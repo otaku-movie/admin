@@ -1,12 +1,14 @@
 'use client'
-import React from 'react';
-import { Table, Button, Space, Row, Col, Image, Tag } from 'antd';
-import { useState, useEffect } from 'react';
-import type { TableColumnsType } from 'antd';
+import React, { useState, useEffect } from 'react'
+import { Table, Button, Space, Row, Col, Image, Tag } from 'antd'
+
+import type { TableColumnsType } from 'antd'
 import movie from '../../assets/image/conan-movie.png'
 import { status } from '../../config/index'
+import { useRouter } from 'next/navigation'
 
 export default function Movie () {
+  const router = useRouter()
   const [data, setData] = useState([
     {
       name: '劇場版『名探偵コナン 100万ドルの五稜星（みちしるべ）』',
@@ -28,20 +30,25 @@ export default function Movie () {
       title: 'タイトル',
       dataIndex: 'name',
       width: 350,
-      render (_, row) {
+      render (_, row: any) {
         return (
-          <Space align="start">
-            <Image width={100} src={movie.src} alt="poster"></Image>
-            <Space direction="vertical">
+          <Space align='start'>
+            <Image width={120} src={movie.src} alt='poster'></Image>
+            <Space direction='vertical'>
               <span>{row.name}</span>
               <section>
-                {
-                  ['IMAX', 'DOLBY cinema', '2D', 'DOLBY ATOMS'].map(item => {
-                    return <Tag key={item} style={{
-                      marginBottom: '10px'
-                    }}>{item}</Tag>
-                  })
-                }
+                {['IMAX', 'DOLBY cinema', '2D', 'DOLBY ATOMS'].map(item => {
+                  return (
+                    <Tag
+                      key={item}
+                      style={{
+                        marginBottom: '10px'
+                      }}
+                    >
+                      {item}
+                    </Tag>
+                  )
+                })}
               </section>
             </Space>
           </Space>
@@ -51,29 +58,29 @@ export default function Movie () {
     {
       title: 'タイム',
       dataIndex: 'time',
-      render(text: number) {
+      render (text: number) {
         return <span>{text}分</span>
       }
     },
     {
       title: 'レベル',
-      dataIndex: 'level',
+      dataIndex: 'level'
     },
     {
       title: 'コメント数',
-      dataIndex: 'commentCount',
+      dataIndex: 'commentCount'
     },
     {
       title: '鑑賞数',
-      dataIndex: 'watchCount',
+      dataIndex: 'watchCount'
     },
     {
       title: '上映開始時期',
-      dataIndex: '',
+      dataIndex: ''
     },
     {
       title: '上映終了時期',
-      dataIndex: '',
+      dataIndex: ''
     },
     {
       title: '上映ステータス',
@@ -90,24 +97,33 @@ export default function Movie () {
       render: () => {
         return (
           <Space>
-            <Button type="primary">編集</Button>
-            <Button type="primary" danger>削除</Button>
+            <Button
+              type='primary'
+              onClick={() => {
+                router.push(`/movieDetail`)
+              }}
+            >
+              編集
+            </Button>
+            <Button type='primary' danger>
+              削除
+            </Button>
           </Space>
         )
-      },
-    },
+      }
+    }
   ]
 
   return (
     <section>
-      <Table 
-        columns={columns} 
-        dataSource={data} 
+      <Table
+        columns={columns}
+        dataSource={data}
         bordered={true}
-        pagination={{ 
+        pagination={{
           pageSize: 10,
           position: ['bottomCenter']
-        }} 
+        }}
       />
     </section>
   )

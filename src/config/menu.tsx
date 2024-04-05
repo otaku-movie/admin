@@ -1,3 +1,4 @@
+import React from 'react'
 import Link from 'next/link'
 import Movie from '../app/movie/page'
 import Theater from '../app/theater/page'
