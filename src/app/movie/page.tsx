@@ -6,8 +6,10 @@ import type { TableColumnsType } from 'antd'
 import movie from '../../assets/image/conan-movie.png'
 import { status } from '../../config/index'
 import { useRouter } from 'next/navigation'
+import { Form, Input, Select, theme } from 'antd'
+import { Query, QueryItem } from '@/components/query'
 
-export default function Movie () {
+export default function Movie() {
   const router = useRouter()
   const [data, setData] = useState([
     {
@@ -27,17 +29,17 @@ export default function Movie () {
   ])
   const columns = [
     {
-      title: 'タイトル',
+      title: '作品',
       dataIndex: 'name',
       width: 350,
-      render (_, row: any) {
+      render(_: any, row: any) {
         return (
-          <Space align='start'>
-            <Image width={120} src={movie.src} alt='poster'></Image>
-            <Space direction='vertical'>
+          <Space align="start">
+            <Image width={120} src={movie.src} alt="poster"></Image>
+            <Space direction="vertical">
               <span>{row.name}</span>
               <section>
-                {['IMAX', 'DOLBY cinema', '2D', 'DOLBY ATOMS'].map(item => {
+                {['IMAX', 'DOLBY cinema', '2D', 'DOLBY ATOMS'].map((item) => {
                   return (
                     <Tag
                       key={item}
@@ -58,7 +60,7 @@ export default function Movie () {
     {
       title: 'タイム',
       dataIndex: 'time',
-      render (text: number) {
+      render(text: number) {
         return <span>{text}分</span>
       }
     },
@@ -75,6 +77,10 @@ export default function Movie () {
       dataIndex: 'watchCount'
     },
     {
+      title: 'みたい数',
+      dataIndex: 'watchCount'
+    },
+    {
       title: '上映開始時期',
       dataIndex: ''
     },
@@ -85,7 +91,7 @@ export default function Movie () {
     {
       title: '上映ステータス',
       dataIndex: '',
-      render (text: number) {
+      render(text: number) {
         return <span>{status[1]}</span>
       }
     },
@@ -98,14 +104,14 @@ export default function Movie () {
         return (
           <Space>
             <Button
-              type='primary'
+              type="primary"
               onClick={() => {
                 router.push(`/movieDetail`)
               }}
             >
               編集
             </Button>
-            <Button type='primary' danger>
+            <Button type="primary" danger>
               削除
             </Button>
           </Space>
@@ -116,6 +122,25 @@ export default function Movie () {
 
   return (
     <section>
+      <Query>
+        <QueryItem label="作品" column={1}>
+          <Input></Input>
+        </QueryItem>
+        <QueryItem label="上映ステータス">
+          <Select>
+            {Object.entries(status).map((item, index) => {
+              const [key, value] = item
+
+              return <Select.Option value={key}>{value}</Select.Option>
+            })}
+          </Select>
+        </QueryItem>
+      </Query>
+      <section
+        style={{
+          margin: '30px 0'
+        }}
+      ></section>
       <Table
         columns={columns}
         dataSource={data}

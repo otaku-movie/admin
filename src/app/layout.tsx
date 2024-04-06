@@ -29,9 +29,11 @@ export default function RootLayout({
   const {
     token: { colorBgContainer, borderRadiusLG }
   } = theme.useToken()
-
+  const pathname = usePathname()
   const onClick: MenuProps['onClick'] = (e) => {}
+  const pathnames = pathname.split('/').filter((x) => x)
 
+  console.log(pathnames, pathname)
   const items: MenuProps['items'] = [
     {
       label: (
@@ -69,7 +71,7 @@ export default function RootLayout({
             <Layout
               style={{
                 width: '100vw',
-                height: '100vh'
+                minHeight: '100vh'
               }}
             >
               <Header
@@ -98,18 +100,39 @@ export default function RootLayout({
                     })}
                   />
                 </Sider>
-                <Layout style={{ padding: '0 24px 24px' }}>
-                  <Content
-                    style={{
-                      padding: 24,
-                      margin: 0,
-                      minHeight: 280,
-                      background: colorBgContainer,
-                      borderRadius: borderRadiusLG
-                    }}
-                  >
-                    {children}
-                  </Content>
+                <Layout style={{ padding: '20px' }}>
+                  <Space direction="vertical" size={20}>
+                    <Breadcrumb
+                      separator=">"
+                      items={[
+                        {
+                          title: 'Home'
+                        },
+                        {
+                          title: 'Application Center',
+                          href: ''
+                        },
+                        {
+                          title: 'Application List',
+                          href: ''
+                        },
+                        {
+                          title: 'An Application'
+                        }
+                      ]}
+                    />
+                    <Content
+                      style={{
+                        padding: 24,
+                        margin: 0,
+                        minHeight: 280,
+                        background: colorBgContainer,
+                        borderRadius: borderRadiusLG
+                      }}
+                    >
+                      {children}
+                    </Content>
+                  </Space>
                 </Layout>
               </Layout>
             </Layout>
