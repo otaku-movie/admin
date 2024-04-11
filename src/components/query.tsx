@@ -62,44 +62,50 @@ export function Query(props: QueryProps) {
   }
 
   return (
-    <FormContext.Provider
-      value={{
-        query: {
-          column
-        }
+    <section
+      style={{
+        width: '100%'
       }}
     >
-      <Form
-        form={form}
-        name="advanced_search"
-        style={formStyle}
-        onFinish={onFinish}
+      <FormContext.Provider
+        value={{
+          query: {
+            column
+          }
+        }}
       >
-        <Row gutter={24}>{props.children}</Row>
+        <Form
+          form={form}
+          name="advanced_search"
+          style={formStyle}
+          onFinish={onFinish}
+        >
+          <Row gutter={24}>{props.children}</Row>
 
-        <div style={{ textAlign: 'right' }}>
-          <Space size="small">
-            <Button type="primary" htmlType="submit">
-              Search
-            </Button>
-            <Button
-              onClick={() => {
-                form.resetFields()
-              }}
-            >
-              Clear
-            </Button>
-            <a
-              style={{ fontSize: 12 }}
-              onClick={() => {
-                setExpand(!expand)
-              }}
-            >
-              <DownOutlined rotate={expand ? 180 : 0} /> Collapse
-            </a>
-          </Space>
-        </div>
-      </Form>
-    </FormContext.Provider>
+          <div style={{ textAlign: 'right' }}>
+            <Space size="small">
+              <Button type="primary" htmlType="submit">
+                Search
+              </Button>
+              <Button
+                onClick={() => {
+                  form.resetFields()
+                }}
+              >
+                Clear
+              </Button>
+              <a
+                style={{ fontSize: 12 }}
+                onClick={() => {
+                  setExpand(!expand)
+                }}
+              >
+                <DownOutlined rotate={expand ? 180 : 0} /> Collapse
+              </a>
+            </Space>
+          </div>
+        </Form>
+      </FormContext.Provider>
+    </section>
   )
 }

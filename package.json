@@ -16,6 +16,7 @@
     "@ant-design/nextjs-registry": "^1.0.0",
     "antd": "^5.16.0",
     "antd-img-crop": "^4.21.0",
+    "axios": "^1.6.8",
     "next": "14.1.4",
     "react": "^18",
     "react-dom": "^18",

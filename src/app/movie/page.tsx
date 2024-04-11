@@ -1,38 +1,58 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import { Table, Button, Space, Row, Col, Image, Tag } from 'antd'
+import {
+  Table,
+  Button,
+  Space,
+  Row,
+  Col,
+  Image,
+  Tag,
+  Input,
+  Select,
+  theme
+} from 'antd'
 
 import type { TableColumnsType } from 'antd'
 import movie from '../../assets/image/conan-movie.png'
 import { status } from '../../config/index'
 import { useRouter } from 'next/navigation'
-import { Form, Input, Select, theme } from 'antd'
-import { Query, QueryItem } from '@/components/query'
 
-export default function Movie() {
+import { Query, QueryItem } from '@/components/query'
+import http from '../../api/index'
+import { Movie, paginationResponse, response } from '@/type/api'
+
+export default function MoviePage() {
   const router = useRouter()
-  const [data, setData] = useState([
-    {
-      name: '劇場版『名探偵コナン 100万ドルの五稜星（みちしるべ）』',
-      level: 'G',
-      time: 113,
-      watchCount: 1000,
-      commentCount: 100
-    },
-    {
-      name: '劇場版『名探偵コナン 100万ドルの五稜星（みちしるべ）』',
-      level: 'G',
-      time: 113,
-      watchCount: 1000,
-      commentCount: 100
-    }
-  ])
-  const columns = [
+  const [data, setData] = useState([])
+  const [page, setPage] = useState(1)
+  const [total, setTotal] = useState(0)
+
+  const getData = (page = 1) => {
+    http({
+      url: 'movie/list',
+      method: 'post',
+      data: {
+        page,
+        pageSize: 10
+      }
+    }).then((res) => {
+      setData(res.data.list)
+      setPage(page)
+      setTotal(res.data.total)
+    })
+  }
+
+  useEffect(() => {
+    getData()
+  }, [])
+
+  const columns: TableColumnsType<Movie> = [
     {
       title: '作品',
       dataIndex: 'name',
       width: 350,
-      render(_: any, row: any) {
+      render(_: any, row) {
         return (
           <Space align="start">
             <Image width={120} src={movie.src} alt="poster"></Image>
@@ -74,19 +94,19 @@ export default function Movie() {
     },
     {
       title: '鑑賞数',
-      dataIndex: 'watchCount'
+      dataIndex: 'watchedCount'
     },
     {
       title: 'みたい数',
-      dataIndex: 'watchCount'
+      dataIndex: 'wantToSeeCount'
     },
     {
       title: '上映開始時期',
-      dataIndex: ''
+      dataIndex: 'startDate'
     },
     {
       title: '上映終了時期',
-      dataIndex: ''
+      dataIndex: 'endDate'
     },
     {
       title: '上映ステータス',
@@ -100,13 +120,13 @@ export default function Movie() {
       key: 'operation',
       fixed: 'right',
       // width: 100,
-      render: () => {
+      render: (_, row) => {
         return (
           <Space>
             <Button
               type="primary"
               onClick={() => {
-                router.push(`/movieDetail`)
+                router.push(`/movieDetail?id=${row.id}`)
               }}
             >
               編集
@@ -122,34 +142,48 @@ export default function Movie() {
 
   return (
     <section>
-      <Query>
-        <QueryItem label="作品" column={1}>
-          <Input></Input>
-        </QueryItem>
-        <QueryItem label="上映ステータス">
-          <Select>
-            {Object.entries(status).map((item, index) => {
-              const [key, value] = item
+      <Space direction="vertical" size={30}>
+        <Row justify="end">
+          <Button
+            onClick={() => {
+              router.push(`/movieDetail`)
+            }}
+          >
+            新規
+          </Button>
+        </Row>
+        <Query>
+          <QueryItem label="作品" column={1}>
+            <Input></Input>
+          </QueryItem>
+          <QueryItem label="上映ステータス">
+            <Select>
+              {Object.entries(status).map((item, index) => {
+                const [key, value] = item
 
-              return <Select.Option value={key}>{value}</Select.Option>
-            })}
-          </Select>
-        </QueryItem>
-      </Query>
-      <section
-        style={{
-          margin: '30px 0'
-        }}
-      ></section>
-      <Table
-        columns={columns}
-        dataSource={data}
-        bordered={true}
-        pagination={{
-          pageSize: 10,
-          position: ['bottomCenter']
-        }}
-      />
+                return (
+                  <Select.Option value={key} key={index}>
+                    {value}
+                  </Select.Option>
+                )
+              })}
+            </Select>
+          </QueryItem>
+        </Query>
+
+        <Table
+          columns={columns}
+          dataSource={data}
+          bordered={true}
+          pagination={{
+            pageSize: 10,
+            current: page,
+            total,
+            showTotal: (total) => `データ数：${total}`,
+            position: ['bottomCenter']
+          }}
+        />
+      </Space>
     </section>
   )
 }
