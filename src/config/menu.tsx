@@ -1,7 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
-import Movie from '../app/movie/page'
-import Theater from '../app/theater/page'
+import Movie from '@/app/[lng]/movie/page'
+import Theater from '@/app/[lng]/theater/page'
 
 export const menu = [
   {

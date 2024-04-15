@@ -1,8 +1,10 @@
 'use client'
+/* eslint-disable react/prop-types */
 import { AntdRegistry } from '@ant-design/nextjs-registry'
-import React from 'react'
-
+import React, { useState } from 'react'
+import { usePathname, useRouter } from 'next/navigation'
 import type { MenuProps } from 'antd'
+import Link from 'next/link'
 import {
   ConfigProvider,
   Menu,
@@ -13,27 +15,30 @@ import {
   Space,
   Avatar
 } from 'antd'
-import jp from 'antd/locale/ja_JP'
+import ja from 'antd/locale/ja_JP'
+import zhCN from 'antd/locale/zh_CN'
 import 'dayjs/locale/ja'
-import { DownOutlined } from '@ant-design/icons'
-import { usePathname } from 'next/navigation'
-import { menu } from '../config/menu'
-import '../assets/css/normalize.scss'
+import { TranslationOutlined } from '@ant-design/icons'
+import '@/assets/css/normalize.scss'
+import { languages } from '@/config'
+import { useTranslation } from '@/app/i18n/client'
 
-export default function RootLayout({
-  children
-}: Readonly<{
+export interface PageProps {
   children: React.ReactNode
-}>) {
+  params: {
+    lng: keyof typeof languages
+  }
+}
+
+function RootLayout({ children, params: { lng } }: PageProps) {
   const { Header, Content, Sider } = Layout
+  const pathname = usePathname()
+  const router = useRouter()
+  const { t } = useTranslation(lng, 'common')
   const {
     token: { colorBgContainer, borderRadiusLG }
   } = theme.useToken()
-  const pathname = usePathname()
-  const onClick: MenuProps['onClick'] = (e) => {}
-  const pathnames = pathname.split('/').filter((x) => x)
 
-  console.log(pathnames, pathname)
   const items: MenuProps['items'] = [
     {
       label: (
@@ -60,14 +65,19 @@ export default function RootLayout({
       key: '1'
     }
   ]
+
   const url =
     'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg'
-
+  
+  const locale = {
+    ja,
+    'zh-CN': zhCN
+  }
   return (
-    <html lang="en">
+    <html lang={lng} dir={lng}>
       <body>
         <AntdRegistry>
-          <ConfigProvider locale={jp}>
+          <ConfigProvider locale={locale[lng as keyof typeof locale]}>
             <Layout
               style={{
                 width: '100vw',
@@ -81,23 +91,66 @@ export default function RootLayout({
                   justifyContent: 'flex-end'
                 }}
               >
-                <Dropdown menu={{ items }} placement="bottom">
-                  <Avatar src={url} />
-                </Dropdown>
+                <Space align="center">
+                  <Dropdown
+                    menu={{
+                      defaultSelectedKeys: [lng],
+                      items: Object.entries(languages).map((item) => {
+                        const [key, label] = item
+
+                        return {
+                          label,
+                          key
+                        }
+                      }),
+                      onClick(info) {
+                        const str = pathname.replace(lng, info.key)
+                        router.replace(str)
+                      }
+                    }}
+                    placement="bottom"
+                  >
+                    <Space>
+                      <span
+                        style={{
+                          color: 'white'
+                        }}
+                      >
+                        {languages[lng as keyof typeof languages]}
+                      </span>
+                      <TranslationOutlined
+                        style={{
+                          // fill: 'white',
+                          verticalAlign: 'middle',
+                          color: 'white',
+                          fontSize: '24px'
+                        }}
+                      />
+                    </Space>
+                  </Dropdown>
+                  <Dropdown menu={{ items }} placement="bottom">
+                    <Avatar src={url} />
+                  </Dropdown>
+                </Space>
               </Header>
               <Layout>
                 <Sider width={200} style={{ background: colorBgContainer }}>
                   <Menu
-                    onClick={onClick}
                     defaultSelectedKeys={['/movie']}
                     // theme="dark"
                     mode="inline"
-                    items={menu.map((item) => {
-                      return {
-                        label: item.name,
-                        key: item.router
+                    items={[
+                      {
+                        key: '/theater',
+                        label: (
+                          <Link href="theater">{t('menu.theaterList')}</Link>
+                        )
+                      },
+                      {
+                        key: '/movie',
+                        label: <Link href={'movie'}>{t('menu.movieList')}</Link>
                       }
-                    })}
+                    ]}
                   />
                 </Sider>
                 <Layout style={{ padding: '20px' }}>
@@ -142,3 +195,5 @@ export default function RootLayout({
     </html>
   )
 }
+
+export default RootLayout

@@ -1,0 +1,8 @@
+{
+  "query": {
+    "search": "搜索",
+    "clear": "清空",
+    "collapse": "折叠",
+    "collapseClose": "收起"
+  }
+}

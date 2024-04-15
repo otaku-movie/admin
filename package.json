@@ -14,12 +14,21 @@
   },
   "dependencies": {
     "@ant-design/nextjs-registry": "^1.0.0",
+    "@formatjs/intl-localematcher": "^0.5.4",
+    "accept-language": "^3.0.18",
     "antd": "^5.16.0",
     "antd-img-crop": "^4.21.0",
     "axios": "^1.6.8",
+    "i18next": "^23.11.1",
+    "i18next-browser-languagedetector": "^7.2.1",
+    "i18next-resources-to-backend": "^1.2.1",
+    "negotiator": "^0.6.3",
     "next": "14.1.4",
+    "next-i18next": "^15.2.0",
     "react": "^18",
+    "react-cookie": "^7.1.4",
     "react-dom": "^18",
+    "react-i18next": "^14.1.0",
     "zustand": "^4.5.2"
   },
   "devDependencies": {

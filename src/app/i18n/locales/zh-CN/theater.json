@@ -1,0 +1,13 @@
+{
+  "table": {
+    "name": "影院名称",
+    "address": "地址",
+    "tel": "电话",
+    "action": "操作"
+  },
+  "button": {
+    "detail": "影院详情",
+    "edit": "编辑",
+    "remove": "删除"
+  }
+}

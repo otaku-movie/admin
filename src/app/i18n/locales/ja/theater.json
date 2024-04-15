@@ -1,0 +1,13 @@
+{
+  "table": {
+    "name": "劇場名",
+    "address": "住所",
+    "tel": "電話番号",
+    "action": "操作"
+  },
+  "button": {
+    "detail": "シアター詳細",
+    "edit": "編集",
+    "remove": "削除"
+  }
+}

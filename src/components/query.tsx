@@ -1,5 +1,6 @@
 import React, { useState, useEffect, createContext, useContext } from 'react'
 import { DownOutlined } from '@ant-design/icons'
+import { useTranslation } from '@/app/i18n/client'
 import {
   Form,
   theme,
@@ -10,6 +11,7 @@ import {
   type FormProps,
   type FormItemProps
 } from 'antd'
+import { languageType } from '@/config'
 
 export type QueryProps = {
   column?: number
@@ -19,12 +21,6 @@ export type QueryProps = {
 export type QueryItemProps = {
   column?: number
 } & FormItemProps
-
-interface options extends QueryItemProps {
-  query: {
-    column: number
-  }
-}
 
 const FormContext = createContext({
   query: {
@@ -50,6 +46,8 @@ export function Query(props: QueryProps) {
   const [form] = Form.useForm()
   const { column = 4 } = props
   const [expand, setExpand] = useState(false)
+
+  const { t } = useTranslation(navigator.language as languageType, 'components')
 
   const formStyle: React.CSSProperties = {
     background: token.colorFillAlter,
@@ -85,14 +83,14 @@ export function Query(props: QueryProps) {
           <div style={{ textAlign: 'right' }}>
             <Space size="small">
               <Button type="primary" htmlType="submit">
-                Search
+                {t('query.search')}
               </Button>
               <Button
                 onClick={() => {
                   form.resetFields()
                 }}
               >
-                Clear
+                {t('query.clear')}
               </Button>
               <a
                 style={{ fontSize: 12 }}
@@ -100,7 +98,8 @@ export function Query(props: QueryProps) {
                   setExpand(!expand)
                 }}
               >
-                <DownOutlined rotate={expand ? 180 : 0} /> Collapse
+                <DownOutlined rotate={expand ? 180 : 0} />{' '}
+                {expand ? t('query.collapseClose') : t('query.collapse')}
               </a>
             </Space>
           </div>

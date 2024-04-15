@@ -1,32 +1,25 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import {
-  Table,
-  Button,
-  Space,
-  Row,
-  Col,
-  Image,
-  Tag,
-  Input,
-  Select,
-  theme
-} from 'antd'
+import { Table, Button, Space, Row, Image, Tag, Input, Select } from 'antd'
 
 import type { TableColumnsType } from 'antd'
-import movie from '../../assets/image/conan-movie.png'
-import { status } from '../../config/index'
+import movie from '@/assets/image/conan-movie.png'
+import { status } from '@/config/index'
 import { useRouter } from 'next/navigation'
 
 import { Query, QueryItem } from '@/components/query'
-import http from '../../api/index'
+import http from '@/api/index'
 import { Movie, paginationResponse, response } from '@/type/api'
+import { useTranslation } from '@/app/i18n/client'
+import { PageProps } from '../layout'
 
-export default function MoviePage() {
+export default function MoviePage({ params: { lng } }: PageProps) {
   const router = useRouter()
+
   const [data, setData] = useState([])
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
+  const { t } = useTranslation(lng, 'movie')
 
   const getData = (page = 1) => {
     http({
@@ -49,7 +42,7 @@ export default function MoviePage() {
 
   const columns: TableColumnsType<Movie> = [
     {
-      title: '作品',
+      title: t('table.name'),
       dataIndex: 'name',
       width: 350,
       render(_: any, row) {
@@ -78,45 +71,45 @@ export default function MoviePage() {
       }
     },
     {
-      title: 'タイム',
+      title: t('table.time'),
       dataIndex: 'time',
       render(text: number) {
         return <span>{text}分</span>
       }
     },
     {
-      title: 'レベル',
+      title: t('table.level'),
       dataIndex: 'level'
     },
     {
-      title: 'コメント数',
+      title: t('table.commentCount'),
       dataIndex: 'commentCount'
     },
     {
-      title: '鑑賞数',
+      title: t('table.watchedCount'),
       dataIndex: 'watchedCount'
     },
     {
-      title: 'みたい数',
+      title: t('table.wantToSeeCount'),
       dataIndex: 'wantToSeeCount'
     },
     {
-      title: '上映開始時期',
+      title: t('table.startDate'),
       dataIndex: 'startDate'
     },
     {
-      title: '上映終了時期',
+      title: t('table.endDate'),
       dataIndex: 'endDate'
     },
     {
-      title: '上映ステータス',
+      title: t('table.status'),
       dataIndex: '',
-      render(text: number) {
+      render() {
         return <span>{status[1]}</span>
       }
     },
     {
-      title: '操作',
+      title: t('table.action'),
       key: 'operation',
       fixed: 'right',
       // width: 100,
@@ -129,10 +122,10 @@ export default function MoviePage() {
                 router.push(`/movieDetail?id=${row.id}`)
               }}
             >
-              編集
+              {t('button.edit')}
             </Button>
             <Button type="primary" danger>
-              削除
+              {t('button.remove')}
             </Button>
           </Space>
         )
@@ -149,14 +142,14 @@ export default function MoviePage() {
               router.push(`/movieDetail`)
             }}
           >
-            新規
+            {t('button.add')}
           </Button>
         </Row>
         <Query>
-          <QueryItem label="作品" column={1}>
+          <QueryItem label={t('table.name')} column={1}>
             <Input></Input>
           </QueryItem>
-          <QueryItem label="上映ステータス">
+          <QueryItem label={t('table.status')}>
             <Select>
               {Object.entries(status).map((item, index) => {
                 const [key, value] = item
@@ -179,7 +172,6 @@ export default function MoviePage() {
             pageSize: 10,
             current: page,
             total,
-            showTotal: (total) => `データ数：${total}`,
             position: ['bottomCenter']
           }}
         />

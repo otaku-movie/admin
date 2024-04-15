@@ -1,0 +1,19 @@
+{
+  "table": {
+    "name": "タイトル",
+    "time": "タイム",
+    "level": "レベル",
+    "commentCount": "コメント数",
+    "watchedCount": "鑑賞数",
+    "wantToSeeCount": "みたい数",
+    "startDate": "上映開始時期",
+    "endDate": "上映終了時期",
+    "status": "上映ステータス",
+    "action": "操作"
+  },
+  "button": {
+    "add": "新規",
+    "edit": "編集",
+    "remove": "削除"
+  }
+}
