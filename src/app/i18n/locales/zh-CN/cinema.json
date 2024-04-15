@@ -3,9 +3,12 @@
     "name": "影院名称",
     "address": "地址",
     "tel": "电话",
-    "action": "操作"
+    "action": "操作",
+    "description": "简介",
+    "homePage": "官网"
   },
   "button": {
+    "add": "添加",
     "detail": "影院详情",
     "edit": "编辑",
     "remove": "删除"

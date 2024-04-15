@@ -1,26 +1,24 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import { Table, Button, Space, Row, Col, Image, Tag } from 'antd'
-
+import { Table, Button, Space, Input, Row } from 'antd'
 import type { TableColumnsType } from 'antd'
-import movie from '@/assets/image/conan-movie.png'
-import { status } from '@/config/index'
 import { useRouter } from 'next/navigation'
 import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '../layout'
 import http from '@/api'
+import { Query, QueryItem } from '@/components/query'
 
-export default function Theater({ params: { lng } }: PageProps) {
+export default function CinemaPage({ params: { lng } }: PageProps) {
   const router = useRouter()
 
   const [data, setData] = useState([])
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
-  const { t } = useTranslation(lng, 'theater')
+  const { t } = useTranslation(lng, 'cinema')
 
   const getData = (page = 1) => {
     http({
-      url: 'theater/list',
+      url: 'cinema/list',
       method: 'post',
       data: {
         page,
@@ -40,35 +38,50 @@ export default function Theater({ params: { lng } }: PageProps) {
   const columns: TableColumnsType = [
     {
       title: t('table.name'),
-      dataIndex: 'level'
+      dataIndex: 'name'
+    },
+    {
+      title: t('table.description'),
+      dataIndex: 'description'
     },
     {
       title: t('table.address'),
-      dataIndex: 'commentCount'
+      dataIndex: 'address'
     },
     {
       title: t('table.tel'),
-      dataIndex: 'watchCount'
+      dataIndex: 'tel'
+    },
+    {
+      title: t('table.homePage'),
+      dataIndex: 'homePage'
     },
     {
       title: t('table.action'),
       key: 'operation',
       fixed: 'right',
-      // width: 100,
-      render: () => {
+      width: 200,
+      render: (_, row) => {
         return (
           <Space>
             <Button
               type="primary"
               onClick={() => {
-                router.push(`/screenDetail`)
+                router.push(`/${lng}/screenDetail`)
               }}
             >
-              {t('table.detail')}
+              {t('button.detail')}
             </Button>
-            <Button type="primary">{t('table.delete')}</Button>
+            <Button
+              type="primary"
+              onClick={() => {
+                router.push(`/${lng}/cinemaDetail?id=${row.id}`)
+              }}
+            >
+              {t('button.edit')}
+            </Button>
             <Button type="primary" danger>
-              {t('table.remove')}
+              {t('button.remove')}
             </Button>
           </Space>
         )
@@ -77,7 +90,27 @@ export default function Theater({ params: { lng } }: PageProps) {
   ]
 
   return (
-    <section>
+    <section
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '30px'
+      }}
+    >
+      <Row justify="end">
+        <Button
+          onClick={() => {
+            router.push(`/${lng}/cinemaDetail`)
+          }}
+        >
+          {t('button.add')}
+        </Button>
+      </Row>
+      <Query>
+        <QueryItem label={t('table.name')} column={1}>
+          <Input></Input>
+        </QueryItem>
+      </Query>
       <Table
         columns={columns}
         dataSource={data}

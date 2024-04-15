@@ -68,7 +68,7 @@ function RootLayout({ children, params: { lng } }: PageProps) {
 
   const url =
     'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg'
-  
+
   const locale = {
     ja,
     'zh-CN': zhCN
@@ -141,10 +141,8 @@ function RootLayout({ children, params: { lng } }: PageProps) {
                     mode="inline"
                     items={[
                       {
-                        key: '/theater',
-                        label: (
-                          <Link href="theater">{t('menu.theaterList')}</Link>
-                        )
+                        key: '/cinema',
+                        label: <Link href="cinema">{t('menu.cinemaList')}</Link>
                       },
                       {
                         key: '/movie',

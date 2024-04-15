@@ -6,6 +6,7 @@
     "action": "操作"
   },
   "button": {
+    "add": "新規",
     "detail": "シアター詳細",
     "edit": "編集",
     "remove": "削除"

@@ -1,0 +1,25 @@
+{
+  "form": {
+    "name": {
+      "label": "影院名称",
+      "required": "请输入影院名称"
+    },
+    "description": {
+      "label": "影院简介",
+      "required": "请输入影院简介"
+    },
+    "address": {
+      "label": "地址",
+      "required": "请输入地址"
+    },
+    "tel": {
+      "label": "电话",
+      "required": "请输入电话"
+    },
+    "homePage": {
+      "label": "官网",
+      "required": "请输入官网地址"
+    },
+    "save": "保存"
+  }
+}

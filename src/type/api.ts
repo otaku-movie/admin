@@ -16,3 +16,11 @@ export interface Movie {
   name: string
   description: string
 }
+
+export interface Cinema {
+  name: string
+  description: string
+  homePage: string
+  tel: string
+  address: string
+}

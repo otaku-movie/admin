@@ -5,7 +5,7 @@ import { Table, Button, Space, Row, Col, Image, Tag } from 'antd'
 import type { TableColumnsType } from 'antd'
 import { useRouter } from 'next/navigation'
 
-export default function Theater() {
+export default function cinema() {
   const router = useRouter()
   const [data, setData] = useState([
     {
