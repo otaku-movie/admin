@@ -13,12 +13,18 @@ import { Movie, paginationResponse, response } from '@/type/api'
 import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '../layout'
 
+interface Query {
+  name: string
+  status: number
+}
+
 export default function MoviePage({ params: { lng } }: PageProps) {
   const router = useRouter()
 
   const [data, setData] = useState([])
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
+  const [query, setQuery] = useState<Partial<Query>>({})
   const { t } = useTranslation(lng, 'movie')
 
   const getData = (page = 1) => {
@@ -39,6 +45,8 @@ export default function MoviePage({ params: { lng } }: PageProps) {
   useEffect(() => {
     getData()
   }, [])
+
+  useEffect(() => {}, [query, setQuery])
 
   const columns: TableColumnsType<Movie> = [
     {
@@ -119,7 +127,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
             <Button
               type="primary"
               onClick={() => {
-                router.push(`/movieDetail?id=${row.id}`)
+                router.push(`movieDetail?id=${row.id}`)
               }}
             >
               {t('button.edit')}
@@ -145,12 +153,38 @@ export default function MoviePage({ params: { lng } }: PageProps) {
             {t('button.add')}
           </Button>
         </Row>
-        <Query>
-          <QueryItem label={t('table.name')} column={1}>
-            <Input></Input>
-          </QueryItem>
-          <QueryItem label={t('table.status')}>
-            <Select>
+        <Query
+          model={query}
+          onSearch={() => {
+            console.log(query)
+          }}
+          onClear={(obj) => {
+            setQuery({ ...obj })
+          }}
+        >
+          {new Array(10).fill(undefined).map((_, index) => {
+            return (
+              <QueryItem label={t('table.name') + index} column={1} key={index}>
+                <Input
+                  value={query.name}
+                  onChange={(e) => {
+                    query.name = e.target.value
+
+                    setQuery(query)
+                  }}
+                ></Input>
+              </QueryItem>
+            )
+          })}
+
+          {/* <QueryItem label={t('table.status')}>
+            <Select
+              value={query.status}
+              onChange={(val) => {
+                query.status = val
+                setQuery(query)
+              }}
+            >
               {Object.entries(status).map((item, index) => {
                 const [key, value] = item
 
@@ -161,7 +195,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
                 )
               })}
             </Select>
-          </QueryItem>
+          </QueryItem> */}
         </Query>
 
         <Table

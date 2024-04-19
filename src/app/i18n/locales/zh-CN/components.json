@@ -2,7 +2,7 @@
   "query": {
     "search": "搜索",
     "clear": "清空",
-    "collapse": "折叠",
+    "collapse": "展开",
     "collapseClose": "收起"
   }
 }
