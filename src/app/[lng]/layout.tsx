@@ -147,6 +147,10 @@ function RootLayout({ children, params: { lng } }: PageProps) {
                       {
                         key: '/movie',
                         label: <Link href={'movie'}>{t('menu.movieList')}</Link>
+                      },
+                      {
+                        key: '/user',
+                        label: <Link href={'user'}>{t('menu.userList')}</Link>
                       }
                     ]}
                   />

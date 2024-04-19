@@ -1,0 +1,14 @@
+{
+  "table": {
+    "icon": "头像",
+    "name": "用户名称",
+    "email": "邮箱",
+    "tel": "电话",
+    "action": "操作"
+  },
+  "button": {
+    "add": "添加",
+    "edit": "编辑",
+    "remove": "删除"
+  }
+}

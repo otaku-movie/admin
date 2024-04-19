@@ -34,9 +34,9 @@ type Option = {
 export type QueryProps = {
   column?: number
   children: React.ReactNode
-  model: Record<string, any>
+  model?: Record<string, any>
   maxLine?: number
-  option: Option
+  option?: Option
   onSearch?: () => void
   onClear?: (obj: Record<string, any>) => void
   defaultCol?: keyof Option
@@ -177,7 +177,7 @@ export function Query(props: QueryProps) {
     } else {
       setRenderChildren([...collapse()])
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [expand])
 
   return (
