@@ -1,0 +1,48 @@
+{
+  "form": {
+    "cover": {
+      "label": "封面",
+      "required": "请上传电影封面"
+    },
+    "name": {
+      "label": "电影名称",
+      "required": "请输入电影名称"
+    },
+    "originalName": {
+      "label": "电影原名",
+      "required": "请输入电影原名"
+    },
+    "time": {
+      "label": "电影时长",
+      "required": "请输入电影时长"
+    },
+    "level": {
+      "label": "电影分级",
+      "required": "请选择分级"
+    },
+    "spec": {
+      "label": "上映规格",
+      "required": "请选择上映规格"
+    },
+    "description": {
+      "label": "影片简介",
+      "required": "请输入影片简介"
+    },
+    "startDate": {
+      "label": "上映开始日期",
+      "required": "请选择开始上映日期"
+    },
+    "endDate": {
+      "label": "上映结束日期",
+      "required": "请选择结束上映日期"
+    },
+    "homePage": {
+      "label": "官网",
+      "required": "请输入官网地址"
+    },
+    "save": "保存"
+  },
+  "button": {
+    "upload": "上传"
+  }
+}

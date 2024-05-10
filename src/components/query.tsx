@@ -34,15 +34,16 @@ type Option = {
 export type QueryProps = {
   column?: number
   children: React.ReactNode
-  model?: Record<string, any>
+  model?: Record<string, unknown>
   maxLine?: number
   option?: Option
   onSearch?: () => void
-  onClear?: (obj: Record<string, any>) => void
+  onClear?: (obj: Record<string, unknown>) => void
   defaultCol?: keyof Option
 } & FormProps
 
 export type QueryItemProps = {
+  show?: boolean
   column?: number
 } & FormItemProps
 
@@ -53,13 +54,18 @@ const FormContext = createContext({
 })
 
 export function QueryItem(props: QueryItemProps) {
-  const { column = 1 } = props
+  const { column = 1, show = false } = props
   const context = useContext(FormContext)
   const queryColumn = 24 / context.query.column
   const span = column * queryColumn
 
   return (
-    <Col span={span}>
+    <Col
+      span={span}
+      style={{
+        display: show ? 'block' : 'none'
+      }}
+    >
       <Form.Item {...props}>{props.children}</Form.Item>
     </Col>
   )
@@ -99,7 +105,10 @@ export function Query(props: QueryProps) {
     0
   )
 
-  const { t } = useTranslation(navigator.language as languageType, 'components')
+  const { t } = useTranslation(
+    globalThis?.navigator?.language as languageType,
+    'components'
+  )
 
   const formStyle: React.CSSProperties = {
     background: token.colorFillAlter,
@@ -107,7 +116,7 @@ export function Query(props: QueryProps) {
     padding: 24
   }
 
-  const onFinish = (values: any) => {
+  const onFinish = (values: unknown) => {
     console.log(values)
     console.log('Received values of form: ', values)
     props.onSearch?.()
@@ -125,7 +134,7 @@ export function Query(props: QueryProps) {
       xxxxl: 2560
     }
 
-    const keys = Object.keys(map)
+    const keys = Object.keys(map) as Array<keyof typeof map>
     // eslint-disable-next-line array-callback-return
     const result = keys.find((key, index) => {
       if (key === 'xs' && width < map[key]) {
@@ -144,7 +153,13 @@ export function Query(props: QueryProps) {
   }
 
   const collapse = (column = 3): React.ReactElement<QueryItemProps>[] => {
-    if (expand) return children
+    if (expand) {
+      return children.map((node) => {
+        return React.cloneElement(node, {
+          show: true
+        })
+      })
+    }
 
     const arr = []
     let init = 0
@@ -152,13 +167,12 @@ export function Query(props: QueryProps) {
     for (let i = 0; i < children.length; i++) {
       const node = children[i]
       const span = ((node.props?.column || 1) * row) / column
-
+      const newNode = React.cloneElement(node, {
+        show: init < max
+      })
       init += span
-      arr.push(node)
 
-      if (init >= max) {
-        break
-      }
+      arr.push(newNode)
     }
 
     return arr

@@ -4,11 +4,30 @@
     "name": "用户名称",
     "email": "邮箱",
     "tel": "电话",
+    "registerTime": "注册时间",
     "action": "操作"
   },
   "button": {
     "add": "添加",
     "edit": "编辑",
     "remove": "删除"
+  },
+  "modal": {
+    "title": {
+      "create": "添加用户",
+      "edit": "编辑用户"
+    },
+    "form": {
+      "username": {
+        "label": "用户名称"
+      },
+      "email": {
+        "label": "邮箱"
+      },
+      "password": {
+        "label": "密码"
+      }
+    }
+   
   }
 }

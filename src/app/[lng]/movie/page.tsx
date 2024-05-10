@@ -1,6 +1,17 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import { Table, Button, Space, Row, Image, Tag, Input, Select } from 'antd'
+import {
+  Table,
+  Button,
+  Space,
+  Row,
+  Image,
+  Tag,
+  Input,
+  Select,
+  Modal,
+  message
+} from 'antd'
 
 import type { TableColumnsType } from 'antd'
 import movie from '@/assets/image/conan-movie.png'
@@ -132,7 +143,36 @@ export default function MoviePage({ params: { lng } }: PageProps) {
             >
               {t('button.edit')}
             </Button>
-            <Button type="primary" danger>
+            <Button
+              type="primary"
+              danger
+              onClick={() => {
+                Modal.confirm({
+                  title: t('button.remove'),
+                  content: t('message.remove.content'),
+                  onCancel() {
+                    console.log('Cancel')
+                  },
+                  onOk() {
+                    return new Promise((resolve, reject) => {
+                      http({
+                        url: 'movie/remove',
+                        method: 'delete',
+                        params: {
+                          id: row.id
+                        }
+                      })
+                        .then(() => {
+                          message.success(t('message.remove.success'))
+                          getData()
+                          resolve(true)
+                        })
+                        .catch(reject)
+                    })
+                  }
+                })
+              }}
+            >
               {t('button.remove')}
             </Button>
           </Space>
@@ -162,7 +202,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
             setQuery({ ...obj })
           }}
         >
-          {new Array(10).fill(undefined).map((_, index) => {
+          {new Array(5).fill(undefined).map((_, index) => {
             return (
               <QueryItem label={t('table.name') + index} column={1} key={index}>
                 <Input
@@ -176,8 +216,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
               </QueryItem>
             )
           })}
-
-          {/* <QueryItem label={t('table.status')}>
+          <QueryItem label={t('table.status')}>
             <Select
               value={query.status}
               onChange={(val) => {
@@ -195,7 +234,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
                 )
               })}
             </Select>
-          </QueryItem> */}
+          </QueryItem>
         </Query>
 
         <Table

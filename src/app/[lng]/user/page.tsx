@@ -7,6 +7,7 @@ import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '../layout'
 import http from '@/api'
 import { Query, QueryItem } from '@/components/query'
+import UserModal from '@/dialog/userModal'
 
 interface Query {
   name: string
@@ -15,7 +16,9 @@ interface Query {
 
 export default function CinemaPage({ params: { lng } }: PageProps) {
   const router = useRouter()
-
+  const [modal, setModal] = useState({
+    show: false
+  })
   const [data, setData] = useState([])
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
@@ -44,19 +47,19 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
   const columns: TableColumnsType = [
     {
       title: t('table.icon'),
-      dataIndex: 'name'
+      dataIndex: 'cover'
     },
     {
       title: t('table.name'),
-      dataIndex: 'name'
+      dataIndex: 'username'
     },
     {
       title: t('table.email'),
-      dataIndex: 'name'
+      dataIndex: 'email'
     },
     {
-      title: t('table.tel'),
-      dataIndex: 'name'
+      title: t('table.registerTime'),
+      dataIndex: 'createTime'
     },
     {
       title: t('table.action'),
@@ -69,15 +72,10 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
             <Button
               type="primary"
               onClick={() => {
-                router.push(`/${lng}/screenDetail`)
-              }}
-            >
-              {t('button.detail')}
-            </Button>
-            <Button
-              type="primary"
-              onClick={() => {
-                router.push(`/${lng}/cinemaDetail?id=${row.id}`)
+                setModal({
+                  ...modal,
+                  show: true
+                })
               }}
             >
               {t('button.edit')}
@@ -100,7 +98,16 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
       }}
     >
       <Row justify="end">
-        <Button onClick={() => {}}>{t('button.add')}</Button>
+        <Button
+          onClick={() => {
+            setModal({
+              ...modal,
+              show: true
+            })
+          }}
+        >
+          {t('button.add')}
+        </Button>
       </Row>
       <Query>
         <QueryItem label={t('table.name')} column={1}>
@@ -135,6 +142,21 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
           position: ['bottomCenter']
         }}
       />
+      <UserModal
+        show={modal.show}
+        onCancel={() => {
+          setModal({
+            ...modal,
+            show: false
+          })
+        }}
+        onConfirm={() => {
+          setModal({
+            ...modal,
+            show: false
+          })
+        }}
+      ></UserModal>
     </section>
   )
 }

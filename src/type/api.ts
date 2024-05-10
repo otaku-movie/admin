@@ -14,7 +14,10 @@ export interface Movie {
   id: number
   cover: string
   name: string
+  originalName: string
   description: string
+  homePage: string
+  time: number
 }
 
 export interface Cinema {

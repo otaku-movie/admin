@@ -105,7 +105,9 @@ function RootLayout({ children, params: { lng } }: PageProps) {
                       }),
                       onClick(info) {
                         const str = pathname.replace(lng, info.key)
-                        router.replace(str)
+                        console.log(str, info)
+                        location.pathname = str
+                        // router.replace(str)
                       }
                     }}
                     placement="bottom"
@@ -151,6 +153,10 @@ function RootLayout({ children, params: { lng } }: PageProps) {
                       {
                         key: '/user',
                         label: <Link href={'user'}>{t('menu.userList')}</Link>
+                      },
+                      {
+                        key: '/dict',
+                        label: <Link href={'dict'}>{t('menu.dictList')}</Link>
                       }
                     ]}
                   />

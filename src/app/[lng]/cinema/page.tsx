@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import { Table, Button, Space, Input, Row } from 'antd'
+import { Table, Button, Space, Input, Row, message, Modal } from 'antd'
 import type { TableColumnsType } from 'antd'
 import { useRouter } from 'next/navigation'
 import { useTranslation } from '@/app/i18n/client'
@@ -80,7 +80,35 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
             >
               {t('button.edit')}
             </Button>
-            <Button type="primary" danger>
+            <Button
+              type="primary"
+              danger
+              onClick={() => {
+                Modal.confirm({
+                  title: t('button.remove'),
+                  content: t('message.remove.content'),
+                  onCancel() {
+                    console.log('Cancel')
+                  },
+                  onOk() {
+                    return new Promise((resolve, reject) => {
+                      http({
+                        url: 'cinema/remove',
+                        method: 'delete',
+                        params: {
+                          id: row.id
+                        }
+                      }).then(() => {
+                        message.success(t('message.remove.success'))
+                        getData()
+                        resolve(true)
+                      }).catch(reject)
+                    })
+                   
+                  }
+                })
+              }}
+            >
               {t('button.remove')}
             </Button>
           </Space>

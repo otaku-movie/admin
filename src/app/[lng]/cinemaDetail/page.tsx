@@ -5,11 +5,13 @@ import { Button, Form, Input } from 'antd'
 import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '../layout'
 import { Cinema } from '@/type/api'
+import { useRouter } from 'next/navigation'
 import http from '@/api'
 
 export default function Page({ params: { lng } }: PageProps) {
   const { t } = useTranslation(lng, 'cinemaDetail')
   const [form, setForm] = useState<Partial<Cinema>>({})
+  const router = useRouter()
 
   useEffect(() => {}, [form])
 
@@ -118,7 +120,7 @@ export default function Page({ params: { lng } }: PageProps) {
                 method: 'post',
                 data: form
               }).then((res) => {
-                
+                router.back()
               })
             }}
           >
