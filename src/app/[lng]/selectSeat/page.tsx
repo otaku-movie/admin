@@ -1,81 +1,92 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import { Table, Button, Space, Input, Row, message, Modal } from 'antd'
+import {
+  Table,
+  Button,
+  Space,
+  Row,
+  Image,
+  Tag,
+  Input,
+  Select,
+  Modal,
+  message
+} from 'antd'
+
 import type { TableColumnsType } from 'antd'
+import movie from '@/assets/image/conan-movie.png'
+import { status } from '@/config/index'
 import { useRouter } from 'next/navigation'
+
+import { Query, QueryItem } from '@/components/query'
+import http from '@/api/index'
+import { Movie, paginationResponse, response } from '@/type/api'
 import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '../layout'
-import http from '@/api'
-import { Query, QueryItem } from '@/components/query'
 
-export default function CinemaPage({ params: { lng } }: PageProps) {
+interface Query {
+  name: string
+  status: number
+}
+
+export default function MoviePage({ params: { lng } }: PageProps) {
   const router = useRouter()
 
   const [data, setData] = useState([])
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
-  const { t } = useTranslation(lng, 'cinema')
+  const [query, setQuery] = useState<Partial<Query>>({})
+  const { t } = useTranslation(lng, 'selectSeat')
 
-  const getData = (page = 1) => {
-    http({
-      url: 'cinema/list',
-      method: 'post',
-      data: {
-        page,
-        pageSize: 10
-      }
-    }).then((res) => {
-      setData(res.data.list)
-      setPage(page)
-      setTotal(res.data.total)
-    })
-  }
+  // const getData = (page = 1) => {
+  //   http({
+  //     url: 'movie/list',
+  //     method: 'post',
+  //     data: {
+  //       page,
+  //       pageSize: 10
+  //     }
+  //   }).then((res) => {
+  //     setData(res.data.list)
+  //     setPage(page)
+  //     setTotal(res.data.total)
+  //   })
+  // }
 
-  useEffect(() => {
-    getData()
-  }, [])
+  // useEffect(() => {
+  //   getData()
+  // }, [])
 
-  const columns: TableColumnsType = [
+  useEffect(() => {}, [query, setQuery])
+
+  const columns: TableColumnsType<Movie> = [
     {
-      title: t('table.name'),
-      dataIndex: 'name'
+      title: '用户信息'
     },
     {
-      title: t('table.description'),
-      dataIndex: 'description'
+      title: '场次',
+      dataIndex: ''
     },
     {
-      title: t('table.address'),
-      dataIndex: 'address'
+      title: '已选座位',
+      dataIndex: ''
     },
     {
-      title: t('table.tel'),
-      dataIndex: 'tel'
-    },
-    {
-      title: t('table.homePage'),
-      dataIndex: 'homePage'
+      title: '座位状态',
+      dataIndex: ''
     },
     {
       title: t('table.action'),
       key: 'operation',
       fixed: 'right',
-      width: 200,
+      // width: 100,
       render: (_, row) => {
         return (
           <Space>
             <Button
               type="primary"
               onClick={() => {
-                router.push(`/${lng}/theaterHall`)
-              }}
-            >
-              {t('button.detail')}
-            </Button>
-            <Button
-              type="primary"
-              onClick={() => {
-                router.push(`/${lng}/cinemaDetail?id=${row.id}`)
+                router.push(`movieDetail?id=${row.id}`)
               }}
             >
               {t('button.edit')}
@@ -93,7 +104,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
                   onOk() {
                     return new Promise((resolve, reject) => {
                       http({
-                        url: 'cinema/remove',
+                        url: 'movie/remove',
                         method: 'delete',
                         params: {
                           id: row.id
@@ -119,27 +130,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
   ]
 
   return (
-    <section
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '30px'
-      }}
-    >
-      <Row justify="end">
-        <Button
-          onClick={() => {
-            router.push(`/${lng}/cinemaDetail`)
-          }}
-        >
-          {t('button.add')}
-        </Button>
-      </Row>
-      <Query>
-        <QueryItem label={t('table.name')} column={1}>
-          <Input></Input>
-        </QueryItem>
-      </Query>
+    <section>
       <Table
         columns={columns}
         dataSource={data}

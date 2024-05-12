@@ -3,6 +3,9 @@
     "cinemaList": "影院列表",
     "movieList": "电影列表",
     "userList": "用户列表",
-    "dictList": "字典列表"
+    "dictList": "字典列表",
+    "showTimeList": "电影场次列表",
+    "orderList": "订单列表",
+    "selectSeat": "选座列表"
   }
 }

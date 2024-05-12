@@ -1,0 +1,25 @@
+{
+  "table": {
+    "name": "作品",
+    "time": "片长",
+    "level": "分级",
+    "commentCount": "评论数",
+    "watchedCount": "已看过",
+    "wantToSeeCount": "想看数",
+    "startDate": "开始日期",
+    "endDate": "结束日期",
+    "status": "上映状态",
+    "action": "操作"
+  },
+  "button": {
+    "add": "添加",
+    "edit": "编辑",
+    "remove": "删除"
+  },
+  "message": {
+    "remove": {
+      "content": "是否确认要删除当前行，删除后不可恢复",
+      "success": "删除成功"
+    }
+  }
+}

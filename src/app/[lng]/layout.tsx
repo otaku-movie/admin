@@ -151,6 +151,28 @@ function RootLayout({ children, params: { lng } }: PageProps) {
                         label: <Link href={'movie'}>{t('menu.movieList')}</Link>
                       },
                       {
+                        key: '/showTime',
+                        label: (
+                          <Link href={'showTime'}>
+                            {t('menu.showTimeList')}
+                          </Link>
+                        )
+                      },
+                      {
+                        key: '/selectSeat',
+                        label: (
+                          <Link href={'selectSeat'}>
+                            {t('menu.selectSeat')}
+                          </Link>
+                        )
+                      },
+                      {
+                        key: '/orderList',
+                        label: (
+                          <Link href={'orderList'}>{t('menu.orderList')}</Link>
+                        )
+                      },
+                      {
                         key: '/user',
                         label: <Link href={'user'}>{t('menu.userList')}</Link>
                       },
