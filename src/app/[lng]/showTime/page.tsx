@@ -24,6 +24,8 @@ import { Movie, paginationResponse, response } from '@/type/api'
 import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '../layout'
 import SeatModal from '@/dialog/seatModal'
+import { Dict } from '@/components/dict'
+import { dictStore } from '@/store/dictStore'
 
 interface Query {
   name: string
@@ -41,6 +43,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
     data: [],
     show: false
   })
+  const setDict = dictStore((state) => state.setDict)
   const { t } = useTranslation(lng, 'showTime')
 
   const getData = (page = 1) => {
@@ -59,6 +62,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
   }
 
   useEffect(() => {
+    setDict(['cinema_spec', 'cinema_play_state'])
     getData()
   }, [])
 
@@ -110,7 +114,9 @@ export default function MoviePage({ params: { lng } }: PageProps) {
     },
     {
       title: t('table.spec'),
-      dataIndex: 'theaterHallSpec'
+      render(_, row) {
+        return <Dict code={row.theaterHallSpec} name={'cinema_spec'}></Dict>
+      }
     },
     {
       title: t('table.seatSelectionRatio'),
@@ -133,10 +139,10 @@ export default function MoviePage({ params: { lng } }: PageProps) {
       dataIndex: 'endTime'
     },
     {
-      title: t('table.status'),
+      title: t('table.playState'),
       dataIndex: '',
-      render() {
-        return <span>{status[1]}</span>
+      render(_, row) {
+        return <Dict code={row.status} name={'cinema_play_state'}></Dict>
       }
     },
     {
@@ -246,7 +252,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
               </QueryItem>
             )
           })}
-          <QueryItem label={t('table.status')}>
+          <QueryItem label={t('table.playState')}>
             <Select
               value={query.status}
               onChange={(val) => {

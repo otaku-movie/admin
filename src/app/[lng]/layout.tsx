@@ -158,14 +158,14 @@ function RootLayout({ children, params: { lng } }: PageProps) {
                           </Link>
                         )
                       },
-                      {
-                        key: '/selectSeat',
-                        label: (
-                          <Link href={'selectSeat'}>
-                            {t('menu.selectSeat')}
-                          </Link>
-                        )
-                      },
+                      // {
+                      //   key: '/selectSeat',
+                      //   label: (
+                      //     <Link href={'selectSeat'}>
+                      //       {t('menu.selectSeat')}
+                      //     </Link>
+                      //   )
+                      // },
                       {
                         key: '/orderList',
                         label: (

@@ -63,7 +63,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
               type="primary"
               onClick={() => {
                 http({
-                  url: 'dictItem/list',
+                  url: 'dict/detail',
                   method: 'get',
                   params: {
                     id: row.id

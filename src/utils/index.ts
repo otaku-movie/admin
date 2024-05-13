@@ -13,6 +13,8 @@ export const getUserInfo = () => {
   }
 }
 
+export const camelCase = key => key.replace(/[-_](.)/g, (_, char) => char.toUpperCase())
+
 export function toCamelCase(input: any): any {
   if (input === null || typeof input !== 'object') {
     return input
@@ -26,7 +28,7 @@ export function toCamelCase(input: any): any {
     const result: any = {}
     for (const key in input) {
       if (Object.prototype.hasOwnProperty.call(input, key)) {
-        const newKey = key.replace(/[-_](.)/g, (_, char) => char.toUpperCase())
+        const newKey = camelCase(key)
         result[newKey] = toCamelCase(input[key])
       }
     }

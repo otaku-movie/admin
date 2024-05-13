@@ -3,7 +3,7 @@
     "name": "作品",
     "startDate": "开始时间",
     "endDate": "结束时间",
-    "status": "放映状态",
+    "playState": "放映状态",
     "cinema": "放映影院",
     "theaterHall": "放映影厅",
     "spec": "放映规格",

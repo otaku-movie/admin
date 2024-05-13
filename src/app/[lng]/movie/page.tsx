@@ -23,6 +23,7 @@ import http from '@/api/index'
 import { Movie, paginationResponse, response } from '@/type/api'
 import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '../layout'
+import { Dict } from '@/components/dict'
 
 interface Query {
   name: string
@@ -123,8 +124,8 @@ export default function MoviePage({ params: { lng } }: PageProps) {
     {
       title: t('table.status'),
       dataIndex: '',
-      render() {
-        return <span>{status[1]}</span>
+      render(_, row) {
+        return <Dict code={row.status} name={'release_status'}></Dict>
       }
     },
     {
