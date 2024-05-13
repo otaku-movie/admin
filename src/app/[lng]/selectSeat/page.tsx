@@ -38,24 +38,16 @@ export default function MoviePage({ params: { lng } }: PageProps) {
   const [query, setQuery] = useState<Partial<Query>>({})
   const { t } = useTranslation(lng, 'selectSeat')
 
-  // const getData = (page = 1) => {
-  //   http({
-  //     url: 'movie/list',
-  //     method: 'post',
-  //     data: {
-  //       page,
-  //       pageSize: 10
-  //     }
-  //   }).then((res) => {
-  //     setData(res.data.list)
-  //     setPage(page)
-  //     setTotal(res.data.total)
-  //   })
-  // }
+  const getData = (page = 1) => {
+    http({
+      url: '/theater/hall/select_seat/list',
+      method: 'get'
+    }).then((res) => {})
+  }
 
-  // useEffect(() => {
-  //   getData()
-  // }, [])
+  useEffect(() => {
+    getData()
+  }, [])
 
   useEffect(() => {}, [query, setQuery])
 
@@ -83,6 +75,14 @@ export default function MoviePage({ params: { lng } }: PageProps) {
       render: (_, row) => {
         return (
           <Space>
+            <Button
+              type="primary"
+              onClick={() => {
+                // router.push(`movieDetail?id=${row.id}`)
+              }}
+            >
+              {t('button.detail')}
+            </Button>
             <Button
               type="primary"
               onClick={() => {

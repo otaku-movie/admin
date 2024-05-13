@@ -1,7 +1,7 @@
 $size: 20px;
 $gap: 5px;
 
-section {
+.section {
   display: grid;
   padding: 0;
   grid-template-columns: $size 1fr;

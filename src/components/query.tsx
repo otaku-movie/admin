@@ -196,9 +196,9 @@ export function Query(props: QueryProps) {
 
   return (
     <section
-      style={{
-        width: '100%'
-      }}
+      // style={{
+      //   width: '100vw'
+      // }}
       ref={container}
     >
       <FormContext.Provider

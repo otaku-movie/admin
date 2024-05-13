@@ -16,6 +16,7 @@ interface UserModalProps {
 }
 
 export default function SeatModal(props: UserModalProps) {
+  const [data, setData] = useState([])
   const { t } = useTranslation(navigator.language as languageType, 'user')
 
   const onFinish = (values) => {
@@ -26,6 +27,33 @@ export default function SeatModal(props: UserModalProps) {
     console.log('Failed:', errorInfo)
   }
 
+  const generate2DArray = (data: any[]) => {
+    // 找到所有不同的xname值
+    const uniqueXNameValues = Array.from(
+      new Set(data.map((item) => item.xname))
+    )
+
+    // 创建二维数组，用于存放分组后的数据
+    const result = []
+
+    // 根据不同的xname值进行分组
+    uniqueXNameValues.forEach((xNameValue) => {
+      // 找到当前xname值对应的所有数据
+      const groupedData = data.filter((item) => item.xname === xNameValue)
+      // 将当前分组的数据添加到结果数组中
+      result.push({
+        row: xNameValue,
+        children: groupedData
+      })
+    })
+
+    return result
+  }
+
+  useEffect(() => {
+    setData(generate2DArray(props.data))
+  }, [props.data])
+
   return (
     <Modal
       title="座位详情"
@@ -34,14 +62,14 @@ export default function SeatModal(props: UserModalProps) {
       onCancel={props?.onCancel}
       width="fit-content"
     >
-      <section>
+      <section className='section'>
         <ul className="seat-row-number">
-          {props.data?.map((item, index) => {
+          {data?.map((item, index) => {
             return <li key={index}>{item.row}</li>
           })}
         </ul>
         <ul className="seat-container">
-          {props.data?.map((item, index) => {
+          {data?.map((item, index) => {
             return (
               <li
                 key={index}
@@ -57,7 +85,9 @@ export default function SeatModal(props: UserModalProps) {
                       key={childrenIndex}
                       className="seat-row-column"
                       style={{
-                        background: children.seatType === 2 ? 'red' : ''
+                        border: children.seatType === 2 ? '2px solid red' : '',
+                        background: children.selected ? 'red' : '',
+                        borderRadius: '4px'
                       }}
                     >
                       {children.column}
