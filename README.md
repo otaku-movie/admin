@@ -21,4 +21,4 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 ## stack
 
 ![React](public/logo/React.png)
-![React](public/logo/Typescript.png)
+![React](public/logo/TypeScript.png)
