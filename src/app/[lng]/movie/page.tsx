@@ -24,6 +24,7 @@ import { Movie, paginationResponse, response } from '@/type/api'
 import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '../layout'
 import { Dict } from '@/components/dict'
+import { dictStore } from '@/store/dictStore'
 
 interface Query {
   name: string
@@ -32,12 +33,12 @@ interface Query {
 
 export default function MoviePage({ params: { lng } }: PageProps) {
   const router = useRouter()
-
   const [data, setData] = useState([])
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
   const [query, setQuery] = useState<Partial<Query>>({})
   const { t } = useTranslation(lng, 'movie')
+  const setDict = dictStore((state) => state.setDict)
 
   const getData = (page = 1) => {
     http({
@@ -55,6 +56,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
   }
 
   useEffect(() => {
+    setDict(['release_status'])
     getData()
   }, [])
 

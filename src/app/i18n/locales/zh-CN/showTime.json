@@ -22,5 +22,25 @@
       "content": "是否确认要删除当前行，删除后不可恢复",
       "success": "删除成功"
     }
+  },
+  "showTimeModal": {
+    "title": {
+      "create": "添加场次",
+      "edit": "编辑场次"
+    },
+    "form": {
+      "movie": {
+        "label": "电影名称"
+      },
+      "theaterHall": {
+        "label": "放映影厅"
+      },
+      "startTime": {
+        "label": "开始时间"
+      },
+      "endTime": {
+        "label": "开始时间"
+      }
+    }
   }
 }

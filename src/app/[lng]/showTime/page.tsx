@@ -26,6 +26,7 @@ import { PageProps } from '../layout'
 import SeatModal from '@/dialog/seatModal'
 import { Dict } from '@/components/dict'
 import { dictStore } from '@/store/dictStore'
+import MovieShowTimeModal from '@/dialog/movieShowTimeModal'
 
 interface Query {
   name: string
@@ -39,6 +40,10 @@ export default function MoviePage({ params: { lng } }: PageProps) {
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
   const [query, setQuery] = useState<Partial<Query>>({})
+  const [showTimeModal, setShowTimeModal] = useState<any>({
+    data: [],
+    show: false
+  })
   const [modal, setModal] = useState<any>({
     data: [],
     show: false
@@ -132,10 +137,12 @@ export default function MoviePage({ params: { lng } }: PageProps) {
     },
     {
       title: t('table.startDate'),
+      width: 130,
       dataIndex: 'startTime'
     },
     {
       title: t('table.endDate'),
+      width: 130,
       dataIndex: 'endTime'
     },
     {
@@ -174,7 +181,10 @@ export default function MoviePage({ params: { lng } }: PageProps) {
             <Button
               type="primary"
               onClick={() => {
-                router.push(`movieDetail?id=${row.id}`)
+                setShowTimeModal({
+                  ...modal,
+                  show: true
+                })
               }}
             >
               {t('button.edit')}
@@ -223,7 +233,11 @@ export default function MoviePage({ params: { lng } }: PageProps) {
         <Row justify="end">
           <Button
             onClick={() => {
-              router.push(`/movieDetail`)
+              setShowTimeModal({
+                ...modal,
+                show: true
+              })
+              // router.push(`/movieDetail`)
             }}
           >
             {t('button.add')}
@@ -283,6 +297,9 @@ export default function MoviePage({ params: { lng } }: PageProps) {
             total,
             position: ['bottomCenter']
           }}
+          scroll={{
+            x: 800
+          }}
         />
       </Space>
       <SeatModal
@@ -302,6 +319,22 @@ export default function MoviePage({ params: { lng } }: PageProps) {
           })
         }}
       ></SeatModal>
+      <MovieShowTimeModal
+        show={showTimeModal.show}
+        type={showTimeModal.type}
+        onConfirm={() => {
+          setShowTimeModal({
+            ...showTimeModal,
+            show: false
+          })
+        }}
+        onCancel={() => {
+          setShowTimeModal({
+            ...showTimeModal,
+            show: false
+          })
+        }}
+      ></MovieShowTimeModal>
     </section>
   )
 }

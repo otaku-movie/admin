@@ -1,6 +1,16 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import { Table, Button, Space, Input, Row, message, Modal, Form } from 'antd'
+import {
+  Table,
+  Button,
+  Space,
+  Input,
+  Row,
+  message,
+  Modal,
+  Form,
+  InputNumber
+} from 'antd'
 import type { TableColumnsType } from 'antd'
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
 import { useRouter } from 'next/navigation'
@@ -18,6 +28,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
   const form = Form.useFormInstance()
   const [modal, setModal] = useState({
     data: [],
+    dictId: null,
     form: Form.useFormInstance(),
     show: false
   })
@@ -60,7 +71,6 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
         return (
           <Space>
             <Button
-              type="primary"
               onClick={() => {
                 http({
                   url: 'dict/detail',
@@ -69,13 +79,10 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
                     id: row.id
                   }
                 }).then((res) => {
-                  // modal.form.setFields(res.data)
-                  // modal.form.setFieldsValue(res.data)
-                  // form.setFields(res.data)
-
                   setModal({
                     ...modal,
                     data: res.data,
+                    dictId: row.id,
                     show: true
                   })
                 })
@@ -84,6 +91,9 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
               }}
             >
               {t('button.detail')}
+            </Button>
+            <Button type="primary" onClick={() => {}}>
+              {t('button.edit')}
             </Button>
             <Button
               type="primary"
@@ -122,16 +132,6 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
       }
     }
   ]
-  const formItemLayout = {
-    labelCol: {
-      xs: { span: 24 },
-      sm: { span: 4 }
-    },
-    wrapperCol: {
-      xs: { span: 24 },
-      sm: { span: 20 }
-    }
-  }
 
   const formItemLayoutWithOutLabel = {
     wrapperCol: {
@@ -180,17 +180,29 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
       <Modal
         title="Basic Modal"
         open={modal.show}
+        maskClosable={false}
         onOk={() => {
-          setModal({
-            ...modal,
-            data: [],
-            show: false
+          http({
+            url: '/dict/item/edit',
+            method: 'post',
+            data: {
+              dictId: modal.dictId,
+              dictItem: modal.data
+            }
+          }).then(() => {
+            setModal({
+              ...modal,
+              data: [],
+              dictId: null,
+              show: false
+            })
           })
         }}
         onCancel={() => {
           setModal({
             ...modal,
             data: [],
+            dictId: null,
             show: false
           })
         }}
@@ -199,74 +211,76 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
           name="dynamic_form_item"
           {...formItemLayoutWithOutLabel}
           onFinish={onFinish}
-          style={{ maxWidth: 600 }}
+          initialValues={modal.data}
         >
-          <Form.List
-            name="names"
-            rules={[
-              {
-                validator: async (_, names) => {
-                  if (!names || names.length < 2) {
-                    return Promise.reject(new Error('At least 2 passengers'))
-                  }
-                }
-              }
-            ]}
+          <Form.Item
+            label={''}
+            name="username"
+            rules={[{ required: true, message: 'Please input your username!' }]}
           >
-            {(fields, { add, remove }, { errors }) => {
-              console.log(fields)
-              return (
-                <>
-                  {fields.map((item, index) => (
-                    <Form.Item
-                      {...(index === 0
-                        ? formItemLayout
-                        : formItemLayoutWithOutLabel)}
-                      label={index === 0 ? 'Passengers' : ''}
-                      required={false}
-                      key={item.key}
-                    >
-                      <Form.Item
-                        validateTrigger={['onChange', 'onBlur']}
-                        name={[item.name, 'name']}
-                        rules={[
-                          {
-                            required: true,
-                            whitespace: true,
-                            message:
-                              "Please input passenger's name or delete this field."
-                          }
-                        ]}
-                        noStyle
-                      >
-                        <Input
-                          placeholder="passenger name"
-                          style={{ width: '60%' }}
-                        />
-                      </Form.Item>
-                      {fields.length > 1 ? (
-                        <MinusCircleOutlined
-                          className="dynamic-delete-button"
-                          onClick={() => remove(item.name)}
-                        />
-                      ) : null}
-                    </Form.Item>
-                  ))}
-                  <Form.Item>
-                    <Button
-                      type="dashed"
-                      onClick={() => add()}
-                      style={{ width: '60%' }}
-                      icon={<PlusOutlined />}
-                    >
-                      Add field
-                    </Button>
-                    <Form.ErrorList errors={errors} />
-                  </Form.Item>
-                </>
-              )
-            }}
-          </Form.List>
+            <Space direction="vertical" size={15}>
+              {modal.data.map((item: any, index: number) => {
+                return (
+                  <Space size={15} key={item.id}>
+                    <InputNumber
+                      min={1}
+                      value={item.code}
+                      onChange={(val) => {
+                        item.code = val
+
+                        setModal({
+                          ...modal,
+                          data: modal.data
+                        })
+                      }}
+                    />
+                    <Input
+                      value={item.name}
+                      style={{ width: '250px' }}
+                      onChange={(e) => {
+                        item.name = e.currentTarget.value
+
+                        setModal({
+                          ...modal,
+                          data: modal.data
+                        })
+                      }}
+                    ></Input>
+                    <MinusCircleOutlined
+                      onClick={() => {
+                        modal.data.splice(index, 1)
+
+                        setModal({
+                          ...modal,
+                          data: modal.data
+                        })
+                      }}
+                    />
+                  </Space>
+                )
+              })}
+              <Button
+                type="dashed"
+                style={{
+                  width: '100%'
+                }}
+                onClick={() => {
+                  modal.data.push({
+                    dictId: modal.dictId,
+                    code: undefined,
+                    name: ''
+                  } as never)
+                  setModal({
+                    ...modal,
+                    data: modal.data
+                  })
+                }}
+                icon={<PlusOutlined />}
+              >
+                Add field
+              </Button>
+            </Space>
+          </Form.Item>
         </Form>
       </Modal>
     </section>
