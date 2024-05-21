@@ -16,11 +16,12 @@ import {
 import type { GetProp, UploadFile, UploadProps } from 'antd'
 import ImgCrop from 'antd-img-crop'
 import { useTranslation } from '@/app/i18n/client'
-import { PageProps } from '../layout'
+import { PageProps } from '../../layout'
 import { useRouter, useSearchParams } from 'next/navigation'
 import http from '@/api'
 import dayjs from 'dayjs'
 import { Movie } from '@/type/api'
+
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 

@@ -25,6 +25,7 @@ import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '../layout'
 import { Dict } from '@/components/dict'
 import { dictStore } from '@/store/dictStore'
+import { processPath } from '@/config/router'
 
 interface Query {
   name: string
@@ -141,7 +142,11 @@ export default function MoviePage({ params: { lng } }: PageProps) {
             <Button
               type="primary"
               onClick={() => {
-                router.push(`movieDetail?id=${row.id}`)
+                router.push(
+                  processPath('movieDetail', {
+                    id: row.id
+                  })
+                )
               }}
             >
               {t('button.edit')}
@@ -190,7 +195,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
         <Row justify="end">
           <Button
             onClick={() => {
-              router.push(`/movieDetail`)
+              router.push(processPath(`movieDetail`))
             }}
           >
             {t('button.add')}

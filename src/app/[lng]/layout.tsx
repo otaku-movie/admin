@@ -22,6 +22,7 @@ import { TranslationOutlined } from '@ant-design/icons'
 import '@/assets/css/normalize.scss'
 import { languages } from '@/config'
 import { useTranslation } from '@/app/i18n/client'
+import { processPath } from '@/config/router'
 
 export interface PageProps {
   children: React.ReactNode
@@ -138,22 +139,30 @@ function RootLayout({ children, params: { lng } }: PageProps) {
               <Layout>
                 <Sider width={200} style={{ background: colorBgContainer }}>
                   <Menu
-                    defaultSelectedKeys={['/movie']}
+                    defaultSelectedKeys={[processPath('movie')]}
                     // theme="dark"
                     mode="inline"
                     items={[
                       {
                         key: '/cinema',
-                        label: <Link href="cinema">{t('menu.cinemaList')}</Link>
+                        label: (
+                          <Link href={processPath('cinema')}>
+                            {t('menu.cinemaList')}
+                          </Link>
+                        )
                       },
                       {
                         key: '/movie',
-                        label: <Link href={'movie'}>{t('menu.movieList')}</Link>
+                        label: (
+                          <Link href={processPath('movie')}>
+                            {t('menu.movieList')}
+                          </Link>
+                        )
                       },
                       {
                         key: '/showTime',
                         label: (
-                          <Link href={'showTime'}>
+                          <Link href={processPath('showTime')}>
                             {t('menu.showTimeList')}
                           </Link>
                         )
@@ -169,16 +178,26 @@ function RootLayout({ children, params: { lng } }: PageProps) {
                       {
                         key: '/orderList',
                         label: (
-                          <Link href={'orderList'}>{t('menu.orderList')}</Link>
+                          <Link href={processPath('orderList')}>
+                            {t('menu.orderList')}
+                          </Link>
                         )
                       },
                       {
                         key: '/user',
-                        label: <Link href={'user'}>{t('menu.userList')}</Link>
+                        label: (
+                          <Link href={processPath('user')}>
+                            {t('menu.userList')}
+                          </Link>
+                        )
                       },
                       {
                         key: '/dict',
-                        label: <Link href={'dict'}>{t('menu.dictList')}</Link>
+                        label: (
+                          <Link href={processPath('dict')}>
+                            {t('menu.dictList')}
+                          </Link>
+                        )
                       }
                     ]}
                   />
