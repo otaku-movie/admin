@@ -7,6 +7,7 @@ import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '../layout'
 import http from '@/api'
 import { Query, QueryItem } from '@/components/query'
+import { processPath } from '@/config/router'
 
 export default function CinemaPage({ params: { lng } }: PageProps) {
   const router = useRouter()
@@ -67,7 +68,14 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
             <Button
               type="primary"
               onClick={() => {
-                router.push(`/${lng}/theaterHall`)
+                router.push(
+                  processPath({
+                    name: 'theaterHall',
+                    query: {
+                      id: row.id
+                    }
+                  })
+                )
               }}
             >
               {t('button.detail')}
@@ -75,7 +83,14 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
             <Button
               type="primary"
               onClick={() => {
-                router.push(`/${lng}/cinemaDetail?id=${row.id}`)
+                router.push(
+                  processPath({
+                    name: 'cinemaDetail',
+                    query: {
+                      id: row.id
+                    }
+                  })
+                )
               }}
             >
               {t('button.edit')}
@@ -129,7 +144,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
       <Row justify="end">
         <Button
           onClick={() => {
-            router.push(`/${lng}/cinemaDetail`)
+            router.push(processPath('cinemaDetail'))
           }}
         >
           {t('button.add')}

@@ -1,15 +1,16 @@
 import { create } from 'zustand'
 import http from '@/api'
+import { DictItem } from '@/type/api'
 
 export interface dictStore {
-  dict: any
-  setDict(code: string[]): void
+  dict: Record<string, DictItem[]>
+  getDict(code: string[]): void
 }
 
 export const dictStore = create<dictStore>((set, get) => {
   return {
     dict: {},
-    async setDict(code: string[]) {
+    async getDict(code: string[]) {
       const res = await http({
         url: 'dict/specify',
         method: 'post',

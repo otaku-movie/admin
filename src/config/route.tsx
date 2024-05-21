@@ -16,6 +16,10 @@ export const route = [
     name: 'cinemaDetail'
   },
   {
+    path: '/cinema/theaterHall',
+    name: 'theaterHall'
+  },
+  {
     path: '/dict',
     name: 'dict'
   },

@@ -18,6 +18,7 @@ export interface Movie {
   description: string
   homePage: string
   time: number
+  status: 1 | 2 | 3
 }
 
 export interface Cinema {
@@ -26,4 +27,11 @@ export interface Cinema {
   homePage: string
   tel: string
   address: string
+}
+
+export interface DictItem {
+  id: number
+  name: string
+  code: number
+  dictId: number
 }
