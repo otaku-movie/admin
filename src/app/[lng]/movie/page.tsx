@@ -47,7 +47,8 @@ export default function MoviePage({ params: { lng } }: PageProps) {
       method: 'post',
       data: {
         page,
-        pageSize: 10
+        pageSize: 10,
+        ...query
       }
     }).then((res) => {
       setData(res.data.list)
@@ -209,28 +210,26 @@ export default function MoviePage({ params: { lng } }: PageProps) {
           model={query}
           onSearch={() => {
             console.log(query)
+            getData()
           }}
           onClear={(obj) => {
             setQuery({ ...obj })
           }}
         >
-          {new Array(5).fill(undefined).map((_, index) => {
-            return (
-              <QueryItem label={t('table.name') + index} column={1} key={index}>
-                <Input
-                  value={query.name}
-                  onChange={(e) => {
-                    query.name = e.target.value
-
-                    setQuery(query)
-                  }}
-                ></Input>
-              </QueryItem>
-            )
-          })}
+          <QueryItem label={t('table.name')}>
+            <Input
+              allowClear
+              value={query.name}
+              onChange={(e) => {
+                query.name = e.target.value
+                setQuery(query)
+              }}
+            ></Input>
+          </QueryItem>
           <QueryItem label={t('table.status')}>
             <Select
               value={query.status}
+              allowClear
               onChange={(val) => {
                 query.status = val
                 setQuery(query)
