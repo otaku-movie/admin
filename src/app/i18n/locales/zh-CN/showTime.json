@@ -17,6 +17,10 @@
     "edit": "编辑",
     "remove": "删除"
   },
+  "query": {
+    "cinema": "影院",
+    "date": "上映日期"
+  },
   "message": {
     "remove": {
       "content": "是否确认要删除当前行，删除后不可恢复",
@@ -30,16 +34,19 @@
     },
     "form": {
       "movie": {
-        "label": "电影名称"
+        "label": "电影名称",
+        "required": "请选择电影"
+      },
+      "cinema": {
+        "required": "请选择影院"
       },
       "theaterHall": {
-        "label": "放映影厅"
+        "label": "放映影厅",
+        "required": "请选择影厅"
       },
-      "startTime": {
-        "label": "开始时间"
-      },
-      "endTime": {
-        "label": "开始时间"
+      "showTime": {
+        "label": "开始时间",
+        "required": "请选择上映时间"
       }
     }
   }

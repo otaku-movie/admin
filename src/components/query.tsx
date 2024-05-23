@@ -121,7 +121,6 @@ export function Query(props: QueryProps) {
     console.log('Received values of form: ', values)
     props.onSearch?.()
   }
-  console.log(totalSpan, max)
 
   const getColumn = (width: number) => {
     const map = {

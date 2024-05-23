@@ -12,11 +12,17 @@ export interface response<T = any> {
 
 
 export interface Cinema {
+  id: number
   name: string
   description: string
   homePage: string
   tel: string
   address: string
+}
+
+export interface theaterHall {
+  id: number
+  name: string
 }
 
 export interface DictItem {
