@@ -10,16 +10,6 @@ export interface response<T = any> {
   data: paginationResponse<T> | T
 }
 
-export interface Movie {
-  id: number
-  cover: string
-  name: string
-  originalName: string
-  description: string
-  homePage: string
-  time: number
-  status: 1 | 2 | 3
-}
 
 export interface Cinema {
   name: string
@@ -34,4 +24,32 @@ export interface DictItem {
   name: string
   code: number
   dictId: number
+}
+
+export interface SpecItem {
+  id: number
+  name: string
+  description: string
+}
+
+export interface seatItem {
+  id: number
+  seatType: number
+  xaxis: number
+  xname: string
+  yaxis: number
+  zaxis: number
+  selected: boolean
+}
+
+export interface Movie {
+  id: number
+  cover: string
+  name: string
+  originalName: string
+  description: string
+  homePage: string
+  time: number
+  status: 1 | 2 | 3
+  spec: SpecItem[]
 }

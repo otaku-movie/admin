@@ -1,20 +1,31 @@
 {
   "table": {
-    "name": "作品",
-    "time": "片长",
-    "level": "分级",
-    "commentCount": "评论数",
-    "watchedCount": "已看过",
-    "wantToSeeCount": "想看数",
-    "startDate": "开始日期",
-    "endDate": "结束日期",
-    "status": "上映状态",
+    "name": "影厅名称",
+    "spec": "规格",
+    "seatCount": "座位数",
     "action": "操作"
   },
   "button": {
+    "detail": "座位详情",
     "add": "添加",
     "edit": "编辑",
     "remove": "删除"
+  },
+  "theaterHallModal": {
+    "title": {
+      "create": "添加影厅",
+      "edit": "编辑影厅"
+    },
+    "form": {
+      "name": {
+        "label": "影厅名称",
+        "required": "请输入影厅名称"
+      },
+      "spec": {
+        "label": "影厅规格",
+        "required": "请选择影厅规格"
+      }
+    }
   },
   "message": {
     "remove": {

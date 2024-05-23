@@ -48,7 +48,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
     data: [],
     show: false
   })
-  const setDict = dictStore((state) => state.setDict)
+  const getDict = dictStore((state) => state.getDict)
   const { t } = useTranslation(lng, 'showTime')
 
   const getData = (page = 1) => {
@@ -67,7 +67,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
   }
 
   useEffect(() => {
-    setDict(['cinema_spec', 'cinema_play_state'])
+    getDict(['cinema_spec', 'cinema_play_state'])
     getData()
   }, [])
 

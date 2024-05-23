@@ -6,17 +6,22 @@ import { Form, Modal, Input } from 'antd'
 import http from '@/api'
 import { languageType } from '@/config'
 import './seatModal.scss'
+import { seatItem } from '@/type/api'
 
-interface UserModalProps {
+interface ModalProps {
   type: 'create' | 'edit'
   show?: boolean
-  data?: any[]
+  data?: seatItem[]
   onConfirm?: () => void
   onCancel?: () => void
 }
 
-export default function SeatModal(props: UserModalProps) {
-  const [data, setData] = useState([])
+interface seat {
+  row: string
+  children: seatItem[]
+}
+export default function SeatModal(props: ModalProps) {
+  const [data, setData] = useState<seat[]>([])
   const { t } = useTranslation(navigator.language as languageType, 'user')
 
   const onFinish = (values) => {
@@ -27,14 +32,14 @@ export default function SeatModal(props: UserModalProps) {
     console.log('Failed:', errorInfo)
   }
 
-  const generate2DArray = (data: any[]) => {
+  const generate2DArray = (data: seatItem[]) => {
     // 找到所有不同的xname值
     const uniqueXNameValues = Array.from(
       new Set(data.map((item) => item.xname))
     )
 
     // 创建二维数组，用于存放分组后的数据
-    const result = []
+    const result: seat[] = []
 
     // 根据不同的xname值进行分组
     uniqueXNameValues.forEach((xNameValue) => {
@@ -51,8 +56,9 @@ export default function SeatModal(props: UserModalProps) {
   }
 
   useEffect(() => {
+    console.log(props.data)
     setData(generate2DArray(props.data))
-  }, [props.data])
+  }, [])
 
   return (
     <Modal
@@ -61,8 +67,9 @@ export default function SeatModal(props: UserModalProps) {
       onOk={props?.onConfirm}
       onCancel={props?.onCancel}
       width="fit-content"
+      key={'seat-modal'}
     >
-      <section className='section'>
+      <section className="section">
         <ul className="seat-row-number">
           {data?.map((item, index) => {
             return <li key={index}>{item.row}</li>

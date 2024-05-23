@@ -19,6 +19,7 @@
     "antd": "^5.16.0",
     "antd-img-crop": "^4.21.0",
     "axios": "^1.6.8",
+    "dayjs": "^1.11.11",
     "i18next": "^23.11.1",
     "i18next-browser-languagedetector": "^7.2.1",
     "i18next-resources-to-backend": "^1.2.1",

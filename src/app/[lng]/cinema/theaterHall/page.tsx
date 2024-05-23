@@ -1,12 +1,13 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import { Table, Button, Space, Row, Col } from 'antd'
+import { Table, Button, Space, Row } from 'antd'
 import type { TableColumnsType } from 'antd'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import SeatModal from '@/dialog/seatModal'
 import http from '@/api'
-import { PageProps } from '../layout'
+import { PageProps } from '../../layout'
 import { useTranslation } from '@/app/i18n/client'
+import TheaterHallModal from '@/dialog/theaterHallModal'
 
 export default function Page({ params: { lng } }: PageProps) {
   const router = useRouter()
@@ -14,9 +15,15 @@ export default function Page({ params: { lng } }: PageProps) {
     data: [],
     show: false
   })
+  const [theaterHallModal, setTheaterHallModal] = useState<any>({
+    data: [],
+    type: 'create',
+    show: false
+  })
   const [data, setData] = useState([])
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
+  const searchParams = useSearchParams()
   const { t } = useTranslation(lng, 'theaterHall')
 
   const getData = (page = 1) => {
@@ -24,6 +31,7 @@ export default function Page({ params: { lng } }: PageProps) {
       url: 'theater/hall/list',
       method: 'post',
       data: {
+        cinemaId: +searchParams.get('id')!,
         page,
         pageSize: 10
       }
@@ -40,15 +48,15 @@ export default function Page({ params: { lng } }: PageProps) {
 
   const columns: TableColumnsType<any> = [
     {
-      title: 'シアター名',
+      title: t('table.name'),
       dataIndex: 'name'
     },
     {
-      title: 'スクリーン規格',
+      title: t('table.spec'),
       dataIndex: 'spec'
     },
     {
-      title: 'シート数',
+      title: t('table.seatCount'),
       dataIndex: 'seatCount'
     },
     {
@@ -57,29 +65,6 @@ export default function Page({ params: { lng } }: PageProps) {
       fixed: 'right',
       width: 250,
       render: (_, row) => {
-        const generate2DArray = (data: any[]) => {
-          // 找到所有不同的xname值
-          const uniqueXNameValues = Array.from(
-            new Set(data.map((item) => item.xname))
-          )
-
-          // 创建二维数组，用于存放分组后的数据
-          const result = []
-
-          // 根据不同的xname值进行分组
-          uniqueXNameValues.forEach((xNameValue) => {
-            // 找到当前xname值对应的所有数据
-            const groupedData = data.filter((item) => item.xname === xNameValue)
-            // 将当前分组的数据添加到结果数组中
-            result.push({
-              row: xNameValue,
-              children: groupedData
-            })
-          })
-
-          return result
-        }
-
         return (
           <Space>
             <Button
@@ -91,10 +76,7 @@ export default function Page({ params: { lng } }: PageProps) {
                   params: {
                     theaterHallId: row.id
                   }
-                }).then((res) => {
-                  const data = generate2DArray(res.data)
-                  console.log(data)
-
+                }).then(() => {
                   setModal({
                     data,
                     show: true
@@ -102,18 +84,31 @@ export default function Page({ params: { lng } }: PageProps) {
                 })
               }}
             >
-              シート詳細
+              {t('button.detail')}
             </Button>
             <Button
               type="primary"
               onClick={() => {
-
+                http({
+                  url: 'theater/hall/detail',
+                  method: 'get',
+                  params: {
+                    id: row.id
+                  }
+                }).then((res) => {
+                  setTheaterHallModal({
+                    ...theaterHallModal,
+                    data: res.data,
+                    type: 'edit',
+                    show: true
+                  })
+                })
               }}
             >
-              編集
+              {t('button.edit')}
             </Button>
             <Button type="primary" danger>
-              削除
+              {t('button.remove')}
             </Button>
           </Space>
         )
@@ -129,7 +124,18 @@ export default function Page({ params: { lng } }: PageProps) {
           marginBottom: '30px'
         }}
       >
-        <Button onClick={() => {}}>{t('button.add')}</Button>
+        <Button
+          onClick={() => {
+            setTheaterHallModal({
+              ...theaterHallModal,
+              data: {},
+              type: 'create',
+              show: true
+            })
+          }}
+        >
+          {t('button.add')}
+        </Button>
       </Row>
       <Table
         columns={columns}
@@ -137,6 +143,8 @@ export default function Page({ params: { lng } }: PageProps) {
         bordered={true}
         pagination={{
           pageSize: 10,
+          current: page,
+          total,
           position: ['bottomCenter']
         }}
       />
@@ -157,6 +165,24 @@ export default function Page({ params: { lng } }: PageProps) {
           })
         }}
       ></SeatModal>
+      <TheaterHallModal
+        show={theaterHallModal.show}
+        type={theaterHallModal.type}
+        data={theaterHallModal.data}
+        onConfirm={() => {
+          getData()
+          setTheaterHallModal({
+            ...theaterHallModal,
+            show: false
+          })
+        }}
+        onCancel={() => {
+          setTheaterHallModal({
+            ...theaterHallModal,
+            show: false
+          })
+        }}
+      ></TheaterHallModal>
     </>
   )
 }

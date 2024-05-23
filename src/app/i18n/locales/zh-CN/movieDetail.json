@@ -28,6 +28,10 @@
       "label": "影片简介",
       "required": "请输入影片简介"
     },
+    "status": {
+      "label": "上映状态",
+      "required": "请选择上映状态"
+    },
     "startDate": {
       "label": "上映开始日期",
       "required": "请选择开始上映日期"

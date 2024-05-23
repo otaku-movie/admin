@@ -39,7 +39,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
   const [total, setTotal] = useState(0)
   const [query, setQuery] = useState<Partial<Query>>({})
   const { t } = useTranslation(lng, 'movie')
-  const setDict = dictStore((state) => state.setDict)
+  const getDict = dictStore((state) => state.getDict)
 
   const getData = (page = 1) => {
     http({
@@ -57,7 +57,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
   }
 
   useEffect(() => {
-    setDict(['release_status'])
+    getDict(['release_status'])
     getData()
   }, [])
 
@@ -75,15 +75,15 @@ export default function MoviePage({ params: { lng } }: PageProps) {
             <Space direction="vertical">
               <span>{row.name}</span>
               <section>
-                {['IMAX', 'DOLBY cinema', '2D', 'DOLBY ATOMS'].map((item) => {
+                {row.spec.map((item) => {
                   return (
                     <Tag
-                      key={item}
+                      key={item.id}
                       style={{
                         marginBottom: '10px'
                       }}
                     >
-                      {item}
+                      {item.name}
                     </Tag>
                   )
                 })}
@@ -92,6 +92,10 @@ export default function MoviePage({ params: { lng } }: PageProps) {
           </Space>
         )
       }
+    },
+    {
+      title: t('table.originalName'),
+      dataIndex: 'originalName'
     },
     {
       title: t('table.time'),
