@@ -100,10 +100,10 @@ export function Query(props: QueryProps) {
   const children = React.Children.toArray(
     props.children
   ) as unknown as React.ReactElement<QueryItemProps>[]
-  const totalSpan = children.reduce(
+  const [totalSpan, setTotalSpan] = useState(children.reduce(
     (total, current) => total + ((current.props?.column || 1) * row) / column,
     0
-  )
+  ))
 
   const { t } = useTranslation(
     globalThis?.navigator?.language as languageType,
@@ -121,6 +121,7 @@ export function Query(props: QueryProps) {
     console.log('Received values of form: ', values)
     props.onSearch?.()
   }
+  console.log(totalSpan, max)
 
   const getColumn = (width: number) => {
     const map = {
@@ -168,12 +169,16 @@ export function Query(props: QueryProps) {
       const node = children[i]
       const span = ((node.props?.column || 1) * row) / column
       const newNode = React.cloneElement(node, {
-        show: init < max
+        show: init < max,
+      
       })
       init += span
 
       arr.push(newNode)
     }
+    // 是否显示展开折叠
+    const result = arr.reduce((total, current) => total + ((current.props?.column || 1) * row) / column, 0)
+    setTotalSpan(result)
 
     return arr
   }
