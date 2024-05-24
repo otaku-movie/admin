@@ -12,6 +12,12 @@
     "edit": "编辑",
     "remove": "删除"
   },
+  "message": {
+    "remove": {
+      "content": "是否确认要删除当前用户，删除后不可恢复",
+      "success": "删除成功"
+    }
+  },
   "modal": {
     "title": {
       "create": "添加用户",
@@ -19,15 +25,26 @@
     },
     "form": {
       "username": {
-        "label": "用户名称"
+        "label": "用户名称",
+        "required": "请输入用户名称",
+        "error": "用户名称不合法，格式为数字、字母，特殊字符为 -_."
       },
       "email": {
-        "label": "邮箱"
+        "label": "邮箱",
+        "required": "请输入邮箱",
+        "error": "邮箱不合法"
       },
       "password": {
-        "label": "密码"
+        "label": "密码",
+        "required": "请输入密码",
+        "error": "密码不合法，格式为数字、字母，特殊字符为 -_."
+      },
+      "password2": {
+        "label": "重复密码",
+        "required": "请输入重复密码",
+        "error": "重复密码不合法，格式为数字、字母，特殊字符为 -_.",
+        "repeat": "两次输入的密码不一致"
       }
     }
-   
   }
 }

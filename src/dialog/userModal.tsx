@@ -5,24 +5,41 @@ import { useTranslation } from '@/app/i18n/client'
 import { Form, Modal, Input } from 'antd'
 import http from '@/api'
 import { languageType } from '@/config'
+import { user } from '@/type/api'
+import { emailRegExp, passwordRegExp, usernameRegExp } from '@/utils'
 
 interface UserModalProps {
   type: 'create' | 'edit'
   show?: boolean
+  data: Partial<user>
   onConfirm?: () => void
   onCancel?: () => void
 }
 
+interface Query {
+  id?: number
+  username?: string
+  password?: string
+  password2?: string
+  email?: string
+}
+
 export default function UserModal(props: UserModalProps) {
   const { t } = useTranslation(navigator.language as languageType, 'user')
+  const [form] = Form.useForm()
+  const [query, setQuery] = useState<Query>({})
 
-  const onFinish = (values) => {
-    console.log('Success:', values)
-  }
-
-  const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo)
-  }
+  useEffect(() => {
+    if (props.show) {
+      form.resetFields()
+    }
+    if (props.data?.id) {
+      form.setFieldsValue(props.data)
+      // setQuery(props.data)
+      console.log(props.data, query)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.show, props.data])
 
   return (
     <Modal
@@ -30,7 +47,20 @@ export default function UserModal(props: UserModalProps) {
         props.type === 'edit' ? t('modal.title.edit') : t('modal.title.create')
       }
       open={props.show}
-      onOk={props?.onConfirm}
+      maskClosable={false}
+      onOk={() => {
+        form.validateFields().then(() => {
+          http({
+            url: 'user/save',
+            method: 'post',
+            data: {
+              ...query
+            }
+          }).then(() => {
+            props?.onConfirm?.()
+          })
+        })
+      }}
       onCancel={props?.onCancel}
     >
       <Form
@@ -38,32 +68,109 @@ export default function UserModal(props: UserModalProps) {
         labelCol={{ span: 8 }}
         wrapperCol={{ span: 16 }}
         style={{ maxWidth: 600 }}
-        initialValues={{ remember: true }}
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
-        autoComplete="off"
+        form={form}
       >
         <Form.Item
           label={t('modal.form.username.label')}
           name="username"
-          rules={[{ required: true, message: 'Please input your username!' }]}
+          rules={[
+            { required: true, message: t('modal.form.username.required') },
+            {
+              pattern: usernameRegExp,
+              validateTrigger: ['onChange', 'onBlur'],
+              message: t('modal.form.username.error')
+            }
+          ]}
         >
-          <Input />
+          <Input
+            value={query.username}
+            onChange={(e) => {
+              setQuery({
+                ...query,
+                username: e.currentTarget.value
+              })
+            }}
+          />
         </Form.Item>
         <Form.Item
           label={t('modal.form.email.label')}
-          name="username"
-          rules={[{ required: true, message: 'Please input your username!' }]}
+          name="email"
+          rules={[
+            {
+              required: true,
+              message: t('modal.form.email.required')
+            },
+            {
+              pattern: emailRegExp,
+              validateTrigger: ['onChange', 'onBlur'],
+              message: t('modal.form.email.error')
+            }
+          ]}
         >
-          <Input />
+          <Input
+            value={query.email}
+            onChange={(e) => {
+              setQuery({
+                ...query,
+                email: e.currentTarget.value
+              })
+            }}
+          />
         </Form.Item>
 
         <Form.Item
           label={t('modal.form.password.label')}
           name="password"
-          rules={[{ required: true, message: 'Please input your password!' }]}
+          rules={[
+            { required: true, message: t('modal.form.password.required') },
+            {
+              pattern: passwordRegExp,
+              validateTrigger: ['onChange', 'onBlur'],
+              message: t('modal.form.password.error')
+            }
+          ]}
         >
-          <Input.Password />
+          <Input.Password
+            value={query.password}
+            onChange={(e) => {
+              setQuery({
+                ...query,
+                password: e.currentTarget.value
+              })
+            }}
+          />
+        </Form.Item>
+        <Form.Item
+          label={t('modal.form.password2.label')}
+          name="password2"
+          rules={[
+            { required: true, message: t('modal.form.password2.required') },
+            {
+              pattern: passwordRegExp,
+              validateTrigger: ['onChange', 'onBlur'],
+              message: t('modal.form.password.error')
+            },
+            {
+              validator() {
+                if (query.password !== query.password2) {
+                  return Promise.reject(
+                    new Error(t('modal.form.password2.repeat'))
+                  )
+                }
+                return Promise.resolve()
+              }
+            }
+          ]}
+        >
+          <Input.Password
+            value={query.password2}
+            onChange={(e) => {
+              setQuery({
+                ...query,
+                password2: e.currentTarget.value
+              })
+            }}
+          />
         </Form.Item>
       </Form>
     </Modal>

@@ -1,8 +1,7 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import { Table, Button, Space, Input, Row } from 'antd'
+import { Table, Button, Space, Input, Row, message, Modal } from 'antd'
 import type { TableColumnsType } from 'antd'
-import { useRouter } from 'next/navigation'
 import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '../layout'
 import http from '@/api'
@@ -15,9 +14,10 @@ interface Query {
 }
 
 export default function CinemaPage({ params: { lng } }: PageProps) {
-  const router = useRouter()
   const [modal, setModal] = useState({
-    show: false
+    type: 'create',
+    show: false,
+    data: {}
   })
   const [data, setData] = useState([])
   const [page, setPage] = useState(1)
@@ -31,7 +31,8 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
       method: 'post',
       data: {
         page,
-        pageSize: 10
+        pageSize: 10,
+        ...query
       }
     }).then((res) => {
       setData(res.data.list)
@@ -72,15 +73,54 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
             <Button
               type="primary"
               onClick={() => {
-                setModal({
-                  ...modal,
-                  show: true
+                http({
+                  url: 'user/detail',
+                  method: 'get',
+                  params: {
+                    id: row.id
+                  }
+                }).then((res) => {
+                  setModal({
+                    ...modal,
+                    data: res.data,
+                    type: 'edit',
+                    show: true
+                  })
                 })
               }}
             >
               {t('button.edit')}
             </Button>
-            <Button type="primary" danger>
+            <Button
+              type="primary"
+              danger
+              onClick={() => {
+                Modal.confirm({
+                  title: t('button.remove'),
+                  content: t('message.remove.content'),
+                  onCancel() {
+                    console.log('Cancel')
+                  },
+                  onOk() {
+                    return new Promise((resolve, reject) => {
+                      http({
+                        url: 'user/remove',
+                        method: 'delete',
+                        params: {
+                          id: row.id
+                        }
+                      })
+                        .then(() => {
+                          message.success(t('message.remove.success'))
+                          getData()
+                          resolve(true)
+                        })
+                        .catch(reject)
+                    })
+                  }
+                })
+              }}
+            >
               {t('button.remove')}
             </Button>
           </Space>
@@ -102,6 +142,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
           onClick={() => {
             setModal({
               ...modal,
+              type: 'create',
               show: true
             })
           }}
@@ -109,9 +150,14 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
           {t('button.add')}
         </Button>
       </Row>
-      <Query>
+      <Query
+        onSearch={() => {
+          getData()
+        }}
+      >
         <QueryItem label={t('table.name')} column={1}>
           <Input
+            allowClear
             value={query.name}
             onChange={(e) => {
               query.name = e.target.value
@@ -122,6 +168,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
         </QueryItem>
         <QueryItem label={t('table.email')} column={1}>
           <Input
+            allowClear
             value={query.name}
             onChange={(e) => {
               query.email = e.target.value
@@ -143,7 +190,9 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
         }}
       />
       <UserModal
+        type={modal.type as 'create' | 'edit'}
         show={modal.show}
+        data={modal.data}
         onCancel={() => {
           setModal({
             ...modal,
@@ -151,6 +200,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
           })
         }}
         onConfirm={() => {
+          getData()
           setModal({
             ...modal,
             show: false

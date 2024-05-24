@@ -59,3 +59,11 @@ export interface Movie {
   status: 1 | 2 | 3
   spec: SpecItem[]
 }
+
+export interface user {
+  id: number
+  cover: string
+  username: string
+  email: string
+  createTime: string
+}
