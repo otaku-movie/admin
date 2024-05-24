@@ -6,7 +6,15 @@
     "dictList": "字典列表",
     "showTimeList": "电影场次列表",
     "orderList": "订单列表",
-    "selectSeat": "选座列表"
+    "selectSeat": "选座列表",
+    "authorityManagement": {
+      "name": "权限管理",
+      "children": {
+        "roleList": "角色列表",
+        "menuList": "菜单列表",
+        "apiList": "接口列表"
+      }
+    }
   },
   "message": {
     "save": "保存成功"

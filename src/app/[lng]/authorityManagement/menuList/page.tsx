@@ -1,33 +1,32 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import { Table, Button, Space, Input, Row, message, Modal } from 'antd'
+import { Table, Button, Space, Row, Input, Switch, Modal, message } from 'antd'
+
 import type { TableColumnsType } from 'antd'
-import { useTranslation } from '@/app/i18n/client'
-import { PageProps } from '../layout'
-import http from '@/api'
+import { useRouter } from 'next/navigation'
+
 import { Query, QueryItem } from '@/components/query'
-import UserModal from '@/dialog/userModal'
+import http from '@/api/index'
+import { Movie, paginationResponse, response } from '@/type/api'
+import { useTranslation } from '@/app/i18n/client'
+import { PageProps } from '../../layout'
+import { processPath } from '@/config/router'
 
 interface Query {
   name: string
-  email: string
 }
 
-export default function CinemaPage({ params: { lng } }: PageProps) {
-  const [modal, setModal] = useState({
-    type: 'create',
-    show: false,
-    data: {}
-  })
+export default function MoviePage({ params: { lng } }: PageProps) {
+  const router = useRouter()
   const [data, setData] = useState([])
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
   const [query, setQuery] = useState<Partial<Query>>({})
-  const { t } = useTranslation(lng, 'user')
+  const { t } = useTranslation(lng, 'menu')
 
   const getData = (page = 1) => {
     http({
-      url: 'user/list',
+      url: 'permission/api/list',
       method: 'post',
       data: {
         page,
@@ -45,48 +44,43 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
     getData()
   }, [])
 
-  const columns: TableColumnsType = [
-    {
-      title: t('table.icon'),
-      dataIndex: 'cover'
-    },
+  useEffect(() => {}, [query, setQuery])
+
+  const columns: TableColumnsType<Movie> = [
     {
       title: t('table.name'),
-      dataIndex: 'username'
+      dataIndex: 'name'
     },
     {
-      title: t('table.email'),
-      dataIndex: 'email'
+      title: t('table.routerPath'),
+      dataIndex: 'path'
     },
     {
-      title: t('table.registerTime'),
-      dataIndex: 'createTime'
+      title: t('table.routerName'),
+      dataIndex: 'pathName'
+    },
+    {
+      title: t('table.show'),
+      dataIndex: '',
+      render(_, row) {
+        return <Switch defaultChecked />
+      }
     },
     {
       title: t('table.action'),
       key: 'operation',
-      fixed: 'right',
-      width: 200,
+      width: 100,
       render: (_, row) => {
         return (
           <Space>
             <Button
               type="primary"
               onClick={() => {
-                http({
-                  url: 'user/detail',
-                  method: 'get',
-                  params: {
+                router.push(
+                  processPath('movieDetail', {
                     id: row.id
-                  }
-                }).then((res) => {
-                  setModal({
-                    ...modal,
-                    data: res.data,
-                    type: 'edit',
-                    show: true
                   })
-                })
+                )
               }}
             >
               {t('button.edit')}
@@ -104,7 +98,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
                   onOk() {
                     return new Promise((resolve, reject) => {
                       http({
-                        url: 'user/remove',
+                        url: 'movie/remove',
                         method: 'delete',
                         params: {
                           id: row.id
@@ -140,45 +134,34 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
       <Row justify="end">
         <Button
           onClick={() => {
-            setModal({
-              ...modal,
-              data: {},
-              type: 'create',
-              show: true
-            })
+            router.push(processPath(`movieDetail`))
           }}
         >
           {t('button.add')}
         </Button>
       </Row>
       <Query
+        model={query}
         onSearch={() => {
+          console.log(query)
           getData()
         }}
+        onClear={(obj) => {
+          setQuery({ ...obj })
+        }}
       >
-        <QueryItem label={t('table.name')} column={1}>
+        <QueryItem label={t('table.name')}>
           <Input
             allowClear
             value={query.name}
             onChange={(e) => {
               query.name = e.target.value
-
-              setQuery(query)
-            }}
-          ></Input>
-        </QueryItem>
-        <QueryItem label={t('table.email')} column={1}>
-          <Input
-            allowClear
-            value={query.name}
-            onChange={(e) => {
-              query.email = e.target.value
-
               setQuery(query)
             }}
           ></Input>
         </QueryItem>
       </Query>
+
       <Table
         columns={columns}
         dataSource={data}
@@ -190,24 +173,6 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
           position: ['bottomCenter']
         }}
       />
-      <UserModal
-        type={modal.type as 'create' | 'edit'}
-        show={modal.show}
-        data={modal.data}
-        onCancel={() => {
-          setModal({
-            ...modal,
-            show: false
-          })
-        }}
-        onConfirm={() => {
-          getData()
-          setModal({
-            ...modal,
-            show: false
-          })
-        }}
-      ></UserModal>
     </section>
   )
 }

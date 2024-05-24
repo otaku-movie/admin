@@ -1,33 +1,46 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import { Table, Button, Space, Input, Row, message, Modal } from 'antd'
+import {
+  Table,
+  Button,
+  Space,
+  Row,
+  Tag,
+  Input,
+  Select,
+  Modal,
+  message
+} from 'antd'
+
 import type { TableColumnsType } from 'antd'
-import { useTranslation } from '@/app/i18n/client'
-import { PageProps } from '../layout'
-import http from '@/api'
+import { useRouter } from 'next/navigation'
+
 import { Query, QueryItem } from '@/components/query'
-import UserModal from '@/dialog/userModal'
+import http from '@/api/index'
+import { useTranslation } from '@/app/i18n/client'
+import { PageProps } from '../../layout'
+import { RoleModal } from '@/dialog/roleModal'
 
 interface Query {
   name: string
-  email: string
+  status: number
 }
 
-export default function CinemaPage({ params: { lng } }: PageProps) {
+export default function MoviePage({ params: { lng } }: PageProps) {
+  const [data, setData] = useState([])
+  const [page, setPage] = useState(1)
+  const [total, setTotal] = useState(0)
+  const [query, setQuery] = useState<Partial<Query>>({})
+  const { t } = useTranslation(lng, 'role')
   const [modal, setModal] = useState({
     type: 'create',
     show: false,
     data: {}
   })
-  const [data, setData] = useState([])
-  const [page, setPage] = useState(1)
-  const [total, setTotal] = useState(0)
-  const [query, setQuery] = useState<Partial<Query>>({})
-  const { t } = useTranslation(lng, 'user')
 
   const getData = (page = 1) => {
     http({
-      url: 'user/list',
+      url: 'permission/role/list',
       method: 'post',
       data: {
         page,
@@ -45,28 +58,17 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
     getData()
   }, [])
 
+  useEffect(() => {}, [query, setQuery])
+
   const columns: TableColumnsType = [
     {
-      title: t('table.icon'),
-      dataIndex: 'cover'
-    },
-    {
       title: t('table.name'),
-      dataIndex: 'username'
-    },
-    {
-      title: t('table.email'),
-      dataIndex: 'email'
-    },
-    {
-      title: t('table.registerTime'),
-      dataIndex: 'createTime'
+      dataIndex: 'name'
     },
     {
       title: t('table.action'),
       key: 'operation',
-      fixed: 'right',
-      width: 200,
+      width: 100,
       render: (_, row) => {
         return (
           <Space>
@@ -74,7 +76,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
               type="primary"
               onClick={() => {
                 http({
-                  url: 'user/detail',
+                  url: 'permission/role/detail',
                   method: 'get',
                   params: {
                     id: row.id
@@ -91,6 +93,12 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
             >
               {t('button.edit')}
             </Button>
+            <Button type="primary" onClick={() => {}}>
+              {t('button.configMenu')}
+            </Button>
+            <Button type="primary" onClick={() => {}}>
+              {t('button.configButton')}
+            </Button>
             <Button
               type="primary"
               danger
@@ -104,7 +112,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
                   onOk() {
                     return new Promise((resolve, reject) => {
                       http({
-                        url: 'user/remove',
+                        url: 'permission/role/remove',
                         method: 'delete',
                         params: {
                           id: row.id
@@ -152,33 +160,26 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
         </Button>
       </Row>
       <Query
+        model={query}
         onSearch={() => {
           getData()
         }}
+        onClear={(obj) => {
+          setQuery({ ...obj })
+        }}
       >
-        <QueryItem label={t('table.name')} column={1}>
+        <QueryItem label={t('table.name')}>
           <Input
             allowClear
             value={query.name}
             onChange={(e) => {
               query.name = e.target.value
-
-              setQuery(query)
-            }}
-          ></Input>
-        </QueryItem>
-        <QueryItem label={t('table.email')} column={1}>
-          <Input
-            allowClear
-            value={query.name}
-            onChange={(e) => {
-              query.email = e.target.value
-
               setQuery(query)
             }}
           ></Input>
         </QueryItem>
       </Query>
+
       <Table
         columns={columns}
         dataSource={data}
@@ -190,7 +191,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
           position: ['bottomCenter']
         }}
       />
-      <UserModal
+      <RoleModal
         type={modal.type as 'create' | 'edit'}
         show={modal.show}
         data={modal.data}
@@ -207,7 +208,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
             show: false
           })
         }}
-      ></UserModal>
+      ></RoleModal>
     </section>
   )
 }

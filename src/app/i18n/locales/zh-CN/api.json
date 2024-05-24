@@ -1,0 +1,34 @@
+{
+  "table": {
+    "name": "接口名称",
+    "path": "接口路径",
+    "action": "操作"
+  },
+  "button": {
+    "add": "添加",
+    "edit": "编辑",
+    "remove": "删除"
+  },
+  "message": {
+    "remove": {
+      "content": "是否确认要删除当前接口，删除后不可恢复",
+      "success": "删除成功"
+    }
+  },
+  "modal": {
+    "title": {
+      "create": "添加接口",
+      "edit": "编辑接口"
+    },
+    "form": {
+      "name": {
+        "label": "接口名称",
+        "required": "请输入接口名称"
+      },
+      "path": {
+        "label": "接口路径",
+        "required": "请输入接口路径"
+      }
+    }
+  }
+}

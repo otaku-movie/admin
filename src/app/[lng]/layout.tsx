@@ -184,6 +184,44 @@ function RootLayout({ children, params: { lng } }: PageProps) {
                         )
                       },
                       {
+                        key: '/authorityManagement',
+                        label: (
+                          <span>{t('menu.authorityManagement.name')}</span>
+                        ),
+                        children: [
+                          {
+                            key: '/authorityManagement/roleList',
+                            label: (
+                              <Link href={processPath('roleList')}>
+                                {t(
+                                  'menu.authorityManagement.children.roleList'
+                                )}
+                              </Link>
+                            )
+                          },
+                          {
+                            key: '/authorityManagement/menuList',
+                            label: (
+                              <Link href={processPath('menuList')}>
+                                {t(
+                                  'menu.authorityManagement.children.menuList'
+                                )}
+                              </Link>
+                            )
+                          },
+                          {
+                            key: '/authorityManagement/apiList',
+                            label: (
+                              <Link href={processPath('apiList')}>
+                                {t(
+                                  'menu.authorityManagement.children.apiList'
+                                )}
+                              </Link>
+                            )
+                          }
+                        ]
+                      },
+                      {
                         key: '/user',
                         label: (
                           <Link href={processPath('user')}>

@@ -34,5 +34,21 @@ export const route = [
   {
     path: '/user',
     name: 'user'
+  },
+  {
+    path: '/authorityManagement',
+    name: 'authorityManagement'
+  },
+  {
+    path: '/authorityManagement/roleList',
+    name: 'roleList'
+  },
+  {
+    path: '/authorityManagement/menuList',
+    name: 'menuList'
+  },
+  {
+    path: '/authorityManagement/apiList',
+    name: 'apiList'
   }
 ]
