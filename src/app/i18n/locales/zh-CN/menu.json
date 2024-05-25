@@ -13,8 +13,34 @@
   },
   "message": {
     "remove": {
-      "content": "是否确认要删除当前接口，删除后不可恢复",
+      "content": "是否确认要删除当前菜单，删除后不可恢复",
       "success": "删除成功"
+    }
+  },
+  "modal": {
+    "title": {
+      "create": "添加菜单",
+      "edit": "编辑菜单"
+    },
+    "form": {
+      "name": {
+        "label": "菜单名称",
+        "required": "请输入菜单名称"
+      },
+      "path": {
+        "label": "路由路径",
+        "required": "请输入路由路径"
+      },
+      "pathName": {
+        "label": "路由路径名称",
+        "required": "请输入路由路径名称"
+      },
+      "show": {
+        "label": "展示"
+      },
+      "parentId": {
+        "label": "父级菜单"
+      }
     }
   }
 }

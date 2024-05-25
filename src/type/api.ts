@@ -67,3 +67,26 @@ export interface user {
   email: string
   createTime: string
 }
+
+export interface menuItem {
+  parentId: number | null
+  id: number
+  name: string
+  path: string
+  pathName: string
+  show: boolean
+}
+
+export type buttonItem = menuItem & {
+  children: buttonItem[]
+  selected: number[]
+  checked: boolean
+  button: {
+    id: number
+    name: string
+    code: string
+    apiId: number
+    apiName: string
+    checked: boolean
+  }[]
+}

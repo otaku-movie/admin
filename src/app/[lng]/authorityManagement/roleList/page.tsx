@@ -1,16 +1,6 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import {
-  Table,
-  Button,
-  Space,
-  Row,
-  Tag,
-  Input,
-  Select,
-  Modal,
-  message
-} from 'antd'
+import { Table, Button, Space, Row, Input, Modal, message } from 'antd'
 
 import type { TableColumnsType } from 'antd'
 import { useRouter } from 'next/navigation'
@@ -20,6 +10,7 @@ import http from '@/api/index'
 import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '../../layout'
 import { RoleModal } from '@/dialog/roleModal'
+import { RolePermission } from '@/dialog/rolePermission'
 
 interface Query {
   name: string
@@ -34,6 +25,10 @@ export default function MoviePage({ params: { lng } }: PageProps) {
   const { t } = useTranslation(lng, 'role')
   const [modal, setModal] = useState({
     type: 'create',
+    show: false,
+    data: {}
+  })
+  const [rolePermissionModal, setRolePermissionModal] = useState({
     show: false,
     data: {}
   })
@@ -93,11 +88,19 @@ export default function MoviePage({ params: { lng } }: PageProps) {
             >
               {t('button.edit')}
             </Button>
-            <Button type="primary" onClick={() => {}}>
-              {t('button.configMenu')}
-            </Button>
-            <Button type="primary" onClick={() => {}}>
-              {t('button.configButton')}
+            <Button
+              type="primary"
+              onClick={() => {
+                setRolePermissionModal({
+                  ...rolePermissionModal,
+                  data: {
+                    id: row.id
+                  },
+                  show: true
+                })
+              }}
+            >
+              {t('button.configPermission')}
             </Button>
             <Button
               type="primary"
@@ -209,6 +212,22 @@ export default function MoviePage({ params: { lng } }: PageProps) {
           })
         }}
       ></RoleModal>
+      <RolePermission
+        show={rolePermissionModal.show}
+        data={rolePermissionModal.data}
+        onCancel={() => {
+          setRolePermissionModal({
+            ...rolePermissionModal,
+            show: false
+          })
+        }}
+        onConfirm={() => {
+          setRolePermissionModal({
+            ...rolePermissionModal,
+            show: false
+          })
+        }}
+      ></RolePermission>
     </section>
   )
 }

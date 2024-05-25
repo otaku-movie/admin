@@ -5,8 +5,7 @@
   },
   "button": {
     "add": "添加",
-    "configMenu": "配置菜单",
-    "configButton": "配置按钮",
+    "configPermission": "配置权限",
     "edit": "编辑",
     "remove": "删除"
   },
@@ -22,7 +21,15 @@
       }
     }
   },
+  "rolePermissionModal": {
+    "title": "配置权限",
+    "table": {
+      "name": "菜单名称",
+      "button": "按钮"
+    }
+  },
   "message": {
+    "noSelectMenu": "请选择菜单",
     "remove": {
       "content": "是否确认要删除当前角色，删除后不可恢复",
       "success": "删除成功"

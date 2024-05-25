@@ -1,0 +1,45 @@
+{
+  "table": {
+    "name": "页面名称",
+    "button": "按钮",
+    "buttonName": "按钮名称",
+    "buttonCode": "按钮Code",
+    "apiName": "接口名称",
+    "action": "操作"
+  },
+  "button": {
+    "add": "添加",
+    "edit": "编辑",
+    "remove": "删除"
+  },
+  "message": {
+    "remove": {
+      "content": "是否确认要删除当前按钮，删除后不可恢复",
+      "success": "删除成功"
+    }
+  },
+  "modal": {
+    "title": {
+      "create": "添加按钮",
+      "edit": "编辑按钮"
+    },
+    "form": {
+      "menuId": {
+        "label": "所属菜单",
+        "required": "请选择菜单"
+      },
+      "name": {
+        "label": "按钮名称",
+        "required": "请输入按钮名称"
+      },
+      "code": {
+        "label": "按钮 code",
+        "required": "请输入按钮 code"
+      },
+      "apiId": {
+        "label": "接口名称",
+        "required": "请选择接口"
+      }
+    }
+  }
+}

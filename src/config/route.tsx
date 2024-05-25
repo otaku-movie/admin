@@ -48,6 +48,10 @@ export const route = [
     name: 'menuList'
   },
   {
+    path: '/authorityManagement/buttonList',
+    name: 'buttonList'
+  },
+  {
     path: '/authorityManagement/apiList',
     name: 'apiList'
   }

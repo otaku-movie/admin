@@ -12,6 +12,7 @@
       "children": {
         "roleList": "角色列表",
         "menuList": "菜单列表",
+        "buttonList": "按钮列表",
         "apiList": "接口列表"
       }
     }

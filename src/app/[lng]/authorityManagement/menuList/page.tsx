@@ -7,37 +7,30 @@ import { useRouter } from 'next/navigation'
 
 import { Query, QueryItem } from '@/components/query'
 import http from '@/api/index'
-import { Movie, paginationResponse, response } from '@/type/api'
+import { menuItem } from '@/type/api'
 import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '../../layout'
 import { processPath } from '@/config/router'
+import { MenuModal } from '@/dialog/menuModal'
+import { permissionStore } from '@/store/permissionStore'
 
 interface Query {
   name: string
 }
 
 export default function MoviePage({ params: { lng } }: PageProps) {
-  const router = useRouter()
-  const [data, setData] = useState([])
-  const [page, setPage] = useState(1)
-  const [total, setTotal] = useState(0)
+  const data = permissionStore((state) => state.menu)
+  const getMenu = permissionStore((state) => state.getMenu)
   const [query, setQuery] = useState<Partial<Query>>({})
   const { t } = useTranslation(lng, 'menu')
+  const [modal, setModal] = useState({
+    type: 'create',
+    show: false,
+    data: {}
+  })
 
-  const getData = (page = 1) => {
-    http({
-      url: 'permission/api/list',
-      method: 'post',
-      data: {
-        page,
-        pageSize: 10,
-        ...query
-      }
-    }).then((res) => {
-      setData(res.data.list)
-      setPage(page)
-      setTotal(res.data.total)
-    })
+  const getData = () => {
+    getMenu()
   }
 
   useEffect(() => {
@@ -46,7 +39,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
 
   useEffect(() => {}, [query, setQuery])
 
-  const columns: TableColumnsType<Movie> = [
+  const columns: TableColumnsType<menuItem> = [
     {
       title: t('table.name'),
       dataIndex: 'name'
@@ -76,11 +69,20 @@ export default function MoviePage({ params: { lng } }: PageProps) {
             <Button
               type="primary"
               onClick={() => {
-                router.push(
-                  processPath('movieDetail', {
+                http({
+                  url: 'permission/menu/detail',
+                  method: 'get',
+                  params: {
                     id: row.id
+                  }
+                }).then((res) => {
+                  setModal({
+                    ...modal,
+                    data: res.data,
+                    type: 'edit',
+                    show: true
                   })
-                )
+                })
               }}
             >
               {t('button.edit')}
@@ -98,7 +100,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
                   onOk() {
                     return new Promise((resolve, reject) => {
                       http({
-                        url: 'movie/remove',
+                        url: 'permission/menu/remove',
                         method: 'delete',
                         params: {
                           id: row.id
@@ -132,9 +134,14 @@ export default function MoviePage({ params: { lng } }: PageProps) {
       }}
     >
       <Row justify="end">
-        <Button
+      <Button
           onClick={() => {
-            router.push(processPath(`movieDetail`))
+            setModal({
+              ...modal,
+              data: {},
+              type: 'create',
+              show: true
+            })
           }}
         >
           {t('button.add')}
@@ -166,13 +173,26 @@ export default function MoviePage({ params: { lng } }: PageProps) {
         columns={columns}
         dataSource={data}
         bordered={true}
-        pagination={{
-          pageSize: 10,
-          current: page,
-          total,
-          position: ['bottomCenter']
-        }}
+        rowKey={"id"}
       />
+      <MenuModal
+        type={modal.type as 'create' | 'edit'}
+        show={modal.show}
+        data={modal.data}
+        onCancel={() => {
+          setModal({
+            ...modal,
+            show: false
+          })
+        }}
+        onConfirm={() => {
+          getData()
+          setModal({
+            ...modal,
+            show: false
+          })
+        }}
+      ></MenuModal>
     </section>
   )
 }

@@ -1,3 +1,4 @@
+import { menuItem } from './../type/api';
 'use client'
 export const emailRegExp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 // 数字、字母、下划线 .
@@ -37,4 +38,41 @@ export function toCamelCase(input: any): any {
   }
 
   return input
+}
+
+export function listToTree<T extends menuItem>(data: T[]): T[] {
+  const arr = data.filter(item => item.parentId === null)
+
+  const fn = (menuList: T[], childrenMenu: T[]): T[] => {
+    return childrenMenu.map(item => {
+      const children = menuList.reduce<T[]>((prev, current) => {
+        return current.parentId === item.id ? prev.concat(current) : prev
+      }, [])
+      return {
+        ...item,
+        children: children.length > 0 ? fn(menuList, children) : null
+      }
+    })
+  }
+
+  return fn(data.filter(item => item.parentId !== null), arr)
+}
+
+export function callTree<T extends { children: T[]}> (arr: T[], fn: (item: T) => void): void {
+  arr?.forEach(item => {
+    fn(item)
+    if (item.children?.length > 0) { 
+      callTree(item.children, fn)
+    }
+  })
+}
+
+export function flattern<T extends { children: T[] }> (arr: T[]): T[] {
+  return arr.reduce((total, current) => {
+    return total.concat(
+      Array.isArray(current.children)
+        ? flattern(current.children)
+        : current
+    );
+  }, [] as T[]);
 }

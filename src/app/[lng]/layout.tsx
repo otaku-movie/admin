@@ -210,6 +210,16 @@ function RootLayout({ children, params: { lng } }: PageProps) {
                             )
                           },
                           {
+                            key: '/authorityManagement/buttonList',
+                            label: (
+                              <Link href={processPath('buttonList')}>
+                                {t(
+                                  'menu.authorityManagement.children.buttonList'
+                                )}
+                              </Link>
+                            )
+                          },
+                          {
                             key: '/authorityManagement/apiList',
                             label: (
                               <Link href={processPath('apiList')}>
