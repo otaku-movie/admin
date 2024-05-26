@@ -1,14 +1,6 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import {
-  Table,
-  Button,
-  Space,
-  Row,
-  Input,
-  Modal,
-  message
-} from 'antd'
+import { Table, Button, Space, Row, Input, Modal, message } from 'antd'
 
 import type { TableColumnsType } from 'antd'
 import { useRouter } from 'next/navigation'
@@ -19,6 +11,7 @@ import { Movie, paginationResponse, response } from '@/type/api'
 import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '../../layout'
 import ApiModal from '@/dialog/ApiModal'
+import { CheckPermission } from '@/components/checkPermission'
 
 interface Query {
   name: string
@@ -76,59 +69,63 @@ export default function MoviePage({ params: { lng } }: PageProps) {
       render: (_, row) => {
         return (
           <Space>
-            <Button
-              type="primary"
-              onClick={() => {
-                http({
-                  url: 'permission/api/detail',
-                  method: 'get',
-                  params: {
-                    id: row.id
-                  }
-                }).then((res) => {
-                  setModal({
-                    ...modal,
-                    data: res.data,
-                    type: 'edit',
-                    show: true
-                  })
-                })
-              }}
-            >
-              {t('button.edit')}
-            </Button>
-            <Button
-              type="primary"
-              danger
-              onClick={() => {
-                Modal.confirm({
-                  title: t('button.remove'),
-                  content: t('message.remove.content'),
-                  onCancel() {
-                    console.log('Cancel')
-                  },
-                  onOk() {
-                    return new Promise((resolve, reject) => {
-                      http({
-                        url: 'permission/api/list',
-                        method: 'delete',
-                        params: {
-                          id: row.id
-                        }
-                      })
-                        .then(() => {
-                          message.success(t('message.remove.success'))
-                          getData()
-                          resolve(true)
-                        })
-                        .catch(reject)
+            <CheckPermission code="">
+              <Button
+                type="primary"
+                onClick={() => {
+                  http({
+                    url: 'permission/api/detail',
+                    method: 'get',
+                    params: {
+                      id: row.id
+                    }
+                  }).then((res) => {
+                    setModal({
+                      ...modal,
+                      data: res.data,
+                      type: 'edit',
+                      show: true
                     })
-                  }
-                })
-              }}
-            >
-              {t('button.remove')}
-            </Button>
+                  })
+                }}
+              >
+                {t('button.edit')}
+              </Button>
+            </CheckPermission>
+            <CheckPermission code="">
+              <Button
+                type="primary"
+                danger
+                onClick={() => {
+                  Modal.confirm({
+                    title: t('button.remove'),
+                    content: t('message.remove.content'),
+                    onCancel() {
+                      console.log('Cancel')
+                    },
+                    onOk() {
+                      return new Promise((resolve, reject) => {
+                        http({
+                          url: 'permission/api/list',
+                          method: 'delete',
+                          params: {
+                            id: row.id
+                          }
+                        })
+                          .then(() => {
+                            message.success(t('message.remove.success'))
+                            getData()
+                            resolve(true)
+                          })
+                          .catch(reject)
+                      })
+                    }
+                  })
+                }}
+              >
+                {t('button.remove')}
+              </Button>
+            </CheckPermission>
           </Space>
         )
       }
@@ -144,18 +141,20 @@ export default function MoviePage({ params: { lng } }: PageProps) {
       }}
     >
       <Row justify="end">
-        <Button
-          onClick={() => {
-            setModal({
-              ...modal,
-              data: {},
-              type: 'create',
-              show: true
-            })
-          }}
-        >
-          {t('button.add')}
-        </Button>
+        <CheckPermission code="">
+          <Button
+            onClick={() => {
+              setModal({
+                ...modal,
+                data: {},
+                type: 'create',
+                show: true
+              })
+            }}
+          >
+            {t('button.add')}
+          </Button>
+        </CheckPermission>
       </Row>
       <Query
         model={query}

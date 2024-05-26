@@ -1,0 +1,17 @@
+{
+  "form": {
+    "email": {
+      "label": "邮箱",
+      "required": "请输入邮箱",
+      "error": "邮箱不合法"
+    },
+    "password": {
+      "label": "密码",
+      "required": "请输入密码",
+      "error": "密码不合法，格式为数字、字母，特殊字符为 -_."
+    }
+  },
+  "button": {
+    "login": "登录"
+  }
+}

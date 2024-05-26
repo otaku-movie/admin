@@ -1,7 +1,7 @@
 'use client'
 /* eslint-disable react/prop-types */
 import { AntdRegistry } from '@ant-design/nextjs-registry'
-import React, { useState } from 'react'
+import React, { useEffect } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import type { MenuProps } from 'antd'
 import Link from 'next/link'
@@ -23,6 +23,10 @@ import '@/assets/css/normalize.scss'
 import { languages } from '@/config'
 import { useTranslation } from '@/app/i18n/client'
 import { processPath } from '@/config/router'
+import { userStore } from '@/store/userStore'
+import { listToTree } from '@/utils'
+import { permission } from '@/dialog/rolePermission'
+import { ItemType, MenuItemType } from 'antd/es/menu/hooks/useItems'
 
 export interface PageProps {
   children: React.ReactNode
@@ -35,6 +39,9 @@ function RootLayout({ children, params: { lng } }: PageProps) {
   const { Header, Content, Sider } = Layout
   const pathname = usePathname()
   const router = useRouter()
+  const getPermission = userStore((state) => state.permission)
+  const menu = userStore((state) => listToTree(state.menuPermission))
+
   const { t } = useTranslation(lng, 'common')
   const {
     token: { colorBgContainer, borderRadiusLG }
@@ -74,218 +81,152 @@ function RootLayout({ children, params: { lng } }: PageProps) {
     ja,
     'zh-CN': zhCN
   }
+  const split = usePathname()
+    .split('/')
+    .filter((item) => item !== '')
+  const set = new Set(['login'])
+
+  useEffect(() => {
+    const roleId = localStorage.getItem('roleId')
+    if (roleId) {
+      getPermission(+roleId)
+    }
+  }, [])
+
+  const recursion = (menu: permission[]): ItemType<MenuItemType>[] => {
+    return menu.map((item) => {
+      if (Array.isArray(item.children)) {
+        return {
+          key: `${item.path}`,
+          label: !Array.isArray(item.children) ? (
+            <Link href={processPath(item.pathName)}>{item.name}</Link>
+          ) : (
+            item.name
+          ),
+          children: recursion(item.children)
+        }
+      } else {
+        return {
+          key: `${item.path}`,
+          label: <Link href={processPath(item.pathName)}>{item.name}</Link>,
+          children: null
+        }
+      }
+    })
+  }
+  console.log(recursion(menu))
+
   return (
     <html lang={lng} dir={lng}>
       <body>
         <AntdRegistry>
           <ConfigProvider locale={locale[lng as keyof typeof locale]}>
-            <Layout
-              style={{
-                width: '100vw',
-                minHeight: '100vh'
-              }}
-            >
-              <Header
+            {set.has(split[1]) ? (
+              children
+            ) : (
+              <Layout
                 style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'flex-end'
+                  width: '100vw',
+                  minHeight: '100vh'
                 }}
               >
-                <Space align="center">
-                  <Dropdown
-                    menu={{
-                      defaultSelectedKeys: [lng],
-                      items: Object.entries(languages).map((item) => {
-                        const [key, label] = item
+                <Header
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'flex-end'
+                  }}
+                >
+                  <Space align="center">
+                    <Dropdown
+                      menu={{
+                        defaultSelectedKeys: [lng],
+                        items: Object.entries(languages).map((item) => {
+                          const [key, label] = item
 
-                        return {
-                          label,
-                          key
+                          return {
+                            label,
+                            key
+                          }
+                        }),
+                        onClick(info) {
+                          const str = pathname.replace(lng, info.key)
+                          console.log(str, info)
+                          location.pathname = str
+                          // router.replace(str)
                         }
-                      }),
-                      onClick(info) {
-                        const str = pathname.replace(lng, info.key)
-                        console.log(str, info)
-                        location.pathname = str
-                        // router.replace(str)
-                      }
-                    }}
-                    placement="bottom"
-                  >
-                    <Space>
-                      <span
+                      }}
+                      placement="bottom"
+                    >
+                      <Space>
+                        <span
+                          style={{
+                            color: 'white'
+                          }}
+                        >
+                          {languages[lng as keyof typeof languages]}
+                        </span>
+                        <TranslationOutlined
+                          style={{
+                            // fill: 'white',
+                            verticalAlign: 'middle',
+                            color: 'white',
+                            fontSize: '24px'
+                          }}
+                        />
+                      </Space>
+                    </Dropdown>
+                    <Dropdown menu={{ items }} placement="bottom">
+                      <Avatar src={url} />
+                    </Dropdown>
+                  </Space>
+                </Header>
+                <Layout>
+                  <Sider width={200} style={{ background: colorBgContainer }}>
+                    <Menu
+                      defaultSelectedKeys={[pathname]}
+                      // theme="dark"
+                      mode="inline"
+                      items={recursion(menu)}
+                    />
+                  </Sider>
+                  <Layout style={{ padding: '20px' }}>
+                    <Space direction="vertical" size={20}>
+                      <Breadcrumb
+                        separator=">"
+                        items={[
+                          {
+                            title: 'Home'
+                          },
+                          {
+                            title: 'Application Center',
+                            href: ''
+                          },
+                          {
+                            title: 'Application List',
+                            href: ''
+                          },
+                          {
+                            title: 'An Application'
+                          }
+                        ]}
+                      />
+                      <Content
                         style={{
-                          color: 'white'
+                          padding: 24,
+                          margin: 0,
+                          minHeight: 280,
+                          background: colorBgContainer,
+                          borderRadius: borderRadiusLG
                         }}
                       >
-                        {languages[lng as keyof typeof languages]}
-                      </span>
-                      <TranslationOutlined
-                        style={{
-                          // fill: 'white',
-                          verticalAlign: 'middle',
-                          color: 'white',
-                          fontSize: '24px'
-                        }}
-                      />
+                        {children}
+                      </Content>
                     </Space>
-                  </Dropdown>
-                  <Dropdown menu={{ items }} placement="bottom">
-                    <Avatar src={url} />
-                  </Dropdown>
-                </Space>
-              </Header>
-              <Layout>
-                <Sider width={200} style={{ background: colorBgContainer }}>
-                  <Menu
-                    defaultSelectedKeys={[processPath('movie')]}
-                    // theme="dark"
-                    mode="inline"
-                    items={[
-                      {
-                        key: '/cinema',
-                        label: (
-                          <Link href={processPath('cinema')}>
-                            {t('menu.cinemaList')}
-                          </Link>
-                        )
-                      },
-                      {
-                        key: '/movie',
-                        label: (
-                          <Link href={processPath('movie')}>
-                            {t('menu.movieList')}
-                          </Link>
-                        )
-                      },
-                      {
-                        key: '/showTime',
-                        label: (
-                          <Link href={processPath('showTime')}>
-                            {t('menu.showTimeList')}
-                          </Link>
-                        )
-                      },
-                      // {
-                      //   key: '/selectSeat',
-                      //   label: (
-                      //     <Link href={'selectSeat'}>
-                      //       {t('menu.selectSeat')}
-                      //     </Link>
-                      //   )
-                      // },
-                      {
-                        key: '/orderList',
-                        label: (
-                          <Link href={processPath('orderList')}>
-                            {t('menu.orderList')}
-                          </Link>
-                        )
-                      },
-                      {
-                        key: '/authorityManagement',
-                        label: (
-                          <span>{t('menu.authorityManagement.name')}</span>
-                        ),
-                        children: [
-                          {
-                            key: '/authorityManagement/roleList',
-                            label: (
-                              <Link href={processPath('roleList')}>
-                                {t(
-                                  'menu.authorityManagement.children.roleList'
-                                )}
-                              </Link>
-                            )
-                          },
-                          {
-                            key: '/authorityManagement/menuList',
-                            label: (
-                              <Link href={processPath('menuList')}>
-                                {t(
-                                  'menu.authorityManagement.children.menuList'
-                                )}
-                              </Link>
-                            )
-                          },
-                          {
-                            key: '/authorityManagement/buttonList',
-                            label: (
-                              <Link href={processPath('buttonList')}>
-                                {t(
-                                  'menu.authorityManagement.children.buttonList'
-                                )}
-                              </Link>
-                            )
-                          },
-                          {
-                            key: '/authorityManagement/apiList',
-                            label: (
-                              <Link href={processPath('apiList')}>
-                                {t(
-                                  'menu.authorityManagement.children.apiList'
-                                )}
-                              </Link>
-                            )
-                          }
-                        ]
-                      },
-                      {
-                        key: '/user',
-                        label: (
-                          <Link href={processPath('user')}>
-                            {t('menu.userList')}
-                          </Link>
-                        )
-                      },
-                      {
-                        key: '/dict',
-                        label: (
-                          <Link href={processPath('dict')}>
-                            {t('menu.dictList')}
-                          </Link>
-                        )
-                      }
-                    ]}
-                  />
-                </Sider>
-                <Layout style={{ padding: '20px' }}>
-                  <Space direction="vertical" size={20}>
-                    <Breadcrumb
-                      separator=">"
-                      items={[
-                        {
-                          title: 'Home'
-                        },
-                        {
-                          title: 'Application Center',
-                          href: ''
-                        },
-                        {
-                          title: 'Application List',
-                          href: ''
-                        },
-                        {
-                          title: 'An Application'
-                        }
-                      ]}
-                    />
-                    <Content
-                      style={{
-                        padding: 24,
-                        margin: 0,
-                        minHeight: 280,
-                        background: colorBgContainer,
-                        borderRadius: borderRadiusLG
-                      }}
-                    >
-                      {children}
-                    </Content>
-                  </Space>
+                  </Layout>
                 </Layout>
               </Layout>
-            </Layout>
+            )}
           </ConfigProvider>
         </AntdRegistry>
       </body>

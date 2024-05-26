@@ -15,7 +15,6 @@ import {
 } from 'antd'
 
 import type { TableColumnsType } from 'antd'
-import movie from '@/assets/image/conan-movie.png'
 import { status } from '@/config/index'
 import { useRouter } from 'next/navigation'
 
@@ -35,6 +34,7 @@ import { Dict } from '@/components/dict'
 import { dictStore } from '@/store/dictStore'
 import MovieShowTimeModal from '@/dialog/movieShowTimeModal'
 import dayjs from 'dayjs'
+import { CheckPermission } from '@/components/checkPermission'
 
 interface Query {
   name: string
@@ -184,76 +184,104 @@ export default function MoviePage({ params: { lng } }: PageProps) {
       render: (_, row) => {
         return (
           <Space direction="vertical" align="center">
-            <Button
-              onClick={() => {
-                http({
-                  url: '/movie_show_time/select_seat/list',
-                  method: 'get',
-                  params: {
-                    id: row.id
-                  }
-                }).then((res) => {
-                  setModal({
-                    data: res.data,
-                    show: true
-                  })
-                })
-              }}
-            >
-              {t('button.detail')}
-            </Button>
-            <Button
-              type="primary"
-              onClick={() => {
-                http({
-                  url: 'movie_show_time/detail',
-                  method: 'get',
-                  params: {
-                    id: row.id
-                  }
-                }).then((res) => {
-                  setShowTimeModal({
-                    ...modal,
-                    data: res.data,
-                    show: true
-                  })
-                })
-              }}
-            >
-              {t('button.edit')}
-            </Button>
-            <Button
-              type="primary"
-              danger
-              onClick={() => {
-                Modal.confirm({
-                  title: t('button.remove'),
-                  content: t('message.remove.content'),
-                  onCancel() {
-                    console.log('Cancel')
-                  },
-                  onOk() {
-                    return new Promise((resolve, reject) => {
-                      http({
-                        url: 'movie/remove',
-                        method: 'delete',
-                        params: {
-                          id: row.id
-                        }
-                      })
-                        .then(() => {
-                          message.success(t('message.remove.success'))
-                          getData()
-                          resolve(true)
-                        })
-                        .catch(reject)
+            <CheckPermission>
+              <Button
+                onClick={() => {
+                  http({
+                    url: '/movie_show_time/select_seat/list',
+                    method: 'get',
+                    params: {
+                      id: row.id
+                    }
+                  }).then((res) => {
+                    setModal({
+                      data: res.data,
+                      show: true
                     })
-                  }
-                })
-              }}
-            >
-              {t('button.remove')}
-            </Button>
+                  })
+                }}
+              >
+                {t('button.detail')}
+              </Button>
+            </CheckPermission>
+            <CheckPermission code="">
+              <Button
+                type="primary"
+                onClick={() => {
+                  http({
+                    url: 'movie_show_time/detail',
+                    method: 'get',
+                    params: {
+                      id: row.id
+                    }
+                  }).then((res) => {
+                    setShowTimeModal({
+                      ...modal,
+                      data: res.data,
+                      show: true
+                    })
+                  })
+                }}
+              >
+                {t('button.edit')}
+              </Button>
+            </CheckPermission>
+            <CheckPermission code="">
+              <Button
+                type="primary"
+                onClick={() => {
+                  http({
+                    url: 'movie_show_time/detail',
+                    method: 'get',
+                    params: {
+                      id: row.id
+                    }
+                  }).then((res) => {
+                    setShowTimeModal({
+                      ...modal,
+                      data: res.data,
+                      show: true
+                    })
+                  })
+                }}
+              >
+                {t('button.edit')}
+              </Button>
+            </CheckPermission>
+            <CheckPermission code="">
+              <Button
+                type="primary"
+                danger
+                onClick={() => {
+                  Modal.confirm({
+                    title: t('button.remove'),
+                    content: t('message.remove.content'),
+                    onCancel() {
+                      console.log('Cancel')
+                    },
+                    onOk() {
+                      return new Promise((resolve, reject) => {
+                        http({
+                          url: 'movie/remove',
+                          method: 'delete',
+                          params: {
+                            id: row.id
+                          }
+                        })
+                          .then(() => {
+                            message.success(t('message.remove.success'))
+                            getData()
+                            resolve(true)
+                          })
+                          .catch(reject)
+                      })
+                    }
+                  })
+                }}
+              >
+                {t('button.remove')}
+              </Button>
+            </CheckPermission>
           </Space>
         )
       }
@@ -264,17 +292,19 @@ export default function MoviePage({ params: { lng } }: PageProps) {
     <section>
       <Space direction="vertical" size={30}>
         <Row justify="end">
-          <Button
-            onClick={() => {
-              setShowTimeModal({
-                ...modal,
-                data: {},
-                show: true
-              })
-            }}
-          >
-            {t('button.add')}
-          </Button>
+          <CheckPermission code="">
+            <Button
+              onClick={() => {
+                setShowTimeModal({
+                  ...modal,
+                  data: {},
+                  show: true
+                })
+              }}
+            >
+              {t('button.add')}
+            </Button>
+          </CheckPermission>
         </Row>
         <Query
           model={query}

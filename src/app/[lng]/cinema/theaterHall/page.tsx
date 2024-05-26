@@ -8,6 +8,7 @@ import http from '@/api'
 import { PageProps } from '../../layout'
 import { useTranslation } from '@/app/i18n/client'
 import TheaterHallModal from '@/dialog/theaterHallModal'
+import { CheckPermission } from '@/components/checkPermission'
 
 export default function Page({ params: { lng } }: PageProps) {
   const router = useRouter()
@@ -67,49 +68,55 @@ export default function Page({ params: { lng } }: PageProps) {
       render: (_, row) => {
         return (
           <Space>
-            <Button
-              type="primary"
-              onClick={() => {
-                http({
-                  url: 'theater/hall/seat',
-                  method: 'get',
-                  params: {
-                    theaterHallId: row.id
-                  }
-                }).then(() => {
-                  setModal({
-                    data,
-                    show: true
+            <CheckPermission code="">
+              <Button
+                type="primary"
+                onClick={() => {
+                  http({
+                    url: 'theater/hall/seat',
+                    method: 'get',
+                    params: {
+                      theaterHallId: row.id
+                    }
+                  }).then(() => {
+                    setModal({
+                      data,
+                      show: true
+                    })
                   })
-                })
-              }}
-            >
-              {t('button.detail')}
-            </Button>
-            <Button
-              type="primary"
-              onClick={() => {
-                http({
-                  url: 'theater/hall/detail',
-                  method: 'get',
-                  params: {
-                    id: row.id
-                  }
-                }).then((res) => {
-                  setTheaterHallModal({
-                    ...theaterHallModal,
-                    data: res.data,
-                    type: 'edit',
-                    show: true
+                }}
+              >
+                {t('button.detail')}
+              </Button>
+            </CheckPermission>
+            <CheckPermission code="">
+              <Button
+                type="primary"
+                onClick={() => {
+                  http({
+                    url: 'theater/hall/detail',
+                    method: 'get',
+                    params: {
+                      id: row.id
+                    }
+                  }).then((res) => {
+                    setTheaterHallModal({
+                      ...theaterHallModal,
+                      data: res.data,
+                      type: 'edit',
+                      show: true
+                    })
                   })
-                })
-              }}
-            >
-              {t('button.edit')}
-            </Button>
-            <Button type="primary" danger>
-              {t('button.remove')}
-            </Button>
+                }}
+              >
+                {t('button.edit')}
+              </Button>
+            </CheckPermission>
+            <CheckPermission code="">
+              <Button type="primary" danger>
+                {t('button.remove')}
+              </Button>
+            </CheckPermission>
           </Space>
         )
       }
@@ -124,18 +131,20 @@ export default function Page({ params: { lng } }: PageProps) {
           marginBottom: '30px'
         }}
       >
-        <Button
-          onClick={() => {
-            setTheaterHallModal({
-              ...theaterHallModal,
-              data: {},
-              type: 'create',
-              show: true
-            })
-          }}
-        >
-          {t('button.add')}
-        </Button>
+        <CheckPermission code="">
+          <Button
+            onClick={() => {
+              setTheaterHallModal({
+                ...theaterHallModal,
+                data: {},
+                type: 'create',
+                show: true
+              })
+            }}
+          >
+            {t('button.add')}
+          </Button>
+        </CheckPermission>
       </Row>
       <Table
         columns={columns}

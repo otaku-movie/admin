@@ -1,11 +1,21 @@
 'use client'
-import { redirect } from 'next/navigation'
-// import { usePathname, useRouter } from 'next/navigation'
-import { PageProps } from './layout'
+import React from 'react'
+import { useRouter } from 'next/navigation'
+import '@/assets/css/normalize.scss'
+import { languages } from '@/config'
+import { processPath } from '@/config/router'
 
-const App = ({ params: { lng } }: PageProps) => {
-  console.log(lng)
-  redirect(`/${lng}/movie`)
+export interface PageProps {
+  children: React.ReactNode
+  params: {
+    lng: keyof typeof languages
+  }
 }
 
-export default App
+
+export default function Page({params: { lng } }: PageProps) {
+  const router = useRouter()
+
+  router.push(processPath('home'))
+}
+ 

@@ -22,10 +22,11 @@ import { Query, QueryItem } from '@/components/query'
 import http from '@/api/index'
 import { Movie, paginationResponse, response } from '@/type/api'
 import { useTranslation } from '@/app/i18n/client'
-import { PageProps } from '../layout'
+import { PageProps } from '../../layout'
 import { Dict } from '@/components/dict'
 import { dictStore } from '@/store/dictStore'
 import { processPath } from '@/config/router'
+import { CheckPermission } from '@/components/checkPermission'
 
 interface Query {
   name: string
@@ -144,50 +145,54 @@ export default function MoviePage({ params: { lng } }: PageProps) {
       render: (_, row) => {
         return (
           <Space>
-            <Button
-              type="primary"
-              onClick={() => {
-                router.push(
-                  processPath('movieDetail', {
-                    id: row.id
-                  })
-                )
-              }}
-            >
-              {t('button.edit')}
-            </Button>
-            <Button
-              type="primary"
-              danger
-              onClick={() => {
-                Modal.confirm({
-                  title: t('button.remove'),
-                  content: t('message.remove.content'),
-                  onCancel() {
-                    console.log('Cancel')
-                  },
-                  onOk() {
-                    return new Promise((resolve, reject) => {
-                      http({
-                        url: 'movie/remove',
-                        method: 'delete',
-                        params: {
-                          id: row.id
-                        }
-                      })
-                        .then(() => {
-                          message.success(t('message.remove.success'))
-                          getData()
-                          resolve(true)
-                        })
-                        .catch(reject)
+            <CheckPermission code="movie.edit">
+              <Button
+                type="primary"
+                onClick={() => {
+                  router.push(
+                    processPath('movieDetail', {
+                      id: row.id
                     })
-                  }
-                })
-              }}
-            >
-              {t('button.remove')}
-            </Button>
+                  )
+                }}
+              >
+                {t('button.edit')}
+              </Button>
+            </CheckPermission>
+            <CheckPermission code="movie.remove">
+              <Button
+                type="primary"
+                danger
+                onClick={() => {
+                  Modal.confirm({
+                    title: t('button.remove'),
+                    content: t('message.remove.content'),
+                    onCancel() {
+                      console.log('Cancel')
+                    },
+                    onOk() {
+                      return new Promise((resolve, reject) => {
+                        http({
+                          url: 'movie/remove',
+                          method: 'delete',
+                          params: {
+                            id: row.id
+                          }
+                        })
+                          .then(() => {
+                            message.success(t('message.remove.success'))
+                            getData()
+                            resolve(true)
+                          })
+                          .catch(reject)
+                      })
+                    }
+                  })
+                }}
+              >
+                {t('button.remove')}
+              </Button>
+            </CheckPermission>
           </Space>
         )
       }
@@ -198,13 +203,15 @@ export default function MoviePage({ params: { lng } }: PageProps) {
     <section>
       <Space direction="vertical" size={30}>
         <Row justify="end">
-          <Button
-            onClick={() => {
-              router.push(processPath(`movieDetail`))
-            }}
-          >
-            {t('button.add')}
-          </Button>
+          <CheckPermission code="movie.add">
+            <Button
+              onClick={() => {
+                router.push(processPath(`movieDetail`))
+              }}
+            >
+              {t('button.add')}
+            </Button>
+          </CheckPermission>
         </Row>
         <Query
           model={query}

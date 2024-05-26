@@ -1,6 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
-import Movie from '@/app/[lng]/movie/page'
+import Movie from '@/app/[lng]/movie/movieList/page'
 import cinema from '@/app/[lng]/cinema/page'
 
 export const menu = [

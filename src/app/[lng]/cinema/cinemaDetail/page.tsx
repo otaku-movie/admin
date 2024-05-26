@@ -6,6 +6,7 @@ import { PageProps } from '../../layout'
 import { Cinema } from '@/type/api'
 import { useRouter, useSearchParams } from 'next/navigation'
 import http from '@/api'
+import { CheckPermission } from '@/components/checkPermission'
 
 export default function Page({ params: { lng } }: PageProps) {
   const { t } = useTranslation(lng, 'cinemaDetail')
@@ -125,21 +126,23 @@ export default function Page({ params: { lng } }: PageProps) {
         </Form.Item>
 
         <Form.Item wrapperCol={{ offset: 6, span: 16 }}>
-          <Button
-            type="primary"
-            htmlType="submit"
-            onClick={() => {
-              http({
-                url: 'cinema/save',
-                method: 'post',
-                data
-              }).then(() => {
-                router.back()
-              })
-            }}
-          >
-            {t('form.save')}
-          </Button>
+          <CheckPermission code="cinema.save">
+            <Button
+              type="primary"
+              htmlType="submit"
+              onClick={() => {
+                http({
+                  url: 'cinema/save',
+                  method: 'post',
+                  data
+                }).then(() => {
+                  router.back()
+                })
+              }}
+            >
+              {t('form.save')}
+            </Button>
+          </CheckPermission>
         </Form.Item>
       </Form>
     </div>

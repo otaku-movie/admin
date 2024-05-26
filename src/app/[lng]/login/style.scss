@@ -1,0 +1,16 @@
+.login {
+  width: 100vw;
+  height: 100vh;
+  background: url('../../../assets/image/background.jpeg');
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .login-box {
+    // width: 500px;
+    padding: 40px;
+    background: white;
+    border-radius: 10px;
+    box-sizing: border-box;
+  }
+}

@@ -14,6 +14,7 @@ import { processPath } from '@/config/router'
 import { ButtonModal } from '@/dialog/buttonModal'
 import { permissionStore } from '@/store/permissionStore'
 import { listToTree } from '@/utils'
+import { CheckPermission } from '@/components/checkPermission'
 import './style.scss'
 
 interface Query {
@@ -89,59 +90,65 @@ export default function Page({ params: { lng } }: PageProps) {
                   </div>
                   <div className="button-table-cell">
                     <Space>
-                      <Button
-                        type="primary"
-                        onClick={() => {
-                          http({
-                            url: 'permission/button/detail',
-                            method: 'get',
-                            params: {
-                              id: button.id
-                            }
-                          }).then((res) => {
-                            setModal({
-                              ...modal,
-                              data: res.data,
-                              type: 'edit',
-                              show: true
-                            })
-                          })
-                        }}
-                      >
-                        {t('button.edit')}
-                      </Button>
-                      <Button
-                        type="primary"
-                        danger
-                        onClick={() => {
-                          Modal.confirm({
-                            title: t('button.remove'),
-                            content: t('message.remove.content'),
-                            onCancel() {
-                              console.log('Cancel')
-                            },
-                            onOk() {
-                              return new Promise((resolve, reject) => {
-                                http({
-                                  url: 'permission/menu/remove',
-                                  method: 'delete',
-                                  params: {
-                                    id: button.id
-                                  }
-                                })
-                                  .then(() => {
-                                    message.success(t('message.remove.success'))
-                                    getData()
-                                    resolve(true)
-                                  })
-                                  .catch(reject)
+                      <CheckPermission code="">
+                        <Button
+                          type="primary"
+                          onClick={() => {
+                            http({
+                              url: 'permission/button/detail',
+                              method: 'get',
+                              params: {
+                                id: button.id
+                              }
+                            }).then((res) => {
+                              setModal({
+                                ...modal,
+                                data: res.data,
+                                type: 'edit',
+                                show: true
                               })
-                            }
-                          })
-                        }}
-                      >
-                        {t('button.remove')}
-                      </Button>
+                            })
+                          }}
+                        >
+                          {t('button.edit')}
+                        </Button>
+                      </CheckPermission>
+                      <CheckPermission code="">
+                        <Button
+                          type="primary"
+                          danger
+                          onClick={() => {
+                            Modal.confirm({
+                              title: t('button.remove'),
+                              content: t('message.remove.content'),
+                              onCancel() {
+                                console.log('Cancel')
+                              },
+                              onOk() {
+                                return new Promise((resolve, reject) => {
+                                  http({
+                                    url: 'permission/menu/remove',
+                                    method: 'delete',
+                                    params: {
+                                      id: button.id
+                                    }
+                                  })
+                                    .then(() => {
+                                      message.success(
+                                        t('message.remove.success')
+                                      )
+                                      getData()
+                                      resolve(true)
+                                    })
+                                    .catch(reject)
+                                })
+                              }
+                            })
+                          }}
+                        >
+                          {t('button.remove')}
+                        </Button>
+                      </CheckPermission>
                     </Space>
                   </div>
                 </li>
@@ -162,18 +169,21 @@ export default function Page({ params: { lng } }: PageProps) {
       }}
     >
       <Row justify="end">
-        <Button
-          onClick={() => {
-            setModal({
-              ...modal,
-              data: {},
-              type: 'create',
-              show: true
-            })
-          }}
-        >
-          {t('button.add')}
-        </Button>
+        <CheckPermission code="">
+          <Button
+            onClick={() => {
+              setModal({
+                ...modal,
+                data: {},
+                type: 'create',
+                show: true
+              })
+            }}
+          >
+            {t('button.add')}
+          </Button>
+        </CheckPermission>
+        
       </Row>
       <Table
         columns={columns}

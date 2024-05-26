@@ -90,3 +90,12 @@ export type buttonItem = menuItem & {
     checked: boolean
   }[]
 }
+
+export type userInfo = user & {
+  token: string
+}
+
+export interface role {
+  id: number
+  name: string
+}

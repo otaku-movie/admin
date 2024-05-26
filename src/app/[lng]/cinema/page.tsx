@@ -8,6 +8,7 @@ import { PageProps } from '../layout'
 import http from '@/api'
 import { Query, QueryItem } from '@/components/query'
 import { processPath } from '@/config/router'
+import { CheckPermission } from '@/components/checkPermission'
 
 export default function CinemaPage({ params: { lng } }: PageProps) {
   const router = useRouter()
@@ -65,68 +66,74 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
       render: (_, row) => {
         return (
           <Space>
-            <Button
-              type="primary"
-              onClick={() => {
-                router.push(
-                  processPath({
-                    name: 'theaterHall',
-                    query: {
-                      id: row.id
-                    }
-                  })
-                )
-              }}
-            >
-              {t('button.detail')}
-            </Button>
-            <Button
-              type="primary"
-              onClick={() => {
-                router.push(
-                  processPath({
-                    name: 'cinemaDetail',
-                    query: {
-                      id: row.id
-                    }
-                  })
-                )
-              }}
-            >
-              {t('button.edit')}
-            </Button>
-            <Button
-              type="primary"
-              danger
-              onClick={() => {
-                Modal.confirm({
-                  title: t('button.remove'),
-                  content: t('message.remove.content'),
-                  onCancel() {
-                    console.log('Cancel')
-                  },
-                  onOk() {
-                    return new Promise((resolve, reject) => {
-                      http({
-                        url: 'cinema/remove',
-                        method: 'delete',
-                        params: {
-                          id: row.id
-                        }
-                      })
-                        .then(() => {
-                          message.success(t('message.remove.success'))
-                          getData()
-                          resolve(true)
-                        })
-                        .catch(reject)
+            <CheckPermission code="">
+              <Button
+                type="primary"
+                onClick={() => {
+                  router.push(
+                    processPath({
+                      name: 'theaterHall',
+                      query: {
+                        id: row.id
+                      }
                     })
-                  }
-                })
-              }}
-            >
-              {t('button.remove')}
-            </Button>
+                  )
+                }}
+              >
+                {t('button.detail')}
+              </Button>
+            </CheckPermission>
+            <CheckPermission code="cinema.edit">
+              <Button
+                type="primary"
+                onClick={() => {
+                  router.push(
+                    processPath({
+                      name: 'cinemaDetail',
+                      query: {
+                        id: row.id
+                      }
+                    })
+                  )
+                }}
+              >
+                {t('button.edit')}
+              </Button>
+            </CheckPermission>
+            <CheckPermission code="cinema.remove">
+              <Button
+                type="primary"
+                danger
+                onClick={() => {
+                  Modal.confirm({
+                    title: t('button.remove'),
+                    content: t('message.remove.content'),
+                    onCancel() {
+                      console.log('Cancel')
+                    },
+                    onOk() {
+                      return new Promise((resolve, reject) => {
+                        http({
+                          url: 'cinema/remove',
+                          method: 'delete',
+                          params: {
+                            id: row.id
+                          }
+                        })
+                          .then(() => {
+                            message.success(t('message.remove.success'))
+                            getData()
+                            resolve(true)
+                          })
+                          .catch(reject)
+                      })
+                    }
+                  })
+                }}
+              >
+                {t('button.remove')}
+              </Button>
+            </CheckPermission>
           </Space>
         )
       }
@@ -142,13 +149,15 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
       }}
     >
       <Row justify="end">
-        <Button
-          onClick={() => {
-            router.push(processPath('cinemaDetail'))
-          }}
-        >
-          {t('button.add')}
-        </Button>
+        <CheckPermission code="cinema.add">
+          <Button
+            onClick={() => {
+              router.push(processPath('cinemaDetail'))
+            }}
+          >
+            {t('button.add')}
+          </Button>
+        </CheckPermission>
       </Row>
       <Query>
         <QueryItem label={t('table.name')} column={1}>

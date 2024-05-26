@@ -18,6 +18,7 @@ import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '../layout'
 import http from '@/api'
 import { Query, QueryItem } from '@/components/query'
+import { CheckPermission } from '@/components/checkPermission'
 
 export default function CinemaPage({ params: { lng } }: PageProps) {
   const router = useRouter()
@@ -70,63 +71,69 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
       render: (_, row) => {
         return (
           <Space>
-            <Button
-              onClick={() => {
-                http({
-                  url: 'dict/detail',
-                  method: 'get',
-                  params: {
-                    id: row.id
-                  }
-                }).then((res) => {
-                  setModal({
-                    ...modal,
-                    data: res.data,
-                    dictId: row.id,
-                    show: true
-                  })
-                })
-
-                // router.push(`/${lng}/cinemaDetail?id=${row.id}`)
-              }}
-            >
-              {t('button.detail')}
-            </Button>
-            <Button type="primary" onClick={() => {}}>
-              {t('button.edit')}
-            </Button>
-            <Button
-              type="primary"
-              danger
-              onClick={() => {
-                Modal.confirm({
-                  title: t('button.remove'),
-                  content: t('message.remove.content'),
-                  onCancel() {
-                    console.log('Cancel')
-                  },
-                  onOk() {
-                    return new Promise((resolve, reject) => {
-                      http({
-                        url: 'dict/remove',
-                        method: 'delete',
-                        params: {
-                          id: row.id
-                        }
-                      })
-                        .then(() => {
-                          message.success(t('message.remove.success'))
-                          getData()
-                          resolve(true)
-                        })
-                        .catch(reject)
+            <CheckPermission code="">
+              <Button
+                onClick={() => {
+                  http({
+                    url: 'dict/detail',
+                    method: 'get',
+                    params: {
+                      id: row.id
+                    }
+                  }).then((res) => {
+                    setModal({
+                      ...modal,
+                      data: res.data,
+                      dictId: row.id,
+                      show: true
                     })
-                  }
-                })
-              }}
-            >
-              {t('button.remove')}
-            </Button>
+                  })
+
+                  // router.push(`/${lng}/cinemaDetail?id=${row.id}`)
+                }}
+              >
+                {t('button.detail')}
+              </Button>
+            </CheckPermission>
+            <CheckPermission code="">
+              <Button type="primary" onClick={() => {}}>
+                {t('button.edit')}
+              </Button>
+            </CheckPermission>
+            <CheckPermission code="">
+              <Button
+                type="primary"
+                danger
+                onClick={() => {
+                  Modal.confirm({
+                    title: t('button.remove'),
+                    content: t('message.remove.content'),
+                    onCancel() {
+                      console.log('Cancel')
+                    },
+                    onOk() {
+                      return new Promise((resolve, reject) => {
+                        http({
+                          url: 'dict/remove',
+                          method: 'delete',
+                          params: {
+                            id: row.id
+                          }
+                        })
+                          .then(() => {
+                            message.success(t('message.remove.success'))
+                            getData()
+                            resolve(true)
+                          })
+                          .catch(reject)
+                      })
+                    }
+                  })
+                }}
+              >
+                {t('button.remove')}
+              </Button>
+            </CheckPermission>
           </Space>
         )
       }

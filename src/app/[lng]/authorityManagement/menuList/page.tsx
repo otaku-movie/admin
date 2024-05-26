@@ -13,6 +13,7 @@ import { PageProps } from '../../layout'
 import { processPath } from '@/config/router'
 import { MenuModal } from '@/dialog/menuModal'
 import { permissionStore } from '@/store/permissionStore'
+import { CheckPermission } from '@/components/checkPermission'
 
 interface Query {
   name: string
@@ -66,59 +67,63 @@ export default function MoviePage({ params: { lng } }: PageProps) {
       render: (_, row) => {
         return (
           <Space>
-            <Button
-              type="primary"
-              onClick={() => {
-                http({
-                  url: 'permission/menu/detail',
-                  method: 'get',
-                  params: {
-                    id: row.id
-                  }
-                }).then((res) => {
-                  setModal({
-                    ...modal,
-                    data: res.data,
-                    type: 'edit',
-                    show: true
-                  })
-                })
-              }}
-            >
-              {t('button.edit')}
-            </Button>
-            <Button
-              type="primary"
-              danger
-              onClick={() => {
-                Modal.confirm({
-                  title: t('button.remove'),
-                  content: t('message.remove.content'),
-                  onCancel() {
-                    console.log('Cancel')
-                  },
-                  onOk() {
-                    return new Promise((resolve, reject) => {
-                      http({
-                        url: 'permission/menu/remove',
-                        method: 'delete',
-                        params: {
-                          id: row.id
-                        }
-                      })
-                        .then(() => {
-                          message.success(t('message.remove.success'))
-                          getData()
-                          resolve(true)
-                        })
-                        .catch(reject)
+            <CheckPermission code="">
+              <Button
+                type="primary"
+                onClick={() => {
+                  http({
+                    url: 'permission/menu/detail',
+                    method: 'get',
+                    params: {
+                      id: row.id
+                    }
+                  }).then((res) => {
+                    setModal({
+                      ...modal,
+                      data: res.data,
+                      type: 'edit',
+                      show: true
                     })
-                  }
-                })
-              }}
-            >
-              {t('button.remove')}
-            </Button>
+                  })
+                }}
+              >
+                {t('button.edit')}
+              </Button>
+            </CheckPermission>
+            <CheckPermission code="">
+              <Button
+                type="primary"
+                danger
+                onClick={() => {
+                  Modal.confirm({
+                    title: t('button.remove'),
+                    content: t('message.remove.content'),
+                    onCancel() {
+                      console.log('Cancel')
+                    },
+                    onOk() {
+                      return new Promise((resolve, reject) => {
+                        http({
+                          url: 'permission/menu/remove',
+                          method: 'delete',
+                          params: {
+                            id: row.id
+                          }
+                        })
+                          .then(() => {
+                            message.success(t('message.remove.success'))
+                            getData()
+                            resolve(true)
+                          })
+                          .catch(reject)
+                      })
+                    }
+                  })
+                }}
+              >
+                {t('button.remove')}
+              </Button>
+            </CheckPermission>
           </Space>
         )
       }
@@ -134,18 +139,20 @@ export default function MoviePage({ params: { lng } }: PageProps) {
       }}
     >
       <Row justify="end">
-      <Button
-          onClick={() => {
-            setModal({
-              ...modal,
-              data: {},
-              type: 'create',
-              show: true
-            })
-          }}
-        >
-          {t('button.add')}
-        </Button>
+        <CheckPermission code="">
+          <Button
+            onClick={() => {
+              setModal({
+                ...modal,
+                data: {},
+                type: 'create',
+                show: true
+              })
+            }}
+          >
+            {t('button.add')}
+          </Button>
+        </CheckPermission>
       </Row>
       <Query
         model={query}
@@ -173,7 +180,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
         columns={columns}
         dataSource={data}
         bordered={true}
-        rowKey={"id"}
+        rowKey={'id'}
       />
       <MenuModal
         type={modal.type as 'create' | 'edit'}

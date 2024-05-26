@@ -11,6 +11,7 @@ import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '../../layout'
 import { RoleModal } from '@/dialog/roleModal'
 import { RolePermission } from '@/dialog/rolePermission'
+import { CheckPermission } from '@/components/checkPermission'
 
 interface Query {
   name: string
@@ -67,73 +68,79 @@ export default function MoviePage({ params: { lng } }: PageProps) {
       render: (_, row) => {
         return (
           <Space>
-            <Button
-              type="primary"
-              onClick={() => {
-                http({
-                  url: 'permission/role/detail',
-                  method: 'get',
-                  params: {
-                    id: row.id
-                  }
-                }).then((res) => {
-                  setModal({
-                    ...modal,
-                    data: res.data,
-                    type: 'edit',
+            <CheckPermission code="">
+              <Button
+                type="primary"
+                onClick={() => {
+                  http({
+                    url: 'permission/role/detail',
+                    method: 'get',
+                    params: {
+                      id: row.id
+                    }
+                  }).then((res) => {
+                    setModal({
+                      ...modal,
+                      data: res.data,
+                      type: 'edit',
+                      show: true
+                    })
+                  })
+                }}
+              >
+                {t('button.edit')}
+              </Button>
+            </CheckPermission>
+            <CheckPermission>
+              <Button
+                type="primary"
+                onClick={() => {
+                  setRolePermissionModal({
+                    ...rolePermissionModal,
+                    data: {
+                      id: row.id
+                    },
                     show: true
                   })
-                })
-              }}
-            >
-              {t('button.edit')}
-            </Button>
-            <Button
-              type="primary"
-              onClick={() => {
-                setRolePermissionModal({
-                  ...rolePermissionModal,
-                  data: {
-                    id: row.id
-                  },
-                  show: true
-                })
-              }}
-            >
-              {t('button.configPermission')}
-            </Button>
-            <Button
-              type="primary"
-              danger
-              onClick={() => {
-                Modal.confirm({
-                  title: t('button.remove'),
-                  content: t('message.remove.content'),
-                  onCancel() {
-                    console.log('Cancel')
-                  },
-                  onOk() {
-                    return new Promise((resolve, reject) => {
-                      http({
-                        url: 'permission/role/remove',
-                        method: 'delete',
-                        params: {
-                          id: row.id
-                        }
-                      })
-                        .then(() => {
-                          message.success(t('message.remove.success'))
-                          getData()
-                          resolve(true)
+                }}
+              >
+                {t('button.configPermission')}
+              </Button>
+            </CheckPermission>
+            <CheckPermission>
+              <Button
+                type="primary"
+                danger
+                onClick={() => {
+                  Modal.confirm({
+                    title: t('button.remove'),
+                    content: t('message.remove.content'),
+                    onCancel() {
+                      console.log('Cancel')
+                    },
+                    onOk() {
+                      return new Promise((resolve, reject) => {
+                        http({
+                          url: 'permission/role/remove',
+                          method: 'delete',
+                          params: {
+                            id: row.id
+                          }
                         })
-                        .catch(reject)
-                    })
-                  }
-                })
-              }}
-            >
-              {t('button.remove')}
-            </Button>
+                          .then(() => {
+                            message.success(t('message.remove.success'))
+                            getData()
+                            resolve(true)
+                          })
+                          .catch(reject)
+                      })
+                    }
+                  })
+                }}
+              >
+                {t('button.remove')}
+              </Button>
+            </CheckPermission>
           </Space>
         )
       }
@@ -149,18 +156,20 @@ export default function MoviePage({ params: { lng } }: PageProps) {
       }}
     >
       <Row justify="end">
-        <Button
-          onClick={() => {
-            setModal({
-              ...modal,
-              data: {},
-              type: 'create',
-              show: true
-            })
-          }}
-        >
-          {t('button.add')}
-        </Button>
+        <CheckPermission code="">
+          <Button
+            onClick={() => {
+              setModal({
+                ...modal,
+                data: {},
+                type: 'create',
+                show: true
+              })
+            }}
+          >
+            {t('button.add')}
+          </Button>
+        </CheckPermission>
       </Row>
       <Query
         model={query}

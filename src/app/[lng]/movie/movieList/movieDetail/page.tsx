@@ -16,12 +16,13 @@ import {
 import type { GetProp, UploadFile, UploadProps } from 'antd'
 import ImgCrop from 'antd-img-crop'
 import { useTranslation } from '@/app/i18n/client'
-import { PageProps } from '../../layout'
+import { PageProps } from '../../../layout'
 import { useRouter, useSearchParams } from 'next/navigation'
 import http from '@/api'
 import dayjs from 'dayjs'
 import { Movie, SpecItem } from '@/type/api'
 import { dictStore } from '@/store/dictStore'
+import { CheckPermission } from '@/components/checkPermission'
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 
@@ -297,12 +298,15 @@ export default function MovieDetail({ params: { lng } }: PageProps) {
           rules={[{ required: false, message: t('form.startDate.required') }]}
           name="startDate"
         >
-          <DatePicker value={data.startDate} onChange={(date) => {
+          <DatePicker
+            value={data.startDate}
+            onChange={(date) => {
               data.startDate = date
               setData({
                 ...data
               })
-            }}/>
+            }}
+          />
         </Form.Item>
         <Form.Item
           label={t('form.endDate.label')}
@@ -321,37 +325,41 @@ export default function MovieDetail({ params: { lng } }: PageProps) {
         </Form.Item>
 
         <Form.Item wrapperCol={{ offset: 6, span: 16 }}>
-          <Button
-            type="primary"
-            htmlType="submit"
-            onClick={() => {
-              console.log(data)
-              form.validateFields().then(() => {
-                http({
-                  url: 'movie/save',
-                  method: 'post',
-                  data: {
-                    ...data,
-                    startDate:
-                      data.startDate === null
-                        ? null
-                        : dayjs(data.startDate || new Date()).format(
-                            'YYYY-MM-DD'
-                          ),
-                    endDate:
-                      data.endDate === null
-                        ? null
-                        : dayjs(data.endDate || new Date()).format('YYYY-MM-DD')
-                  }
-                }).then(() => {
-                  message.success('保存成功')
-                  router.back()
+          <CheckPermission code="movie.save">
+            <Button
+              type="primary"
+              htmlType="submit"
+              onClick={() => {
+                console.log(data)
+                form.validateFields().then(() => {
+                  http({
+                    url: 'movie/save',
+                    method: 'post',
+                    data: {
+                      ...data,
+                      startDate:
+                        data.startDate === null
+                          ? null
+                          : dayjs(data.startDate || new Date()).format(
+                              'YYYY-MM-DD'
+                            ),
+                      endDate:
+                        data.endDate === null
+                          ? null
+                          : dayjs(data.endDate || new Date()).format(
+                              'YYYY-MM-DD'
+                            )
+                    }
+                  }).then(() => {
+                    message.success('保存成功')
+                    router.back()
+                  })
                 })
-              })
-            }}
-          >
-            {t('form.save')}
-          </Button>
+              }}
+            >
+              {t('form.save')}
+            </Button>
+          </CheckPermission>
         </Form.Item>
       </Form>
     </div>

@@ -1,5 +1,9 @@
 export const route = [
   {
+    path: '/',
+    name: 'home'
+  },
+  {
     path: '/movie',
     name: 'movie'
   },

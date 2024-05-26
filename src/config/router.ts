@@ -1,5 +1,4 @@
-import { route } from './route'
-
+import { permission } from './../dialog/rolePermission'
 export interface Options {
   name: string
   query: Record<string, any>
@@ -7,9 +6,17 @@ export interface Options {
 
 
 export function processPath (options: string | Options, query?: Record<string, any>) {
+  const menu = localStorage.getItem('menu')
+
+  let route: permission[] = []
+
+  if (menu) {
+    route = JSON.parse(menu)
+  }
+
   const process = (name: string, query?: Record<string, any>) => {
-    const find = route.find(item => item.name === name)
-    const bashPath = `/${navigator.language}/${find?.path}`
+    const find = route.find(item => item.pathName === name)
+    const bashPath = `/${navigator.language}${find?.path}`
     
     if (query) {
       const queryStr = Object.keys(query).map((item) => {
