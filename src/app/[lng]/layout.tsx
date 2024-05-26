@@ -114,7 +114,6 @@ function RootLayout({ children, params: { lng } }: PageProps) {
       }
     })
   }
-  console.log(recursion(menu))
 
   return (
     <html lang={lng} dir={lng}>

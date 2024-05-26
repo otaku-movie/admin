@@ -6,11 +6,10 @@ export interface CheckPermissionProps {
   children: React.ReactElement
 }
 
-export function CheckPermission (props: CheckPermissionProps) {
+export function CheckPermission(props: CheckPermissionProps) {
   const buttonPermission = userStore((state) => state.buttonPermission)
 
-
-  if (buttonPermission.has(props.code)) {
+  if (buttonPermission.has(props.code) || props.code === '') {
     return props.children
   }
 }

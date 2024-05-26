@@ -38,8 +38,9 @@ export function MenuModal(props: modalProps) {
       form.resetFields()
       getData()
     }
+
     form.setFieldsValue(props.data)
-    // setQuery(props.data)
+    setQuery(props.data)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.show, props.data])
 

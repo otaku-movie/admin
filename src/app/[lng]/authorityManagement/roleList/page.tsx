@@ -91,7 +91,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
                 {t('button.edit')}
               </Button>
             </CheckPermission>
-            <CheckPermission>
+            <CheckPermission code="">
               <Button
                 type="primary"
                 onClick={() => {

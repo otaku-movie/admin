@@ -21,6 +21,7 @@ interface Query {
 
 export default function MoviePage({ params: { lng } }: PageProps) {
   const data = permissionStore((state) => state.menu)
+
   const getMenu = permissionStore((state) => state.getMenu)
   const [query, setQuery] = useState<Partial<Query>>({})
   const { t } = useTranslation(lng, 'menu')
@@ -37,6 +38,8 @@ export default function MoviePage({ params: { lng } }: PageProps) {
   useEffect(() => {
     getData()
   }, [])
+
+  useEffect(() => {}, [data])
 
   useEffect(() => {}, [query, setQuery])
 
@@ -57,7 +60,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
       title: t('table.show'),
       dataIndex: '',
       render(_, row) {
-        return <Switch defaultChecked />
+        return <Switch value={row.show} disabled />
       }
     },
     {
@@ -181,6 +184,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
         dataSource={data}
         bordered={true}
         rowKey={'id'}
+        pagination={false}
       />
       <MenuModal
         type={modal.type as 'create' | 'edit'}

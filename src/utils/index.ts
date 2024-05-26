@@ -1,4 +1,3 @@
-import { menuItem } from './../type/api';
 'use client'
 export const emailRegExp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 // 数字、字母、下划线 .
@@ -15,7 +14,7 @@ export const getUserInfo = () => {
   }
 }
 
-export const camelCase = key => key.replace(/[-_](.)/g, (_, char) => char.toUpperCase())
+export const camelCase = (key: string) => key.replace(/[-_](.)/g, (_, char) => char.toUpperCase())
 
 export function toCamelCase(input: any): any {
   if (input === null || typeof input !== 'object') {
@@ -40,10 +39,35 @@ export function toCamelCase(input: any): any {
   return input
 }
 
-export function listToTree<T extends menuItem>(data: T[]): T[] {
-  const arr = data.filter(item => item.parentId === null)
+interface TreeNode<T> {
+  parent?: T | null
+  parentId: number | null
+  id: number
+  depth: number
+  children?: TreeNode<T>[] | null
+}
+
+export function callTree<T extends TreeNode<T>>(arr: T[], fn: (item: T) => void, parent: T | null = null, depth = 1): void {
+  arr?.forEach(item => {
+    item.parent = parent
+    item.depth = depth
+    fn(item)
+    if (Array.isArray(item.children)) {
+      callTree(item.children as any, fn, item, item.depth + 1)
+    }
+  })
+}
+
+export function listToTree<T extends TreeNode<T>>(data: T[]) {
+  const arr = data.filter(item => item.parentId === null).map(item => {
+    return {
+      ...item,
+      children: null
+    }
+  })
 
   const fn = (menuList: T[], childrenMenu: T[]): T[] => {
+    // debugger
     return childrenMenu.map(item => {
       const children = menuList.reduce<T[]>((prev, current) => {
         return current.parentId === item.id ? prev.concat(current) : prev
@@ -58,21 +82,64 @@ export function listToTree<T extends menuItem>(data: T[]): T[] {
   return fn(data.filter(item => item.parentId !== null), arr)
 }
 
-export function callTree<T extends { children: T[]}> (arr: T[], fn: (item: T) => void): void {
-  arr?.forEach(item => {
-    fn(item)
-    if (item.children?.length > 0) { 
-      callTree(item.children, fn)
+
+export const flattern = <T extends any[] = Record<string, any>[]>(arr: T, key = 'children'): Record<string, any>[] => {
+  return arr.reduce((total, current) => {
+    const isArray = Array.isArray(current[key])
+    total.push(current)
+
+    if (isArray) {
+      total.push(...flattern(current[key], key))
     }
-  })
+
+    return total
+  }, [])
 }
 
-export function flattern<T extends { children: T[] }> (arr: T[]): T[] {
-  return arr.reduce((total, current) => {
-    return total.concat(
-      Array.isArray(current.children)
-        ? flattern(current.children)
-        : current
-    );
-  }, [] as T[]);
+export const hasChecked = (node: any): boolean => {
+  // debugger
+  if (node?.children?.length === 0 && node.checked !== false) return true
+  return node.children?.length !== 0 && node.children?.every((item: any) => item.checked)
+}
+export const hasIndeterminate = (node: any): boolean => {
+  return !hasChecked(node) && node.children?.some((item: any) => item.checked || item.indeterminate)
+}
+
+export function setCheckedStatus (nodes: any[], selectedIds: number[]): void {
+  // debugger
+  // Step 1: Set the checked status based on the selected IDs
+  const updateCheckedStatus = (nodes: any[]) => {
+    nodes.forEach(node => {
+      node.checked = selectedIds.includes(node.id)
+      if (Array.isArray(node.children) && node.children.length > 0) {
+        updateCheckedStatus(node.children)
+      }
+    })
+  }
+  
+  
+  updateCheckedStatus(nodes)
+
+  // Step 2: Update the halfChecked and parent checked status recursively
+  const updateParentStatus = (nodes: any[]): void => {
+    nodes.forEach(node => {
+      if (Array.isArray(node.children) && node.children.length > 0) {
+        updateParentStatus(node.children)
+        const allChecked = node.children.every((child: any) => child.checked)
+        const someChecked = node.children.some((child: any) => child.checked || child.halfChecked)
+
+        if (allChecked) {
+          node.checked = true
+          node.indeterminate = false
+        } else if (someChecked) {
+          node.checked = false
+          node.indeterminate = true
+        } else {
+          node.checked = false
+          node.indeterminate = false
+        }
+      }
+    })
+  }
+  updateParentStatus(nodes)
 }

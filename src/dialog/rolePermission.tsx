@@ -1,9 +1,8 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import { PageProps } from '@/app/[lng]/layout'
 import { useTranslation } from '@/app/i18n/client'
 import {
-  Form,
+  Switch,
   Modal,
   Checkbox,
   Table,
@@ -13,7 +12,15 @@ import {
 import http from '@/api'
 import { languageType } from '@/config'
 import { buttonItem } from '@/type/api'
-import { listToTree, callTree } from '@/utils'
+import {
+  listToTree,
+  callTree,
+  flattern,
+  hasChecked,
+  hasIndeterminate,
+  // setChecked,
+  setCheckedStatus
+} from '@/utils'
 
 interface modalProps {
   show?: boolean
@@ -39,30 +46,40 @@ export function RolePermission(props: modalProps) {
         id: props.data.id
       }
     }).then((res: any) => {
-      const selected = res.data.reduce((total: number[], current: permission) => {
-        if (current.checked) {
-          return total.concat(current.id)
-        }
-        return total
-      }, [])
+      const tree = listToTree(res.data)
+      const selected = res.data.reduce(
+        (total: number[], current: permission & { indeterminate: boolean }) => {
+          if (Array.isArray(current.children)) {
+            const every = hasChecked(current)
+            const indeterminate = hasIndeterminate(current)
+
+            if (every) {
+              current.checked = true
+              return total.concat(current.id)
+            }
+            current.indeterminate = indeterminate
+          } else {
+            if (current.checked) {
+              return total.concat(current.id)
+            }
+          }
+          return total
+        },
+        []
+      )
 
       setMenuListId(selected)
-      // debugger
-      const map = res.data.map((item: buttonItem) => {
-        return {
-          ...item,
-          button: item.button.filter((item) => item.id !== null),
-          selected: item.button.reduce((total, current) => {
-            if (current.checked) {
-              return total.concat(current.id as never)
-            }
-            return total
-          }, [])
-        }
+      callTree(tree as any, (item: any) => {
+        item.button = item.button.filter((item: any) => item.id !== null)
+        item.selected = item.button.reduce((total: number[], current: any) => {
+          if (current.checked) {
+            return total.concat(current.id as never)
+          }
+          return total
+        }, [] as number[])
       })
-        
-      setData(listToTree(map))
-      console.log(data)
+
+      setData(tree as any)
     })
   }
 
@@ -78,6 +95,13 @@ export function RolePermission(props: modalProps) {
       title: t('rolePermissionModal.table.name'),
       // width: 200,
       dataIndex: 'name'
+    },
+    {
+      title: t('table.show'),
+      dataIndex: '',
+      render(_, row) {
+        return <Switch value={row.show} disabled />
+      }
     },
     {
       title: t('rolePermissionModal.table.button'),
@@ -112,8 +136,8 @@ export function RolePermission(props: modalProps) {
   ]
 
   const select = (data: permission[], selected: boolean) => {
-    callTree<permission>(data, (item) => {
-      const buttonId = item.button.map((item) => item.id)
+    callTree(data, (item: any) => {
+      const buttonId = item.button.map((item: any) => item.id)
 
       item.selected = selected ? buttonId : []
     })
@@ -127,22 +151,42 @@ export function RolePermission(props: modalProps) {
       width={800}
       onOk={() => {
         const buttonId: number[] = []
+        const menuId: number[] = []
 
-        callTree<permission>(data, (item) => {
+        callTree(data, (item: any) => {
           buttonId.push(...item.selected)
         })
+
+        // 设置目前已选中的节点
+        const map = new Map(menuListId.map((item) => [item, item]))
+        callTree(data, (item: any) => {
+          if (map.get(item.id)) {
+            item.checked = true
+          }
+        })
+        // 更新选中节点
+        const flatternTree = flattern(data)
+
+        setCheckedStatus(data, menuListId)
+        callTree(flatternTree, (item: any) => {
+          if (item.checked || item?.indeterminate) {
+            if (!menuId.includes(item.id)) {
+              menuId.push(item.id)
+            }
+          }
+        })
+
         http({
           url: 'permission/role/config',
           method: 'post',
           data: {
             roleId: props.data.id,
-            menuId: menuListId,
+            menuId,
             buttonId
           }
         }).then(() => {
           props?.onConfirm?.()
         })
-
       }}
       onCancel={props?.onCancel}
     >
@@ -163,7 +207,6 @@ export function RolePermission(props: modalProps) {
             const buttonId = row.button.map((item) => item.id)
 
             row.selected = selected ? buttonId : []
-
             select(row.children, selected)
             setData([...data])
           },
