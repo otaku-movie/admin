@@ -46,28 +46,50 @@ export function RolePermission(props: modalProps) {
         id: props.data.id
       }
     }).then((res: any) => {
+      const recursion = (menu: any[]): number[] => {
+        const hasEvery = (arr: permission[]): boolean => {
+          return arr.every((item) => {
+            return Array.isArray(item.children)
+              ? hasEvery(item.children)
+              : item.checked
+          })
+        }
+        const hasIndeterminate = (arr: permission[]): boolean => {
+          return arr.some((item) => {
+            return Array.isArray(item.children)
+              ? hasEvery(item.children)
+              : item.checked
+          })
+        }
+
+        return menu.reduce(
+          (
+            total: number[],
+            current: permission & { indeterminate: boolean }
+          ) => {
+            if (Array.isArray(current.children)) {
+              const every = hasEvery(current.children)
+              const indeterminate = hasIndeterminate(current.children)
+
+              if (every) {
+                current.checked = true
+                return total.concat(current.id)
+              }
+              current.indeterminate = indeterminate
+
+              return total.concat(recursion(current.children))
+            } else {
+              if (current.checked) {
+                return total.concat(current.id)
+              }
+            }
+            return total
+          },
+          []
+        )
+      }
       const tree = listToTree(res.data)
-      const selected = res.data.reduce(
-        (total: number[], current: permission & { indeterminate: boolean }) => {
-          if (Array.isArray(current.children)) {
-            const every = hasChecked(current)
-            const indeterminate = hasIndeterminate(current)
-
-            if (every) {
-              current.checked = true
-              return total.concat(current.id)
-            }
-            current.indeterminate = indeterminate
-          } else {
-            if (current.checked) {
-              return total.concat(current.id)
-            }
-          }
-          return total
-        },
-        []
-      )
-
+      const selected = recursion(tree as any)
       setMenuListId(selected)
       callTree(tree as any, (item: any) => {
         item.button = item.button.filter((item: any) => item.id !== null)

@@ -31,7 +31,7 @@ export function MenuModal(props: modalProps) {
   const getMenu = permissionStore((state) => state.getMenu)
 
   const getData = () => {
-    getMenu()
+    getMenu(true)
   }
   useEffect(() => {
     if (props.show) {
