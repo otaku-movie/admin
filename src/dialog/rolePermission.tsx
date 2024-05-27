@@ -16,9 +16,6 @@ import {
   listToTree,
   callTree,
   flattern,
-  hasChecked,
-  hasIndeterminate,
-  // setChecked,
   setCheckedStatus
 } from '@/utils'
 

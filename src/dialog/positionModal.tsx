@@ -16,11 +16,10 @@ interface modalProps {
 interface Query {
   id?: number
   name?: string
-  path?: string
 }
 
-export function RoleModal(props: modalProps) {
-  const { t } = useTranslation(navigator.language as languageType, 'role')
+export function PositionModal(props: modalProps) {
+  const { t } = useTranslation(navigator.language as languageType, 'position')
   const [form] = Form.useForm()
   const [query, setQuery] = useState<Query>({})
 
@@ -42,7 +41,7 @@ export function RoleModal(props: modalProps) {
       onOk={() => {
         form.validateFields().then(() => {
           http({
-            url: 'permission/role/save',
+            url: 'position/save',
             method: 'post',
             data: {
               ...query

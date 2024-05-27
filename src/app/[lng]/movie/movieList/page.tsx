@@ -223,16 +223,21 @@ export default function MoviePage({ params: { lng } }: PageProps) {
             setQuery({ ...obj })
           }}
         >
-          <QueryItem label={t('table.name')}>
-            <Input
-              allowClear
-              value={query.name}
-              onChange={(e) => {
-                query.name = e.target.value
-                setQuery(query)
-              }}
-            ></Input>
-          </QueryItem>
+        
+          {new Array(10).fill(undefined).map((item, index) => {
+                return (
+                  <QueryItem label={t('table.name')} key={index}>
+                  <Input
+                    allowClear
+                    value={query.name}
+                    onChange={(e) => {
+                      query.name = e.target.value
+                      setQuery(query)
+                    }}
+                  ></Input>
+                </QueryItem>
+                )
+              })}
           <QueryItem label={t('table.status')}>
             <Select
               value={query.status}

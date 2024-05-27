@@ -1,16 +1,12 @@
 'use client'
 import React, { useState, useEffect } from 'react'
 import { Table, Button, Space, Row, Input, Modal, message } from 'antd'
-
 import type { TableColumnsType } from 'antd'
-import { useRouter } from 'next/navigation'
-
 import { Query, QueryItem } from '@/components/query'
 import http from '@/api/index'
 import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '../../layout'
-import { RoleModal } from '@/dialog/roleModal'
-import { RolePermission } from '@/dialog/rolePermission'
+import { PositionModal } from '@/dialog/positionModal'
 import { CheckPermission } from '@/components/checkPermission'
 
 interface Query {
@@ -23,7 +19,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
   const [query, setQuery] = useState<Partial<Query>>({})
-  const { t } = useTranslation(lng, 'role')
+  const { t } = useTranslation(lng, 'position')
   const [modal, setModal] = useState({
     type: 'create',
     show: false,
@@ -36,7 +32,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
 
   const getData = (page = 1) => {
     http({
-      url: 'permission/role/list',
+      url: '/position/list',
       method: 'post',
       data: {
         page,
@@ -73,7 +69,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
                 type="primary"
                 onClick={() => {
                   http({
-                    url: 'permission/role/detail',
+                    url: 'position/detail',
                     method: 'get',
                     params: {
                       id: row.id
@@ -94,22 +90,6 @@ export default function MoviePage({ params: { lng } }: PageProps) {
             <CheckPermission code="">
               <Button
                 type="primary"
-                onClick={() => {
-                  setRolePermissionModal({
-                    ...rolePermissionModal,
-                    data: {
-                      id: row.id
-                    },
-                    show: true
-                  })
-                }}
-              >
-                {t('button.configPermission')}
-              </Button>
-            </CheckPermission>
-            <CheckPermission code="">
-              <Button
-                type="primary"
                 danger
                 onClick={() => {
                   Modal.confirm({
@@ -121,7 +101,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
                     onOk() {
                       return new Promise((resolve, reject) => {
                         http({
-                          url: 'permission/role/remove',
+                          url: 'position/remove',
                           method: 'delete',
                           params: {
                             id: row.id
@@ -203,7 +183,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
           position: ['bottomCenter']
         }}
       />
-      <RoleModal
+      <PositionModal
         type={modal.type as 'create' | 'edit'}
         show={modal.show}
         data={modal.data}
@@ -220,23 +200,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
             show: false
           })
         }}
-      ></RoleModal>
-      <RolePermission
-        show={rolePermissionModal.show}
-        data={rolePermissionModal.data}
-        onCancel={() => {
-          setRolePermissionModal({
-            ...rolePermissionModal,
-            show: false
-          })
-        }}
-        onConfirm={() => {
-          setRolePermissionModal({
-            ...rolePermissionModal,
-            show: false
-          })
-        }}
-      ></RolePermission>
+      ></PositionModal>
     </section>
   )
 }

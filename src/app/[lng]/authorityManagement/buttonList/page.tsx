@@ -1,16 +1,12 @@
 'use client'
 import React, { useState, useEffect } from 'react'
 import { Table, Button, Space, Row, Input, Switch, Modal, message } from 'antd'
-
 import type { TableColumnsType } from 'antd'
-import { useRouter } from 'next/navigation'
-
 import { Query, QueryItem } from '@/components/query'
 import http from '@/api/index'
 import { buttonItem, menuItem } from '@/type/api'
 import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '../../layout'
-import { processPath } from '@/config/router'
 import { ButtonModal } from '@/dialog/buttonModal'
 import { permissionStore } from '@/store/permissionStore'
 import { listToTree } from '@/utils'

@@ -1,0 +1,30 @@
+{
+  "table": {
+    "name": "职位名称",
+    "action": "操作"
+  },
+  "button": {
+    "add": "添加",
+    "configPermission": "配置权限",
+    "edit": "编辑",
+    "remove": "删除"
+  },
+  "modal": {
+    "title": {
+      "create": "添加职位",
+      "edit": "编辑职位"
+    },
+    "form": {
+      "name": {
+        "label": "职位名称",
+        "required": "请输入职位名称"
+      }
+    }
+  },
+  "message": {
+    "remove": {
+      "content": "是否确认要删除当前职位，删除后不可恢复",
+      "success": "删除成功"
+    }
+  }
+}

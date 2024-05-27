@@ -1,16 +1,12 @@
 'use client'
 import React, { useState, useEffect } from 'react'
 import { Table, Button, Space, Row, Input, Modal, message } from 'antd'
-
 import type { TableColumnsType } from 'antd'
-import { useRouter } from 'next/navigation'
-
 import { Query, QueryItem } from '@/components/query'
 import http from '@/api/index'
 import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '../../layout'
-import { RoleModal } from '@/dialog/roleModal'
-import { RolePermission } from '@/dialog/rolePermission'
+import { StaffModal } from '@/dialog/staffModal'
 import { CheckPermission } from '@/components/checkPermission'
 
 interface Query {
@@ -18,25 +14,20 @@ interface Query {
   status: number
 }
 
-export default function MoviePage({ params: { lng } }: PageProps) {
+export default function Page({ params: { lng } }: PageProps) {
   const [data, setData] = useState([])
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
   const [query, setQuery] = useState<Partial<Query>>({})
-  const { t } = useTranslation(lng, 'role')
+  const { t } = useTranslation(lng, 'staff')
   const [modal, setModal] = useState({
     type: 'create',
     show: false,
     data: {}
   })
-  const [rolePermissionModal, setRolePermissionModal] = useState({
-    show: false,
-    data: {}
-  })
-
   const getData = (page = 1) => {
     http({
-      url: 'permission/role/list',
+      url: 'staff/list',
       method: 'post',
       data: {
         page,
@@ -62,6 +53,10 @@ export default function MoviePage({ params: { lng } }: PageProps) {
       dataIndex: 'name'
     },
     {
+      title: t('table.description'),
+      dataIndex: 'description'
+    },
+    {
       title: t('table.action'),
       key: 'operation',
       width: 100,
@@ -73,7 +68,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
                 type="primary"
                 onClick={() => {
                   http({
-                    url: 'permission/role/detail',
+                    url: 'staff/detail',
                     method: 'get',
                     params: {
                       id: row.id
@@ -94,22 +89,6 @@ export default function MoviePage({ params: { lng } }: PageProps) {
             <CheckPermission code="">
               <Button
                 type="primary"
-                onClick={() => {
-                  setRolePermissionModal({
-                    ...rolePermissionModal,
-                    data: {
-                      id: row.id
-                    },
-                    show: true
-                  })
-                }}
-              >
-                {t('button.configPermission')}
-              </Button>
-            </CheckPermission>
-            <CheckPermission code="">
-              <Button
-                type="primary"
                 danger
                 onClick={() => {
                   Modal.confirm({
@@ -121,7 +100,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
                     onOk() {
                       return new Promise((resolve, reject) => {
                         http({
-                          url: 'permission/role/remove',
+                          url: 'staff/remove',
                           method: 'delete',
                           params: {
                             id: row.id
@@ -203,7 +182,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
           position: ['bottomCenter']
         }}
       />
-      <RoleModal
+      <StaffModal
         type={modal.type as 'create' | 'edit'}
         show={modal.show}
         data={modal.data}
@@ -220,23 +199,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
             show: false
           })
         }}
-      ></RoleModal>
-      <RolePermission
-        show={rolePermissionModal.show}
-        data={rolePermissionModal.data}
-        onCancel={() => {
-          setRolePermissionModal({
-            ...rolePermissionModal,
-            show: false
-          })
-        }}
-        onConfirm={() => {
-          setRolePermissionModal({
-            ...rolePermissionModal,
-            show: false
-          })
-        }}
-      ></RolePermission>
+      ></StaffModal>
     </section>
   )
 }

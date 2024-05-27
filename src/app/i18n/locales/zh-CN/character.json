@@ -1,0 +1,45 @@
+{
+  "table": {
+    "name": "角色名称",
+    "description": "简介",
+    "movie": "所属电影",
+    "staff": "演员或者声优",
+    "action": "操作"
+  },
+  "button": {
+    "add": "添加",
+    "configPermission": "配置权限",
+    "edit": "编辑",
+    "remove": "删除"
+  },
+  "modal": {
+    "title": {
+      "create": "添加角色",
+      "edit": "编辑角色"
+    },
+    "form": {
+      "movie": {
+        "label": "电影名称",
+        "required": "请选择电影"
+      },
+      "name": {
+        "label": "角色名称",
+        "required": "请输入角色名称"
+      },
+      "description": {
+        "label": "简介",
+        "required": "请输入简介"
+      },
+      "staffId": {
+        "label": "演职人员",
+        "required": "请选择演职人员"
+      }
+    }
+  },
+  "message": {
+    "remove": {
+      "content": "是否确认要删除当前角色，删除后不可恢复",
+      "success": "删除成功"
+    }
+  }
+}

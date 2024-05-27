@@ -16,11 +16,11 @@ interface modalProps {
 interface Query {
   id?: number
   name?: string
-  path?: string
+  description?: string
 }
 
-export function RoleModal(props: modalProps) {
-  const { t } = useTranslation(navigator.language as languageType, 'role')
+export function StaffModal(props: modalProps) {
+  const { t } = useTranslation(navigator.language as languageType, 'staff')
   const [form] = Form.useForm()
   const [query, setQuery] = useState<Query>({})
 
@@ -28,6 +28,7 @@ export function RoleModal(props: modalProps) {
     if (props.show) {
       form.resetFields()
     }
+    form.setFieldsValue(props.data)
     setQuery(props.data)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.show, props.data])
@@ -42,7 +43,7 @@ export function RoleModal(props: modalProps) {
       onOk={() => {
         form.validateFields().then(() => {
           http({
-            url: 'permission/role/save',
+            url: 'staff/save',
             method: 'post',
             data: {
               ...query
@@ -64,6 +65,7 @@ export function RoleModal(props: modalProps) {
         <Form.Item
           label={t('modal.form.name.label')}
           rules={[{ required: true, message: t('modal.form.name.required') }]}
+          name="name"
         >
           <Input
             value={query.name}
@@ -71,6 +73,23 @@ export function RoleModal(props: modalProps) {
               setQuery({
                 ...query,
                 name: e.currentTarget.value
+              })
+            }}
+          />
+        </Form.Item>
+        <Form.Item
+          label={t('modal.form.description.label')}
+          rules={[
+            { required: true, message: t('modal.form.description.required') }
+          ]}
+          name="description"
+        >
+          <Input
+            value={query.description}
+            onChange={(e) => {
+              setQuery({
+                ...query,
+                description: e.currentTarget.value
               })
             }}
           />
