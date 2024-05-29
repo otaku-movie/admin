@@ -31,7 +31,7 @@ import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '../layout'
 import SeatModal from '@/dialog/seatModal'
 import { Dict } from '@/components/dict'
-import { dictStore } from '@/store/dictStore'
+import { commonStore } from '@/store/commonStore'
 import MovieShowTimeModal from '@/dialog/movieShowTimeModal'
 import dayjs from 'dayjs'
 import { CheckPermission } from '@/components/checkPermission'
@@ -57,7 +57,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
     data: [],
     show: false
   })
-  const getDict = dictStore((state) => state.getDict)
+  const getDict = commonStore((state) => state.getDict)
   const { t } = useTranslation(lng, 'showTime')
 
   const getData = (page = 1) => {

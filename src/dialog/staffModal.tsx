@@ -84,8 +84,9 @@ export function StaffModal(props: modalProps) {
           ]}
           name="description"
         >
-          <Input
+          <Input.TextArea
             value={query.description}
+            rows={5}
             onChange={(e) => {
               setQuery({
                 ...query,

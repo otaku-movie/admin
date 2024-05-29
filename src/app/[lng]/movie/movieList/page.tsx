@@ -24,7 +24,7 @@ import { Movie, paginationResponse, response } from '@/type/api'
 import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '../../layout'
 import { Dict } from '@/components/dict'
-import { dictStore } from '@/store/dictStore'
+import { commonStore } from '@/store/commonStore'
 import { processPath } from '@/config/router'
 import { CheckPermission } from '@/components/checkPermission'
 
@@ -40,7 +40,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
   const [total, setTotal] = useState(0)
   const [query, setQuery] = useState<Partial<Query>>({})
   const { t } = useTranslation(lng, 'movie')
-  const getDict = dictStore((state) => state.getDict)
+  const getDict = commonStore((state) => state.getDict)
 
   const getData = (page = 1) => {
     http({
@@ -223,21 +223,20 @@ export default function MoviePage({ params: { lng } }: PageProps) {
             setQuery({ ...obj })
           }}
         >
-        
           {new Array(10).fill(undefined).map((item, index) => {
-                return (
-                  <QueryItem label={t('table.name')} key={index}>
-                  <Input
-                    allowClear
-                    value={query.name}
-                    onChange={(e) => {
-                      query.name = e.target.value
-                      setQuery(query)
-                    }}
-                  ></Input>
-                </QueryItem>
-                )
-              })}
+            return (
+              <QueryItem label={t('table.name')} key={index}>
+                <Input
+                  allowClear
+                  value={query.name}
+                  onChange={(e) => {
+                    query.name = e.target.value
+                    setQuery(query)
+                  }}
+                ></Input>
+              </QueryItem>
+            )
+          })}
           <QueryItem label={t('table.status')}>
             <Select
               value={query.status}

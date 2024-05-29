@@ -44,7 +44,7 @@ export const userStore = create<userInfoStore>((set, get) => {
             }, [])
           )
         })
-        localStorage.setItem('menu', JSON.stringify(filter))
+        localStorage.setItem('route', JSON.stringify(permission.data))
         localStorage.setItem('roleId', `${roleId}`)
         return Promise.resolve(true)
       } else {

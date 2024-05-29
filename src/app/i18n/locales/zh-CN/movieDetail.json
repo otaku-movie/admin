@@ -44,9 +44,80 @@
       "label": "官网",
       "required": "请输入官网地址"
     },
-    "save": "保存"
+    "staff": {
+      "label": "工作人员"
+    },
+    "character": {
+      "label": "角色"
+    }
+  },
+  "staff": {
+    "select": "选择工作人员",
+    "table": {
+      "position": "职位",
+      "cover": "图片",
+      "name": "名称",
+      "action": "操作"
+    },
+    "button": {
+      "edit": "编辑",
+      "remove": "删除"
+    },
+    "message": {
+      "notRepeat": "该职位已添加"
+    },
+    "modal": {
+      "button": {
+        "addPosition": "添加职位",
+        "addStaff": "添加工作人员"
+      },
+      "form": {
+        "staff": {
+          "label": "工作人员",
+          "required": "请选择工作人员"
+        },
+        "position": {
+          "label": "职位名称",
+          "required": "请选择职位"
+        }
+      }
+    }
+  },
+  "character": {
+    "select": "选择角色",
+    "table": {
+      "cover": "图片",
+      "name": "名称",
+      "staff": "演员或者声优",
+      "action": "操作"
+    },
+    "button": {
+      "edit": "编辑",
+      "remove": "删除"
+    },
+    "message": {
+      "notRepeat": "该角色已添加"
+    },
+    "modal": {
+      "button": {
+        "addCharacter": "添加角色"
+      },
+      "form": {
+        "movie": {
+          "label": "所属电影",
+          "required": "请选择电影"
+        },
+        "character": {
+          "label": "角色",
+          "required": "请选择角色"
+        }
+      }
+    }
   },
   "button": {
+    "prev": "上一步",
+    "next": "下一步",
+    "save": "保存",
     "upload": "上传"
   }
 }

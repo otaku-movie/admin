@@ -99,3 +99,18 @@ export interface role {
   id: number
   name: string
 }
+
+export interface position {
+  id: number
+  name: string
+}
+
+export interface character {
+  id: number
+  name: string
+}
+
+export interface staff {
+  id: number
+  name: string
+}

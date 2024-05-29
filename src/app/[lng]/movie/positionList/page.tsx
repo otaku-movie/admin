@@ -25,10 +25,6 @@ export default function MoviePage({ params: { lng } }: PageProps) {
     show: false,
     data: {}
   })
-  const [rolePermissionModal, setRolePermissionModal] = useState({
-    show: false,
-    data: {}
-  })
 
   const getData = (page = 1) => {
     http({

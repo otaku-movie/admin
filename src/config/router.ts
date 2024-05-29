@@ -6,7 +6,7 @@ export interface Options {
 
 
 export function processPath (options: string | Options, query?: Record<string, any>) {
-  const menu = localStorage.getItem('menu')
+  const menu = localStorage.getItem('route')
 
   let route: permission[] = []
 
@@ -15,6 +15,7 @@ export function processPath (options: string | Options, query?: Record<string, a
   }
 
   const process = (name: string, query?: Record<string, any>) => {
+    // debugger
     const find = route.find(item => item.pathName === name)
     const bashPath = `/${navigator.language}${find?.path}`
     
