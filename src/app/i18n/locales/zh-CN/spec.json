@@ -1,0 +1,34 @@
+{
+  "table": {
+    "name": "名称",
+    "description": "简介",
+    "action": "操作"
+  },
+  "button": {
+    "add": "添加",
+    "edit": "编辑",
+    "remove": "删除"
+  },
+  "modal": {
+    "title": {
+      "create": "添加规格",
+      "edit": "编辑规格"
+    },
+    "form": {
+      "name": {
+        "label": "名称",
+        "required": "请输入名称"
+      },
+      "description": {
+        "label": "简介",
+        "required": "请输入简介"
+      }
+    }
+  },
+  "message": {
+    "remove": {
+      "content": "是否确认要删除当前规格，删除后不可恢复",
+      "success": "删除成功"
+    }
+  }
+}
