@@ -43,7 +43,7 @@ interface TreeNode<T> {
   parent?: T | null
   parentId: number | null
   id: number
-  depth: number
+  depth?: number
   children?: TreeNode<T>[] | null
 }
 

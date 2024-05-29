@@ -43,6 +43,7 @@ function RootLayout({ children, params: { lng } }: PageProps) {
   const menu = userStore((state) => listToTree(state.menuPermission))
 
   const { t } = useTranslation(lng, 'common')
+
   const {
     token: { colorBgContainer, borderRadiusLG }
   } = theme.useToken()
@@ -99,16 +100,18 @@ function RootLayout({ children, params: { lng } }: PageProps) {
         return {
           key: `${item.path}`,
           label: !Array.isArray(item.children) ? (
-            <Link href={processPath(item.pathName)}>{item.name}</Link>
+            <Link href={processPath(item.pathName)}>{t(item.i18nKey)}</Link>
           ) : (
-            item.name
+            t(item.i18nKey)
           ),
           children: recursion(item.children)
         }
       } else {
         return {
           key: `${item.path}`,
-          label: <Link href={processPath(item.pathName)}>{item.name}</Link>,
+          label: (
+            <Link href={processPath(item.pathName)}>{t(item.i18nKey)}</Link>
+          ),
           children: null
         }
       }

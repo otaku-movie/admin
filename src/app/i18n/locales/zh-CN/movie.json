@@ -15,7 +15,8 @@
   "button": {
     "add": "添加",
     "edit": "编辑",
-    "remove": "删除"
+    "remove": "删除",
+    "commentList": "评论列表"
   },
   "message": {
     "remove": {

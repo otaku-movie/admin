@@ -72,6 +72,7 @@ export interface menuItem {
   parentId: number | null
   id: number
   name: string
+  i18nKey: string
   path: string
   pathName: string
   show: boolean
@@ -84,6 +85,7 @@ export type buttonItem = menuItem & {
   button: {
     id: number
     name: string
+    i18nKey: string
     code: string
     apiId: number
     apiName: string

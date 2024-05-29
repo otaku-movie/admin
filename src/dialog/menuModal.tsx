@@ -17,6 +17,7 @@ interface modalProps {
 interface Query {
   parentId?: number
   id?: number
+  i18nKey?: string
   name?: string
   path?: string
   pathName?: string
@@ -104,6 +105,23 @@ export function MenuModal(props: modalProps) {
               setQuery({
                 ...query,
                 name: e.currentTarget.value
+              })
+            }}
+          />
+        </Form.Item>
+        <Form.Item
+          label={t('modal.form.i18nKey.label')}
+          rules={[
+            { required: true, message: t('modal.form.i18nKey.required') }
+          ]}
+          name="i18nKey"
+        >
+          <Input
+            value={query.i18nKey}
+            onChange={(e) => {
+              setQuery({
+                ...query,
+                i18nKey: e.currentTarget.value
               })
             }}
           />

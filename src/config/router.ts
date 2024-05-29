@@ -17,8 +17,8 @@ export function processPath (options: string | Options, query?: Record<string, a
   const process = (name: string, query?: Record<string, any>) => {
     // debugger
     const find = route.find(item => item.pathName === name)
-    const bashPath = `/${navigator.language}${find?.path}`
-    
+    const bashPath = `/${document.documentElement.lang}${find?.path}`
+    // console.log(bashPath)
     if (query) {
       const queryStr = Object.keys(query).map((item) => {
         return `${item}=${query[item]}`

@@ -1,6 +1,7 @@
 {
   "table": {
     "name": "页面名称",
+    "i18nKey": "国际化key",
     "routerPath": "路由路径",
     "routerName": "路由名称",
     "show": "展示",
@@ -23,6 +24,10 @@
       "edit": "编辑菜单"
     },
     "form": {
+      "i18nKey": {
+        "label": "国际化key",
+        "required": "请输入国际化key"
+      },
       "name": {
         "label": "菜单名称",
         "required": "请输入菜单名称"

@@ -10,7 +10,6 @@ import http from '@/api/index'
 import { menuItem } from '@/type/api'
 import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '../../layout'
-import { processPath } from '@/config/router'
 import { MenuModal } from '@/dialog/menuModal'
 import { permissionStore } from '@/store/permissionStore'
 import { CheckPermission } from '@/components/checkPermission'
@@ -25,6 +24,8 @@ export default function MoviePage({ params: { lng } }: PageProps) {
   const getMenu = permissionStore((state) => state.getMenu)
   const [query, setQuery] = useState<Partial<Query>>({})
   const { t } = useTranslation(lng, 'menu')
+  const { t: common } = useTranslation(lng, 'common')
+
   const [modal, setModal] = useState({
     type: 'create',
     show: false,
@@ -46,7 +47,14 @@ export default function MoviePage({ params: { lng } }: PageProps) {
   const columns: TableColumnsType<menuItem> = [
     {
       title: t('table.name'),
-      dataIndex: 'name'
+      render (key) {
+        return common(key)
+      },
+      dataIndex: 'i18nKey'
+    },
+    {
+      title: t('table.i18nKey'),
+      dataIndex: 'i18nKey'
     },
     {
       title: t('table.routerPath'),

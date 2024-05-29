@@ -1,0 +1,17 @@
+{
+  "table": {
+    "user": "评论人",
+    "content": "评论内容",
+    "time": "评论时间",
+    "replyCount": "回复数量",
+    "likeCount": "点赞数量",
+    "stepOnCount": "点踩数量",
+    "action": "操作"
+  },
+  "button": {
+    "add": "添加",
+    "detail": "回复详情",
+    "edit": "编辑",
+    "remove": "删除"
+  }
+}

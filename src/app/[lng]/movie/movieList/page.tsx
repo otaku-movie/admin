@@ -70,6 +70,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
       title: t('table.name'),
       dataIndex: 'name',
       width: 350,
+      fixed: 'left',
       render(_: any, row) {
         return (
           <Space align="start">
@@ -159,6 +160,20 @@ export default function MoviePage({ params: { lng } }: PageProps) {
                 {t('button.edit')}
               </Button>
             </CheckPermission>
+            <CheckPermission code="">
+              <Button
+                type="primary"
+                onClick={() => {
+                  router.push(
+                    processPath('commentList', {
+                      id: row.id
+                    })
+                  )
+                }}
+              >
+                {t('button.commentList')}
+              </Button>
+            </CheckPermission>
             <CheckPermission code="movie.remove">
               <Button
                 type="primary"
@@ -223,20 +238,6 @@ export default function MoviePage({ params: { lng } }: PageProps) {
             setQuery({ ...obj })
           }}
         >
-          {new Array(10).fill(undefined).map((item, index) => {
-            return (
-              <QueryItem label={t('table.name')} key={index}>
-                <Input
-                  allowClear
-                  value={query.name}
-                  onChange={(e) => {
-                    query.name = e.target.value
-                    setQuery(query)
-                  }}
-                ></Input>
-              </QueryItem>
-            )
-          })}
           <QueryItem label={t('table.status')}>
             <Select
               value={query.status}
@@ -269,6 +270,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
             total,
             position: ['bottomCenter']
           }}
+          scroll={{x: 1200}}
         />
       </Space>
     </section>

@@ -1,13 +1,30 @@
 {
   "menu": {
-    "cinemaList": "影院列表",
-    "movieList": "电影列表",
+    "dataChart": "数据图表",
+    "cinema": {
+      "name": "影院管理",
+      "children": {
+        "cinemaList": "影院列表",
+        "specList": "规格列表"
+      }
+    },
+    "movie": {
+      "name": "电影管理",
+      "children": {
+        "movieList": "电影列表",
+        "showTimeList": "电影场次列表",
+        "characterList": "角色列表",
+        "staffList": "演职员列表",
+        "positionList": "职位列表",
+        "levelList": "分级列表",
+        "movieDetail": "电影详情",
+        "commentList": "评论列表"
+      }
+    },
     "userList": "用户列表",
     "dictList": "字典列表",
-    "showTimeList": "电影场次列表",
     "orderList": "订单列表",
-    "selectSeat": "选座列表",
-    "authorityManagement": {
+    "permission": {
       "name": "权限管理",
       "children": {
         "roleList": "角色列表",

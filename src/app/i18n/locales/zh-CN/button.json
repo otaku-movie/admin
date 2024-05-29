@@ -5,6 +5,7 @@
     "buttonName": "按钮名称",
     "buttonCode": "按钮Code",
     "apiName": "接口名称",
+    "i18nKey": "国际化Key",
     "action": "操作"
   },
   "button": {
@@ -27,6 +28,10 @@
       "menuId": {
         "label": "所属菜单",
         "required": "请选择菜单"
+      },
+      "i18nKey": {
+        "label": "国际化key",
+        "required": "请输入国际化key"
       },
       "name": {
         "label": "按钮名称",

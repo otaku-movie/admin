@@ -19,9 +19,9 @@ interface Query {
 
 export default function Page({ params: { lng } }: PageProps) {
   const [data, setData] = useState([])
-  const getMenu = permissionStore((state) => state.getMenu)
   const [query, setQuery] = useState<Partial<Query>>({})
   const { t } = useTranslation(lng, 'button')
+  const { t: common } = useTranslation(lng, 'common')
   const [modal, setModal] = useState({
     type: 'create',
     show: false,
@@ -50,13 +50,15 @@ export default function Page({ params: { lng } }: PageProps) {
     {
       title: t('table.name'),
       // width: 200,
-      dataIndex: 'name'
+      dataIndex: 'i18nKey',
+      render (key) {
+        return common(key)
+      },
     },
     {
       title: t('table.button'),
       className: 'button-cell',
       render(value, item) {
-        console.log(item)
         return (
           <ul
             style={{
@@ -67,6 +69,7 @@ export default function Page({ params: { lng } }: PageProps) {
             {item.button.length ? (
               <li className="button-table">
                 <div className="button-table-cell">{t('table.buttonName')}</div>
+                <div className="button-table-cell">{t('table.i18nKey')}</div>
                 <div className="button-table-cell">{t('table.buttonCode')}</div>
                 <div className="button-table-cell">{t('table.apiName')}</div>
                 <div className="button-table-cell">{t('table.action')}</div>
@@ -77,6 +80,9 @@ export default function Page({ params: { lng } }: PageProps) {
                 <li className="button-table" key={index}>
                   <div className="button-table-cell">
                     <Button type="text">{button.name}</Button>
+                  </div>
+                  <div className="button-table-cell">
+                    <Button type="text">{button.i18nKey}</Button>
                   </div>
                   <div className="button-table-cell">
                     <Button type="text">{button.code}</Button>
@@ -179,7 +185,6 @@ export default function Page({ params: { lng } }: PageProps) {
             {t('button.add')}
           </Button>
         </CheckPermission>
-        
       </Row>
       <Table
         columns={columns}

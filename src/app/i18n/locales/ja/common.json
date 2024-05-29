@@ -1,7 +1,41 @@
 {
   "menu": {
-    "cinemaList": "劇場リスト",
-    "movieList": "映画リスト",
-    "userList": "ユーザーリスト"
+    "dataChart": "データチャート",
+    "cinema": {
+      "name": "劇場管理",
+      "children": {
+        "cinemaList": "劇場リスト",
+        "specList": "スペックリスト"
+      }
+    },
+    "movie": {
+      "name": "映画管理",
+      "children": {
+        "movieList": "映画リスト",
+        "showTimeList": "映画番組リスト",
+        "characterList": "キャラクターリスト",
+        "staffList": "スタッフリスト",
+        "positionList": "ポジションリスト",
+        "levelList": "レベルリスト",
+        "movieDetail": "映画詳細",
+        "commentList": "コメントリスト"
+      }
+    },
+    "userList": "ユーザーリスト",
+    "dictList": "辞書リスト",
+    "orderList": "オーダーリスト",
+    "permission": {
+      "name": "権限管理",
+      "children": {
+        "roleList": "役割リスト",
+        "menuList": "メニューリスト",
+        "buttonList": "ボタンリスト",
+        "apiList": "API リスト"
+      }
+    }
+  },
+  "message": {
+    "notPermission": "権限ありません",
+    "save": "保存成功"
   }
 }
