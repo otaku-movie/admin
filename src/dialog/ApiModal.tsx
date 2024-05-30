@@ -43,7 +43,7 @@ export default function ApiModal(props: modalProps) {
       onOk={() => {
         form.validateFields().then(() => {
           http({
-            url: 'permission/api/save',
+            url: 'admin/permission/api/save',
             method: 'post',
             data: {
               ...query

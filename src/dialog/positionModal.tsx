@@ -41,7 +41,7 @@ export function PositionModal(props: modalProps) {
       onOk={() => {
         form.validateFields().then(() => {
           http({
-            url: 'position/save',
+            url: 'admin/position/save',
             method: 'post',
             data: {
               ...query

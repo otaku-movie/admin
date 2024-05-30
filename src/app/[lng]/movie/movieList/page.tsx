@@ -7,7 +7,6 @@ import {
   Row,
   Image,
   Tag,
-  Input,
   Select,
   Modal,
   message
@@ -20,11 +19,11 @@ import { useRouter } from 'next/navigation'
 
 import { Query, QueryItem } from '@/components/query'
 import http from '@/api/index'
-import { Movie, paginationResponse, response } from '@/type/api'
+import { Movie} from '@/type/api'
 import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '../../layout'
 import { Dict } from '@/components/dict'
-import { commonStore } from '@/store/commonStore'
+import { useCommonStore } from '@/store/useCommonStore'
 import { processPath } from '@/config/router'
 import { CheckPermission } from '@/components/checkPermission'
 
@@ -40,7 +39,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
   const [total, setTotal] = useState(0)
   const [query, setQuery] = useState<Partial<Query>>({})
   const { t } = useTranslation(lng, 'movie')
-  const getDict = commonStore((state) => state.getDict)
+  const getDict = useCommonStore((state) => state.getDict)
 
   const getData = (page = 1) => {
     http({
@@ -270,7 +269,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
             total,
             position: ['bottomCenter']
           }}
-          scroll={{x: 1200}}
+          scroll={{ x: 1200 }}
         />
       </Space>
     </section>

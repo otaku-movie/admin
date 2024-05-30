@@ -42,7 +42,7 @@ export function RoleModal(props: modalProps) {
       onOk={() => {
         form.validateFields().then(() => {
           http({
-            url: 'permission/role/save',
+            url: 'admin/permission/role/save',
             method: 'post',
             data: {
               ...query

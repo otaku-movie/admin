@@ -9,7 +9,7 @@ import { One } from './step/one'
 import { Two } from './step/two'
 
 export default function MovieDetail({ params: { lng } }: PageProps) {
-  const [step, setStep] = useState(1)
+  const [step, setStep] = useState(0)
   const [data, setData] = useState<
     Partial<
       Omit<Movie, 'spec'> & {

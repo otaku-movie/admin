@@ -35,7 +35,7 @@ export default function TheaterHallModal(props: TheaterHallModalProps) {
     console.log(data)
     form.validateFields().then(() => {
       http({
-        url: 'theater/hall/save',
+        url: 'admin/theater/hall/save',
         method: 'post',
         data: {
           ...data,

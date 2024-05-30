@@ -4,7 +4,7 @@ import { useTranslation } from '@/app/i18n/client'
 import { Form, Modal, Input, Select, Switch } from 'antd'
 import http from '@/api'
 import { languageType } from '@/config'
-import { permissionStore } from '@/store/permissionStore'
+import { usePermissionStore } from '@/store/usePermissionStore'
 
 interface modalProps {
   type: 'create' | 'edit'
@@ -33,16 +33,16 @@ export function ButtonModal(props: modalProps) {
 
   const getApi = () => {
     http({
-      url: 'permission/api/list',
+      url: 'admin/permission/api/list',
       method: 'post',
       data: {
-        pageSize: 100,
+        pageSize: 100
       }
-    }).then(res => {
+    }).then((res) => {
       setApiData(res.data.list)
     })
   }
-  
+
   const getData = () => {
     getMenu(true)
     getApi()
@@ -67,7 +67,7 @@ export function ButtonModal(props: modalProps) {
       onOk={() => {
         form.validateFields().then(() => {
           http({
-            url: 'permission/button/save',
+            url: 'admin/permission/button/save',
             method: 'post',
             data: {
               ...query
@@ -126,7 +126,9 @@ export function ButtonModal(props: modalProps) {
         </Form.Item>
         <Form.Item
           label={t('modal.form.i18nKey.label')}
-          rules={[{ required: true, message: t('modal.form.i18nKey.required') }]}
+          rules={[
+            { required: true, message: t('modal.form.i18nKey.required') }
+          ]}
           name="i18nKey"
         >
           <Input

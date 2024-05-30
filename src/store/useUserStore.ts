@@ -1,8 +1,7 @@
-import { permission } from './../dialog/rolePermission';
+import { permission } from '../dialog/rolePermission';
 import { create } from 'zustand'
-import http, { ApiResponse } from '@/api'
-import { AxiosResponse } from 'axios'
-import { userInfo, response, role } from '@/type/api'
+import http from '@/api'
+import { userInfo, role } from '@/type/api'
 import { message } from 'antd'
 import dayjs from 'dayjs'
 
@@ -19,7 +18,7 @@ export interface userInfoStore {
   permission(roleId: number): Promise<boolean>
 }
 
-export const userStore = create<userInfoStore>((set, get) => {
+export const useUserStore = create<userInfoStore>((set, get) => {
   return {
     userInfo: {},
     roleInfo: {},
@@ -27,7 +26,7 @@ export const userStore = create<userInfoStore>((set, get) => {
     menuPermission: [],
     async permission(roleId: number) {
       const permission = await http({
-        url: 'permission/role/permission',
+        url: 'admin/permission/role/permission',
         method: 'get',
         params: {
           id: roleId
@@ -59,7 +58,7 @@ export const userStore = create<userInfoStore>((set, get) => {
         data: query
       })
       const userRole = await http({
-        url: 'user/role',
+        url: 'admin/user/role',
         method: 'get',
         params: {
           id: userInfo.data.id

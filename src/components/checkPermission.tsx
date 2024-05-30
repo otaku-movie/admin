@@ -1,5 +1,5 @@
 import React from 'react'
-import { userStore } from '@/store/userStore'
+import { useUserStore } from '@/store/useUserStore'
 
 export interface CheckPermissionProps {
   code: string
@@ -7,7 +7,7 @@ export interface CheckPermissionProps {
 }
 
 export function CheckPermission(props: CheckPermissionProps) {
-  const buttonPermission = userStore((state) => state.buttonPermission)
+  const buttonPermission = useUserStore((state) => state.buttonPermission)
 
   if (buttonPermission.has(props.code) || props.code === '') {
     return props.children

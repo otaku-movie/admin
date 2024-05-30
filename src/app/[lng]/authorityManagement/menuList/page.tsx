@@ -1,17 +1,14 @@
 'use client'
 import React, { useState, useEffect } from 'react'
 import { Table, Button, Space, Row, Input, Switch, Modal, message } from 'antd'
-
 import type { TableColumnsType } from 'antd'
-import { useRouter } from 'next/navigation'
-
 import { Query, QueryItem } from '@/components/query'
 import http from '@/api/index'
 import { menuItem } from '@/type/api'
 import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '../../layout'
 import { MenuModal } from '@/dialog/menuModal'
-import { permissionStore } from '@/store/permissionStore'
+import { usePermissionStore } from '@/store/usePermissionStore'
 import { CheckPermission } from '@/components/checkPermission'
 
 interface Query {
@@ -19,9 +16,8 @@ interface Query {
 }
 
 export default function MoviePage({ params: { lng } }: PageProps) {
-  const data = permissionStore((state) => state.menu)
-
-  const getMenu = permissionStore((state) => state.getMenu)
+  const data = usePermissionStore((state) => state.menu)
+  const getMenu = usePermissionStore((state) => state.getMenu)
   const [query, setQuery] = useState<Partial<Query>>({})
   const { t } = useTranslation(lng, 'menu')
   const { t: common } = useTranslation(lng, 'common')
@@ -47,7 +43,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
   const columns: TableColumnsType<menuItem> = [
     {
       title: t('table.name'),
-      render (key) {
+      render(key) {
         return common(key)
       },
       dataIndex: 'i18nKey'
@@ -83,7 +79,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
                 type="primary"
                 onClick={() => {
                   http({
-                    url: 'permission/menu/detail',
+                    url: 'admin/permission/menu/detail',
                     method: 'get',
                     params: {
                       id: row.id
@@ -115,7 +111,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
                     onOk() {
                       return new Promise((resolve, reject) => {
                         http({
-                          url: 'permission/menu/remove',
+                          url: 'admin/permission/menu/remove',
                           method: 'delete',
                           params: {
                             id: row.id

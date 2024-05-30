@@ -19,7 +19,7 @@ import { useTranslation } from '@/app/i18n/client'
 import http from '@/api'
 import dayjs from 'dayjs'
 import { Movie, SpecItem } from '@/type/api'
-import { commonStore } from '@/store/commonStore'
+import { useCommonStore } from '@/store/useCommonStore'
 import { CheckPermission } from '@/components/checkPermission'
 import { languageType } from '@/config'
 
@@ -49,8 +49,8 @@ export function One(props: Props) {
     endDate: null
   })
   const [spec, setSpec] = useState<SpecItem[]>([])
-  const dict = commonStore((state) => state.dict)
-  const getDict = commonStore((state) => state.getDict)
+  const dict = useCommonStore((state) => state.dict)
+  const getDict = useCommonStore((state) => state.getDict)
   const [fileList, setFileList] = useState<UploadFile[]>()
 
   const onChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {

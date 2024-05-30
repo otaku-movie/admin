@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, useEffect } from 'react'
 import { useTranslation } from '@/app/i18n/client'
-import { Form, Modal, Input, Select } from 'antd'
+import { Form, Modal, Input } from 'antd'
 import http from '@/api'
 import { languageType } from '@/config'
 
@@ -53,7 +53,7 @@ export function SpecModal(props: modalProps) {
       onOk={() => {
         form.validateFields().then(() => {
           http({
-            url: 'cinema/spec/save',
+            url: 'admin/cinema/spec/save',
             method: 'post',
             data: {
               ...query

@@ -4,7 +4,7 @@ import { Form, Modal, Select, Button, Space } from 'antd'
 import { useTranslation } from '@/app/i18n/client'
 import { languageType } from '@/config'
 import { CharacterModal } from './characterModal'
-import { commonStore } from '@/store/commonStore'
+import { useCommonStore } from '@/store/useCommonStore'
 import { character } from '@/type/api'
 
 // export interface movieCharacter {
@@ -29,7 +29,7 @@ export function SelectCharacterModal(props: modalProps) {
     navigator.language as languageType,
     'movieDetail'
   )
-  const store = commonStore()
+  const store = useCommonStore()
   const [characterModal, setCharacterModal] = useState({
     type: 'create',
     show: false,
@@ -61,7 +61,6 @@ export function SelectCharacterModal(props: modalProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.show, props.data])
 
-
   return (
     <Modal
       title={t('character.select')}
@@ -76,7 +75,6 @@ export function SelectCharacterModal(props: modalProps) {
               id: [query.characterId as number]
             })
             .then((data) => {
-
               props.onConfirm?.(data[0])
             })
         })
@@ -92,7 +90,10 @@ export function SelectCharacterModal(props: modalProps) {
         <Form.Item
           label={t('character.modal.form.character.label')}
           rules={[
-            { required: true, message: t('character.modal.form.character.required') }
+            {
+              required: true,
+              message: t('character.modal.form.character.required')
+            }
           ]}
           name="characterId"
         >

@@ -5,7 +5,7 @@ import { useTranslation } from '@/app/i18n/client'
 import { languageType } from '@/config'
 import { PositionModal } from './positionModal'
 import { StaffModal } from './staffModal'
-import { commonStore } from '@/store/commonStore'
+import { useCommonStore } from '@/store/useCommonStore'
 import { staff } from '@/type/api'
 
 export interface movieStaff {
@@ -31,7 +31,7 @@ export function SelectStaffModal(props: modalProps) {
     navigator.language as languageType,
     'movieDetail'
   )
-  const store = commonStore()
+  const store = useCommonStore()
   const [positionModal, setPositionModal] = useState({
     type: 'create',
     show: false,
@@ -76,7 +76,6 @@ export function SelectStaffModal(props: modalProps) {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.show, props.data])
-
 
   return (
     <Modal

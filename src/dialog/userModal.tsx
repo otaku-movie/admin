@@ -1,6 +1,5 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import { PageProps } from '@/app/[lng]/layout'
 import { useTranslation } from '@/app/i18n/client'
 import { Form, Modal, Input } from 'antd'
 import http from '@/api'
@@ -51,7 +50,7 @@ export default function UserModal(props: UserModalProps) {
       onOk={() => {
         form.validateFields().then(() => {
           http({
-            url: 'user/save',
+            url: 'admin/user/save',
             method: 'post',
             data: {
               ...query

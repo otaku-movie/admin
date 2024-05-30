@@ -23,7 +23,7 @@ import '@/assets/css/normalize.scss'
 import { languages } from '@/config'
 import { useTranslation } from '@/app/i18n/client'
 import { processPath } from '@/config/router'
-import { userStore } from '@/store/userStore'
+import { useUserStore } from '@/store/useUserStore'
 import { listToTree } from '@/utils'
 import { permission } from '@/dialog/rolePermission'
 import { ItemType, MenuItemType } from 'antd/es/menu/hooks/useItems'
@@ -38,9 +38,8 @@ export interface PageProps {
 function RootLayout({ children, params: { lng } }: PageProps) {
   const { Header, Content, Sider } = Layout
   const pathname = usePathname()
-  const router = useRouter()
-  const getPermission = userStore((state) => state.permission)
-  const menu = userStore((state) => listToTree(state.menuPermission))
+  const getPermission = useUserStore((state) => state.permission)
+  const menu = useUserStore((state) => listToTree(state.menuPermission))
 
   const { t } = useTranslation(lng, 'common')
 

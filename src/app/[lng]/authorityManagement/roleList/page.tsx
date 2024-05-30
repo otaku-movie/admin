@@ -36,7 +36,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
 
   const getData = (page = 1) => {
     http({
-      url: 'permission/role/list',
+      url: 'admin/permission/role/list',
       method: 'post',
       data: {
         page,
@@ -73,7 +73,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
                 type="primary"
                 onClick={() => {
                   http({
-                    url: 'permission/role/detail',
+                    url: 'admin/permission/role/detail',
                     method: 'get',
                     params: {
                       id: row.id
@@ -121,7 +121,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
                     onOk() {
                       return new Promise((resolve, reject) => {
                         http({
-                          url: 'permission/role/remove',
+                          url: 'admin/permission/role/remove',
                           method: 'delete',
                           params: {
                             id: row.id

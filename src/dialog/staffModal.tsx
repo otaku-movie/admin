@@ -43,7 +43,7 @@ export function StaffModal(props: modalProps) {
       onOk={() => {
         form.validateFields().then(() => {
           http({
-            url: 'staff/save',
+            url: 'admin/staff/save',
             method: 'post',
             data: {
               ...query

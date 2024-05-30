@@ -12,12 +12,7 @@ import {
 import http from '@/api'
 import { languageType } from '@/config'
 import { buttonItem } from '@/type/api'
-import {
-  listToTree,
-  callTree,
-  flattern,
-  setCheckedStatus
-} from '@/utils'
+import { listToTree, callTree, flattern, setCheckedStatus } from '@/utils'
 
 interface modalProps {
   show?: boolean
@@ -37,7 +32,7 @@ export function RolePermission(props: modalProps) {
 
   const getData = () => {
     http({
-      url: 'permission/role/permissionList',
+      url: 'admin/permission/role/permissionList',
       method: 'get',
       params: {
         id: props.data.id
@@ -196,7 +191,7 @@ export function RolePermission(props: modalProps) {
         })
 
         http({
-          url: 'permission/role/config',
+          url: 'admin/permission/role/config',
           method: 'post',
           data: {
             roleId: props.data.id,

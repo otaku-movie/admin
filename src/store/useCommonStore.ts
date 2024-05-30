@@ -29,7 +29,7 @@ export interface commonStore {
 
 
 
-export const commonStore = create<commonStore>((set, get) => {
+export const useCommonStore = create<commonStore>((set, get) => {
   return {
     positionList: [],
     characterList: [],

@@ -8,7 +8,7 @@ import { buttonItem, menuItem } from '@/type/api'
 import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '../../layout'
 import { ButtonModal } from '@/dialog/buttonModal'
-import { permissionStore } from '@/store/permissionStore'
+// import { usePermissionStore } from '@/store/usePermissionStore'
 import { listToTree } from '@/utils'
 import { CheckPermission } from '@/components/checkPermission'
 import './style.scss'
@@ -30,7 +30,7 @@ export default function Page({ params: { lng } }: PageProps) {
 
   const getData = () => {
     http({
-      url: 'permission/button/list',
+      url: 'admin/permission/button/list',
       method: 'post',
       data: {
         ...query
@@ -51,9 +51,9 @@ export default function Page({ params: { lng } }: PageProps) {
       title: t('table.name'),
       // width: 200,
       dataIndex: 'i18nKey',
-      render (key) {
+      render(key) {
         return common(key)
-      },
+      }
     },
     {
       title: t('table.button'),
@@ -97,7 +97,7 @@ export default function Page({ params: { lng } }: PageProps) {
                           type="primary"
                           onClick={() => {
                             http({
-                              url: 'permission/button/detail',
+                              url: 'admin/permission/button/detail',
                               method: 'get',
                               params: {
                                 id: button.id
@@ -129,7 +129,7 @@ export default function Page({ params: { lng } }: PageProps) {
                               onOk() {
                                 return new Promise((resolve, reject) => {
                                   http({
-                                    url: 'permission/menu/remove',
+                                    url: 'admin/permission/menu/remove',
                                     method: 'delete',
                                     params: {
                                       id: button.id

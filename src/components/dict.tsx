@@ -1,5 +1,5 @@
 'use client'
-import { commonStore } from '@/store/commonStore'
+import { useCommonStore } from '@/store/useCommonStore'
 import React, { useEffect, useState } from 'react'
 import { camelCase } from '@/utils'
 
@@ -9,7 +9,7 @@ export interface DictProps {
 }
 
 export function Dict(props: DictProps) {
-  const dict = commonStore((state) => state.dict)
+  const dict = useCommonStore((state) => state.dict)
   const [name, setName] = useState<string>('')
 
   useEffect(() => {

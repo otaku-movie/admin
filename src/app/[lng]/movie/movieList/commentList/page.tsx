@@ -10,6 +10,7 @@ import { Query, QueryItem } from '@/components/query'
 import { processPath } from '@/config/router'
 import { CheckPermission } from '@/components/checkPermission'
 import { CommentModal } from '@/dialog/commentModal'
+import { showTotal } from '@/utils/pagination'
 
 export default function CinemaPage({ params: { lng } }: PageProps) {
   const router = useRouter()
@@ -183,6 +184,10 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
           pageSize: 10,
           current: page,
           total,
+          showTotal,
+          onChange(page) {
+            getData(page)
+          },
           position: ['bottomCenter']
         }}
       />

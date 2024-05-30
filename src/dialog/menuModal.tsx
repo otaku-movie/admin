@@ -4,7 +4,7 @@ import { useTranslation } from '@/app/i18n/client'
 import { Form, Modal, Input, Select, Switch } from 'antd'
 import http from '@/api'
 import { languageType } from '@/config'
-import { permissionStore } from '@/store/permissionStore'
+import { usePermissionStore } from '@/store/usePermissionStore'
 
 interface modalProps {
   type: 'create' | 'edit'
@@ -28,8 +28,8 @@ export function MenuModal(props: modalProps) {
   const { t } = useTranslation(navigator.language as languageType, 'menu')
   const [form] = Form.useForm()
   const [query, setQuery] = useState<Query>({})
-  const data = permissionStore((state) => state.menu)
-  const getMenu = permissionStore((state) => state.getMenu)
+  const data = usePermissionStore((state) => state.menu)
+  const getMenu = usePermissionStore((state) => state.getMenu)
 
   const getData = () => {
     getMenu(true)
@@ -55,7 +55,7 @@ export function MenuModal(props: modalProps) {
       onOk={() => {
         form.validateFields().then(() => {
           http({
-            url: 'permission/menu/save',
+            url: 'admin/permission/menu/save',
             method: 'post',
             data: {
               ...query

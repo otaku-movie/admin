@@ -6,7 +6,7 @@ import { PageProps } from '../layout'
 import { useRouter } from 'next/navigation'
 import { emailRegExp, passwordRegExp } from '@/utils'
 import { processPath } from '@/config/router'
-import { userStore } from '@/store/userStore'
+import { useUserStore } from '@/store/useUserStore'
 import './style.scss'
 
 interface Query {
@@ -15,7 +15,7 @@ interface Query {
 }
 
 export default function Page({ params: { lng } }: PageProps) {
-  const store = userStore()
+  const store = useUserStore()
   const { t } = useTranslation(lng, 'login')
   const [form] = Form.useForm()
   const router = useRouter()

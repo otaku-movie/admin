@@ -16,25 +16,18 @@ import {
 
 import type { TableColumnsType } from 'antd'
 import { status } from '@/config/index'
-import { useRouter } from 'next/navigation'
 
 import { Query, QueryItem } from '@/components/query'
 import http from '@/api/index'
-import {
-  Cinema,
-  Movie,
-  SpecItem,
-  paginationResponse,
-  response
-} from '@/type/api'
+import { Cinema, SpecItem } from '@/type/api'
 import { useTranslation } from '@/app/i18n/client'
-import { PageProps } from '../layout'
 import SeatModal from '@/dialog/seatModal'
 import { Dict } from '@/components/dict'
-import { commonStore } from '@/store/commonStore'
+import { useCommonStore } from '@/store/useCommonStore'
 import MovieShowTimeModal from '@/dialog/movieShowTimeModal'
 import dayjs from 'dayjs'
 import { CheckPermission } from '@/components/checkPermission'
+import { PageProps } from '../../layout'
 
 interface Query {
   name: string
@@ -57,7 +50,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
     data: [],
     show: false
   })
-  const getDict = commonStore((state) => state.getDict)
+  const getDict = useCommonStore((state) => state.getDict)
   const { t } = useTranslation(lng, 'showTime')
 
   const getData = (page = 1) => {
@@ -71,9 +64,9 @@ export default function MoviePage({ params: { lng } }: PageProps) {
         date: query.date?.format('YYYY-MM-DD')
       }
     }).then((res) => {
-      setData(res.data)
-      // setPage(page)
-      // setTotal(res.data.total)
+      setData(res.data.list)
+      setPage(page)
+      setTotal(res.data.total)
     })
   }
 
@@ -184,7 +177,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
       render: (_, row) => {
         return (
           <Space direction="vertical" align="center">
-            <CheckPermission>
+            <CheckPermission code="">
               <Button
                 onClick={() => {
                   http({
@@ -202,28 +195,6 @@ export default function MoviePage({ params: { lng } }: PageProps) {
                 }}
               >
                 {t('button.detail')}
-              </Button>
-            </CheckPermission>
-            <CheckPermission code="">
-              <Button
-                type="primary"
-                onClick={() => {
-                  http({
-                    url: 'movie_show_time/detail',
-                    method: 'get',
-                    params: {
-                      id: row.id
-                    }
-                  }).then((res) => {
-                    setShowTimeModal({
-                      ...modal,
-                      data: res.data,
-                      show: true
-                    })
-                  })
-                }}
-              >
-                {t('button.edit')}
               </Button>
             </CheckPermission>
             <CheckPermission code="">

@@ -123,7 +123,7 @@ export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
         console.log(query)
         form.validateFields().then(() => {
           http({
-            url: 'movie_show_time/save',
+            url: 'admin/movie_show_time/save',
             method: 'post',
             data: {
               ...query,

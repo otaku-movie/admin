@@ -51,7 +51,7 @@ export function LevelModal(props: modalProps) {
       onOk={() => {
         form.validateFields().then(() => {
           http({
-            url: 'movie/level/save',
+            url: 'admin/movie/level/save',
             method: 'post',
             data: {
               ...query

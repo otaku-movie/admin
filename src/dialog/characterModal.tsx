@@ -97,7 +97,7 @@ export function CharacterModal(props: modalProps) {
       onOk={() => {
         form.validateFields().then(() => {
           http({
-            url: 'character/save',
+            url: 'admin/character/save',
             method: 'post',
             data: {
               ...query

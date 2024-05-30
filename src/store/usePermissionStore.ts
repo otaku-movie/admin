@@ -8,12 +8,12 @@ export interface permissionStoreOptions {
   getMenu(flattern?: boolean): void
 }
 
-export const permissionStore = create<permissionStoreOptions>((set, get) => {
+export const usePermissionStore = create<permissionStoreOptions>((set, get) => {
   return {
     menu: [],
     async getMenu(flattern: boolean = false) {
       const res = await http({
-        url: 'permission/menu/list',
+        url: 'admin/permission/menu/list',
         method: 'post',
         data: {
           flattern
