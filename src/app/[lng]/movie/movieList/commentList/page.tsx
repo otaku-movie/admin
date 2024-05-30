@@ -4,11 +4,12 @@ import { Table, Button, Space, Input, Row, message, Modal } from 'antd'
 import type { TableColumnsType } from 'antd'
 import { useRouter } from 'next/navigation'
 import { useTranslation } from '@/app/i18n/client'
-import { PageProps } from '../layout'
+import { PageProps } from '../../../layout'
 import http from '@/api'
 import { Query, QueryItem } from '@/components/query'
 import { processPath } from '@/config/router'
 import { CheckPermission } from '@/components/checkPermission'
+import { CommentModal } from '@/dialog/commentModal'
 
 export default function CinemaPage({ params: { lng } }: PageProps) {
   const router = useRouter()
@@ -17,10 +18,15 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
   const { t } = useTranslation(lng, 'comment')
+  const [modal, setModal] = useState({
+    type: 'create',
+    show: false,
+    data: {}
+  })
 
   const getData = (page = 1) => {
     http({
-      url: 'comment/list',
+      url: 'movie/comment/list',
       method: 'post',
       data: {
         page,
@@ -67,35 +73,41 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
         return (
           <Space>
             <Button
-                type="primary"
-                onClick={() => {
-                  router.push(
-                    processPath({
-                      name: 'commentDetail',
-                      query: {
-                        id: row.id
-                      }
-                    })
-                  )
-                }}
-              >
-                {t('button.edit')}
-              </Button>
-              <Button
-                type="primary"
-                onClick={() => {
-                  router.push(
-                    processPath({
-                      name: 'commentDetail',
-                      query: {
-                        id: row.id
-                      }
-                    })
-                  )
-                }}
-              >
-                {t('button.detail')}
-              </Button>
+              type="primary"
+              onClick={() => {
+                http({
+                  url: 'movie/comment/detail',
+                  method: 'get',
+                  params: {
+                    id: row.id
+                  }
+                }).then((res) => {
+                  setModal({
+                    ...modal,
+                    data: res.data,
+                    type: 'edit',
+                    show: true
+                  })
+                })
+              }}
+            >
+              {t('button.edit')}
+            </Button>
+            <Button
+              type="primary"
+              onClick={() => {
+                router.push(
+                  processPath({
+                    name: 'commentDetail',
+                    query: {
+                      id: row.id
+                    }
+                  })
+                )
+              }}
+            >
+              {t('button.detail')}
+            </Button>
             <CheckPermission code="">
               <Button
                 type="primary"
@@ -110,7 +122,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
                     onOk() {
                       return new Promise((resolve, reject) => {
                         http({
-                          url: 'comment/remove',
+                          url: 'movie/comment/remove',
                           method: 'delete',
                           params: {
                             id: row.id
@@ -145,15 +157,18 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
       }}
     >
       <Row justify="end">
-        <CheckPermission code="comment.add">
-          <Button
-            onClick={() => {
-              router.push(processPath('commentDetail'))
-            }}
-          >
-            {t('button.add')}
-          </Button>
-        </CheckPermission>
+        <Button
+          onClick={() => {
+            setModal({
+              ...modal,
+              data: {},
+              type: 'create',
+              show: true
+            })
+          }}
+        >
+          {t('button.add')}
+        </Button>
       </Row>
       <Query>
         <QueryItem label={t('table.user')} column={1}>
@@ -171,6 +186,24 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
           position: ['bottomCenter']
         }}
       />
+      <CommentModal
+        type={modal.type as 'create' | 'edit'}
+        show={modal.show}
+        data={modal.data}
+        onCancel={() => {
+          setModal({
+            ...modal,
+            show: false
+          })
+        }}
+        onConfirm={() => {
+          setModal({
+            ...modal,
+            show: false
+          })
+          getData()
+        }}
+      ></CommentModal>
     </section>
   )
 }

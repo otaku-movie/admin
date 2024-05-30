@@ -96,7 +96,7 @@ export default function Page({ params: { lng } }: PageProps) {
               onClick={() => {
                 store.login(query).then((res) => {
                   if (res) {
-                    router.push(processPath('movie'))
+                    router.push(processPath('movieList'))
                   }
                 })
               }}

@@ -4,6 +4,7 @@ import http, { ApiResponse } from '@/api'
 import { AxiosResponse } from 'axios'
 import { userInfo, response, role } from '@/type/api'
 import { message } from 'antd'
+import dayjs from 'dayjs'
 
 interface Query {
   email: string
@@ -64,6 +65,9 @@ export const userStore = create<userInfoStore>((set, get) => {
           id: userInfo.data.id
         }
       })
+      localStorage.setItem('userInfo', JSON.stringify(userInfo.data))
+      localStorage.setItem('token', userInfo.data.token)
+      localStorage.setItem('loginTime', dayjs().format('YYYY-MM-DD HH:mm:ss'))
       // eslint-disable-next-line no-unsafe-optional-chaining
       const first: role = userRole.data.shift()
       

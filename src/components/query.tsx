@@ -19,6 +19,7 @@ import {
   type FormItemProps
 } from 'antd'
 import { languageType } from '@/config'
+import { omit } from 'lodash'
 
 type Option = {
   xs: number
@@ -66,7 +67,7 @@ export function QueryItem(props: QueryItemProps) {
         display: show ? 'block' : 'none'
       }}
     >
-      <Form.Item {...props}>{props.children}</Form.Item>
+      <Form.Item {...omit(props, ['show'])}>{props.children}</Form.Item>
     </Col>
   )
 }
@@ -168,8 +169,7 @@ export function Query(props: QueryProps) {
       const node = children[i]
       const span = ((node.props?.column || 1) * row) / column
       const newNode = React.cloneElement(node, {
-        show: init < max,
-      
+        show: init < max
       })
       init += span
 

@@ -53,7 +53,7 @@ http.interceptors.response.use((res: AxiosResponse<response>) => {
     if (err.response.status === 401) {
       localStorage.removeItem('userInfo')
       localStorage.removeItem('token')
-      location.href = '/login'
+      location.href = `/${document.documentElement.lang}/login`
 
     } else {
       const status = err.response.status as keyof typeof httpStatus
