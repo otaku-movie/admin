@@ -4,12 +4,12 @@ import { Table, Button, Space, Input, Row, message, Modal } from 'antd'
 import type { TableColumnsType } from 'antd'
 import { useRouter } from 'next/navigation'
 import { useTranslation } from '@/app/i18n/client'
-import { PageProps } from '../../../layout'
+import { PageProps } from '../../../../layout'
 import http from '@/api'
 import { Query, QueryItem } from '@/components/query'
 import { processPath } from '@/config/router'
 import { CheckPermission } from '@/components/checkPermission'
-import { CommentModal } from '@/dialog/commentModal'
+import { ReplyModal } from '@/dialog/replyModal'
 import { showTotal } from '@/utils/pagination'
 
 export default function CinemaPage({ params: { lng } }: PageProps) {
@@ -18,16 +18,17 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
   const [data, setData] = useState([])
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
-  const { t } = useTranslation(lng, 'comment')
+  const { t } = useTranslation(lng, 'reply')
   const [modal, setModal] = useState({
     type: 'create',
     show: false,
+    action: 'comment',
     data: {}
   })
 
   const getData = (page = 1) => {
     http({
-      url: 'movie/comment/list',
+      url: 'movie/reply/list',
       method: 'post',
       data: {
         page,
@@ -46,16 +47,20 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
 
   const columns: TableColumnsType = [
     {
-      title: t('table.user'),
+      title: 'Id',
+      dataIndex: 'id'
+    },
+    {
+      title: t('table.commentUser'),
       dataIndex: 'commentUserName'
+    },
+    {
+      title: t('table.replyUser'),
+      dataIndex: 'replyUserName'
     },
     {
       title: t('table.content'),
       dataIndex: 'content'
-    },
-    {
-      title: t('table.replyCount'),
-      dataIndex: 'replyCount'
     },
     {
       title: t('table.likeCount'),
@@ -77,7 +82,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
               type="primary"
               onClick={() => {
                 http({
-                  url: 'movie/comment/detail',
+                  url: 'movie/reply/detail',
                   method: 'get',
                   params: {
                     id: row.id
@@ -85,6 +90,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
                 }).then((res) => {
                   setModal({
                     ...modal,
+                    action: 'comment',
                     data: res.data,
                     type: 'edit',
                     show: true
@@ -97,17 +103,20 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
             <Button
               type="primary"
               onClick={() => {
-                router.push(
-                  processPath({
-                    name: 'replyList',
-                    query: {
-                      id: row.id
-                    }
-                  })
-                )
+                setModal({
+                  ...modal,
+                  action: 'reply',
+                  data: {
+                    id: row.id,
+                    parentReplyId: row.id,
+                    commentUserId: row.commentUserId
+                  },
+                  type: 'edit',
+                  show: true
+                })
               }}
             >
-              {t('button.detail')}
+              {t('button.reply')}
             </Button>
             <CheckPermission code="">
               <Button
@@ -123,7 +132,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
                     onOk() {
                       return new Promise((resolve, reject) => {
                         http({
-                          url: 'movie/comment/remove',
+                          url: 'movie/reply/remove',
                           method: 'delete',
                           params: {
                             id: row.id
@@ -163,6 +172,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
             setModal({
               ...modal,
               data: {},
+              action: 'comment',
               type: 'create',
               show: true
             })
@@ -171,11 +181,11 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
           {t('button.add')}
         </Button>
       </Row>
-      <Query>
+      {/* <Query>
         <QueryItem label={t('table.user')} column={1}>
           <Input></Input>
         </QueryItem>
-      </Query>
+      </Query> */}
       <Table
         columns={columns}
         dataSource={data}
@@ -191,7 +201,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
           position: ['bottomCenter']
         }}
       />
-      <CommentModal
+      <ReplyModal
         type={modal.type as 'create' | 'edit'}
         show={modal.show}
         data={modal.data}
@@ -208,7 +218,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
           })
           getData()
         }}
-      ></CommentModal>
+      ></ReplyModal>
     </section>
   )
 }

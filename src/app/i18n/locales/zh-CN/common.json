@@ -18,7 +18,8 @@
         "positionList": "职位列表",
         "levelList": "分级列表",
         "movieDetail": "电影详情",
-        "commentList": "评论列表"
+        "commentList": "评论列表",
+        "replyList": "回复列表"
       }
     },
     "userList": "用户列表",

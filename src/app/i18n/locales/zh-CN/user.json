@@ -4,11 +4,13 @@
     "name": "用户名称",
     "email": "邮箱",
     "tel": "电话",
+    "role": "角色",
     "registerTime": "注册时间",
     "action": "操作"
   },
   "button": {
     "add": "添加",
+    "configRole": "配置角色",
     "edit": "编辑",
     "remove": "删除"
   },
@@ -24,6 +26,10 @@
       "edit": "编辑用户"
     },
     "form": {
+      "role": {
+        "label": "角色",
+        "required": "请选择角色"
+      },
       "username": {
         "label": "用户名称",
         "required": "请输入用户名称",

@@ -21,8 +21,8 @@ interface Query {
   content?: string
 }
 
-export function CommentModal(props: Modal) {
-  const { t } = useTranslation(navigator.language as languageType, 'comment')
+export function ReplyModal(props: Modal) {
+  const { t } = useTranslation(navigator.language as languageType, 'reply')
   const searchParams = useSearchParams()
 
   const [form] = Form.useForm()
@@ -51,15 +51,13 @@ export function CommentModal(props: Modal) {
       open={props.show}
       maskClosable={false}
       onOk={() => {
-        console.log(query)
         form.validateFields().then(() => {
           http({
-            url: 'movie/comment/save',
+            url: 'movie/reply/save',
             method: 'post',
             data: {
               ...query,
-              movieId: searchParams.get('id'),
-              commentUserId: getUserInfo()?.id
+              movieCommentId: searchParams.get('id')
             }
           }).then((res) => {
             console.log(res)
@@ -83,7 +81,7 @@ export function CommentModal(props: Modal) {
           label={t('modal.form.comment.label')}
           rules={[
             { required: true, message: t('modal.form.comment.required') },
-            { max: 1000, message: t('modal.form.comment.max') }
+            { max: 1000, message: t('modal.form.comment.max')}
           ]}
           name="content"
         >

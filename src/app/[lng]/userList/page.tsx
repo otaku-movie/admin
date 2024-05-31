@@ -1,13 +1,15 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import { Table, Button, Space, Input, Row, message, Modal } from 'antd'
+import { Table, Button, Space, Input, Row, message, Modal, Tag } from 'antd'
 import type { TableColumnsType } from 'antd'
 import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '../layout'
 import http from '@/api'
 import { Query, QueryItem } from '@/components/query'
 import UserModal from '@/dialog/userModal'
+import { ConfigUserRoleModal } from '@/dialog/configUserRoleModal'
 import { CheckPermission } from '@/components/checkPermission'
+import { role } from '@/type/api'
 
 interface Query {
   name: string
@@ -20,6 +22,11 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
     show: false,
     data: {}
   })
+  const [configUserRoleModal, setConfigUserRoleModal] = useState({
+    type: 'create',
+    show: false,
+    data: {}
+  })
   const [data, setData] = useState([])
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
@@ -28,7 +35,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
 
   const getData = (page = 1) => {
     http({
-      url: 'user/list',
+      url: 'admin/user/list',
       method: 'post',
       data: {
         page,
@@ -58,6 +65,28 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
     {
       title: t('table.email'),
       dataIndex: 'email'
+    },
+    {
+      title: t('table.role'),
+      dataIndex: 'roles',
+      render(data) {
+        return (
+          <Space>
+            {data.map((item: any) => {
+              return (
+                <Tag
+                  key={item.id}
+                  style={{
+                    marginBottom: '10px'
+                  }}
+                >
+                  {item.name}
+                </Tag>
+              )
+            })}
+          </Space>
+        )
+      }
     },
     {
       title: t('table.registerTime'),
@@ -92,6 +121,32 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
                 }}
               >
                 {t('button.edit')}
+              </Button>
+            </CheckPermission>
+            <CheckPermission code="">
+              <Button
+                type="primary"
+                onClick={() => {
+                  http({
+                    url: 'admin/user/role',
+                    method: 'get',
+                    params: {
+                      id: row.id
+                    }
+                  }).then((res) => {
+                    setConfigUserRoleModal({
+                      ...modal,
+                      data: {
+                        id: row.id,
+                        roleId: res.data.map((item: role) => item.id)
+                      },
+                      type: 'edit',
+                      show: true
+                    })
+                  })
+                }}
+              >
+                {t('button.configRole')}
               </Button>
             </CheckPermission>
             <CheckPermission code="">
@@ -215,6 +270,24 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
           })
         }}
       ></UserModal>
+      <ConfigUserRoleModal
+        type={configUserRoleModal.type as 'create' | 'edit'}
+        show={configUserRoleModal.show}
+        data={configUserRoleModal.data}
+        onCancel={() => {
+          setConfigUserRoleModal({
+            ...configUserRoleModal,
+            show: false
+          })
+        }}
+        onConfirm={() => {
+          getData()
+          setConfigUserRoleModal({
+            ...configUserRoleModal,
+            show: false
+          })
+        }}
+      ></ConfigUserRoleModal>
     </section>
   )
 }

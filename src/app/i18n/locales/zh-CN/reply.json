@@ -1,8 +1,9 @@
 {
   "table": {
-    "user": "评论人",
-    "content": "评论内容",
-    "time": "评论时间",
+    "commentUser": "评论人",
+    "replyUser": "回复人",
+    "content": "回复内容",
+    "time": "回复时间",
     "replyCount": "回复数量",
     "likeCount": "点赞数量",
     "stepOnCount": "点踩数量",
@@ -10,19 +11,19 @@
   },
   "button": {
     "add": "添加",
-    "detail": "回复详情",
+    "reply": "回复",
     "edit": "编辑",
     "remove": "删除"
   },
   "modal": {
     "title": {
-      "create": "添加评论",
-      "edit": "编辑评论"
+      "create": "添加回复",
+      "edit": "编辑回复"
     },
     "form": {
       "comment": {
-        "label": "评论内容",
-        "required": "请输入评论内容",
+        "label": "回复内容",
+        "required": "请输入回复内容",
         "max": "字数不能超过 1000"
       }
     }

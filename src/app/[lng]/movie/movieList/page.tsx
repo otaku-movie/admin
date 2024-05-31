@@ -5,6 +5,7 @@ import {
   Button,
   Space,
   Row,
+  Input,
   Image,
   Tag,
   Select,
@@ -233,10 +234,19 @@ export default function MoviePage({ params: { lng } }: PageProps) {
             console.log(query)
             getData()
           }}
-          onClear={(obj) => {
-            setQuery({ ...obj })
+          onClear={() => {
+            setQuery({})
           }}
         >
+           <QueryItem label={t('table.name')}>
+            <Input
+                value={query.name}
+                onChange={(e) => {
+                  query.name = e.target.value
+                  setQuery(query)
+                }}
+              ></Input>
+          </QueryItem>
           <QueryItem label={t('table.status')}>
             <Select
               value={query.status}
