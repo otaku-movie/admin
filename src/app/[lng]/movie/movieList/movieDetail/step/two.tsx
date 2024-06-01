@@ -20,7 +20,7 @@ import { processPath } from '@/config/router'
 import { character } from '@/type/api'
 
 interface modal<T> {
-  columns: TableColumnsType<movieStaff>
+  columns: TableColumnsType<T>
   data: T[]
   modal: {
     type: 'create' | 'edit'
@@ -34,6 +34,7 @@ export function Two(props: Props) {
   const router = useRouter()
   const { t } = useTranslation(props.language, 'movieDetail')
   const [form] = Form.useForm()
+  // const [data, setData] = useState({})
 
   const [staff, setStaff] = useState<modal<movieStaff>>({
     columns: [
@@ -362,7 +363,7 @@ export function Two(props: Props) {
                 onClick={() => {
                   form.validateFields().then(() => {
                     http({
-                      url: 'movie/save',
+                      url: 'admin/movie/save',
                       method: 'post',
                       data: {
                         ...props.data,

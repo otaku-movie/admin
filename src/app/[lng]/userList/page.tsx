@@ -10,6 +10,7 @@ import UserModal from '@/dialog/userModal'
 import { ConfigUserRoleModal } from '@/dialog/configUserRoleModal'
 import { CheckPermission } from '@/components/checkPermission'
 import { role } from '@/type/api'
+import { showTotal } from '@/utils/pagination'
 
 interface Query {
   name: string
@@ -249,6 +250,10 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
           pageSize: 10,
           current: page,
           total,
+          showTotal,
+          onChange(page) {
+            getData(page)
+          },
           position: ['bottomCenter']
         }}
       />

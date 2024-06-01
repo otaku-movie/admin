@@ -4,6 +4,8 @@
     "originalName": "原名",
     "time": "片长",
     "level": "分级",
+    "cinemaCount": "上映影院数",
+    "theaterCount": "上映场馆数",
     "commentCount": "评论数",
     "watchedCount": "已看过",
     "wantToSeeCount": "想看数",

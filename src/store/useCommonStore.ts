@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import http from '@/api'
-import { DictItem, character, position, staff } from '@/type/api'
+import { DictItem, character, position, staff, level } from '@/type/api'
 
 interface CharacterQuery {
   name?: string
@@ -19,12 +19,14 @@ interface StaffListQuery {
 export interface commonStore {
   characterList: character[]
   positionList: position[]
+  levelList: level[]
   staffList: staff[]
   dict: Record<string, DictItem[]>
   getDict(code: string[]): void
   getCharacterList(query?: CharacterQuery): Promise<character[]>
   getPositionList(query?: PositionListQuery): void
   getStaffList(query?: StaffListQuery): Promise<staff[]>
+  getLevelList (): void
 }
 
 
@@ -34,6 +36,7 @@ export const useCommonStore = create<commonStore>((set, get) => {
     positionList: [],
     characterList: [],
     staffList: [],
+    levelList: [],
     dict: {},
     async getDict(code: string[]) {
       const res = await http({
@@ -49,7 +52,21 @@ export const useCommonStore = create<commonStore>((set, get) => {
         }, get().dict) 
       })
     },
-    getCharacterList (query: CharacterQuery) {
+    getLevelList () {
+      http({
+        url: 'movie/level/list',
+        method: 'post',
+        data: {
+          page: 1,
+          pageSize: 10
+        }
+      }).then(res => {
+        set({
+          levelList: res.data.list
+        })
+      })
+    },
+    getCharacterList (query: CharacterQuery = {}) {
       return new Promise((resolve) => {
         http({
           url: '/character/list',
@@ -67,7 +84,7 @@ export const useCommonStore = create<commonStore>((set, get) => {
         })
       })
     },
-    getPositionList (query: CharacterQuery) {
+    getPositionList (query: PositionListQuery = {}) {
       http({
         url: '/position/list',
         method: 'post',
@@ -82,7 +99,7 @@ export const useCommonStore = create<commonStore>((set, get) => {
         })
       })
     },
-    getStaffList (query: StaffListQuery) {
+    getStaffList (query: StaffListQuery = {}) {
       return new Promise((resolve) => {
         http({
           url: '/staff/list',

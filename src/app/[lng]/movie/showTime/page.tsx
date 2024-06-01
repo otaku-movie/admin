@@ -15,7 +15,7 @@ import {
 } from 'antd'
 
 import type { TableColumnsType } from 'antd'
-import { status } from '@/config/index'
+import { status, notFoundImage } from '@/config/index'
 
 import { Query, QueryItem } from '@/components/query'
 import http from '@/api/index'
@@ -28,6 +28,7 @@ import MovieShowTimeModal from '@/dialog/movieShowTimeModal'
 import dayjs from 'dayjs'
 import { CheckPermission } from '@/components/checkPermission'
 import { PageProps } from '../../layout'
+import { showTotal } from '@/utils/pagination'
 
 interface Query {
   name: string
@@ -104,7 +105,11 @@ export default function MoviePage({ params: { lng } }: PageProps) {
       render(_: any, row) {
         return (
           <Space align="start">
-            <Image width={120} src={row.moviePoster} alt="poster"></Image>
+            <Image 
+              width={120} 
+              src={row.movieCover} 
+              alt="poster"
+              fallback={notFoundImage}></Image>
             <Space direction="vertical">
               <span>{row.movieName}</span>
               <section>
@@ -354,6 +359,10 @@ export default function MoviePage({ params: { lng } }: PageProps) {
             pageSize: 10,
             current: page,
             total,
+            showTotal,
+            onChange(page) {
+              getData(page)
+            },
             position: ['bottomCenter']
           }}
         />

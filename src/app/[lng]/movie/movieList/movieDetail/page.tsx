@@ -51,10 +51,12 @@ export default function MovieDetail({ params: { lng } }: PageProps) {
     }
   }
 
-  const next = () => {
+  const next = (data: any) => {
     if (step < components.length) {
+      setData(data)
       setStep(step + 1)
     }
+    console.log(data)
   }
   const prev = () => {
     if (step !== 0) {

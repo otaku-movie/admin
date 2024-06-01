@@ -8,6 +8,7 @@ import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '../../layout'
 import { CharacterModal } from '@/dialog/characterModal'
 import { CheckPermission } from '@/components/checkPermission'
+import { showTotal } from '@/utils/pagination'
 
 interface Query {
   name: string
@@ -205,6 +206,10 @@ export default function MoviePage({ params: { lng } }: PageProps) {
           pageSize: 10,
           current: page,
           total,
+          showTotal,
+          onChange(page) {
+            getData(page)
+          },
           position: ['bottomCenter']
         }}
       />

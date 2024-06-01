@@ -7,6 +7,7 @@ import { languageType } from '@/config'
 import { user } from '@/type/api'
 import { emailRegExp, passwordRegExp, usernameRegExp } from '@/utils'
 
+
 interface UserModalProps {
   type: 'create' | 'edit'
   show?: boolean

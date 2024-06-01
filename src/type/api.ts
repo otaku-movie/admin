@@ -57,6 +57,7 @@ export interface Movie {
   homePage: string
   time: number
   status: 1 | 2 | 3
+  levelId: number
   spec: SpecItem[]
 }
 
@@ -96,6 +97,11 @@ export type buttonItem = menuItem & {
 export type userInfo = user & {
   token: string
 }
+export interface base {
+  id: number
+  name: string
+  description: string
+}
 
 export interface role {
   id: number
@@ -107,12 +113,8 @@ export interface position {
   name: string
 }
 
-export interface character {
-  id: number
-  name: string
-}
+export type character = base
 
-export interface staff {
-  id: number
-  name: string
-}
+export type staff = base
+
+export type level = base

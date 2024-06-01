@@ -4,17 +4,15 @@ import {
   Button,
   DatePicker,
   Input,
+  Space,
   InputNumber,
   Checkbox,
   Select,
   Row,
   Col,
   message,
-  Upload,
   Form
 } from 'antd'
-import type { GetProp, UploadFile, UploadProps } from 'antd'
-import ImgCrop from 'antd-img-crop'
 import { useTranslation } from '@/app/i18n/client'
 import http from '@/api'
 import dayjs from 'dayjs'
@@ -22,8 +20,7 @@ import { Movie, SpecItem } from '@/type/api'
 import { useCommonStore } from '@/store/useCommonStore'
 import { CheckPermission } from '@/components/checkPermission'
 import { languageType } from '@/config'
-
-type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
+import { Upload } from '@/components/upload/Upload'
 
 export interface Props {
   language: languageType
@@ -50,28 +47,10 @@ export function One(props: Props) {
   })
   const [spec, setSpec] = useState<SpecItem[]>([])
   const dict = useCommonStore((state) => state.dict)
+  const levelList = useCommonStore((state) => state.levelList)
   const getDict = useCommonStore((state) => state.getDict)
-  const [fileList, setFileList] = useState<UploadFile[]>()
-
-  const onChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
-    setFileList(newFileList)
-  }
-
-  const onPreview = async (file: UploadFile) => {
-    let src = file.url as string
-    if (!src) {
-      src = await new Promise((resolve) => {
-        const reader = new FileReader()
-        reader.readAsDataURL(file.originFileObj as FileType)
-        reader.onload = () => resolve(reader.result as string)
-      })
-    }
-    const image = new Image()
-    image.src = src
-    const imgWindow = window.open(src)
-    imgWindow?.document.write(image.outerHTML)
-  }
-
+  const getLevelList = useCommonStore((state) => state.getLevelList)
+ 
   const getSpec = () => {
     http({
       url: 'movie/spec',
@@ -88,11 +67,17 @@ export function One(props: Props) {
 
   useEffect(() => {
     getSpec()
+    getLevelList()
     getDict(['release_status'])
   }, [])
 
   return (
-    <div>
+    <Space
+      align="start"
+      style={{
+        display: 'flex'
+      }}
+    >
       <Form
         {...{
           labelCol: {
@@ -101,34 +86,28 @@ export function One(props: Props) {
           },
           wrapperCol: {
             xs: { span: 24 },
-            sm: { span: 14 }
+            sm: { span: 15 }
           }
         }}
         form={form}
         variant="filled"
         // initialValues={data}
-        style={{ maxWidth: 600 }}
+        style={{ maxWidth: 600, minWidth: 500 }}
         name="movieDetail"
       >
         <Form.Item
           label={t('form.cover.label')}
           rules={[{ required: true, message: t('form.cover.required') }]}
         >
-          <ImgCrop rotationSlider>
-            <Upload
-              action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
-              listType="picture"
-              maxCount={1}
-              onChange={onChange}
-              onPreview={onPreview}
-              onRemove={() => {
-                setFileList([])
-                return true
-              }}
-            >
-              {!fileList?.length ? <Button>{t('button.upload')}</Button> : null}
-            </Upload>
-          </ImgCrop>
+          <Upload 
+            value={data.cover || ''} 
+            crop={true}
+            onChange={(val) => {
+             setData({
+              ...data,
+              cover: val
+            })
+          }}></Upload>
         </Form.Item>
         <Form.Item
           label={t('form.name.label')}
@@ -188,6 +167,7 @@ export function One(props: Props) {
         >
           <Input.TextArea
             value={data.description}
+            rows={5}
             onChange={(e) => {
               data.description = e.currentTarget.value
               setData({
@@ -211,6 +191,81 @@ export function One(props: Props) {
             }}
           />
         </Form.Item>
+        <Form.Item
+          label={t('form.level.label')}
+          rules={[{ required: true, message: t('form.level.required') }]}
+          name="levelId"
+        >
+          <Select
+            value={data.levelId}
+            onChange={(val) => {
+              data.levelId = val
+              setData({ ...data })
+            }}
+          >
+            {levelList?.map((item) => {
+              return (
+                <Select.Option value={item.id} key={item.name}>
+                  {item.name}（{item.description}）
+                </Select.Option>
+              )
+            })}
+          </Select>
+        </Form.Item>
+
+        <Form.Item wrapperCol={{ offset: 6, span: 16 }}>
+          <CheckPermission code="movie.save">
+            <Button
+              type="primary"
+              htmlType="submit"
+              onClick={() => {
+                form.validateFields().then(() => {
+                  http({
+                    url: 'admin/movie/save',
+                    method: 'post',
+                    data: {
+                      ...data,
+                      startDate:
+                        data.startDate === null
+                          ? null
+                          : dayjs(data.startDate || new Date()).format(
+                              'YYYY-MM-DD'
+                            ),
+                      endDate:
+                        data.endDate === null
+                          ? null
+                          : dayjs(data.endDate || new Date()).format(
+                              'YYYY-MM-DD'
+                            )
+                    }
+                  }).then((res) => {
+                    message.success('保存成功')
+                    props.onNext?.(res.data)
+                    // router.back()
+                  })
+                })
+              }}
+            >
+              {t('button.next')}
+            </Button>
+          </CheckPermission>
+        </Form.Item>
+      </Form>
+      <Form
+        {...{
+          labelCol: {
+            span: 8
+          },
+          wrapperCol: {
+            offset: 1
+          }
+        }}
+        form={form}
+        variant="filled"
+        // initialValues={data}
+        style={{ width: 500 }}
+        name="movieDetail"
+      >
         <Form.Item
           label={t('form.spec.label')}
           rules={[{ required: false, message: t('form.spec.required') }]}
@@ -236,13 +291,6 @@ export function One(props: Props) {
               })}
             </Row>
           </Checkbox.Group>
-        </Form.Item>
-
-        <Form.Item
-          label={t('form.level.label')}
-          rules={[{ required: false, message: t('form.level.required') }]}
-        >
-          <Select />
         </Form.Item>
         <Form.Item
           label={t('form.status.label')}
@@ -273,6 +321,9 @@ export function One(props: Props) {
         >
           <DatePicker
             value={data.startDate}
+            style={{
+              width: '300px'
+            }}
             onChange={(date) => {
               data.startDate = date
               setData({
@@ -288,6 +339,9 @@ export function One(props: Props) {
         >
           <DatePicker
             value={data.endDate}
+            style={{
+              width: '300px'
+            }}
             onChange={(date) => {
               data.endDate = date
               setData({
@@ -296,45 +350,7 @@ export function One(props: Props) {
             }}
           />
         </Form.Item>
-
-        <Form.Item wrapperCol={{ offset: 6, span: 16 }}>
-          <CheckPermission code="movie.save">
-            <Button
-              type="primary"
-              htmlType="submit"
-              onClick={() => {
-                form.validateFields().then(() => {
-                  http({
-                    url: 'movie/save',
-                    method: 'post',
-                    data: {
-                      ...data,
-                      startDate:
-                        data.startDate === null
-                          ? null
-                          : dayjs(data.startDate || new Date()).format(
-                              'YYYY-MM-DD'
-                            ),
-                      endDate:
-                        data.endDate === null
-                          ? null
-                          : dayjs(data.endDate || new Date()).format(
-                              'YYYY-MM-DD'
-                            )
-                    }
-                  }).then((res) => {
-                    message.success('保存成功')
-                    props.onNext?.(res.data)
-                    // router.back()
-                  })
-                })
-              }}
-            >
-              {t('button.next')}
-            </Button>
-          </CheckPermission>
-        </Form.Item>
       </Form>
-    </div>
+    </Space>
   )
 }

@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint --fix .",
+    "lint": "next lint  --fix .{ts,tsx}",
     "prepare": "husky install"
   },
   "lint-staged": {
@@ -19,6 +19,7 @@
     "antd": "^5.16.0",
     "antd-img-crop": "^4.21.0",
     "axios": "^1.6.8",
+    "cropperjs": "^1.6.2",
     "dayjs": "^1.11.11",
     "i18next": "^23.11.1",
     "i18next-browser-languagedetector": "^7.2.1",
@@ -31,6 +32,7 @@
     "react-cookie": "^7.1.4",
     "react-dom": "^18",
     "react-i18next": "^14.1.0",
+    "sharp": "^0.33.4",
     "zustand": "^4.5.2"
   },
   "devDependencies": {
@@ -41,6 +43,7 @@
     "@typescript-eslint/eslint-plugin": "^7.5.0",
     "@typescript-eslint/parser": "^7.5.0",
     "autoprefixer": "^10.0.1",
+    "classnames": "^2.5.1",
     "eslint": "^8.57.0",
     "eslint-config-next": "14.1.4",
     "eslint-config-prettier": "^9.1.0",

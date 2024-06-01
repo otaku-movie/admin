@@ -14,19 +14,19 @@ import {
 } from 'antd'
 
 import type { TableColumnsType } from 'antd'
-import movie from '@/assets/image/conan-movie.png'
-import { status } from '@/config/index'
+import { status, notFoundImage } from '@/config/index'
 import { useRouter } from 'next/navigation'
 
 import { Query, QueryItem } from '@/components/query'
 import http from '@/api/index'
-import { Movie} from '@/type/api'
+import { Movie } from '@/type/api'
 import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '../../layout'
 import { Dict } from '@/components/dict'
 import { useCommonStore } from '@/store/useCommonStore'
 import { processPath } from '@/config/router'
 import { CheckPermission } from '@/components/checkPermission'
+import { showTotal } from '@/utils/pagination'
 
 interface Query {
   name: string
@@ -74,7 +74,12 @@ export default function MoviePage({ params: { lng } }: PageProps) {
       render(_: any, row) {
         return (
           <Space align="start">
-            <Image width={120} src={movie.src} alt="poster"></Image>
+            <Image
+              width={120}
+              src={row.cover}
+              alt="poster"
+              fallback={notFoundImage}
+            ></Image>
             <Space direction="vertical">
               <span>{row.name}</span>
               <section>
@@ -112,6 +117,14 @@ export default function MoviePage({ params: { lng } }: PageProps) {
       dataIndex: 'level'
     },
     {
+      title: t('table.cinemaCount'),
+      dataIndex: 'cinemaCount'
+    },
+    {
+      title: t('table.theaterCount'),
+      dataIndex: 'theaterCount'
+    },
+    {
       title: t('table.commentCount'),
       dataIndex: 'commentCount'
     },
@@ -142,24 +155,10 @@ export default function MoviePage({ params: { lng } }: PageProps) {
       title: t('table.action'),
       key: 'operation',
       fixed: 'right',
-      // width: 100,
+      width: 150,
       render: (_, row) => {
         return (
-          <Space>
-            <CheckPermission code="movie.edit">
-              <Button
-                type="primary"
-                onClick={() => {
-                  router.push(
-                    processPath('movieDetail', {
-                      id: row.id
-                    })
-                  )
-                }}
-              >
-                {t('button.edit')}
-              </Button>
-            </CheckPermission>
+          <Space direction="vertical" align="center">
             <CheckPermission code="">
               <Button
                 type="primary"
@@ -174,7 +173,22 @@ export default function MoviePage({ params: { lng } }: PageProps) {
                 {t('button.commentList')}
               </Button>
             </CheckPermission>
-            <CheckPermission code="movie.remove">
+            <CheckPermission code="movie.edit">
+              <Button
+                type="primary"
+                onClick={() => {
+                  router.push(
+                    processPath('movieDetail', {
+                      id: row.id
+                    })
+                  )
+                }}
+              >
+                {t('button.edit')}
+              </Button>
+            </CheckPermission>
+
+            <CheckPermission code="">
               <Button
                 type="primary"
                 danger
@@ -238,14 +252,14 @@ export default function MoviePage({ params: { lng } }: PageProps) {
             setQuery({})
           }}
         >
-           <QueryItem label={t('table.name')}>
+          <QueryItem label={t('table.name')}>
             <Input
-                value={query.name}
-                onChange={(e) => {
-                  query.name = e.target.value
-                  setQuery(query)
-                }}
-              ></Input>
+              value={query.name}
+              onChange={(e) => {
+                query.name = e.target.value
+                setQuery(query)
+              }}
+            ></Input>
           </QueryItem>
           <QueryItem label={t('table.status')}>
             <Select
@@ -277,6 +291,10 @@ export default function MoviePage({ params: { lng } }: PageProps) {
             pageSize: 10,
             current: page,
             total,
+            showTotal,
+            onChange(page) {
+              getData(page)
+            },
             position: ['bottomCenter']
           }}
           scroll={{ x: 1200 }}

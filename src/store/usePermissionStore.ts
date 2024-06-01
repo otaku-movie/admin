@@ -8,7 +8,7 @@ export interface permissionStoreOptions {
   getMenu(flattern?: boolean): void
 }
 
-export const usePermissionStore = create<permissionStoreOptions>((set, get) => {
+export const usePermissionStore = create<permissionStoreOptions>((set) => {
   return {
     menu: [],
     async getMenu(flattern: boolean = false) {
