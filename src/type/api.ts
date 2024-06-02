@@ -58,6 +58,7 @@ export interface Movie {
   time: number
   status: 1 | 2 | 3
   levelId: number
+  levelName: string
   spec: SpecItem[]
 }
 

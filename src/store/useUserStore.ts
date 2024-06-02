@@ -29,7 +29,7 @@ export const useUserStore = create<userInfoStore>((set, get) => {
         url: 'admin/permission/role/permission',
         method: 'get',
         params: {
-          id: roleId
+          id: localStorage.getItem('roleId')
         }
       })
       if (permission.data.length !== 0) {

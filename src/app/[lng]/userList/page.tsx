@@ -1,6 +1,16 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import { Table, Button, Space, Input, Row, message, Modal, Tag } from 'antd'
+import {
+  Table,
+  Button,
+  Image,
+  Space,
+  Input,
+  Row,
+  message,
+  Modal,
+  Tag
+} from 'antd'
 import type { TableColumnsType } from 'antd'
 import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '../layout'
@@ -11,6 +21,7 @@ import { ConfigUserRoleModal } from '@/dialog/configUserRoleModal'
 import { CheckPermission } from '@/components/checkPermission'
 import { role } from '@/type/api'
 import { showTotal } from '@/utils/pagination'
+import { notFoundImage } from '@/config'
 
 interface Query {
   name: string
@@ -56,12 +67,25 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
 
   const columns: TableColumnsType = [
     {
-      title: t('table.icon'),
-      dataIndex: 'cover'
+      title: t('table.cover'),
+      dataIndex: 'cover',
+      render(image) {
+        return (
+          <Image
+            width={120}
+            src={image}
+            alt="poster"
+            fallback={notFoundImage}
+            style={{
+              borderRadius: ' 4px'
+            }}
+          ></Image>
+        )
+      }
     },
     {
       title: t('table.name'),
-      dataIndex: 'username'
+      dataIndex: 'name'
     },
     {
       title: t('table.email'),

@@ -144,3 +144,36 @@ export function setCheckedStatus (nodes: any[], selectedIds: number[]): void {
   }
   updateParentStatus(nodes)
 }
+
+export const matchFormat = (dateString: string) => {
+  const formats = [
+    { 
+      type: 'date',
+      regex: /^\d{4}-\d{2}-\d{2}$/, 
+      format: 'YYYY-MM-DD'
+    },
+    { 
+      type: 'month',
+      regex: /^\d{4}-\d{2}$/, 
+      format: 'YYYY-MM' 
+    },
+    { 
+      type: 'year',
+      regex: /^\d{4}$/, 
+      format: 'YYYY' 
+    },
+    { 
+      type: 'quarter',
+      regex: /^\d{4}-Q[1-4]$/,
+      format: 'YYYY-[Q]Q'
+    }
+  ];
+
+  for (let i = 0; i < formats.length; i++) {
+    if (formats[i].regex.test(dateString)) {
+      return formats[i]
+    }
+  }
+
+  return null
+}

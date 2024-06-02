@@ -1,6 +1,16 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import { Table, Button, Space, Row, Input, Modal, message, Tag } from 'antd'
+import {
+  Table,
+  Button,
+  Space,
+  Row,
+  Input,
+  Image,
+  Modal,
+  message,
+  Tag
+} from 'antd'
 import type { TableColumnsType } from 'antd'
 import { Query, QueryItem } from '@/components/query'
 import http from '@/api/index'
@@ -9,6 +19,7 @@ import { PageProps } from '../../layout'
 import { CharacterModal } from '@/dialog/characterModal'
 import { CheckPermission } from '@/components/checkPermission'
 import { showTotal } from '@/utils/pagination'
+import { notFoundImage } from '@/config'
 
 interface Query {
   name: string
@@ -50,17 +61,38 @@ export default function MoviePage({ params: { lng } }: PageProps) {
 
   const columns: TableColumnsType = [
     {
+      title: t('table.cover'),
+      dataIndex: 'cover',
+      render(image) {
+        return (
+          <Image
+            width={120}
+            src={image}
+            alt="poster"
+            fallback={notFoundImage}
+            style={{
+              borderRadius: ' 4px'
+            }}
+          ></Image>
+        )
+      }
+    },
+    {
       title: t('table.name'),
       dataIndex: 'name'
+    },
+    {
+      title: t('table.originalName'),
+      dataIndex: 'originalName'
     },
     {
       title: t('table.description'),
       dataIndex: 'description'
     },
-    {
-      title: t('table.movie'),
-      dataIndex: 'movieName'
-    },
+    // {
+    //   title: t('table.movie'),
+    //   dataIndex: 'movieName'
+    // },
     {
       title: t('table.staff'),
       dataIndex: 'staff',

@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, useState, useRef, useEffect } from 'react'
 import classNames from 'classnames'
 import Cropper from 'cropperjs'
-import { Modal, Space } from 'antd'
+import { Modal } from 'antd'
 import 'cropperjs/src/css/cropper.scss'
 import './cropper.scss'
 
@@ -31,14 +31,14 @@ export function ImageCropper(props: ImageCropperProps) {
     imageURL,
     visible,
     options,
-    action,
+    // action,
     fixed,
     fixedNumber,
     circle = false,
     outputFilename = 'cropper.png',
     getInstance,
     onCancel,
-    onClose,
+    // onClose,
     onConfirm
   } = props
 
@@ -54,10 +54,10 @@ export function ImageCropper(props: ImageCropperProps) {
   }, [visible])
 
   useLayoutEffect(() => {
-    console.log(image.current, container.current)
     if (show && image.current && container.current) {
       const cropper = new Cropper(image.current, {
         autoCropArea: 0.5,
+        cropBoxResizable: true,
         ...options,
         viewMode: 1,
         autoCrop: true,

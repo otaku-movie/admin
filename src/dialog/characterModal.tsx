@@ -4,6 +4,7 @@ import { useTranslation } from '@/app/i18n/client'
 import { Form, Modal, Input, Select } from 'antd'
 import http from '@/api'
 import { languageType } from '@/config'
+import { Upload } from '@/components/upload/Upload'
 
 interface modalProps {
   type: 'create' | 'edit'
@@ -15,14 +16,15 @@ interface modalProps {
 
 interface Query {
   id?: number
+  cover?: string
   name?: string
+  originalName?: string
   description?: string
   staffId?: number[]
   movieId?: number
 }
 
 export function CharacterModal(props: modalProps) {
-  const [movieData, setMovieData] = useState([])
   const [staff, setStaffData] = useState([])
   const { t } = useTranslation(navigator.language as languageType, 'character')
   const [form] = Form.useForm()
@@ -30,23 +32,6 @@ export function CharacterModal(props: modalProps) {
     staffId: []
   })
 
-  const getMovieData = (
-    name: string = '',
-    id: number | undefined = undefined
-  ) => {
-    http({
-      url: 'movie/list',
-      method: 'post',
-      data: {
-        id,
-        name,
-        page: 1,
-        pageSize: 10
-      }
-    }).then((res) => {
-      setMovieData(res.data?.list)
-    })
-  }
   const getStaffData = (name = '', id = []) => {
     http({
       url: 'staff/list',
@@ -65,6 +50,7 @@ export function CharacterModal(props: modalProps) {
   useEffect(() => {
     if (props.show) {
       form.resetFields()
+      getStaffData()
     }
 
     if (props.data.id) {
@@ -78,11 +64,18 @@ export function CharacterModal(props: modalProps) {
         staffId
       })
       getStaffData('', staffId)
-      getMovieData('', props.data.movieId)
     } else {
-      getStaffData()
-      getMovieData()
+      setQuery({
+        ...props.data,
+        staffId: []
+      })
+      form.setFieldsValue({
+        ...props.data,
+        staffId: []
+      })
+      // getStaffData()
     }
+    console.log(props.data, query)
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.show, props.data])
@@ -117,29 +110,23 @@ export function CharacterModal(props: modalProps) {
         form={form}
       >
         <Form.Item
-          label={t('modal.form.movie.label')}
-          rules={[{ required: true, message: t('modal.form.movie.required') }]}
-          name="movieId"
+          label={t('modal.form.cover.label')}
+          rules={[{ required: false, message: t('modal.form.cover.required') }]}
+          name="cover"
         >
-          <Select
-            showSearch
-            value={query.movieId}
+          <Upload
+            value={query.cover || ''}
+            crop={true}
+            options={{
+              aspectRatio: 160 / 190
+            }}
             onChange={(val) => {
               setQuery({
                 ...query,
-                movieId: val
+                cover: val
               })
             }}
-            onSearch={getMovieData}
-          >
-            {movieData.map((item: any) => {
-              return (
-                <Select.Option value={item.id} key={item.id}>
-                  {item.name}
-                </Select.Option>
-              )
-            })}
-          </Select>
+          />
         </Form.Item>
         <Form.Item
           label={t('modal.form.name.label')}
@@ -152,6 +139,23 @@ export function CharacterModal(props: modalProps) {
               setQuery({
                 ...query,
                 name: e.currentTarget.value
+              })
+            }}
+          />
+        </Form.Item>
+        <Form.Item
+          label={t('modal.form.originalName.label')}
+          rules={[
+            { required: true, message: t('modal.form.originalName.required') }
+          ]}
+          name="originalName"
+        >
+          <Input
+            value={query.originalName}
+            onChange={(e) => {
+              setQuery({
+                ...query,
+                originalName: e.currentTarget.value
               })
             }}
           />

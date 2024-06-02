@@ -4,6 +4,7 @@ import { useTranslation } from '@/app/i18n/client'
 import { Form, Modal, Input } from 'antd'
 import http from '@/api'
 import { languageType } from '@/config'
+import { Upload } from '@/components/upload/Upload'
 
 interface modalProps {
   type: 'create' | 'edit'
@@ -15,6 +16,8 @@ interface modalProps {
 
 interface Query {
   id?: number
+  cover?: string
+  originalName?: string
   name?: string
   description?: string
 }
@@ -63,6 +66,24 @@ export function StaffModal(props: modalProps) {
         form={form}
       >
         <Form.Item
+          label={t('modal.form.cover.label')}
+          rules={[{ required: false, message: t('modal.form.cover.required') }]}
+        >
+          <Upload
+            value={query.cover || ''}
+            crop={true}
+            options={{
+              aspectRatio: 160 / 190
+            }}
+            onChange={(val) => {
+              setQuery({
+                ...query,
+                cover: val
+              })
+            }}
+          />
+        </Form.Item>
+        <Form.Item
           label={t('modal.form.name.label')}
           rules={[{ required: true, message: t('modal.form.name.required') }]}
           name="name"
@@ -73,6 +94,23 @@ export function StaffModal(props: modalProps) {
               setQuery({
                 ...query,
                 name: e.currentTarget.value
+              })
+            }}
+          />
+        </Form.Item>
+        <Form.Item
+          label={t('modal.form.originalName.label')}
+          rules={[
+            { required: true, message: t('modal.form.originalName.required') }
+          ]}
+          name="originalName"
+        >
+          <Input
+            value={query.originalName}
+            onChange={(e) => {
+              setQuery({
+                ...query,
+                originalName: e.currentTarget.value
               })
             }}
           />

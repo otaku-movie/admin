@@ -18,6 +18,7 @@ import http from '@/api'
 import { useRouter } from 'next/navigation'
 import { processPath } from '@/config/router'
 import { character } from '@/type/api'
+import { useMovieStore } from '@/store/useMovieStore'
 
 interface modal<T> {
   columns: TableColumnsType<T>
@@ -32,6 +33,7 @@ interface modal<T> {
 
 export function Two(props: Props) {
   const router = useRouter()
+  const movieStore = useMovieStore()
   const { t } = useTranslation(props.language, 'movieDetail')
   const [form] = Form.useForm()
   // const [data, setData] = useState({})
@@ -218,12 +220,12 @@ export function Two(props: Props) {
   }
 
   const getStaffList = () => {
-    if (props.data.id) {
+    if (movieStore.movie.id) {
       http({
         url: 'movie/staff',
         method: 'get',
         params: {
-          id: props.data.id
+          id: movieStore.movie.id
         }
       }).then((res) => {
         setStaff({
@@ -234,12 +236,12 @@ export function Two(props: Props) {
     }
   }
   const getCharacterList = () => {
-    if (props.data.id) {
+    if (movieStore.movie.id) {
       http({
         url: 'movie/character',
         method: 'get',
         params: {
-          id: props.data.id
+          id: movieStore.movie.id
         }
       }).then((res) => {
         setCharacter({
@@ -295,7 +297,7 @@ export function Two(props: Props) {
   useEffect(() => {
     getStaffList()
     getCharacterList()
-  }, [props.data])
+  }, [])
 
   return (
     <>
@@ -361,15 +363,16 @@ export function Two(props: Props) {
                 type="primary"
                 htmlType="submit"
                 onClick={() => {
+                  // debugger
                   form.validateFields().then(() => {
                     http({
                       url: 'admin/movie/save',
                       method: 'post',
                       data: {
-                        ...props.data,
+                        ...movieStore.movie,
                         characterList: character.data.map((item) => {
                           return {
-                            movieId: props.data.id,
+                            movieId: movieStore.movie.id,
                             characterId: item.id
                           }
                         }),
@@ -387,7 +390,7 @@ export function Two(props: Props) {
                                 return {
                                   positionId: current.id,
                                   staffId: children.id,
-                                  movieId: props.data.id
+                                  movieId: movieStore.movie.id!
                                 }
                               })
                             )

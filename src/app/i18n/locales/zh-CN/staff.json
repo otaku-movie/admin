@@ -1,6 +1,8 @@
 {
   "table": {
+    "cover": "图片",
     "name": "演职人员名称",
+    "originalName": "原名",
     "description": "简介",
     "action": "操作"
   },
@@ -15,9 +17,17 @@
       "edit": "编辑演职人员"
     },
     "form": {
+      "cover": {
+        "label": "图片",
+        "required": "请上传图片"
+      },
       "name": {
         "label": "演职人员名称",
         "required": "请输入演职人员名称"
+      },
+      "originalName": {
+        "label": "原名",
+        "required": "请输入原名"
       },
       "description": {
         "label": "简介",

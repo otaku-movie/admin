@@ -6,6 +6,7 @@ import http from '@/api'
 import { languageType } from '@/config'
 import { user } from '@/type/api'
 import { emailRegExp, passwordRegExp, usernameRegExp } from '@/utils'
+import { Upload } from '@/components/upload/Upload'
 
 
 interface UserModalProps {
@@ -18,7 +19,8 @@ interface UserModalProps {
 
 interface Query {
   id?: number
-  username?: string
+  cover?: string
+  name?: string
   password?: string
   password2?: string
   email?: string
@@ -35,7 +37,7 @@ export default function UserModal(props: UserModalProps) {
     }
     if (props.data?.id) {
       form.setFieldsValue(props.data)
-      // setQuery(props.data)
+      setQuery(props.data)
       console.log(props.data, query)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -71,8 +73,27 @@ export default function UserModal(props: UserModalProps) {
         form={form}
       >
         <Form.Item
+          label={t('modal.form.cover.label')}
+          rules={[{ required: false, message: t('modal.form.cover.required') }]}
+          name="cover"
+        >
+          <Upload
+            value={query.cover || ''}
+            crop={true}
+            options={{
+              aspectRatio: 100 / 100
+            }}
+            onChange={(val) => {
+              setQuery({
+                ...query,
+                cover: val
+              })
+            }}
+          />
+        </Form.Item>
+        <Form.Item
           label={t('modal.form.username.label')}
-          name="username"
+          name="name"
           rules={[
             { required: true, message: t('modal.form.username.required') },
             {
@@ -83,11 +104,11 @@ export default function UserModal(props: UserModalProps) {
           ]}
         >
           <Input
-            value={query.username}
+            value={query.name}
             onChange={(e) => {
               setQuery({
                 ...query,
-                username: e.currentTarget.value
+                name: e.currentTarget.value
               })
             }}
           />

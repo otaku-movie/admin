@@ -16,41 +16,59 @@ import {
 import { useTranslation } from '@/app/i18n/client'
 import http from '@/api'
 import dayjs from 'dayjs'
-import { Movie, SpecItem } from '@/type/api'
+import { SpecItem } from '@/type/api'
 import { useCommonStore } from '@/store/useCommonStore'
 import { CheckPermission } from '@/components/checkPermission'
 import { languageType } from '@/config'
 import { Upload } from '@/components/upload/Upload'
+import { useMovieStore, SaveMovieQuery } from '@/store/useMovieStore'
+import { matchFormat } from '@/utils'
+import advancedFormat from 'dayjs/plugin/advancedFormat'
+
+dayjs.extend(advancedFormat)
 
 export interface Props {
   language: languageType
-  data: Record<string, any>
   onPrev?: () => void
   onNext?: (data?: any) => void
 }
 
 export function One(props: Props) {
   const { t } = useTranslation(props.language, 'movieDetail')
+  const [picker, setPicker] = useState('date')
+  const [startDate, setStartDate] = useState<dayjs.Dayjs | null>(null)
+  const [endDate, setEndDate] = useState<dayjs.Dayjs | null>(null)
+
   const [form] = Form.useForm()
-  const [data, setData] = useState<
-    Partial<
-      Omit<Movie, 'spec'> & {
-        spec: number[]
-        startDate: dayjs.Dayjs | null
-        endDate: dayjs.Dayjs | null
-      }
-    >
-  >({
-    spec: [],
-    startDate: null,
-    endDate: null
+  const movieStore = useMovieStore()
+  const [data, setData] = useState<SaveMovieQuery>({
+    spec: []
   })
   const [spec, setSpec] = useState<SpecItem[]>([])
   const dict = useCommonStore((state) => state.dict)
   const levelList = useCommonStore((state) => state.levelList)
   const getDict = useCommonStore((state) => state.getDict)
   const getLevelList = useCommonStore((state) => state.getLevelList)
- 
+
+  const options = [
+    {
+      name: '年',
+      type: 'year'
+    },
+    {
+      name: '月',
+      type: 'month'
+    },
+    {
+      name: '日期',
+      type: 'date'
+    },
+    // {
+    //   name: '季节',
+    //   type: 'quarter'
+    // }
+  ]
+
   const getSpec = () => {
     http({
       url: 'movie/spec',
@@ -59,17 +77,97 @@ export function One(props: Props) {
       setSpec(res.data)
     })
   }
+
+  const toDayjs = (type: 'start' | 'end', date: string) => {
+    const result = matchFormat(date)
+    if (result) {
+      if (type === 'start') {
+        setPicker(result.type)
+      }
+    }
+
+    return !date ? null : dayjs(date, result?.format)
+  }
+
   useEffect(() => {
-    setData(props.data)
+    const updateDates = () => {
+      setStartDate(() => toDayjs('start', movieStore.movie.startDate as string))
+      setEndDate(() => toDayjs('end', movieStore.movie.endDate as string))
 
-    form.setFieldsValue(props.data)
-  }, [props.data])
+      form.setFieldsValue({
+        ...movieStore.movie,
+        startDate: toDayjs('start', movieStore.movie.startDate as string),
+        endDate: toDayjs('end', movieStore.movie.endDate as string)
+      })
 
+      console.log(startDate?.format('YYYY-[Q]Q'))
+    }
+    setData({
+      ...movieStore.movie
+    })
+
+    updateDates()
+  }, [form, movieStore.movie, movieStore.movie.startDate])
+
+  useEffect(() => {
+    console.log(startDate)
+  }, [startDate])
   useEffect(() => {
     getSpec()
     getLevelList()
     getDict(['release_status'])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  const renderPicker = () => {
+    return (
+      <Space>
+        <Select
+          value={picker}
+          style={{
+            width: '100px'
+          }}
+          onChange={(val) => {
+            setPicker(val)
+          }}
+        >
+          {options?.map((item) => {
+            return (
+              <Select.Option value={item.type} key={item.type}>
+                {item.name}
+              </Select.Option>
+            )
+          })}
+        </Select>
+        <DatePicker
+          value={startDate}
+          style={{
+            width: '200px'
+          }}
+          picker={picker as 'year' | 'month' | 'date' | 'quarter'}
+          onChange={(date) => {
+            console.log(date.format('YYYY-[Q]Q'))
+            setStartDate(date)
+          }}
+        />
+      </Space>
+    )
+  }
+
+  const formatDate = (date: null | dayjs.Dayjs, type = 'auto') => {
+    if (!date) return null
+    const formatMap = {
+      year: 'YYYY',
+      month: 'YYYY-MM',
+      date: 'YYYY-MM-DD',
+      quarter: 'YYYY-[Q]Q'
+    }
+    if (type === 'auto') {
+      return dayjs(date).format(formatMap[picker as keyof typeof formatMap])
+    } else {
+      return dayjs(date).format(formatMap[type as keyof typeof formatMap])
+    }
+  }
 
   return (
     <Space
@@ -91,7 +189,6 @@ export function One(props: Props) {
         }}
         form={form}
         variant="filled"
-        // initialValues={data}
         style={{ maxWidth: 600, minWidth: 500 }}
         name="movieDetail"
       >
@@ -99,15 +196,16 @@ export function One(props: Props) {
           label={t('form.cover.label')}
           rules={[{ required: true, message: t('form.cover.required') }]}
         >
-          <Upload 
-            value={data.cover || ''} 
+          <Upload
+            value={data.cover || ''}
             crop={true}
             onChange={(val) => {
-             setData({
-              ...data,
-              cover: val
-            })
-          }}></Upload>
+              setData({
+                ...data,
+                cover: val
+              })
+            }}
+          />
         </Form.Item>
         <Form.Item
           label={t('form.name.label')}
@@ -225,23 +323,15 @@ export function One(props: Props) {
                     method: 'post',
                     data: {
                       ...data,
-                      startDate:
-                        data.startDate === null
-                          ? null
-                          : dayjs(data.startDate || new Date()).format(
-                              'YYYY-MM-DD'
-                            ),
-                      endDate:
-                        data.endDate === null
-                          ? null
-                          : dayjs(data.endDate || new Date()).format(
-                              'YYYY-MM-DD'
-                            )
+                      startDate: formatDate(startDate),
+                      endDate: formatDate(endDate, 'date')
                     }
-                  }).then((res) => {
+                  }).then((res: any) => {
                     message.success('保存成功')
-                    props.onNext?.(res.data)
-                    // router.back()
+                    movieStore.setMovie({
+                      ...res.data
+                    })
+                    props.onNext?.()
                   })
                 })
               }}
@@ -262,7 +352,6 @@ export function One(props: Props) {
         }}
         form={form}
         variant="filled"
-        // initialValues={data}
         style={{ width: 500 }}
         name="movieDetail"
       >
@@ -274,7 +363,6 @@ export function One(props: Props) {
           <Checkbox.Group
             value={data.spec}
             onChange={(val) => {
-              console.log(val)
               setData({
                 ...data,
                 spec: val
@@ -316,39 +404,67 @@ export function One(props: Props) {
 
         <Form.Item
           label={t('form.startDate.label')}
-          rules={[{ required: false, message: t('form.startDate.required') }]}
+          rules={[
+            {
+              required: false,
+              message: t('form.startDate.required'),
+              type: 'object'
+            },
+            {
+              validator() {
+                if (!startDate?.isBefore(endDate)) {
+                  return Promise.reject(t('form.endDate.startAfterEnd'))
+                } else {
+                  return Promise.resolve()
+                }
+              }
+            }
+          ]}
           name="startDate"
         >
-          <DatePicker
-            value={data.startDate}
-            style={{
-              width: '300px'
-            }}
-            onChange={(date) => {
-              data.startDate = date
-              setData({
-                ...data
-              })
-            }}
-          />
+          {renderPicker()}
         </Form.Item>
         <Form.Item
           label={t('form.endDate.label')}
-          rules={[{ required: false, message: t('form.endDate.required') }]}
+          rules={[
+            {
+              required: false,
+              message: t('form.endDate.required'),
+              type: 'object'
+            },
+            {
+              validator() {
+                if (!startDate?.isBefore(endDate)) {
+                  return Promise.reject(t('form.endDate.startAfterEnd'))
+                } else {
+                  return Promise.resolve()
+                }
+              }
+            }
+          ]}
           name="endDate"
         >
           <DatePicker
-            value={data.endDate}
+            value={endDate}
+            style={{
+              width: '310px'
+            }}
+            onChange={(date) => {
+              console.log('end-picker', data)
+              setEndDate(date)
+            }}
+          />
+          {/* <DatePicker
+            value={}
             style={{
               width: '300px'
             }}
             onChange={(date) => {
-              data.endDate = date
-              setData({
-                ...data
-              })
+              debugger
+            
+              setEndDate(date)
             }}
-          />
+          /> */}
         </Form.Item>
       </Form>
     </Space>

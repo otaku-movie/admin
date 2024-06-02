@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, useEffect } from 'react'
 import { useTranslation } from '@/app/i18n/client'
-import { Form, Modal, Input, Select, Switch } from 'antd'
+import { Form, Modal, Input, Select } from 'antd'
 import http from '@/api'
 import { languageType } from '@/config'
 import { usePermissionStore } from '@/store/usePermissionStore'
@@ -28,8 +28,8 @@ export function ButtonModal(props: modalProps) {
   const [form] = Form.useForm()
   const [query, setQuery] = useState<Query>({})
   const [apiData, setApiData] = useState([])
-  const data = permissionStore((state) => state.menu)
-  const getMenu = permissionStore((state) => state.getMenu)
+  const data = usePermissionStore((state) => state.menu)
+  const getMenu = usePermissionStore((state) => state.getMenu)
 
   const getApi = () => {
     http({

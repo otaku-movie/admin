@@ -21,6 +21,7 @@ const getBase64 = (file: FileType): Promise<string> => {
 export interface UploadProps {
   value: string
   crop?: boolean
+  options?: Omit<Cropper.Options, 'preview'>
   onChange?: (val: string) => void
 }
 
@@ -36,6 +37,9 @@ export function Upload(props: UploadProps) {
   })
 
   useEffect(() => {
+    setCropperURL('')
+
+    console.log('image', props.value)
     if (props.value) {
       setFileList([
         {
@@ -46,6 +50,13 @@ export function Upload(props: UploadProps) {
         }
       ])
       setImageURL(props.value)
+    } else {
+      setFileList([])
+      setImageURL('')
+    }
+
+    return () => {
+      setCropperURL('')
     }
   }, [props.value])
 
@@ -91,6 +102,25 @@ export function Upload(props: UploadProps) {
       message.success('success')
     })
   }
+  const uploadFile = (fd: FormData) => {
+    http({
+      url: '/upload',
+      method: 'post',
+      data: fd
+    }).then((res: any) => {
+      setFileList([
+        {
+          uid: '-1',
+          name: 'image.png',
+          status: 'done',
+          url: res.data.url
+        }
+      ])
+      props.onChange?.(res.data.url)
+      message.success('success')
+    })
+  }
+
   return (
     <>
       <AntdUpload
@@ -103,7 +133,6 @@ export function Upload(props: UploadProps) {
         onPreview={handlePreview}
         onChange={handleChange}
         customRequest={(options) => {
-          console.log(options)
           if (crop) {
             setModal({
               show: true
@@ -114,6 +143,10 @@ export function Upload(props: UploadProps) {
             })
 
             setCropperURL(URL.createObjectURL(blob))
+          } else {
+            const fd = new FormData()
+            fd.append('file', options.file)
+            uploadFile(fd)
           }
         }}
         onRemove={() => {
@@ -126,31 +159,12 @@ export function Upload(props: UploadProps) {
         imageURL={cropperURL}
         visible={modal.show}
         fixed={true}
-        options={{
-          aspectRatio: 160 / 190,
-          cropBoxResizable: true,
-        }}
+        options={props.options}
         onConfirm={(data) => {
           const fd = new FormData()
           fd.append('file', data.file)
 
-          http({
-            url: '/upload',
-            method: 'post',
-            data: fd
-          }).then((res: any) => {
-            setFileList([
-              {
-                uid: '-1',
-                name: 'image.png',
-                status: 'done',
-                url: res.data.url
-              }
-            ])
-            props.onChange?.(res.data.url)
-            message.success('success')
-          })
-         
+          uploadFile(fd)
         }}
       ></ImageCropper>
       {previewImage && (

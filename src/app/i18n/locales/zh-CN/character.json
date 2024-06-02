@@ -1,6 +1,8 @@
 {
   "table": {
+    "cover": "图片",
     "name": "角色名称",
+    "originalName": "原名",
     "description": "简介",
     "movie": "所属电影",
     "staff": "演员或者声优",
@@ -22,9 +24,17 @@
         "label": "电影名称",
         "required": "请选择电影"
       },
+      "cover": {
+        "label": "图片",
+        "required": "请上传图片"
+      },
       "name": {
         "label": "角色名称",
         "required": "请输入角色名称"
+      },
+      "originalName": {
+        "label": "原名",
+        "required": "请输入原名"
       },
       "description": {
         "label": "简介",

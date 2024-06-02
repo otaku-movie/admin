@@ -38,7 +38,8 @@
     },
     "endDate": {
       "label": "上映结束日期",
-      "required": "请选择结束上映日期"
+      "required": "请选择结束上映日期",
+      "startAfterEnd": "结束日期必须比开始日期大"
     },
     "homePage": {
       "label": "官网",

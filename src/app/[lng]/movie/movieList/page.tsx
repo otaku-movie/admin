@@ -33,7 +33,7 @@ interface Query {
   status: number
 }
 
-export default function MoviePage({ params: { lng } }: PageProps) {
+export default function Page({ params: { lng } }: PageProps) {
   const router = useRouter()
   const [data, setData] = useState([])
   const [page, setPage] = useState(1)
@@ -73,13 +73,31 @@ export default function MoviePage({ params: { lng } }: PageProps) {
       fixed: 'left',
       render(_: any, row) {
         return (
-          <Space align="start">
+          <Space
+            align="start"
+            style={{
+              position: 'relative'
+            }}
+          >
             <Image
               width={120}
               src={row.cover}
               alt="poster"
               fallback={notFoundImage}
+              style={{
+                borderRadius: ' 4px'
+              }}
             ></Image>
+            <Tag
+              style={{
+                position: 'absolute',
+                top: '0',
+                left: '0'
+              }}
+              color="green"
+            >
+              {row.levelName}
+            </Tag>
             <Space direction="vertical">
               <span>{row.name}</span>
               <section>
@@ -109,12 +127,10 @@ export default function MoviePage({ params: { lng } }: PageProps) {
       title: t('table.time'),
       dataIndex: 'time',
       render(text: number) {
-        return <span>{text}分</span>
+        if (text) {
+          return <span>{text}分</span>
+        }
       }
-    },
-    {
-      title: t('table.level'),
-      dataIndex: 'level'
     },
     {
       title: t('table.cinemaCount'),

@@ -1,6 +1,6 @@
 {
   "table": {
-    "icon": "头像",
+    "cover": "图片",
     "name": "用户名称",
     "email": "邮箱",
     "tel": "电话",
@@ -26,6 +26,10 @@
       "edit": "编辑用户"
     },
     "form": {
+      "cover": {
+        "label": "图片",
+        "required": "请上传图片"
+      },
       "role": {
         "label": "角色",
         "required": "请选择角色"
