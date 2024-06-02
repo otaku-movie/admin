@@ -7,7 +7,7 @@ import { languageType } from '@/config'
 import { user } from '@/type/api'
 import { emailRegExp, passwordRegExp, usernameRegExp } from '@/utils'
 import { Upload } from '@/components/upload/Upload'
-
+import { md5 } from 'js-md5'
 
 interface UserModalProps {
   type: 'create' | 'edit'
@@ -52,12 +52,15 @@ export default function UserModal(props: UserModalProps) {
       maskClosable={false}
       onOk={() => {
         form.validateFields().then(() => {
+          const data = {...query}
+
+          if (data.password) {
+            data.password = md5(query.password as string)
+          }
           http({
             url: 'admin/user/save',
             method: 'post',
-            data: {
-              ...query
-            }
+            data
           }).then(() => {
             props?.onConfirm?.()
           })
@@ -143,7 +146,10 @@ export default function UserModal(props: UserModalProps) {
           label={t('modal.form.password.label')}
           name="password"
           rules={[
-            { required: true, message: t('modal.form.password.required') },
+            {
+              required: props.type !== 'edit',
+              message: t('modal.form.password.required')
+            },
             {
               pattern: passwordRegExp,
               validateTrigger: ['onChange', 'onBlur'],
@@ -165,7 +171,10 @@ export default function UserModal(props: UserModalProps) {
           label={t('modal.form.password2.label')}
           name="password2"
           rules={[
-            { required: true, message: t('modal.form.password2.required') },
+            {
+              required: props.type !== 'edit',
+              message: t('modal.form.password2.required')
+            },
             {
               pattern: passwordRegExp,
               validateTrigger: ['onChange', 'onBlur'],
@@ -173,7 +182,7 @@ export default function UserModal(props: UserModalProps) {
             },
             {
               validator() {
-                if (query.password !== query.password2) {
+                if (query.password && query.password !== query.password2) {
                   return Promise.reject(
                     new Error(t('modal.form.password2.repeat'))
                   )

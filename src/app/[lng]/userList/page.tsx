@@ -72,7 +72,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
       render(image) {
         return (
           <Image
-            width={120}
+            width={60}
             src={image}
             alt="poster"
             fallback={notFoundImage}
@@ -188,7 +188,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
                     onOk() {
                       return new Promise((resolve, reject) => {
                         http({
-                          url: 'user/remove',
+                          url: 'admin/user/remove',
                           method: 'delete',
                           params: {
                             id: row.id

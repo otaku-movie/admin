@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation'
 import { emailRegExp, passwordRegExp } from '@/utils'
 import { processPath } from '@/config/router'
 import { useUserStore } from '@/store/useUserStore'
+import { md5 } from 'js-md5'
 import './style.scss'
 
 interface Query {
@@ -20,8 +21,8 @@ export default function Page({ params: { lng } }: PageProps) {
   const [form] = Form.useForm()
   const router = useRouter()
   const [query, setQuery] = useState<Query>({
-    email: '2495713984@qq.com',
-    password: '123456'
+    email: '',
+    password: ''
   })
 
   useEffect(() => {}, [])
@@ -94,7 +95,10 @@ export default function Page({ params: { lng } }: PageProps) {
                 height: '40px'
               }}
               onClick={() => {
-                store.login(query).then((res) => {
+                store.login({
+                  ...query,
+                  password: md5(query.password)
+                }).then((res) => {
                   if (res) {
                     router.push(processPath('movieList'))
                   }

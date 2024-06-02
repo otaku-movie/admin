@@ -24,7 +24,7 @@ import { languages } from '@/config'
 import { useTranslation } from '@/app/i18n/client'
 import { processPath } from '@/config/router'
 import { useUserStore } from '@/store/useUserStore'
-import { listToTree } from '@/utils'
+import { getUserInfo, listToTree } from '@/utils'
 import { permission } from '@/dialog/rolePermission'
 import { ItemType, MenuItemType } from 'antd/es/menu/hooks/useItems'
 
@@ -92,6 +92,7 @@ function RootLayout({ children, params: { lng } }: PageProps) {
       getPermission(+roleId)
     }
   }, [])
+  const userInfo = getUserInfo()
 
   const recursion = (menu: permission[]): ItemType<MenuItemType>[] => {
     return menu.map((item) => {
@@ -167,18 +168,13 @@ function RootLayout({ children, params: { lng } }: PageProps) {
                         >
                           {languages[lng as keyof typeof languages]}
                         </span>
-                        <TranslationOutlined
-                          style={{
-                            // fill: 'white',
-                            verticalAlign: 'middle',
-                            color: 'white',
-                            fontSize: '24px'
-                          }}
-                        />
+                        <span style={{
+                          color: 'white'
+                        }}>{userInfo.name}</span>                        
                       </Space>
                     </Dropdown>
                     <Dropdown menu={{ items }} placement="bottom">
-                      <Avatar src={url} />
+                      <Avatar src={userInfo.cover || url} />
                     </Dropdown>
                   </Space>
                 </Header>

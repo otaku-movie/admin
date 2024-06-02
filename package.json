@@ -24,6 +24,7 @@
     "i18next": "^23.11.1",
     "i18next-browser-languagedetector": "^7.2.1",
     "i18next-resources-to-backend": "^1.2.1",
+    "js-md5": "^0.8.3",
     "lodash": "^4.17.21",
     "negotiator": "^0.6.3",
     "next": "14.1.4",
