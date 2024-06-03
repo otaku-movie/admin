@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import { Table, Button, Space, Input, Row, message, Modal } from 'antd'
 import type { TableColumnsType } from 'antd'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '../../../layout'
 import http from '@/api'
@@ -19,6 +19,8 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
   const { t } = useTranslation(lng, 'comment')
+  const searchParams = useSearchParams()
+
   const [modal, setModal] = useState({
     type: 'create',
     show: false,
@@ -30,6 +32,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
       url: 'movie/comment/list',
       method: 'post',
       data: {
+        movieId: searchParams.get('id'),
         page,
         pageSize: 10
       }
@@ -101,7 +104,8 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
                   processPath({
                     name: 'replyList',
                     query: {
-                      id: row.id
+                      id: row.id,
+                      movieId: searchParams.get('id'),
                     }
                   })
                 )

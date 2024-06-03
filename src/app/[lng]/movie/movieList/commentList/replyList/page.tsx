@@ -42,10 +42,6 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
 
   const columns: TableColumnsType = [
     {
-      title: 'Id',
-      dataIndex: 'id'
-    },
-    {
       title: t('table.commentUser'),
       dataIndex: 'commentUserName'
     },
@@ -98,12 +94,14 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
             <Button
               type="primary"
               onClick={() => {
+                const parentReplyId = row.parentReplyId === null ? `${row.id}` : `${row.parentReplyId}-${row.id}`
+
                 setModal({
                   ...modal,
                   action: 'reply',
                   data: {
                     id: row.id,
-                    parentReplyId: row.id,
+                    parentReplyId,
                     commentUserId: row.commentUserId
                   },
                   type: 'edit',
@@ -133,8 +131,8 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
                             id: row.id
                           }
                         })
-                          .then(() => {
-                            message.success(t('message.remove.success'))
+                          .then((res) => {
+                            message.success(res.message)
                             getData()
                             resolve(true)
                           })

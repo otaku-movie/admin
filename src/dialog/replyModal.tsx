@@ -50,12 +50,14 @@ export function ReplyModal(props: Modal) {
       open={props.show}
       maskClosable={false}
       onOk={() => {
+        // debugger
         form.validateFields().then(() => {
           http({
             url: 'movie/reply/save',
             method: 'post',
             data: {
               ...query,
+              movieId: searchParams.get('movieId'),
               movieCommentId: searchParams.get('id')
             }
           }).then((res) => {
@@ -80,7 +82,7 @@ export function ReplyModal(props: Modal) {
           label={t('modal.form.comment.label')}
           rules={[
             { required: true, message: t('modal.form.comment.required') },
-            { max: 1000, message: t('modal.form.comment.max')}
+            { max: 1000, message: t('modal.form.comment.max') }
           ]}
           name="content"
         >
