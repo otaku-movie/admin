@@ -84,6 +84,7 @@ export default function Page({ params: { lng } }: PageProps) {
               src={row.cover}
               alt="poster"
               fallback={notFoundImage}
+              placeholder={true}
               style={{
                 borderRadius: ' 4px'
               }}

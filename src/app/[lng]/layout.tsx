@@ -2,7 +2,7 @@
 /* eslint-disable react/prop-types */
 import { AntdRegistry } from '@ant-design/nextjs-registry'
 import React, { useEffect } from 'react'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import type { MenuProps } from 'antd'
 import Link from 'next/link'
 import {
@@ -18,7 +18,6 @@ import {
 import ja from 'antd/locale/ja_JP'
 import zhCN from 'antd/locale/zh_CN'
 import 'dayjs/locale/ja'
-import { TranslationOutlined } from '@ant-design/icons'
 import '@/assets/css/normalize.scss'
 import { languages } from '@/config'
 import { useTranslation } from '@/app/i18n/client'

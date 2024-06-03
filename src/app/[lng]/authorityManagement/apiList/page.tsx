@@ -3,11 +3,8 @@ import React, { useState, useEffect } from 'react'
 import { Table, Button, Space, Row, Input, Modal, message } from 'antd'
 
 import type { TableColumnsType } from 'antd'
-import { useRouter } from 'next/navigation'
-
 import { Query, QueryItem } from '@/components/query'
 import http from '@/api/index'
-import { Movie, paginationResponse, response } from '@/type/api'
 import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '../../layout'
 import ApiModal from '@/dialog/ApiModal'
@@ -19,7 +16,6 @@ interface Query {
 }
 
 export default function MoviePage({ params: { lng } }: PageProps) {
-  const router = useRouter()
   const [data, setData] = useState([])
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
@@ -53,7 +49,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
 
   useEffect(() => {}, [query, setQuery])
 
-  const columns: TableColumnsType<Movie> = [
+  const columns: TableColumnsType = [
     {
       title: t('table.name'),
       dataIndex: 'name'

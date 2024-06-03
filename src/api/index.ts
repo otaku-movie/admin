@@ -21,7 +21,7 @@ const httpStatus = {
 }
 
 // 添加请求拦截器
-http.interceptors.request.use(config => {
+http.interceptors.request.use((config: any) => {
   // 在发送请求之前做些什么
   const token = localStorage.getItem('token')
   

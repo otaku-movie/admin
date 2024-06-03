@@ -5,7 +5,6 @@ import { Form, Modal, Input, message } from 'antd'
 import http from '@/api'
 import { languageType } from '@/config'
 import { useSearchParams } from 'next/navigation'
-import { getUserInfo } from '@/utils'
 
 interface Modal {
   type: 'create' | 'edit'

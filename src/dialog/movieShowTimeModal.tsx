@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, useEffect } from 'react'
 import { useTranslation } from '@/app/i18n/client'
-import { Form, Modal, Select, Space, DatePicker, message } from 'antd'
+import { Form, Modal, Select, Space, DatePicker, message, Switch } from 'antd'
 import http from '@/api'
 import { languageType } from '@/config'
 import dayjs from 'dayjs'
@@ -19,6 +19,7 @@ interface Query {
   id?: number
   movieId?: number
   cinemaId?: number
+  open?: boolean
   theaterHallId?: number
   startTime?: dayjs.Dayjs
   endTime?: dayjs.Dayjs
@@ -26,7 +27,10 @@ interface Query {
 
 export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
   const { t } = useTranslation(navigator.language as languageType, 'showTime')
-  const { t: common } = useTranslation(navigator.language as languageType, 'common')
+  const { t: common } = useTranslation(
+    navigator.language as languageType,
+    'common'
+  )
   const [movieData, setMovieData] = useState([])
   const [cinemaData, setCinemaData] = useState<Cinema[]>([])
   const [theaterHallData, setTheaterHallData] = useState<theaterHall[]>([])
@@ -88,8 +92,11 @@ export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
   }
 
   useEffect(() => {
+    if (props.show) {
+      form.resetFields()
+    }
+
     if (props.show && !props.data.id) {
-      // form.resetFields()
       getMovieData()
       getCinemaData()
       console.log(props.data)
@@ -101,11 +108,17 @@ export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
         startTime: dayjs(props.data.startTime as string),
         endTime: dayjs(props.data.endTime as string)
       })
+      form.setFieldsValue({
+        ...props.data,
+        startTime: dayjs(props.data.startTime as string),
+        endTime: dayjs(props.data.endTime as string)
+      })
       getTheaterHallData(props.data.cinemaId as number)
       getMovieData('', props.data.movieId as number)
       getCinemaData('', props.data.cinemaId as number)
     } else {
       setQuery({})
+      form.setFieldsValue({})
     }
   }, [props.show, props.data])
 
@@ -152,6 +165,7 @@ export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
           rules={[
             { required: true, message: t('showTimeModal.form.movie.required') }
           ]}
+          name="movieId"
         >
           <Select
             showSearch
@@ -167,7 +181,7 @@ export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
                 params: {
                   id: val
                 }
-              }).then(res => {
+              }).then((res) => {
                 if (res.data.time) {
                   setTime(res.data.time)
                 }
@@ -187,6 +201,7 @@ export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
         <Form.Item
           label={t('showTimeModal.form.theaterHall.label')}
           required={true}
+          name={['cinemaId', 'theaterHallId']}
           rules={[
             {
               async validator() {
@@ -246,62 +261,17 @@ export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
             </Select>
           </Space>
         </Form.Item>
-        {/* <Form.Item
-          label={t('showTimeModal.form.theaterHall.label')}
-          // required={true}
-          rules={[
-            {
-              async validator(_, value) {
-                console.log('---------', value)
-                return Promise.reject(new Error(''))
-              },
-              validateTrigger: ['onBlur', 'onChange']
-            }
-          ]}
-        >
-          <Space>
-            <Select
-              showSearch
-              style={{ width: 250 }}
-              onChange={(val) => {
-                getTheaterHallData(val)
-                setQuery({
-                  ...query,
-                  cinemaId: val,
-                  theaterHallId: undefined
-                })
-              }}
-              value={query.cinemaId}
-              onSearch={getCinemaData}
-            >
-              {cinemaData.map((item: any) => {
-                return (
-                  <Select.Option value={item.id} key={item.id}>
-                    {item.name}
-                  </Select.Option>
-                )
-              })}
-            </Select>
-            <Select
-              style={{ width: 200 }}
-              value={query.theaterHallId}
-              onChange={(val) => {
-                setQuery({
-                  ...query,
-                  theaterHallId: val
-                })
-              }}
-            >
-              {theaterHallData.map((item: any) => {
-                return (
-                  <Select.Option value={item.id} key={item.id}>
-                    {item.name}
-                  </Select.Option>
-                )
-              })}
-            </Select>
-          </Space>
-        </Form.Item> */}
+        <Form.Item label={t('showTimeModal.form.open.label')}>
+          <Switch
+            value={query.open}
+            onChange={(val) => {
+              setQuery({
+                ...query,
+                open: val
+              })
+            }}
+          />
+        </Form.Item>
 
         <Form.Item
           label={t('showTimeModal.form.showTime.label')}
@@ -309,9 +279,34 @@ export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
           rules={[
             {
               required: true,
+              validator() {
+                if (!query.startTime || !query.endTime) {
+                  return Promise.reject(
+                    t('showTimeModal.form.showTime.required')
+                  )
+                } else {
+                  return Promise.resolve()
+                }
+              },
               message: t('showTimeModal.form.showTime.required')
+            },
+            {
+              validator() {
+                if (query.startTime && query.endTime) {
+                  if (!query.startTime?.isBefore(query.endTime)) {
+                    return Promise.reject(
+                      t('showTimeModal.form.showTime.startAfterEnd')
+                    )
+                  } else {
+                    return Promise.resolve()
+                  }
+                } else {
+                  return Promise.resolve()
+                }
+              }
             }
           ]}
+          name={['startTime', 'endTime']}
         >
           <Space>
             <DatePicker

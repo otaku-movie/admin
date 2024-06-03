@@ -6,6 +6,7 @@
     "playState": "放映状态",
     "cinema": "放映影院",
     "theaterHall": "放映影厅",
+    "open": "是否公开",
     "spec": "放映规格",
     "seatSelectionRatio": "选座比",
     "attendance": "上座率",
@@ -23,7 +24,8 @@
   },
   "message": {
     "remove": {
-      "content": "是否确认要删除当前行，删除后不可恢复",
+      "selectedCount": "当前已有{{count}}人选座，是否仍要删除",
+      "content": "是否确认要删除当前场次，删除后不可恢复",
       "success": "删除成功"
     }
   },
@@ -37,6 +39,9 @@
         "label": "电影名称",
         "required": "请选择电影"
       },
+      "open": {
+        "label": "是否公开"
+      },
       "cinema": {
         "required": "请选择影院"
       },
@@ -46,7 +51,8 @@
       },
       "showTime": {
         "label": "开始时间",
-        "required": "请选择上映时间"
+        "required": "请选择上映时间",
+        "startAfterEnd": "结束时间必须大于开始时间"
       }
     }
   }

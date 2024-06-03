@@ -1,8 +1,7 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import { PageProps } from '@/app/[lng]/layout'
 import { useTranslation } from '@/app/i18n/client'
-import { Form, Modal, Input } from 'antd'
+import { Modal } from 'antd'
 import http from '@/api'
 import { languageType } from '@/config'
 import './seatModal.scss'
@@ -23,14 +22,6 @@ interface seat {
 export default function SeatModal(props: ModalProps) {
   const [data, setData] = useState<seat[]>([])
   const { t } = useTranslation(navigator.language as languageType, 'user')
-
-  const onFinish = (values) => {
-    console.log('Success:', values)
-  }
-
-  const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo)
-  }
 
   const generate2DArray = (data: seatItem[]) => {
     // 找到所有不同的xname值

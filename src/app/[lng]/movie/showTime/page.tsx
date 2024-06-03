@@ -11,6 +11,7 @@ import {
   Select,
   Modal,
   message,
+  Switch,
   DatePicker
 } from 'antd'
 
@@ -105,11 +106,12 @@ export default function MoviePage({ params: { lng } }: PageProps) {
       render(_: any, row) {
         return (
           <Space align="start">
-            <Image 
-              width={120} 
-              src={row.movieCover} 
+            <Image
+              width={120}
+              src={row.movieCover}
               alt="poster"
-              fallback={notFoundImage}></Image>
+              fallback={notFoundImage}
+            ></Image>
             <Space direction="vertical">
               <span>{row.movieName}</span>
               <section>
@@ -143,6 +145,35 @@ export default function MoviePage({ params: { lng } }: PageProps) {
       title: t('table.spec'),
       render(_, row) {
         return <Dict code={row.theaterHallSpec} name={'cinema_spec'}></Dict>
+      }
+    },
+    {
+      title: t('table.open'),
+      dataIndex: '',
+      render(_, row) {
+        return (
+          <Switch
+            value={row.open}
+            onChange={(val) => {
+              row.open = val
+              http({
+                url: 'admin/movie_show_time/save',
+                method: 'post',
+                data: {
+                  ...row,
+                  open: val,
+                  startTime: dayjs(row.startTime)?.format(
+                    'YYYY-MM-DD HH:mm:ss'
+                  ),
+                  endTime: dayjs(row.endTime)?.format('YYYY-MM-DD HH:mm:ss')
+                }
+              }).then(() => {
+                // row.open = val
+                getData()
+              })
+            }}
+          />
+        )
       }
     },
     {
@@ -229,6 +260,24 @@ export default function MoviePage({ params: { lng } }: PageProps) {
                 type="primary"
                 danger
                 onClick={() => {
+                  const remove = () => {
+                    return new Promise((resolve, reject) => {
+                      http({
+                        url: 'admin/movie_show_time/remove',
+                        method: 'delete',
+                        params: {
+                          id: row.id
+                        }
+                      })
+                        .then(() => {
+                          message.success(t('message.remove.success'))
+                          getData()
+                          resolve(true)
+                        })
+                        .catch(reject)
+                    })
+                  }
+
                   Modal.confirm({
                     title: t('button.remove'),
                     content: t('message.remove.content'),
@@ -236,21 +285,22 @@ export default function MoviePage({ params: { lng } }: PageProps) {
                       console.log('Cancel')
                     },
                     onOk() {
-                      return new Promise((resolve, reject) => {
-                        http({
-                          url: 'movie/remove',
-                          method: 'delete',
-                          params: {
-                            id: row.id
+                      if (row.selectedSeatCount !== 0) {
+                        Modal.confirm({
+                          title: t('button.remove'),
+                          content: t('message.remove.selectedCount', {
+                            count: row.selectedSeatCount
+                          }),
+                          onCancel() {
+                            console.log('Cancel')
+                          },
+                          onOk() {
+                            remove()
                           }
                         })
-                          .then(() => {
-                            message.success(t('message.remove.success'))
-                            getData()
-                            resolve(true)
-                          })
-                          .catch(reject)
-                      })
+                      } else {
+                        remove()
+                      }                 
                     }
                   })
                 }}

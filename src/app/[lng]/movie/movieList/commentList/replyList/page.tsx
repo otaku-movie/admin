@@ -1,20 +1,15 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import { Table, Button, Space, Input, Row, message, Modal } from 'antd'
+import { Table, Button, Space, Row, message, Modal } from 'antd'
 import type { TableColumnsType } from 'antd'
-import { useRouter } from 'next/navigation'
 import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '../../../../layout'
 import http from '@/api'
-import { Query, QueryItem } from '@/components/query'
-import { processPath } from '@/config/router'
 import { CheckPermission } from '@/components/checkPermission'
 import { ReplyModal } from '@/dialog/replyModal'
 import { showTotal } from '@/utils/pagination'
 
 export default function CinemaPage({ params: { lng } }: PageProps) {
-  const router = useRouter()
-
   const [data, setData] = useState([])
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
