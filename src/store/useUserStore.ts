@@ -1,4 +1,4 @@
-import { permission } from '../dialog/rolePermission';
+import { permission } from '../dialog/rolePermission'
 import { create } from 'zustand'
 import http from '@/api'
 import { userInfo, role } from '@/type/api'
@@ -14,8 +14,10 @@ export interface userInfoStore {
   roleInfo: Partial<role>,
   buttonPermission: Set<string>
   menuPermission: permission[]
+  breadcrumb: permission[]
   login(query: Query): Promise<boolean>
   permission(roleId: number): Promise<boolean>
+  getBreadcrumb(data: permission[]): void
 }
 
 export const useUserStore = create<userInfoStore>((set, get) => {
@@ -24,6 +26,31 @@ export const useUserStore = create<userInfoStore>((set, get) => {
     roleInfo: {},
     buttonPermission: new Set([]),
     menuPermission: [],
+    breadcrumb: [],
+    getBreadcrumb (data) {
+      const map = new Map(
+        data.map(item => {
+          return [item.pathName, item]
+        })
+      )
+      const path = location.pathname.split('/').slice(2)
+      const breadcrumb = path.map(item => {
+        const data = map.get(item)
+
+        return {
+          ...data,
+          path: path.at(-1) === data?.pathName ? `${data?.path}${location.search}` : data?.path
+        }
+      }) as permission[]
+
+      console.log(breadcrumb)
+      
+      if (path) {
+        set({
+          breadcrumb
+        })
+      }
+    },
     async permission(roleId: number) {
       const permission = await http({
         url: 'admin/permission/role/permission',
@@ -44,6 +71,8 @@ export const useUserStore = create<userInfoStore>((set, get) => {
             }, [])
           )
         })
+
+        get().getBreadcrumb(permission.data)
         localStorage.setItem('route', JSON.stringify(permission.data))
         localStorage.setItem('roleId', `${roleId}`)
         return Promise.resolve(true)

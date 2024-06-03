@@ -7,7 +7,6 @@ import type { MenuProps } from 'antd'
 import Link from 'next/link'
 import {
   ConfigProvider,
-  Menu,
   Breadcrumb,
   Layout,
   theme,
@@ -24,8 +23,7 @@ import { useTranslation } from '@/app/i18n/client'
 import { processPath } from '@/config/router'
 import { useUserStore } from '@/store/useUserStore'
 import { getUserInfo, listToTree } from '@/utils'
-import { permission } from '@/dialog/rolePermission'
-import { ItemType, MenuItemType } from 'antd/es/menu/hooks/useItems'
+import { Menu } from '@/components/menu'
 
 export interface PageProps {
   children: React.ReactNode
@@ -37,9 +35,10 @@ export interface PageProps {
 function RootLayout({ children, params: { lng } }: PageProps) {
   const { Header, Content, Sider } = Layout
   const pathname = usePathname()
+  const userStore = useUserStore()
+  // const breadcrumb = useUserStore((state) => state.breadcrumb)
   const getPermission = useUserStore((state) => state.permission)
   const menu = useUserStore((state) => listToTree(state.menuPermission))
-
   const { t } = useTranslation(lng, 'common')
 
   const {
@@ -84,38 +83,18 @@ function RootLayout({ children, params: { lng } }: PageProps) {
     .split('/')
     .filter((item) => item !== '')
   const set = new Set(['login'])
+  
 
   useEffect(() => {
     const roleId = localStorage.getItem('roleId')
     if (roleId) {
       getPermission(+roleId)
     }
+    // userStore.getBreadcrumb()
   }, [])
+
   const userInfo = getUserInfo()
 
-  const recursion = (menu: permission[]): ItemType<MenuItemType>[] => {
-    return menu.map((item) => {
-      if (Array.isArray(item.children)) {
-        return {
-          key: `${item.path}`,
-          label: !Array.isArray(item.children) ? (
-            <Link href={processPath(item.pathName)}>{t(item.i18nKey)}</Link>
-          ) : (
-            t(item.i18nKey)
-          ),
-          children: recursion(item.children)
-        }
-      } else {
-        return {
-          key: `${item.path}`,
-          label: (
-            <Link href={processPath(item.pathName)}>{t(item.i18nKey)}</Link>
-          ),
-          children: null
-        }
-      }
-    })
-  }
 
   return (
     <html lang={lng} dir={lng}>
@@ -167,9 +146,13 @@ function RootLayout({ children, params: { lng } }: PageProps) {
                         >
                           {languages[lng as keyof typeof languages]}
                         </span>
-                        <span style={{
-                          color: 'white'
-                        }}>{userInfo.name}</span>                        
+                        <span
+                          style={{
+                            color: 'white'
+                          }}
+                        >
+                          {userInfo.name}
+                        </span>
                       </Space>
                     </Dropdown>
                     <Dropdown menu={{ items }} placement="bottom">
@@ -179,33 +162,18 @@ function RootLayout({ children, params: { lng } }: PageProps) {
                 </Header>
                 <Layout>
                   <Sider width={200} style={{ background: colorBgContainer }}>
-                    <Menu
-                      defaultSelectedKeys={[pathname]}
-                      // theme="dark"
-                      mode="inline"
-                      items={recursion(menu)}
-                    />
+                    <Menu data={menu}></Menu>
                   </Sider>
                   <Layout style={{ padding: '20px' }}>
                     <Space direction="vertical" size={20}>
                       <Breadcrumb
                         separator=">"
-                        items={[
-                          {
-                            title: 'Home'
-                          },
-                          {
-                            title: 'Application Center',
-                            href: ''
-                          },
-                          {
-                            title: 'Application List',
-                            href: ''
-                          },
-                          {
-                            title: 'An Application'
+                        items={userStore.breadcrumb.map((item) => {
+                          return {
+                            href: processPath(item.pathName),
+                            title: t(item.i18nKey)
                           }
-                        ]}
+                        })}
                       />
                       <Content
                         style={{

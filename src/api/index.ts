@@ -48,7 +48,6 @@ http.interceptors.response.use((res: AxiosResponse<response>) => {
     return Promise.reject(res.data)
   }
 }, (err: AxiosError<AxiosResponse<response>>) => {
-  console.log(err)
   if (err.response) {
     if (err.response.status === 401) {
       localStorage.removeItem('userInfo')
