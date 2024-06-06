@@ -18,6 +18,7 @@ interface Query {
 export default function Page({ params: { lng } }: PageProps) {
   const store = useUserStore()
   const { t } = useTranslation(lng, 'login')
+  const { t: common } = useTranslation(lng, 'common')
   const [form] = Form.useForm()
   const router = useRouter()
   const [query, setQuery] = useState<Query>({
@@ -105,7 +106,7 @@ export default function Page({ params: { lng } }: PageProps) {
                 })
               }}
             >
-              {t('button.login')}
+              {common('button.login')}
             </Button>
           </Form.Item>
         </Form>

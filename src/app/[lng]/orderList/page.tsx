@@ -37,6 +37,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
   const [total, setTotal] = useState(0)
   const [query, setQuery] = useState<Partial<Query>>({})
   const { t } = useTranslation(lng, 'showTime')
+  const { t: common } = useTranslation(lng, 'common')
 
   const getData = (page = 1) => {
     http({
@@ -127,14 +128,14 @@ export default function MoviePage({ params: { lng } }: PageProps) {
                 router.push(`movieDetail?id=${row.id}`)
               }}
             >
-              {t('button.edit')}
+              {common('button.edit')}
             </Button>
             <Button
               type="primary"
               danger
               onClick={() => {
                 Modal.confirm({
-                  title: t('button.remove'),
+                  title: common('button.remove'),
                   content: t('message.remove.content'),
                   onCancel() {
                     console.log('Cancel')
@@ -159,7 +160,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
                 })
               }}
             >
-              {t('button.remove')}
+              {common('button.remove')}
             </Button>
           </Space>
         )
@@ -176,7 +177,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
               router.push(`/movieDetail`)
             }}
           >
-            {t('button.add')}
+            {common('button.add')}
           </Button>
         </Row>
         <Query

@@ -2,7 +2,7 @@
   padding: 0 !important;
   .button-table {
     display: grid;
-    grid-template-columns: 100px 200px 150px auto 165px;
+    grid-template-columns: 100px 200px 150px 1fr 1fr 165px;
     text-align: center;
   }
   .button-table-cell {

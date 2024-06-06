@@ -14,12 +14,6 @@
     "status": "上映状态",
     "action": "操作"
   },
-  "button": {
-    "add": "添加",
-    "edit": "编辑",
-    "remove": "删除",
-    "commentList": "评论列表"
-  },
   "message": {
     "remove": {
       "content": "是否确认删除当前电影，将会删除当前行以及评论、回复、场次等数据，删除后不可恢复",

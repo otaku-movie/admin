@@ -72,6 +72,7 @@ export default function Page({ params: { lng } }: PageProps) {
                 <div className="button-table-cell">{t('table.i18nKey')}</div>
                 <div className="button-table-cell">{t('table.buttonCode')}</div>
                 <div className="button-table-cell">{t('table.apiName')}</div>
+                <div className="button-table-cell">{t('table.apiCode')}</div>
                 <div className="button-table-cell">{t('table.action')}</div>
               </li>
             ) : null}
@@ -79,7 +80,7 @@ export default function Page({ params: { lng } }: PageProps) {
               return (
                 <li className="button-table" key={index}>
                   <div className="button-table-cell">
-                    <Button type="text">{button.name}</Button>
+                    <Button type="text">{common(button.i18nKey)}</Button>
                   </div>
                   <div className="button-table-cell">
                     <Button type="text">{button.i18nKey}</Button>
@@ -89,6 +90,9 @@ export default function Page({ params: { lng } }: PageProps) {
                   </div>
                   <div className="button-table-cell">
                     <Button type="text">{button.apiName}</Button>
+                  </div>
+                  <div className="button-table-cell">
+                    <Button type="text">{button.apiCode}</Button>
                   </div>
                   <div className="button-table-cell">
                     <Space>
@@ -112,7 +116,7 @@ export default function Page({ params: { lng } }: PageProps) {
                             })
                           }}
                         >
-                          {t('button.edit')}
+                          {common('button.edit')}
                         </Button>
                       </CheckPermission>
                       <CheckPermission code="">
@@ -121,7 +125,7 @@ export default function Page({ params: { lng } }: PageProps) {
                           danger
                           onClick={() => {
                             Modal.confirm({
-                              title: t('button.remove'),
+                              title: common('button.remove'),
                               content: t('message.remove.content'),
                               onCancel() {
                                 console.log('Cancel')
@@ -148,7 +152,7 @@ export default function Page({ params: { lng } }: PageProps) {
                             })
                           }}
                         >
-                          {t('button.remove')}
+                          {common('button.remove')}
                         </Button>
                       </CheckPermission>
                     </Space>
@@ -182,7 +186,7 @@ export default function Page({ params: { lng } }: PageProps) {
               })
             }}
           >
-            {t('button.add')}
+            {common('button.add')}
           </Button>
         </CheckPermission>
       </Row>

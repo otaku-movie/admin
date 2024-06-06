@@ -38,5 +38,16 @@
   "message": {
     "notPermission": "没有权限",
     "save": "保存成功"
+  },
+  "button": {
+    "add": "添加",
+    "edit": "编辑",
+    "remove": "删除",
+    "save": "保存",
+    "login": "登录",
+    "theaterHallDetail": "影厅详情",
+    "commentList": "评论列表",
+    "configPermission": "配置权限",
+    "configRole": "配置角色"
   }
 }

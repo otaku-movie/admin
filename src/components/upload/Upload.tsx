@@ -6,6 +6,7 @@ import { BASE_URL } from '@/config'
 import { ImageCropper } from '../cropper/cropper'
 import './style.scss'
 import http from '@/api'
+import { getFileSize } from '@/utils'
 
 type FileType = Parameters<GetProp<AntdUploadProps, 'beforeUpload'>>[0]
 
@@ -21,11 +22,18 @@ const getBase64 = (file: FileType): Promise<string> => {
 export interface UploadProps {
   value: string
   crop?: boolean
+  ext: string[]
+  fileSize: number
   options?: Omit<Cropper.Options, 'preview'>
   onChange?: (val: string) => void
 }
 
 export function Upload(props: UploadProps) {
+  const {
+    ext = ['.jpg', '.jpeg', '.webp', '.png'],
+    fileSize = 5 * Math.pow(1024, 2)
+  } = props
+
   const [crop] = useState(props.crop)
   const [previewOpen, setPreviewOpen] = useState(false)
   const [previewImage, setPreviewImage] = useState('')
@@ -69,13 +77,7 @@ export function Upload(props: UploadProps) {
     setPreviewOpen(true)
   }
 
-  const handleChange: AntdUploadProps['onChange'] = ({
-    fileList,
-    file,
-    event
-  }) => {
-    console.log(file, event, fileList)
-
+  const handleChange: AntdUploadProps['onChange'] = ({ fileList, file }) => {
     setFileList(fileList)
     if (file.status === 'done') {
       const url = file.response.data.url
@@ -155,6 +157,10 @@ export function Upload(props: UploadProps) {
       >
         {fileList.length >= 1 ? null : uploadButton}
       </AntdUpload>
+      <section className="upload-hint">
+        <p>支持的格式为：{ext.join('、')}</p>
+        <p>限制文件大小为：{getFileSize(fileSize)}</p>
+      </section>
       <ImageCropper
         imageURL={cropperURL}
         visible={modal.show}

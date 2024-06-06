@@ -8,12 +8,6 @@
     "stepOnCount": "点踩数量",
     "action": "操作"
   },
-  "button": {
-    "add": "添加",
-    "detail": "回复详情",
-    "edit": "编辑",
-    "remove": "删除"
-  },
   "modal": {
     "title": {
       "create": "添加评论",

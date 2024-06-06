@@ -35,6 +35,7 @@ export interface Props {
 
 export function One(props: Props) {
   const { t } = useTranslation(props.language, 'movieDetail')
+  const { t: common } = useTranslation(props.language, 'common')
   const [picker, setPicker] = useState('date')
   const [startDate, setStartDate] = useState<dayjs.Dayjs | null>(null)
   const [endDate, setEndDate] = useState<dayjs.Dayjs | null>(null)

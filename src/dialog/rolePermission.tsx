@@ -28,6 +28,7 @@ export type permission = buttonItem & {
 export function RolePermission(props: modalProps) {
   const [data, setData] = useState<permission[]>([])
   const { t } = useTranslation(navigator.language as languageType, 'role')
+  const { t: common } = useTranslation(navigator.language as languageType, 'common')
   const [menuListId, setMenuListId] = useState<number[]>([])
 
   const getData = () => {
@@ -107,11 +108,13 @@ export function RolePermission(props: modalProps) {
   const columns: TableColumnsType<permission> = [
     {
       title: t('rolePermissionModal.table.name'),
-      // width: 200,
-      dataIndex: 'name'
+      render(key) {
+        return common(key)
+      },
+      dataIndex: 'i18nKey'
     },
     {
-      title: t('table.show'),
+      title: t('rolePermissionModal.table.show'),
       dataIndex: '',
       render(_, row) {
         return <Switch value={row.show} disabled />
@@ -123,7 +126,7 @@ export function RolePermission(props: modalProps) {
       render(value, item) {
         const options = item.button.map((item) => {
           return {
-            label: item.name,
+            label: common(item.i18nKey),
             value: item.id
           }
         })

@@ -7,12 +7,6 @@
     "description": "简介",
     "homePage": "官网"
   },
-  "button": {
-    "add": "添加",
-    "detail": "影院详情",
-    "edit": "编辑",
-    "remove": "删除"
-  },
   "message": {
     "remove": {
       "content": "是否确认要删除当前影院，删除后不可恢复",

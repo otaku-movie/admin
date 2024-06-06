@@ -12,12 +12,6 @@
     "attendance": "上座率",
     "action": "操作"
   },
-  "button": {
-    "add": "添加",
-    "detail": "选座详情",
-    "edit": "编辑",
-    "remove": "删除"
-  },
   "query": {
     "cinema": "影院",
     "date": "上映日期"

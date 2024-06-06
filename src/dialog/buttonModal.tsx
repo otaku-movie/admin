@@ -1,10 +1,12 @@
 'use client'
 import React, { useState, useEffect } from 'react'
 import { useTranslation } from '@/app/i18n/client'
-import { Form, Modal, Input, Select } from 'antd'
+import { Form, Modal, Input, Select, TreeSelect } from 'antd'
 import http from '@/api'
 import { languageType } from '@/config'
 import { usePermissionStore } from '@/store/usePermissionStore'
+import { menuItem } from '@/type/api'
+import { callTree } from '@/utils'
 
 interface modalProps {
   type: 'create' | 'edit'
@@ -25,6 +27,7 @@ interface Query {
 
 export function ButtonModal(props: modalProps) {
   const { t } = useTranslation(navigator.language as languageType, 'button')
+  const { t: common } = useTranslation(navigator.language as languageType, 'common')
   const [form] = Form.useForm()
   const [query, setQuery] = useState<Query>({})
   const [apiData, setApiData] = useState([])
@@ -44,7 +47,7 @@ export function ButtonModal(props: modalProps) {
   }
 
   const getData = () => {
-    getMenu(true)
+    getMenu()
     getApi()
   }
   useEffect(() => {
@@ -87,7 +90,27 @@ export function ButtonModal(props: modalProps) {
         form={form}
       >
         <Form.Item label={t('modal.form.menuId.label')} name="menuId">
-          <Select
+          <TreeSelect
+            showSearch
+            allowClear
+            treeDefaultExpandAll
+            treeData={callTree(data, (item) => {
+              item.name = common(item.i18nKey)
+            })}
+            fieldNames={{
+              label: 'name',
+              value: 'id'
+            }}
+            value={query.menuId as number}
+            onChange={(val) => {
+              console.log(val)
+              setQuery({
+                ...query,
+                menuId: val
+              })
+            }}
+          ></TreeSelect>
+          {/* <Select
             value={query.menuId}
             onChange={(val) => {
               setQuery({
@@ -103,7 +126,7 @@ export function ButtonModal(props: modalProps) {
                 </Select.Option>
               )
             })}
-          </Select>
+          </Select> */}
         </Form.Item>
         <Form.Item label={t('modal.form.apiId.label')} name="apiId">
           <Select
@@ -137,21 +160,6 @@ export function ButtonModal(props: modalProps) {
               setQuery({
                 ...query,
                 i18nKey: e.currentTarget.value
-              })
-            }}
-          />
-        </Form.Item>
-        <Form.Item
-          label={t('modal.form.name.label')}
-          rules={[{ required: true, message: t('modal.form.name.required') }]}
-          name="name"
-        >
-          <Input
-            value={query.name}
-            onChange={(e) => {
-              setQuery({
-                ...query,
-                name: e.currentTarget.value
               })
             }}
           />

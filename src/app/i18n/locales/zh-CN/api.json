@@ -2,12 +2,8 @@
   "table": {
     "name": "接口名称",
     "path": "接口路径",
+    "code": "接口 code",
     "action": "操作"
-  },
-  "button": {
-    "add": "添加",
-    "edit": "编辑",
-    "remove": "删除"
   },
   "message": {
     "remove": {
@@ -24,6 +20,10 @@
       "name": {
         "label": "接口名称",
         "required": "请输入接口名称"
+      },
+      "code": {
+        "label": "接口 code",
+        "required": "请输入接口 code"
       },
       "path": {
         "label": "接口路径",

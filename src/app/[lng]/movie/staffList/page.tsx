@@ -22,6 +22,7 @@ export default function Page({ params: { lng } }: PageProps) {
   const [total, setTotal] = useState(0)
   const [query, setQuery] = useState<Partial<Query>>({})
   const { t } = useTranslation(lng, 'staff')
+  const { t: common } = useTranslation(lng, 'common')
   const [modal, setModal] = useState({
     type: 'create',
     show: false,
@@ -53,17 +54,17 @@ export default function Page({ params: { lng } }: PageProps) {
     {
       title: t('table.cover'),
       dataIndex: 'cover',
-      render (image) {
+      render(image) {
         return (
           <Image
-              width={120}
-              src={image}
-              alt="poster"
-              fallback={notFoundImage}
-              style={{
-                borderRadius: ' 4px'
-              }}
-            ></Image>
+            width={120}
+            src={image}
+            alt="poster"
+            fallback={notFoundImage}
+            style={{
+              borderRadius: ' 4px'
+            }}
+          ></Image>
         )
       }
     },
@@ -106,7 +107,7 @@ export default function Page({ params: { lng } }: PageProps) {
                   })
                 }}
               >
-                {t('button.edit')}
+                {common('button.edit')}
               </Button>
             </CheckPermission>
             <CheckPermission code="">
@@ -115,7 +116,7 @@ export default function Page({ params: { lng } }: PageProps) {
                 danger
                 onClick={() => {
                   Modal.confirm({
-                    title: t('button.remove'),
+                    title: common('button.remove'),
                     content: t('message.remove.content'),
                     onCancel() {
                       console.log('Cancel')
@@ -140,7 +141,7 @@ export default function Page({ params: { lng } }: PageProps) {
                   })
                 }}
               >
-                {t('button.remove')}
+                {common('button.remove')}
               </Button>
             </CheckPermission>
           </Space>
@@ -169,7 +170,7 @@ export default function Page({ params: { lng } }: PageProps) {
               })
             }}
           >
-            {t('button.add')}
+            {common('button.add')}
           </Button>
         </CheckPermission>
       </Row>

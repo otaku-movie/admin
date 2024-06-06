@@ -8,12 +8,6 @@
     "registerTime": "注册时间",
     "action": "操作"
   },
-  "button": {
-    "add": "添加",
-    "configRole": "配置角色",
-    "edit": "编辑",
-    "remove": "删除"
-  },
   "message": {
     "remove": {
       "content": "是否确认要删除当前用户，删除后不可恢复",

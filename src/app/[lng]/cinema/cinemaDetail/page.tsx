@@ -10,6 +10,7 @@ import { CheckPermission } from '@/components/checkPermission'
 
 export default function Page({ params: { lng } }: PageProps) {
   const { t } = useTranslation(lng, 'cinemaDetail')
+  const { t: common } = useTranslation(lng, 'common')
   const [data, setData] = useState<Partial<Cinema>>({})
   const [form] = Form.useForm()
   const router = useRouter()
@@ -140,7 +141,7 @@ export default function Page({ params: { lng } }: PageProps) {
                 })
               }}
             >
-              {t('form.save')}
+              {common('form.save')}
             </Button>
           </CheckPermission>
         </Form.Item>

@@ -47,16 +47,26 @@ interface TreeNode<T> {
   children?: TreeNode<T>[] | null
 }
 
-export function callTree<T extends TreeNode<T>>(arr: T[], fn: (item: T) => void, parent: T | null = null, depth = 1): void {
-  arr?.forEach(item => {
+export function callTree<T extends TreeNode<T>>(
+  arr: T[] | null | undefined,
+  fn: (item: T) => void,
+  parent: T | null = null,
+  depth = 1
+): any[] {
+  if (!arr) return []
+
+  return arr.map((item) => {
     item.parent = parent
     item.depth = depth
     fn(item)
     if (Array.isArray(item.children)) {
-      callTree(item.children as any, fn, item, item.depth + 1)
+      callTree(item.children as T[], fn, item, depth + 1)
     }
+    
+    return item
   })
 }
+
 
 export function listToTree<T extends TreeNode<T>>(data: T[]) {
   const arr = data.filter(item => item.parentId === null).map(item => {
@@ -175,4 +185,25 @@ export const matchFormat = (dateString: string) => {
   }
 
   return null
+}
+
+export const getFileSize = (fileSize: number): string => {
+  const size = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+  const base = 1024
+
+  let res
+  for (let i = 0; i < size.length; i++) {
+    if (fileSize < base) {
+      res = fileSize + size[0]
+    } else {
+      if (
+        fileSize < Math.pow(base, i + 1) &&
+        fileSize >= Math.pow(base, i)
+      ) {
+        res = (fileSize / Math.pow(base, i)).toFixed(2) + size[i]
+      }
+    }
+  }
+
+  return res as string
 }

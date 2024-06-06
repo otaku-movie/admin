@@ -4,12 +4,6 @@
     "code": "code",
     "action": "操作"
   },
-  "button": {
-    "add": "添加",
-    "detail": "字典详情",
-    "edit": "编辑",
-    "remove": "删除"
-  },
   "message": {
     "remove": {
       "content": "是否要删除当前行，删除时，如果有字典项，也将会一并被删除，删除后无法恢复。"

@@ -18,6 +18,7 @@ interface Query {
   id?: number
   name?: string
   path?: string
+  code?: string
 }
 
 export default function ApiModal(props: modalProps) {
@@ -30,6 +31,7 @@ export default function ApiModal(props: modalProps) {
       form.resetFields()
     }
     setQuery(props.data)
+    form.setFieldsValue(props.data)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.show, props.data])
 
@@ -65,6 +67,7 @@ export default function ApiModal(props: modalProps) {
         <Form.Item
           label={t('modal.form.name.label')}
           rules={[{ required: true, message: t('modal.form.name.required') }]}
+          name="name"
         >
           <Input
             value={query.name}
@@ -91,6 +94,26 @@ export default function ApiModal(props: modalProps) {
               setQuery({
                 ...query,
                 path: e.currentTarget.value
+              })
+            }}
+          />
+        </Form.Item>
+        <Form.Item
+          label={t('modal.form.code.label')}
+          name="code"
+          rules={[
+            {
+              required: true,
+              message: t('modal.form.code.required')
+            }
+          ]}
+        >
+          <Input
+            value={query.code}
+            onChange={(e) => {
+              setQuery({
+                ...query,
+                code: e.currentTarget.value
               })
             }}
           />

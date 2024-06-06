@@ -59,7 +59,7 @@ http.interceptors.response.use((res: AxiosResponse<response>) => {
       if (httpStatus[status]) {
         message.warning(httpStatus[status] as string)
       } else {
-        const msg = err.response.data.data.message
+        const msg = err.response.data.message
         message.warning(Array.isArray(msg) ? msg.join('、') : msg)
       }
     }

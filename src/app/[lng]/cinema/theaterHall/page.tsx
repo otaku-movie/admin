@@ -10,9 +10,7 @@ import { useTranslation } from '@/app/i18n/client'
 import TheaterHallModal from '@/dialog/theaterHallModal'
 import { CheckPermission } from '@/components/checkPermission'
 
-export default function Page({ params: { lng } }: PageProps) {
-  const router = useRouter()
-  const [modal, setModal] = useState<any>({
+export default function Page({ params: { lng } }: PageProps) {  const [modal, setModal] = useState<any>({
     data: [],
     show: false
   })
@@ -26,6 +24,7 @@ export default function Page({ params: { lng } }: PageProps) {
   const [total, setTotal] = useState(0)
   const searchParams = useSearchParams()
   const { t } = useTranslation(lng, 'theaterHall')
+  const { t: common } = useTranslation(lng, 'common')
 
   const getData = (page = 1) => {
     http({
@@ -109,12 +108,12 @@ export default function Page({ params: { lng } }: PageProps) {
                   })
                 }}
               >
-                {t('button.edit')}
+                {common('button.edit')}
               </Button>
             </CheckPermission>
             <CheckPermission code="">
               <Button type="primary" danger>
-                {t('button.remove')}
+                {common('button.remove')}
               </Button>
             </CheckPermission>
           </Space>
@@ -142,7 +141,7 @@ export default function Page({ params: { lng } }: PageProps) {
               })
             }}
           >
-            {t('button.add')}
+            {common('button.add')}
           </Button>
         </CheckPermission>
       </Row>

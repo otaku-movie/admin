@@ -19,6 +19,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
   const { t } = useTranslation(lng, 'comment')
+  const { t: common } = useTranslation(lng, 'common')
   const searchParams = useSearchParams()
 
   const [modal, setModal] = useState({
@@ -95,7 +96,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
                 })
               }}
             >
-              {t('button.edit')}
+              {common('button.edit')}
             </Button>
             <Button
               type="primary"
@@ -105,7 +106,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
                     name: 'replyList',
                     query: {
                       id: row.id,
-                      movieId: searchParams.get('id'),
+                      movieId: searchParams.get('id')
                     }
                   })
                 )
@@ -119,7 +120,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
                 danger
                 onClick={() => {
                   Modal.confirm({
-                    title: t('button.remove'),
+                    title: common('button.remove'),
                     content: t('message.remove.content'),
                     onCancel() {
                       console.log('Cancel')
@@ -144,7 +145,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
                   })
                 }}
               >
-                {t('button.remove')}
+                {common('button.remove')}
               </Button>
             </CheckPermission>
           </Space>
@@ -172,7 +173,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
             })
           }}
         >
-          {t('button.add')}
+          {common('button.add')}
         </Button>
       </Row>
       <Query>

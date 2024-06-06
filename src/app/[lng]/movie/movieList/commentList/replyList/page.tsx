@@ -14,6 +14,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
   const { t } = useTranslation(lng, 'reply')
+  const { t: common } = useTranslation(lng, 'common')
   const [modal, setModal] = useState({
     type: 'create',
     show: false,
@@ -89,12 +90,15 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
                 })
               }}
             >
-              {t('button.edit')}
+              {common('button.edit')}
             </Button>
             <Button
               type="primary"
               onClick={() => {
-                const parentReplyId = row.parentReplyId === null ? `${row.id}` : `${row.parentReplyId}-${row.id}`
+                const parentReplyId =
+                  row.parentReplyId === null
+                    ? `${row.id}`
+                    : `${row.parentReplyId}-${row.id}`
 
                 setModal({
                   ...modal,
@@ -117,7 +121,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
                 danger
                 onClick={() => {
                   Modal.confirm({
-                    title: t('button.remove'),
+                    title: common('button.remove'),
                     content: t('message.remove.content'),
                     onCancel() {
                       console.log('Cancel')
@@ -142,7 +146,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
                   })
                 }}
               >
-                {t('button.remove')}
+                {common('button.remove')}
               </Button>
             </CheckPermission>
           </Space>
@@ -171,7 +175,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
             })
           }}
         >
-          {t('button.add')}
+          {common('button.add')}
         </Button>
       </Row>
       {/* <Query>

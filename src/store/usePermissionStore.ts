@@ -22,7 +22,7 @@ export const usePermissionStore = create<permissionStoreOptions>((set) => {
 
       const result = listToTree<menuItem>(res.data)
       
-      console.log(flattern ? res.data : result)
+
       set({
         menu: flattern ? res.data : result
       })

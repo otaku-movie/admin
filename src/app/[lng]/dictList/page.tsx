@@ -26,7 +26,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
   const [data, setData] = useState([])
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
-  const form = Form.useFormInstance()
+  // const form = Form.useFormInstance()
   const [modal, setModal] = useState({
     data: [],
     dictId: null,
@@ -34,7 +34,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
     show: false
   })
   const { t } = useTranslation(lng, 'dict')
-
+  const { t: common } = useTranslation(lng, 'common')
   const getData = (page = 1) => {
     http({
       url: 'dict/list',
@@ -97,7 +97,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
             </CheckPermission>
             <CheckPermission code="">
               <Button type="primary" onClick={() => {}}>
-                {t('button.edit')}
+                {common('button.edit')}
               </Button>
             </CheckPermission>
             <CheckPermission code="">
@@ -106,7 +106,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
                 danger
                 onClick={() => {
                   Modal.confirm({
-                    title: t('button.remove'),
+                    title: common('button.remove'),
                     content: t('message.remove.content'),
                     onCancel() {
                       console.log('Cancel')
@@ -131,7 +131,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
                   })
                 }}
               >
-                {t('button.remove')}
+                {common('button.remove')}
               </Button>
             </CheckPermission>
           </Space>
@@ -165,7 +165,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
             router.push(`/${lng}/cinemaDetail`)
           }}
         >
-          {t('button.add')}
+          {common('button.add')}
         </Button>
       </Row>
       <Query>

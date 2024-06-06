@@ -5,13 +5,9 @@
     "buttonName": "按钮名称",
     "buttonCode": "按钮Code",
     "apiName": "接口名称",
+    "apiCode": "接口 code",
     "i18nKey": "国际化Key",
     "action": "操作"
-  },
-  "button": {
-    "add": "添加",
-    "edit": "编辑",
-    "remove": "删除"
   },
   "message": {
     "remove": {

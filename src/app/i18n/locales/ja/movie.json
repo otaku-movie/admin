@@ -10,10 +10,5 @@
     "endDate": "上映終了時期",
     "status": "上映ステータス",
     "action": "操作"
-  },
-  "button": {
-    "add": "新規",
-    "edit": "編集",
-    "remove": "削除"
   }
 }

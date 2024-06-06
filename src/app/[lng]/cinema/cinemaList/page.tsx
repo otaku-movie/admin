@@ -17,6 +17,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
   const { t } = useTranslation(lng, 'cinema')
+  const { t: common } = useTranslation(lng, 'common')
 
   const getData = (page = 1) => {
     http({
@@ -80,7 +81,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
                   )
                 }}
               >
-                {t('button.detail')}
+                {common('button.theaterHallDetail')}
               </Button>
             </CheckPermission>
             <CheckPermission code="cinema.edit">
@@ -97,7 +98,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
                   )
                 }}
               >
-                {t('button.edit')}
+                {common('button.edit')}
               </Button>
             </CheckPermission>
             <CheckPermission code="cinema.remove">
@@ -106,7 +107,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
                 danger
                 onClick={() => {
                   Modal.confirm({
-                    title: t('button.remove'),
+                    title: common('button.remove'),
                     content: t('message.remove.content'),
                     onCancel() {
                       console.log('Cancel')
@@ -131,7 +132,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
                   })
                 }}
               >
-                {t('button.remove')}
+                {common('button.remove')}
               </Button>
             </CheckPermission>
           </Space>
@@ -155,7 +156,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
               router.push(processPath('cinemaDetail'))
             }}
           >
-            {t('button.add')}
+            {common('button.add')}
           </Button>
         </CheckPermission>
       </Row>

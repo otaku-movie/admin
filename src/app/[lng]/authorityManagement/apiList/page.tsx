@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, useEffect } from 'react'
 import { Table, Button, Space, Row, Input, Modal, message } from 'antd'
-
+import { showTotal } from '@/utils/pagination'
 import type { TableColumnsType } from 'antd'
 import { Query, QueryItem } from '@/components/query'
 import http from '@/api/index'
@@ -21,6 +21,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
   const [total, setTotal] = useState(0)
   const [query, setQuery] = useState<Partial<Query>>({})
   const { t } = useTranslation(lng, 'api')
+  const { t: common } = useTranslation(lng, 'common')
   const [modal, setModal] = useState({
     type: 'create',
     show: false,
@@ -59,6 +60,10 @@ export default function MoviePage({ params: { lng } }: PageProps) {
       dataIndex: 'path'
     },
     {
+      title: t('table.code'),
+      dataIndex: 'code'
+    },
+    {
       title: t('table.action'),
       key: 'operation',
       width: 100,
@@ -85,7 +90,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
                   })
                 }}
               >
-                {t('button.edit')}
+                {common('button.edit')}
               </Button>
             </CheckPermission>
             <CheckPermission code="">
@@ -94,7 +99,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
                 danger
                 onClick={() => {
                   Modal.confirm({
-                    title: t('button.remove'),
+                    title: common('button.remove'),
                     content: t('message.remove.content'),
                     onCancel() {
                       console.log('Cancel')
@@ -119,7 +124,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
                   })
                 }}
               >
-                {t('button.remove')}
+                {common('button.remove')}
               </Button>
             </CheckPermission>
           </Space>
@@ -148,7 +153,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
               })
             }}
           >
-            {t('button.add')}
+            {common('button.add')}
           </Button>
         </CheckPermission>
       </Row>
@@ -181,7 +186,11 @@ export default function MoviePage({ params: { lng } }: PageProps) {
           pageSize: 10,
           current: page,
           total,
-          position: ['bottomCenter']
+          position: ['bottomCenter'],
+          showTotal,
+          onChange(page) {
+            getData(page)
+          }
         }}
       />
       <ApiModal

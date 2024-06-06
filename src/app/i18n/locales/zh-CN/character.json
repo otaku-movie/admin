@@ -8,12 +8,6 @@
     "staff": "演员或者声优",
     "action": "操作"
   },
-  "button": {
-    "add": "添加",
-    "configPermission": "配置权限",
-    "edit": "编辑",
-    "remove": "删除"
-  },
   "modal": {
     "title": {
       "create": "添加角色",

@@ -54,6 +54,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
   })
   const getDict = useCommonStore((state) => state.getDict)
   const { t } = useTranslation(lng, 'showTime')
+  const { t: common } = useTranslation(lng, 'common')
 
   const getData = (page = 1) => {
     http({
@@ -252,7 +253,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
                   })
                 }}
               >
-                {t('button.edit')}
+                {common('button.edit')}
               </Button>
             </CheckPermission>
             <CheckPermission code="">
@@ -279,7 +280,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
                   }
 
                   Modal.confirm({
-                    title: t('button.remove'),
+                    title: common('button.remove'),
                     content: t('message.remove.content'),
                     onCancel() {
                       console.log('Cancel')
@@ -287,7 +288,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
                     onOk() {
                       if (row.selectedSeatCount !== 0) {
                         Modal.confirm({
-                          title: t('button.remove'),
+                          title: common('button.remove'),
                           content: t('message.remove.selectedCount', {
                             count: row.selectedSeatCount
                           }),
@@ -300,12 +301,12 @@ export default function MoviePage({ params: { lng } }: PageProps) {
                         })
                       } else {
                         remove()
-                      }                 
+                      }
                     }
                   })
                 }}
               >
-                {t('button.remove')}
+                {common('button.remove')}
               </Button>
             </CheckPermission>
           </Space>
@@ -328,7 +329,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
                 })
               }}
             >
-              {t('button.add')}
+              {common('button.add')}
             </Button>
           </CheckPermission>
         </Row>

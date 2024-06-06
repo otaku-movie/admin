@@ -4,11 +4,6 @@
     "description": "简介",
     "action": "操作"
   },
-  "button": {
-    "add": "添加",
-    "edit": "编辑",
-    "remove": "删除"
-  },
   "modal": {
     "title": {
       "create": "添加",

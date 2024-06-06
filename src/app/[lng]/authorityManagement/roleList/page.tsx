@@ -22,6 +22,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
   const [total, setTotal] = useState(0)
   const [query, setQuery] = useState<Partial<Query>>({})
   const { t } = useTranslation(lng, 'role')
+  const { t: common } = useTranslation(lng, 'common')
   const [modal, setModal] = useState({
     type: 'create',
     show: false,
@@ -86,7 +87,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
                   })
                 }}
               >
-                {t('button.edit')}
+                {common('button.edit')}
               </Button>
             </CheckPermission>
             <CheckPermission code="">
@@ -102,7 +103,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
                   })
                 }}
               >
-                {t('button.configPermission')}
+                {common('button.configPermission')}
               </Button>
             </CheckPermission>
             <CheckPermission code="">
@@ -111,7 +112,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
                 danger
                 onClick={() => {
                   Modal.confirm({
-                    title: t('button.remove'),
+                    title: common('button.remove'),
                     content: t('message.remove.content'),
                     onCancel() {
                       console.log('Cancel')
@@ -136,7 +137,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
                   })
                 }}
               >
-                {t('button.remove')}
+                {common('button.remove')}
               </Button>
             </CheckPermission>
           </Space>
@@ -165,7 +166,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
               })
             }}
           >
-            {t('button.add')}
+            {common('button.add')}
           </Button>
         </CheckPermission>
       </Row>

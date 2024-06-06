@@ -37,5 +37,16 @@
   "message": {
     "notPermission": "権限ありません",
     "save": "保存成功"
+  },
+  "button": {
+    "add": "新規",
+    "edit": "編集",
+    "remove": "削除",
+    "save": "保存",
+    "login": "ログイン",
+    "theaterHallDetail": "シアター詳細",
+    "commentList": "コメントリスト",
+    "configPermission": "権限配置",
+    "configRole": "役割配置"
   }
 }

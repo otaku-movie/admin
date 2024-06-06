@@ -11,11 +11,6 @@
     "status": "上映状态",
     "action": "操作"
   },
-  "button": {
-    "add": "添加",
-    "edit": "编辑",
-    "remove": "删除"
-  },
   "message": {
     "remove": {
       "content": "是否确认要删除当前行，删除后不可恢复",
