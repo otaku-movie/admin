@@ -1,7 +1,8 @@
+import { userInfo, role } from './../type/api'
 import { permission } from '../dialog/rolePermission'
 import { create } from 'zustand'
 import http from '@/api'
-import { userInfo, role } from '@/type/api'
+
 import { message } from 'antd'
 import dayjs from 'dayjs'
 
@@ -86,6 +87,8 @@ export const useUserStore = create<userInfoStore>((set, get) => {
         method: 'post',
         data: query
       })
+      localStorage.setItem('token', userInfo.data.token)
+
       const userRole = await http({
         url: 'admin/user/role',
         method: 'get',
@@ -93,21 +96,26 @@ export const useUserStore = create<userInfoStore>((set, get) => {
           id: userInfo.data.id
         }
       })
+      
       localStorage.setItem('userInfo', JSON.stringify(userInfo.data))
       localStorage.setItem('token', userInfo.data.token)
       localStorage.setItem('loginTime', dayjs().format('YYYY-MM-DD HH:mm:ss'))
       // eslint-disable-next-line no-unsafe-optional-chaining
       const first: role = userRole.data.shift()
       
+      if (userRole) {
+        const result = await get().permission(first.id)
 
-      const result = await get().permission(first.id)
-
-      if (!result) {
-        message.info('没有权限')
-        return Promise.resolve(false)
+        if (!result) {
+          message.info('没有权限')
+          return Promise.resolve(false)
+        }
+  
+        return Promise.resolve(true)
+      } else {
+        // eslint-disable-next-line prefer-promise-reject-errors
+        return Promise.reject(false)
       }
-
-      return Promise.resolve(true)
     }
   }
 })

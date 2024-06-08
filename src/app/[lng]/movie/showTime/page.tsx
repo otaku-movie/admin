@@ -231,7 +231,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
                   })
                 }}
               >
-                {t('button.detail')}
+                {common('button.seatSelectedDetail')}
               </Button>
             </CheckPermission>
             <CheckPermission code="">

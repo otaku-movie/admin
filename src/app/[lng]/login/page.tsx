@@ -96,14 +96,21 @@ export default function Page({ params: { lng } }: PageProps) {
                 height: '40px'
               }}
               onClick={() => {
-                store.login({
-                  ...query,
-                  password: md5(query.password)
-                }).then((res) => {
-                  if (res) {
-                    router.push(processPath('movieList'))
-                  }
-                })
+                store
+                  .login({
+                    ...query,
+                    password: query.password ? md5(query.password) : ''
+                  })
+                  .then((res) => {
+                    if (res) {
+                      const redirectURL = localStorage.getItem('redirectURL')
+                      if (redirectURL) {
+                        location.href = redirectURL
+                      } else {
+                        router.push(processPath('movieList'))
+                      }
+                    }
+                  })
               }}
             >
               {common('button.login')}

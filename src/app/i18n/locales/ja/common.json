@@ -47,6 +47,7 @@
     "theaterHallDetail": "シアター詳細",
     "commentList": "コメントリスト",
     "configPermission": "権限配置",
-    "configRole": "役割配置"
+    "configRole": "役割配置",
+    "seatSelectedDetail": "座席選択詳細"
   }
 }

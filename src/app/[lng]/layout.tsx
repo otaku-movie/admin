@@ -83,7 +83,6 @@ function RootLayout({ children, params: { lng } }: PageProps) {
     .split('/')
     .filter((item) => item !== '')
   const set = new Set(['login'])
-  
 
   useEffect(() => {
     const roleId = localStorage.getItem('roleId')
@@ -94,7 +93,9 @@ function RootLayout({ children, params: { lng } }: PageProps) {
   }, [])
 
   const userInfo = getUserInfo()
+  const lang = pathname.split('/')[1]
 
+  localStorage.setItem('language', lang)
 
   return (
     <html lang={lng} dir={lng}>
@@ -131,7 +132,8 @@ function RootLayout({ children, params: { lng } }: PageProps) {
                         }),
                         onClick(info) {
                           const str = pathname.replace(lng, info.key)
-                          console.log(str, info)
+                          console.log(str, info, lng)
+                          localStorage.setItem('language', info.key)
                           location.pathname = str
                           // router.replace(str)
                         }

@@ -12,7 +12,7 @@ import {
 import http from '@/api'
 import { languageType } from '@/config'
 import { buttonItem } from '@/type/api'
-import { listToTree, callTree, flattern, setCheckedStatus } from '@/utils'
+import { listToTree, callTree, flattern, setCheckedStatus, hasChecked, hasIndeterminate } from '@/utils'
 
 interface modalProps {
   show?: boolean
@@ -28,7 +28,10 @@ export type permission = buttonItem & {
 export function RolePermission(props: modalProps) {
   const [data, setData] = useState<permission[]>([])
   const { t } = useTranslation(navigator.language as languageType, 'role')
-  const { t: common } = useTranslation(navigator.language as languageType, 'common')
+  const { t: common } = useTranslation(
+    navigator.language as languageType,
+    'common'
+  )
   const [menuListId, setMenuListId] = useState<number[]>([])
 
   const getData = () => {
@@ -40,28 +43,13 @@ export function RolePermission(props: modalProps) {
       }
     }).then((res: any) => {
       const recursion = (menu: any[]): number[] => {
-        const hasEvery = (arr: permission[]): boolean => {
-          return arr.every((item) => {
-            return Array.isArray(item.children)
-              ? hasEvery(item.children)
-              : item.checked
-          })
-        }
-        const hasIndeterminate = (arr: permission[]): boolean => {
-          return arr.some((item) => {
-            return Array.isArray(item.children)
-              ? hasEvery(item.children)
-              : item.checked
-          })
-        }
-
         return menu.reduce(
           (
             total: number[],
             current: permission & { indeterminate: boolean }
           ) => {
             if (Array.isArray(current.children)) {
-              const every = hasEvery(current.children)
+              const every = hasChecked(current.children)
               const indeterminate = hasIndeterminate(current.children)
 
               if (every) {
@@ -81,8 +69,10 @@ export function RolePermission(props: modalProps) {
           []
         )
       }
+
       const tree = listToTree(res.data)
       const selected = recursion(tree as any)
+
       setMenuListId(selected)
       callTree(tree as any, (item: any) => {
         item.button = item.button.filter((item: any) => item.id !== null)
@@ -112,6 +102,10 @@ export function RolePermission(props: modalProps) {
         return common(key)
       },
       dataIndex: 'i18nKey'
+    },
+    {
+      title: 'id',
+      dataIndex: 'id'
     },
     {
       title: t('rolePermissionModal.table.show'),
@@ -213,6 +207,12 @@ export function RolePermission(props: modalProps) {
         bordered={true}
         rowKey={'id'}
         pagination={false}
+        scroll={{
+          y: '400px'
+        }}
+        expandable={{
+          defaultExpandAllRows: true
+        }}
         rowSelection={{
           type: 'checkbox',
           checkStrictly: false,

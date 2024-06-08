@@ -5,6 +5,8 @@
       "name": "影院管理",
       "children": {
         "cinemaList": "影院列表",
+        "cinemaDetail": "影院详情",
+        "theaterHall": "影厅列表",
         "specList": "规格列表"
       }
     },
@@ -48,6 +50,7 @@
     "theaterHallDetail": "影厅详情",
     "commentList": "评论列表",
     "configPermission": "配置权限",
-    "configRole": "配置角色"
+    "configRole": "配置角色",
+    "seatSelectedDetail": "选座详情"
   }
 }

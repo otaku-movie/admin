@@ -15,7 +15,6 @@ export function processPath (options: string | Options, query?: Record<string, a
   }
 
   const process = (name: string, query?: Record<string, any>) => {
-    // debugger
     const find = route.find(item => item.pathName === name)
     const bashPath = `/${document.documentElement.lang}${find?.path}`
     // console.log(bashPath)
@@ -30,9 +29,11 @@ export function processPath (options: string | Options, query?: Record<string, a
     }  
   }
   
-  if (typeof options === 'string') {
-    return process(options, query)
-  } else {
-    return process(options.name, options.query)
+  if (options) {
+    if (typeof options === 'string') {
+      return process(options, query)
+    } else {
+      return process(options.name, options.query)
+    }
   }
 }

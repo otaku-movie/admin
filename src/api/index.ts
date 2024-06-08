@@ -24,7 +24,12 @@ const httpStatus = {
 http.interceptors.request.use((config: any) => {
   // 在发送请求之前做些什么
   const token = localStorage.getItem('token')
+  const language = localStorage.getItem('language') || 'ja'
   
+  config.headers = {
+    'Accept-Language': language
+  }
+
   if (token) {
     config.headers = {
       ...config.headers,
@@ -52,6 +57,7 @@ http.interceptors.response.use((res: AxiosResponse<response>) => {
     if (err.response.status === 401) {
       localStorage.removeItem('userInfo')
       localStorage.removeItem('token')
+      localStorage.setItem('redirectURL', location.href)
       location.href = `/${document.documentElement.lang}/login`
 
     } else {

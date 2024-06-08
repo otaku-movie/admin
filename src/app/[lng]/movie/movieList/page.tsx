@@ -188,7 +188,7 @@ export default function Page({ params: { lng } }: PageProps) {
                   )
                 }}
               >
-                {t('button.commentList')}
+                {common('button.commentList')}
               </Button>
             </CheckPermission>
             <CheckPermission code="movie.edit">
