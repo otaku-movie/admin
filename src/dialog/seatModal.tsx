@@ -24,58 +24,58 @@ export default function SeatModal(props: ModalProps) {
   const { t } = useTranslation(navigator.language as languageType, 'user')
 
   const generate2DArray = (data: seatItem[]) => {
-    // 找到所有不同的xname值
-    const uniqueXNameValues = Array.from(
-      new Set(data.map((item) => item.xname))
-    )
+    const groupBy = Object.groupBy(data, ({ xaxis }) => xaxis)
 
-    // 创建二维数组，用于存放分组后的数据
-    const result: seat[] = []
+    const result = Object.entries(groupBy).map((item) => {
+      const [row, children] = item
 
-    // 根据不同的xname值进行分组
-    uniqueXNameValues.forEach((xNameValue) => {
-      // 找到当前xname值对应的所有数据
-      const groupedData = data.filter((item) => item.xname === xNameValue)
-      // 将当前分组的数据添加到结果数组中
-      result.push({
-        row: xNameValue,
-        children: groupedData
-      })
+      return {
+        row,
+        children: children?.map(children => {
+          return {
+            ...children,
+            selected: false
+          }
+        })
+      }
     })
 
-    return result
+    console.log(result)
+    return result as seat[]
   }
 
-  useEffect(() => {
-    console.log(props.data)
-    setData(generate2DArray(props.data))
-  }, [])
+  const buildSeat = () => {
+    const count = data[0]?.children.length
 
-  return (
-    <Modal
-      title="座位详情"
-      open={props.show}
-      onOk={props?.onConfirm}
-      onCancel={props?.onCancel}
-      width="fit-content"
-      key={'seat-modal'}
-    >
-      <section className="section">
-        <ul className="seat-row-number">
-          {data?.map((item, index) => {
-            return <li key={index}>{item.row}</li>
-          })}
-        </ul>
-        <ul className="seat-container">
-          {data?.map((item, index) => {
+    const style = {
+      color: 'black',
+      gridTemplateColumns: `repeat(${count}, ${size}px)`,
+      gridTemplateRows: size + 'px'
+    }
+    
+    return (
+      <ul className="seat-container" onClick={(e) => {
+        const el = e.target as HTMLElement
+        const dataset = el.dataset
+        console.log(el.dataset)
+        const x = +dataset.rowIndex!
+        const y =  +dataset.columnIndex!
+        
+        console.log(el.dataset, x, y)
+
+        if (x && y) {
+          data[x].children[y].selected = !data[x].children[y].selected
+
+          setData([...data])
+        }
+      }}>
+        {
+          data?.map((item, index) => {
             return (
               <li
                 key={index}
                 className="seat-row"
-                style={{
-                  color: 'black',
-                  gridTemplateColumns: `repeat(${item.children.length}, 20px)`
-                }}
+                style={style}
               >
                 {item.children.map((children, childrenIndex) => {
                   return (
@@ -83,19 +83,74 @@ export default function SeatModal(props: ModalProps) {
                       key={childrenIndex}
                       className="seat-row-column"
                       style={{
-                        border: children.seatType === 2 ? '2px solid red' : '',
-                        background: children.selected ? 'red' : '',
-                        borderRadius: '4px'
+                        border: '2px solid #dad4d4',
+                        background: children.selected ? 'red' : ''
                       }}
+                      data-row-index={index}
+                      data-column-index={childrenIndex}
                     >
-                      {children.column}
                     </div>
                   )
                 })}
               </li>
             )
+          })
+        }
+        <li
+          className="seat-row"
+          style={style}
+        >
+          {
+            new Array(count).fill(undefined).map((_, index) => {
+              return (
+                <div
+                  key={index}
+                  className="seat-row-column">
+                  {index + 1}
+                </div>
+              )
+            })
+          }
+        </li>
+      </ul>
+    )
+   
+  }
+
+  useEffect(() => {
+    if (props.data) {
+      setData(generate2DArray(props.data))
+    }
+  }, [props.data])
+
+  const size = 20
+
+  return (
+    <Modal
+      title={`座位详情，座位数：${props.data?.length || 0}`}
+      open={props.show}
+      onOk={() => {
+        // console.log(props.d)
+        props.onConfirm?.()
+      }}
+      onCancel={props?.onCancel}
+      width="fit-content"
+      key={'seat-modal'}
+      maskClosable={false}
+    >
+      <section className="section" style={{
+        gridTemplateColumns: `${size}px 1fr`
+      }}>
+        <ul className="seat-row-number">
+          {data?.map((item, index) => {
+            return <li key={index} style={{
+              width: `${size}px`,
+              height: size + 'px',
+              lineHeight: size+ 'px'
+            }}>{item.row}</li>
           })}
         </ul>
+        {buildSeat()}
       </section>
       <div
         style={{

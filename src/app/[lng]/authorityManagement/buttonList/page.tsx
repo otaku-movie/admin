@@ -70,8 +70,6 @@ export default function Page({ params: { lng } }: PageProps) {
               <li className="button-table">
                 <div className="button-table-cell">{t('table.buttonName')}</div>
                 <div className="button-table-cell">{t('table.i18nKey')}</div>
-                <div className="button-table-cell">{t('table.buttonCode')}</div>
-                <div className="button-table-cell">{t('table.apiName')}</div>
                 <div className="button-table-cell">{t('table.apiCode')}</div>
                 <div className="button-table-cell">{t('table.action')}</div>
               </li>
@@ -84,12 +82,6 @@ export default function Page({ params: { lng } }: PageProps) {
                   </div>
                   <div className="button-table-cell">
                     <Button type="text">{button.i18nKey}</Button>
-                  </div>
-                  <div className="button-table-cell">
-                    <Button type="text">{button.code}</Button>
-                  </div>
-                  <div className="button-table-cell">
-                    <Button type="text">{button.apiName}</Button>
                   </div>
                   <div className="button-table-cell">
                     <Button type="text">{button.apiCode}</Button>

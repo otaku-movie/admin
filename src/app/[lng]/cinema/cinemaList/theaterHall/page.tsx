@@ -10,8 +10,10 @@ import { useTranslation } from '@/app/i18n/client'
 import TheaterHallModal from '@/dialog/theaterHallModal'
 import { CheckPermission } from '@/components/checkPermission'
 
-export default function Page({ params: { lng } }: PageProps) {  const [modal, setModal] = useState<any>({
+export default function Page({ params: { lng } }: PageProps) {  
+  const [modal, setModal] = useState<any>({
     data: [],
+    columnCount: 0,
     show: false
   })
   const [theaterHallModal, setTheaterHallModal] = useState<any>({
@@ -56,8 +58,22 @@ export default function Page({ params: { lng } }: PageProps) {  const [modal, se
       dataIndex: 'spec'
     },
     {
+      title: t('table.rowCount'),
+      dataIndex: 'rowCount'
+    },
+    {
+      title: t('table.columnCount'),
+      dataIndex: 'columnCount'
+    },
+    {
       title: t('table.seatCount'),
-      dataIndex: 'seatCount'
+      render(_, row) {
+        if (row.rowCount && row.columnCount) {
+          return row.rowCount * row.columnCount
+        } else {
+          return 0
+        }
+      }
     },
     {
       title: '操作',
@@ -77,15 +93,16 @@ export default function Page({ params: { lng } }: PageProps) {  const [modal, se
                     params: {
                       theaterHallId: row.id
                     }
-                  }).then(() => {
+                  }).then((res) => {
                     setModal({
-                      data,
+                      data: res.data,
+                      columnCount: row.columnCount,
                       show: true
                     })
                   })
                 }}
               >
-                {t('button.detail')}
+                {common('button.seatDetail')}
               </Button>
             </CheckPermission>
             <CheckPermission code="">

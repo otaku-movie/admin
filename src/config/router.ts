@@ -35,5 +35,7 @@ export function processPath (options: string | Options, query?: Record<string, a
     } else {
       return process(options.name, options.query)
     }
+  } else {
+    return ''
   }
 }

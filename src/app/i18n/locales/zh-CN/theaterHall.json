@@ -2,6 +2,8 @@
   "table": {
     "name": "影厅名称",
     "spec": "规格",
+    "rowCount": "行数",
+    "columnCount": "列数",
     "seatCount": "座位数",
     "action": "操作"
   },
@@ -18,10 +20,21 @@
       "spec": {
         "label": "影厅规格",
         "required": "请选择影厅规格"
+      },
+      "rowCount": {
+        "label": "行数",
+        "required": "请输入行数"
+      },
+      "columnCount": {
+        "label": "列数",
+        "required": "请输入列数"
       }
     }
   },
   "message": {
+    "changeSeatCount": {
+      "content": "是否确认更改行数和列数，更改后不可恢复"
+    },
     "remove": {
       "content": "是否确认要删除当前行，删除后不可恢复",
       "success": "删除成功"

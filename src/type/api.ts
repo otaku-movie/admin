@@ -88,9 +88,6 @@ export type buttonItem = menuItem & {
     id: number
     name: string
     i18nKey: string
-    code: string
-    apiId: number
-    apiName: string
     apiCode: string
     checked: boolean
   }[]

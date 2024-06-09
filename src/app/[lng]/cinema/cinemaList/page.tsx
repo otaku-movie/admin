@@ -63,10 +63,27 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
       title: t('table.action'),
       key: 'operation',
       fixed: 'right',
-      width: 200,
+      // width: 200,
       render: (_, row) => {
         return (
           <Space>
+            <CheckPermission code="">
+              <Button
+                type="primary"
+                onClick={() => {
+                  router.push(
+                    processPath({
+                      name: 'ticketType',
+                      query: {
+                        id: row.id
+                      }
+                    })
+                  )
+                }}
+              >
+                {common('button.ticketType')}
+              </Button>
+            </CheckPermission>
             <CheckPermission code="">
               <Button
                 type="primary"

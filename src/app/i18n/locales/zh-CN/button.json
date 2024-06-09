@@ -37,9 +37,9 @@
         "label": "按钮 code",
         "required": "请输入按钮 code"
       },
-      "apiId": {
-        "label": "接口名称",
-        "required": "请选择接口"
+      "apiCode": {
+        "label": "接口 code",
+        "required": "请输入接口 code"
       }
     }
   }

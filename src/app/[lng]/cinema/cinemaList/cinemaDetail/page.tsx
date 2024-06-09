@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import { Button, Form, Input } from 'antd'
 import { useTranslation } from '@/app/i18n/client'
-import { PageProps } from '../../layout'
+import { PageProps } from '@/app/[lng]/layout'
 import { Cinema } from '@/type/api'
 import { useRouter, useSearchParams } from 'next/navigation'
 import http from '@/api'
@@ -26,9 +26,10 @@ export default function Page({ params: { lng } }: PageProps) {
         }
       }).then((res) => {
         console.log(res.data)
-        setData({
-          ...res.data
-        })
+        form.setFieldsValue(res.data)
+        // setData({
+        //   ...res.data
+        // })
       })
     }
   }
@@ -57,6 +58,7 @@ export default function Page({ params: { lng } }: PageProps) {
         <Form.Item
           label={t('form.name.label')}
           rules={[{ required: true, message: t('form.name.required') }]}
+          name="name"
         >
           <Input
             value={data.name}
@@ -71,6 +73,7 @@ export default function Page({ params: { lng } }: PageProps) {
         <Form.Item
           label={t('form.description.label')}
           rules={[{ required: true, message: t('form.description.required') }]}
+          name="description"
         >
           <Input.TextArea
             rows={5}
@@ -86,6 +89,7 @@ export default function Page({ params: { lng } }: PageProps) {
         <Form.Item
           label={t('form.address.label')}
           rules={[{ required: true, message: t('form.address.required') }]}
+          name="address"
         >
           <Input
             value={data.address}
@@ -100,6 +104,7 @@ export default function Page({ params: { lng } }: PageProps) {
         <Form.Item
           label={t('form.tel.label')}
           rules={[{ required: true, message: t('form.tel.required') }]}
+          name="tel"
         >
           <Input
             value={data.tel}
@@ -113,7 +118,8 @@ export default function Page({ params: { lng } }: PageProps) {
         </Form.Item>
         <Form.Item
           label={t('form.homePage.label')}
-          rules={[{ required: true, message: t('form.homePage.required') }]}
+          rules={[{ required: false, message: t('form.homePage.required') }]}
+          name="tel"
         >
           <Input
             value={data.homePage}
@@ -133,7 +139,7 @@ export default function Page({ params: { lng } }: PageProps) {
               htmlType="submit"
               onClick={() => {
                 http({
-                  url: 'cinema/save',
+                  url: 'admin/cinema/save',
                   method: 'post',
                   data
                 }).then(() => {
@@ -141,7 +147,7 @@ export default function Page({ params: { lng } }: PageProps) {
                 })
               }}
             >
-              {common('form.save')}
+              {common('button.save')}
             </Button>
           </CheckPermission>
         </Form.Item>

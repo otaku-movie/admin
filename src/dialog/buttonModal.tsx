@@ -1,11 +1,10 @@
 'use client'
 import React, { useState, useEffect } from 'react'
 import { useTranslation } from '@/app/i18n/client'
-import { Form, Modal, Input, Select, TreeSelect } from 'antd'
+import { Form, Modal, Input, TreeSelect } from 'antd'
 import http from '@/api'
 import { languageType } from '@/config'
 import { usePermissionStore } from '@/store/usePermissionStore'
-import { menuItem } from '@/type/api'
 import { callTree } from '@/utils'
 
 interface modalProps {
@@ -22,33 +21,36 @@ interface Query {
   i18nKey?: string
   name?: string
   code?: string
-  apiId?: number
+  apiCode?: string
 }
 
 export function ButtonModal(props: modalProps) {
   const { t } = useTranslation(navigator.language as languageType, 'button')
-  const { t: common } = useTranslation(navigator.language as languageType, 'common')
+  const { t: common } = useTranslation(
+    navigator.language as languageType,
+    'common'
+  )
   const [form] = Form.useForm()
   const [query, setQuery] = useState<Query>({})
-  const [apiData, setApiData] = useState([])
+  // const [apiData, setApiData] = useState([])
   const data = usePermissionStore((state) => state.menu)
   const getMenu = usePermissionStore((state) => state.getMenu)
 
-  const getApi = () => {
-    http({
-      url: 'admin/permission/api/list',
-      method: 'post',
-      data: {
-        pageSize: 100
-      }
-    }).then((res) => {
-      setApiData(res.data.list)
-    })
-  }
+  // const getApi = () => {
+  //   http({
+  //     url: 'admin/permission/api/list',
+  //     method: 'post',
+  //     data: {
+  //       pageSize: 100
+  //     }
+  //   }).then((res) => {
+  //     setApiData(res.data.list)
+  //   })
+  // }
 
   const getData = () => {
     getMenu()
-    getApi()
+    // getApi()
   }
   useEffect(() => {
     if (props.show) {
@@ -110,42 +112,6 @@ export function ButtonModal(props: modalProps) {
               })
             }}
           ></TreeSelect>
-          {/* <Select
-            value={query.menuId}
-            onChange={(val) => {
-              setQuery({
-                ...query,
-                menuId: val
-              })
-            }}
-          >
-            {data.map((item: any) => {
-              return (
-                <Select.Option value={item.id} key={item.id}>
-                  {item.name}
-                </Select.Option>
-              )
-            })}
-          </Select> */}
-        </Form.Item>
-        <Form.Item label={t('modal.form.apiId.label')} name="apiId">
-          <Select
-            value={query.apiId}
-            onChange={(val) => {
-              setQuery({
-                ...query,
-                apiId: val
-              })
-            }}
-          >
-            {apiData.map((item: any) => {
-              return (
-                <Select.Option value={item.id} key={item.id}>
-                  {item.name}
-                </Select.Option>
-              )
-            })}
-          </Select>
         </Form.Item>
         <Form.Item
           label={t('modal.form.i18nKey.label')}
@@ -165,16 +131,18 @@ export function ButtonModal(props: modalProps) {
           />
         </Form.Item>
         <Form.Item
-          label={t('modal.form.code.label')}
-          rules={[{ required: true, message: t('modal.form.code.required') }]}
-          name="code"
+          label={t('modal.form.apiCode.label')}
+          rules={[
+            { required: true, message: t('modal.form.apiCode.required') }
+          ]}
+          name="apiCode"
         >
           <Input
-            value={query.code}
+            value={query.apiCode}
             onChange={(e) => {
               setQuery({
                 ...query,
-                code: e.currentTarget.value
+                apiCode: e.currentTarget.value
               })
             }}
           />

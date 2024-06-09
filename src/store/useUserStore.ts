@@ -43,8 +43,6 @@ export const useUserStore = create<userInfoStore>((set, get) => {
           path: path.at(-1) === data?.pathName ? `${data?.path}${location.search}` : data?.path
         }
       }) as permission[]
-
-      console.log(breadcrumb)
       
       if (path) {
         set({
@@ -67,7 +65,7 @@ export const useUserStore = create<userInfoStore>((set, get) => {
           buttonPermission: new Set(
             permission.data.reduce((total: string[], current: permission) => {
               return total.concat(
-                current.button.map(children => children.code)
+                current.button.map(children => children.apiCode)
               )
             }, [])
           )

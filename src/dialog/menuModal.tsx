@@ -1,10 +1,11 @@
 'use client'
 import React, { useState, useEffect } from 'react'
 import { useTranslation } from '@/app/i18n/client'
-import { Form, Modal, Input, Select, Switch } from 'antd'
+import { Form, Modal, Input, Select, Switch, TreeSelect } from 'antd'
 import http from '@/api'
 import { languageType } from '@/config'
 import { usePermissionStore } from '@/store/usePermissionStore'
+import { callTree } from '@/utils'
 
 interface modalProps {
   type: 'create' | 'edit'
@@ -26,13 +27,14 @@ interface Query {
 
 export function MenuModal(props: modalProps) {
   const { t } = useTranslation(navigator.language as languageType, 'menu')
+  const { t: common } = useTranslation(navigator.language as languageType, 'common')
   const [form] = Form.useForm()
   const [query, setQuery] = useState<Query>({})
   const data = usePermissionStore((state) => state.menu)
   const getMenu = usePermissionStore((state) => state.getMenu)
 
   const getData = () => {
-    getMenu(true)
+    getMenu()
   }
   useEffect(() => {
     if (props.show) {
@@ -75,26 +77,28 @@ export function MenuModal(props: modalProps) {
         form={form}
       >
         <Form.Item label={t('modal.form.parentId.label')} name="parentId">
-          <Select
-            style={{ width: 200 }}
-            value={query.parentId}
+          <TreeSelect
+            showSearch
+            allowClear
+            treeDefaultExpandAll
+            treeData={callTree(data, (item) => {
+              item.name = common(item.i18nKey)
+            })}
+            fieldNames={{
+              label: 'name',
+              value: 'id'
+            }}
+            value={query.parentId as number}
             onChange={(val) => {
+              console.log(val)
               setQuery({
                 ...query,
                 parentId: val
               })
             }}
-          >
-            {data.map((item: any) => {
-              return (
-                <Select.Option value={item.id} key={item.id}>
-                  {item.name}
-                </Select.Option>
-              )
-            })}
-          </Select>
+          ></TreeSelect>
         </Form.Item>
-        <Form.Item
+        {/* <Form.Item
           label={t('modal.form.name.label')}
           rules={[{ required: true, message: t('modal.form.name.required') }]}
           name="name"
@@ -108,7 +112,7 @@ export function MenuModal(props: modalProps) {
               })
             }}
           />
-        </Form.Item>
+        </Form.Item> */}
         <Form.Item
           label={t('modal.form.i18nKey.label')}
           rules={[

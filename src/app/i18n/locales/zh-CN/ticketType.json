@@ -1,0 +1,29 @@
+{
+  "table": {
+    "name": "电影票类型",
+    "price": "价格",
+    "action": "操作"
+  },
+  "modal": {
+    "title": {
+      "create": "添加电影票类型",
+      "edit": "编辑电影票类型"
+    },
+    "form": {
+      "name": {
+        "label": "电影票类型",
+        "required": "请输入电影票类型"
+      },
+      "price": {
+        "label": "价格",
+        "required": "请输入价格"
+      }
+    }
+  },
+  "message": {
+    "remove": {
+      "content": "是否确认要删除当前电影票类型？",
+      "success": "删除成功"
+    }
+  }
+}

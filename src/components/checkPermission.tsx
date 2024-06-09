@@ -9,6 +9,8 @@ export interface CheckPermissionProps {
 export function CheckPermission(props: CheckPermissionProps) {
   const buttonPermission = useUserStore((state) => state.buttonPermission)
 
+  // console.log(buttonPermission)
+
   if (buttonPermission.has(props.code) || props.code === '') {
     return props.children
   }
