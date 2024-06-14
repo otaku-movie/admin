@@ -1,0 +1,87 @@
+$gap: 10px;
+
+.section {
+  display: flex;
+  padding: 20px;
+  gap: $gap;
+  user-select: none;
+  // grid-template-areas:
+  //   'seat-number-left seat-number-top'
+  //   'seat-number-left seat';
+  // background: black;
+  // color: white;
+
+  .seat-row-column {
+    display: grid;
+    gap: $gap;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 14px;
+    cursor: pointer;
+    text-align: center;
+    user-select: none;
+    pointer-events: none;
+  }
+}
+
+.seat-area {
+  display: flex;
+  gap: 30px;
+  margin: 10px;
+  justify-content: center;
+}
+.seat-number-top,
+.seat-number-bottom {
+  // grid-area: 'seat-number-top';
+  display: flex;
+  box-sizing: border-box;
+}
+.seat-number-top {
+  margin-top: $gap;
+}
+.seat-number-bottom {
+  margin-top: $gap;
+}
+
+.seat {
+  display: grid;
+  gap: $gap;
+  grid-area: 'seat';
+  .seat-row {
+    display: grid;
+    gap: $gap;
+    // grid-template-columns: repeat(25, 10px);
+  }
+}
+
+.row-line {
+  width: 100%;
+  border: 2px solid red;
+}
+.column-line {
+  height: 100%;
+  border: 2px solid black;
+}
+
+.seat-not-selected {
+  background-color: #fbffff;
+  border: 2px solid orange;
+}
+
+.seat-selceted {
+  background-color: orange;
+}
+.drag-container {
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.5);
+  // border: 2px solid rgba(0, 168, 224);
+  border: 2px solid black;
+  position: fixed;
+}
+
+.seat-area-selected {
+  border: 2px solid red;
+}

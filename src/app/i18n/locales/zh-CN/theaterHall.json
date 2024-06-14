@@ -7,6 +7,26 @@
     "seatCount": "座位数",
     "action": "操作"
   },
+  "seatModal": {
+    "titlle": "配置座位",
+    "message": {
+      "required": "过道配置不能为空",
+      "repeat": "过道重复",
+      "max": "最多只能选择{{max}}个"
+    },
+    "form": {
+      "type": {
+        "label": "过道类型",
+        "required": "请选择过道类型",
+        "placeholder": "请选择行或者列"
+      },
+      "start": {
+        "label": "开始位置",
+        "required": "请输入开始位置",
+        "placeholder": "请输入开始位置"
+      }
+    }
+  },
   "theaterHallModal": {
     "title": {
       "create": "添加影厅",

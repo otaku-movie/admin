@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Fabric.js Grid Selection with Passages and Centered Text Boxes
+    </title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.2.4/fabric.min.js"></script>
+    <style>
+      canvas {
+        border: 1px solid #ccc;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas"></canvas>
+    <script>
+      const w = 50 // 每个格子的宽度和高度
+      const spacing = 10 // 格子之间的间距
+
+      const cols = 30 // 列数
+      const rows = 40 // 行数
+
+      // 设置画布宽度和高度
+      const canvasWidth = cols * (w + spacing) + spacing
+      const canvasHeight = rows * (w + spacing) + spacing
+
+      // 初始化Fabric.js 画布
+      const canvas = new fabric.Canvas('canvas', {
+        width: canvasWidth,
+        height: canvasHeight
+      })
+
+      // 插入过道的配置
+      const passages = [
+        { type: 'column', start: 3 },
+        { type: 'column', start: 10 },
+        { type: 'column', start: 16 },
+        { type: 'row', start: 2 }
+      ]
+
+      // 判断当前格子是否是过道
+      function isPassage(row, col) {
+        for (let passage of passages) {
+          if (passage.type === 'row' && row === passage.start) return true
+          if (passage.type === 'column' && col === passage.start) return true
+        }
+        return false
+      }
+
+      // 创建格子并加入画布
+      for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+          if (!isPassage(row, col)) {
+            const rect = new fabric.Rect({
+              left: w + spacing + col * (w + spacing),
+              top: w + spacing + row * (w + spacing),
+              width: w,
+              height: w,
+              fill: 'white',
+              stroke: 'black',
+              strokeWidth: 1,
+              selectable: false,
+              row: row,
+              col: col
+            })
+            canvas.add(rect)
+          }
+        }
+      }
+
+      // 添加坐标轴和盒子
+      for (let i = 0; i < cols; i++) {
+        const text = new fabric.Text(String(i + 1), {
+          left: w + spacing + i * (w + spacing) + w / 2,
+          top: spacing / 2,
+          fontSize: 14,
+          originX: 'center',
+          originY: 'center',
+          selectable: false
+        })
+        canvas.add(text)
+      }
+
+      for (let j = 0; j < rows; j++) {
+        const text = new fabric.Text(String(j + 1), {
+          left: spacing / 2,
+          top: w + spacing + j * (w + spacing) + w / 2,
+          fontSize: 14,
+          originX: 'center',
+          originY: 'center',
+          selectable: false
+        })
+        canvas.add(text)
+      }
+
+      // 选区变量
+      let isSelecting = false
+      let selectionRect = null
+      let startX = 0
+      let startY = 0
+      let origX = 0
+      let origY = 0
+
+      // 鼠标按下事件
+      canvas.on('mouse:down', function (options) {
+        const pointer = canvas.getPointer(options.e)
+        const x = pointer.x
+        const y = pointer.y
+        const obj = canvas.getActiveObject()
+
+        if (obj && obj.type === 'rect') {
+          const fill = obj.get('fill') === 'green' ? 'white' : 'green'
+          obj.set('fill', fill)
+          canvas.renderAll()
+          return
+        }
+
+        isSelecting = true
+        startX = x
+        startY = y
+        origX = startX
+        origY = startY
+
+        selectionRect = new fabric.Rect({
+          left: startX,
+          top: startY,
+          width: 0,
+          height: 0,
+          fill: 'rgba(0, 0, 255, 0.3)',
+          selectable: false
+        })
+        canvas.add(selectionRect)
+      })
+
+      // 鼠标移动事件
+      canvas.on('mouse:move', function (options) {
+        if (!isSelecting) return
+        const pointer = canvas.getPointer(options.e)
+
+        selectionRect.set({
+          width: Math.abs(startX - pointer.x),
+          height: Math.abs(startY - pointer.y),
+          left: Math.min(pointer.x, startX),
+          top: Math.min(pointer.y, startY)
+        })
+
+        selectionRect.setCoords()
+        canvas.renderAll()
+      })
+
+      // 鼠标抬起事件
+      canvas.on('mouse:up', function () {
+        isSelecting = false
+
+        // 选区的最终位置
+        const selLeft = selectionRect.left
+        const selTop = selectionRect.top
+        const selRight = selectionRect.left + selectionRect.width
+        const selBottom = selectionRect.top + selectionRect.height
+
+        // 遍历所有格子，确定哪些被选中
+        const objects = canvas.getObjects('rect')
+        const selectedIndexes = []
+
+        objects.forEach((obj) => {
+          if (obj === selectionRect) return
+
+          const objLeft = obj.left
+          const objTop = obj.top
+          const objRight = obj.left + obj.width
+          const objBottom = obj.top + obj.height
+
+          if (
+            objLeft > selRight ||
+            objRight < selLeft ||
+            objTop > selBottom ||
+            objBottom < selTop
+          ) {
+            // Object is outside selection box
+            return
+          }
+
+          // obj.set('fill', 'green');
+          obj.get('fill') === 'green'
+            ? obj.set('fill', 'white')
+            : obj.set('fill', 'green')
+          selectedIndexes.push({ row: obj.row, col: obj.col })
+        })
+
+        canvas.renderAll()
+        canvas.remove(selectionRect)
+        selectionRect = null // 清空选区对象
+
+        console.log('Selected indexes:', selectedIndexes)
+      })
+
+      // 拖拽选区时不移动选区位置
+      canvas.on('object:moving', function (e) {
+        if (e.target === selectionRect) {
+          e.target.set({
+            left: origX,
+            top: origY
+          })
+        }
+      })
+    </script>
+  </body>
+</html>

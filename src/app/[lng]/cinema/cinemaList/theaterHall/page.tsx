@@ -3,17 +3,16 @@ import React, { useState, useEffect } from 'react'
 import { Table, Button, Space, Row } from 'antd'
 import type { TableColumnsType } from 'antd'
 import { useRouter, useSearchParams } from 'next/navigation'
-import SeatModal from '@/dialog/seatModal'
+import SeatModal from '@/dialog/seatModal/seatModal'
 import http from '@/api'
 import { PageProps } from '@/app/[lng]/layout'
 import { useTranslation } from '@/app/i18n/client'
 import TheaterHallModal from '@/dialog/theaterHallModal'
 import { CheckPermission } from '@/components/checkPermission'
 
-export default function Page({ params: { lng } }: PageProps) {  
+export default function Page({ params: { lng } }: PageProps) {
   const [modal, setModal] = useState<any>({
     data: [],
-    columnCount: 0,
     show: false
   })
   const [theaterHallModal, setTheaterHallModal] = useState<any>({
@@ -87,19 +86,24 @@ export default function Page({ params: { lng } }: PageProps) {
               <Button
                 type="primary"
                 onClick={() => {
-                  http({
-                    url: 'theater/hall/seat',
-                    method: 'get',
-                    params: {
-                      theaterHallId: row.id
-                    }
-                  }).then((res) => {
-                    setModal({
-                      data: res.data,
-                      columnCount: row.columnCount,
-                      show: true
-                    })
+                  setModal({
+                    data: row,
+                    show: true
                   })
+                  // http({
+                  //   url: 'theater/hall/seat',
+                  //   method: 'get',
+                  //   params: {
+                  //     theaterHallId: row.id
+                  //   }
+                  // }).then((res) => {
+                  //   setModal({
+                  //     data: res.data,
+                  //     rowCount: row.rowCount,
+                  //     columnCount: row.columnCount,
+                  //     show: true
+                  //   })
+                  // })
                 }}
               >
                 {common('button.seatDetail')}
