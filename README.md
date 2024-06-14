@@ -18,7 +18,23 @@ Open [http://localhost:3000/zh-CN/movie](http://localhost:3000/zh-CN/movie) with
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
+## language
+
+- Chinese
+- Japanese
+
 ## stack
 
 ![React](public/logo/React.png)
 ![React](public/logo/TypeScript.png)
+
+## screenshot
+
+![login](./screenshot/01.png)
+![movie list](./screenshot/02.png)
+![movie detail](./screenshot/03.png)
+![character](./screenshot/04.png)
+![showtime](./screenshot/05.png)
+![menu](./screenshot/06.png)
+![permission](./screenshot/07.png)
+![button](./screenshot/08.png)
