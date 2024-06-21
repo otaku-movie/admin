@@ -50,10 +50,10 @@
     "login": "登录",
     "ticketType": "电影票类型",
     "theaterHallDetail": "影厅详情",
-    "seatDetail": "座位详情",
     "commentList": "评论列表",
     "configPermission": "配置权限",
     "configRole": "配置角色",
-    "seatSelectedDetail": "选座详情"
+    "seatSelectedDetail": "选座详情",
+    "configSeat": "配置座位"
   }
 }

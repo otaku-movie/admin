@@ -38,16 +38,6 @@ export interface SpecItem {
   description: string
 }
 
-export interface seatItem {
-  id: number
-  seatType: number
-  xaxis: number
-  xname: string
-  yaxis: number
-  zaxis: number
-  selected: boolean
-}
-
 export interface Movie {
   id: number
   cover: string
@@ -117,3 +107,27 @@ export type character = base
 export type staff = base
 
 export type level = base
+
+export interface Area {
+  id?: number
+  color?: string
+  name?: string
+  price?: number
+  hover: boolean
+  // selected: boolean
+}
+
+export interface SeatItem {
+  type: 'seat' | 'aisle'
+  seatPositionGroup: string | null
+  show: boolean
+  disabled: boolean
+  wheelChair: boolean
+  x: number
+  y: number
+  z: number
+  selected: boolean
+  left?: number
+  top?: number
+  area: Area | null
+}

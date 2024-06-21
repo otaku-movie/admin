@@ -7,8 +7,26 @@
     "seatCount": "座位数",
     "action": "操作"
   },
+  "areaModal": {
+    "title": "配置区域",
+    "message": {
+      "max": "区域数量最大不能超过5个",
+      "required": "区域选择数量不能为空"
+    },
+    "form": {
+      "name": {
+        "label": "区域名称",
+        "required": "请输入区域名称",
+        "repeat": "区域名称不能重复"
+      },
+      "price": {
+        "label": "价格",
+        "required": "请输入价格"
+      }
+    }
+  },
   "seatModal": {
-    "titlle": "配置座位",
+    "titlle": "配置过道",
     "message": {
       "required": "过道配置不能为空",
       "repeat": "过道重复",

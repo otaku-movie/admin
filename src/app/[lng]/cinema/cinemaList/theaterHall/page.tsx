@@ -106,7 +106,7 @@ export default function Page({ params: { lng } }: PageProps) {
                   // })
                 }}
               >
-                {common('button.seatDetail')}
+                {common('button.configSeat')}
               </Button>
             </CheckPermission>
             <CheckPermission code="">

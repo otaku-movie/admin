@@ -196,6 +196,10 @@ export function RolePermission(props: modalProps) {
             buttonId
           }
         }).then(() => {
+          const roleId = localStorage.getItem('roleId')
+          if (roleId && props.data.id === +roleId) {
+            location.reload()
+          }
           props?.onConfirm?.()
         })
       }}
