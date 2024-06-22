@@ -38,10 +38,6 @@
       }
     }
   },
-  "message": {
-    "notPermission": "没有权限",
-    "save": "保存成功"
-  },
   "button": {
     "add": "添加",
     "edit": "编辑",
@@ -54,6 +50,11 @@
     "configPermission": "配置权限",
     "configRole": "配置角色",
     "seatSelectedDetail": "选座详情",
-    "configSeat": "配置座位"
+    "configSeat": "配置座位",
+    "saveSeatConfig": "保存座位配置",
+    "saveSelectSeat": "确认选座",
+    "configAisle": "配置过道",
+    "configArea": "配置区域",
+    "cancel": "取消"
   }
 }

@@ -82,7 +82,7 @@ export default function Page({ params: { lng } }: PageProps) {
       render: (_, row) => {
         return (
           <Space>
-            <CheckPermission code="">
+            <CheckPermission code="theaterHall.saveSeatConfig">
               <Button
                 type="primary"
                 onClick={() => {
@@ -90,26 +90,12 @@ export default function Page({ params: { lng } }: PageProps) {
                     data: row,
                     show: true
                   })
-                  // http({
-                  //   url: 'theater/hall/seat',
-                  //   method: 'get',
-                  //   params: {
-                  //     theaterHallId: row.id
-                  //   }
-                  // }).then((res) => {
-                  //   setModal({
-                  //     data: res.data,
-                  //     rowCount: row.rowCount,
-                  //     columnCount: row.columnCount,
-                  //     show: true
-                  //   })
-                  // })
                 }}
               >
                 {common('button.configSeat')}
               </Button>
             </CheckPermission>
-            <CheckPermission code="">
+            <CheckPermission code="theaterHall.save">
               <Button
                 type="primary"
                 onClick={() => {
@@ -132,7 +118,7 @@ export default function Page({ params: { lng } }: PageProps) {
                 {common('button.edit')}
               </Button>
             </CheckPermission>
-            <CheckPermission code="">
+            <CheckPermission code="theaterHall.remove">
               <Button type="primary" danger>
                 {common('button.remove')}
               </Button>
@@ -179,6 +165,7 @@ export default function Page({ params: { lng } }: PageProps) {
       />
       <SeatModal
         type="create"
+        permission="configSeat"
         show={modal.show}
         data={modal.data}
         onConfirm={() => {

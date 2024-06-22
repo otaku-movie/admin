@@ -60,10 +60,14 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
       dataIndex: 'homePage'
     },
     {
+      title: t('table.maxSelectSeatCount'),
+      dataIndex: 'maxSelectSeatCount'
+    },
+    {
       title: t('table.action'),
       key: 'operation',
       fixed: 'right',
-      // width: 200,
+      width: 200,
       render: (_, row) => {
         return (
           <Space>

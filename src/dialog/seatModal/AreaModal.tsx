@@ -64,7 +64,7 @@ export function AreaModal(props: modalProps) {
     'yellow'
   ])
   const [selectedRows, setSelectedRows] = useState<Query[]>([])
-  let [colorIndex, setColorIndex] = useState(0)
+  const [colorIndex, setColorIndex] = useState(0)
 
   const columns: TableColumnsType<Query> = [
     {
@@ -72,7 +72,7 @@ export function AreaModal(props: modalProps) {
       dataIndex: 'name'
     },
     {
-      title: 'color',
+      title: t('areaModal.table.color'),
       dataIndex: 'color'
     },
     {
@@ -80,7 +80,7 @@ export function AreaModal(props: modalProps) {
       dataIndex: 'price'
     },
     {
-      title: t('table.action'),
+      title: t('areaModal.table.action'),
       key: 'operation',
       width: 100,
       render: (_, row, index: number) => {
@@ -179,11 +179,6 @@ export function AreaModal(props: modalProps) {
                 selectedRowKeys: React.Key[],
                 selectedRows: Query[]
               ) => {
-                console.log(
-                  `selectedRowKeys: ${selectedRowKeys}`,
-                  'selectedRows: ',
-                  selectedRows
-                )
                 setSelectedRows(selectedRows)
               }
             }}

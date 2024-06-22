@@ -18,6 +18,7 @@ export interface Cinema {
   homePage: string
   tel: string
   address: string
+  maxSelectSeatCount: number
 }
 
 export interface theaterHall {

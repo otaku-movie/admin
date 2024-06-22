@@ -5,7 +5,8 @@
     "tel": "电话",
     "action": "操作",
     "description": "简介",
-    "homePage": "官网"
+    "homePage": "官网",
+    "maxSelectSeatCount": "可选座位数"
   },
   "message": {
     "remove": {

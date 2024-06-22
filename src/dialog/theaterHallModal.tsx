@@ -7,6 +7,7 @@ import http from '@/api'
 import { languageType } from '@/config'
 
 interface Query {
+  id?: number
   name: string
   cinemaSpecId: number | undefined
   rowCount?: number
@@ -50,7 +51,7 @@ export default function TheaterHallModal(props: TheaterHallModalProps) {
     }
     form.validateFields().then(() => {
       if (
-        props.data.rowCount !== query.rowCount || 
+        props.data.rowCount !== query.rowCount ||
         props.data.columnCount !== query.columnCount
       ) {
         Modal.confirm({
@@ -66,7 +67,6 @@ export default function TheaterHallModal(props: TheaterHallModalProps) {
       } else {
         save()
       }
-     
     })
   }
 
@@ -148,12 +148,16 @@ export default function TheaterHallModal(props: TheaterHallModalProps) {
           ]}
         >
           <Space>
-            <Select style={{ width: 200 }} value={query.cinemaSpecId} onChange={(val) => {
-              setQuery({
-                ...query,
-                cinemaSpecId: val
-              })
-            }}>
+            <Select
+              style={{ width: 200 }}
+              value={query.cinemaSpecId}
+              onChange={(val) => {
+                setQuery({
+                  ...query,
+                  cinemaSpecId: val
+                })
+              }}
+            >
               {specList.map((item: any) => {
                 return (
                   <Select.Option value={item.id} key={item.id}>
@@ -178,6 +182,7 @@ export default function TheaterHallModal(props: TheaterHallModalProps) {
             style={{ width: '100%' }}
             value={query.rowCount}
             precision={0}
+            disabled={!!query?.id}
             onChange={(val) => {
               setQuery({
                 ...query,
@@ -200,6 +205,7 @@ export default function TheaterHallModal(props: TheaterHallModalProps) {
             style={{ width: '100%' }}
             value={query.columnCount}
             precision={0}
+            disabled={!!query?.id}
             onChange={(val) => {
               setQuery({
                 ...query,

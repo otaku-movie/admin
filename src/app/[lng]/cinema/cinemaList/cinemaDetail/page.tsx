@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import { Button, Form, Input } from 'antd'
+import { Button, Form, Input, InputNumber } from 'antd'
 import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '@/app/[lng]/layout'
 import { Cinema } from '@/type/api'
@@ -11,7 +11,9 @@ import { CheckPermission } from '@/components/checkPermission'
 export default function Page({ params: { lng } }: PageProps) {
   const { t } = useTranslation(lng, 'cinemaDetail')
   const { t: common } = useTranslation(lng, 'common')
-  const [data, setData] = useState<Partial<Cinema>>({})
+  const [data, setData] = useState<Partial<Cinema>>({
+    maxSelectSeatCount: 5
+  })
   const [form] = Form.useForm()
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -27,9 +29,9 @@ export default function Page({ params: { lng } }: PageProps) {
       }).then((res) => {
         console.log(res.data)
         form.setFieldsValue(res.data)
-        // setData({
-        //   ...res.data
-        // })
+        setData({
+          ...res.data
+        })
       })
     }
   }
@@ -130,6 +132,27 @@ export default function Page({ params: { lng } }: PageProps) {
               })
             }}
           ></Input>
+        </Form.Item>
+        <Form.Item
+          label={t('form.maxSelectSeatCount.label')}
+          rules={[
+            { required: false, message: t('form.maxSelectSeatCount.required') }
+          ]}
+          name="maxSelectSeatCount"
+        >
+          <InputNumber
+            min={1}
+            value={data.maxSelectSeatCount}
+            precision={0}
+            placeholder={t('seatModal.form.start.placeholder')}
+            onChange={(val) => {
+              data.maxSelectSeatCount = val as number
+
+              setData({
+                ...data
+              })
+            }}
+          />
         </Form.Item>
 
         <Form.Item wrapperCol={{ offset: 6, span: 16 }}>

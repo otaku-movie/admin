@@ -13,6 +13,10 @@
       "max": "区域数量最大不能超过5个",
       "required": "区域选择数量不能为空"
     },
+    "table": {
+      "color": "颜色",
+      "action": "操作"
+    },
     "form": {
       "name": {
         "label": "区域名称",
@@ -27,6 +31,15 @@
   },
   "seatModal": {
     "titlle": "配置过道",
+    "seatCount": "座位数",
+    "dropdownItem": {
+      "configCoupleSeat": "配置情侣座",
+      "configArea": "配置区域（最大5个）",
+      "configWheelChairSeat": "配置轮椅座",
+      "show": "显示/隐藏 座位",
+      "disabled": "禁用/启用 座位",
+      "reset": "重置"
+    },
     "message": {
       "required": "过道配置不能为空",
       "repeat": "过道重复",
@@ -36,7 +49,11 @@
       "type": {
         "label": "过道类型",
         "required": "请选择过道类型",
-        "placeholder": "请选择行或者列"
+        "placeholder": "请选择行或者列",
+        "select": {
+          "row": "行",
+          "column": "列"
+        }
       },
       "start": {
         "label": "开始位置",

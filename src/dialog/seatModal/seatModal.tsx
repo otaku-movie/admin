@@ -23,6 +23,8 @@ import { SeatItem, Area } from '@/type/api'
 import classNames from 'classnames'
 import { AreaModal } from './AreaModal'
 import { CheckPermission } from '@/components/checkPermission'
+import * as wheelChair from '@/assets/font/wheelChair.svg'
+import Image from 'next/image'
 
 // import { Draw } from './store'
 
@@ -30,6 +32,7 @@ interface ModalProps {
   type: 'create' | 'edit'
   show?: boolean
   data?: any
+  permission: 'configSeat' | 'selctSeat'
   onConfirm?: () => void
   onCancel?: () => void
 }
@@ -60,6 +63,7 @@ export default function SeatModal(props: ModalProps) {
   const [dragSelected, setDragSelected] = useState<any>(new Set())
   const [hoverSelected, setHoverSelected] = useState<any>(new Set())
   const [showDropDown, setShowDropDown] = useState(false)
+  const [maxSelectSeatCount, setMaxSelectSeatCount] = useState(0)
   const dragBoxRef = useRef({
     startX: 0,
     startY: 0,
@@ -89,6 +93,10 @@ export default function SeatModal(props: ModalProps) {
   const { t } = useTranslation(
     navigator.language as languageType,
     'theaterHall'
+  )
+  const { t: common } = useTranslation(
+    navigator.language as languageType,
+    'common'
   )
   const size = 50
   const gap = 10
@@ -284,14 +292,18 @@ export default function SeatModal(props: ModalProps) {
   }
 
   useEffect(() => {
-    window.addEventListener('mousedown', handleMouseDown)
-    window.addEventListener('mousemove', handleMouseMove)
-    window.addEventListener('mouseup', handleMouseUp)
+    if (props.permission === 'configSeat') {
+      window.addEventListener('mousedown', handleMouseDown)
+      window.addEventListener('mousemove', handleMouseMove)
+      window.addEventListener('mouseup', handleMouseUp)
+    }
 
     return () => {
-      window.removeEventListener('mousedown', handleMouseDown)
-      window.removeEventListener('mousemove', handleMouseMove)
-      window.removeEventListener('mouseup', handleMouseUp)
+      if (props.permission === 'configSeat') {
+        window.removeEventListener('mousedown', handleMouseDown)
+        window.removeEventListener('mousemove', handleMouseMove)
+        window.removeEventListener('mouseup', handleMouseUp)
+      }
     }
   }, [mousedown, data])
 
@@ -323,6 +335,7 @@ export default function SeatModal(props: ModalProps) {
           })
         }
       })
+      setMaxSelectSeatCount(res.data.maxSelectSeatCount)
       setModal({
         ...modal,
         data: res.data.aisle
@@ -374,85 +387,85 @@ export default function SeatModal(props: ModalProps) {
         }}
       >
         <Drawer
-          title={`座位数：${seatCount}`}
+          title={`${t('seatModal.seatCount')}：${seatCount}`}
           placement="right"
           open={props.show}
           maskClosable={false}
           onClose={props.onCancel}
           width={'fit-content'}
-          // style={{
-          //   minWidth: '600px',
-          //   width: '90%'
-          // }}
           footer={
-            <Space>
-              <Button
-                type="primary"
-                onClick={() => {
-                  setModal({
-                    ...modal,
-                    show: true
-                  })
-                }}
-              >
-                配置过道
-              </Button>
-              <Button
-                type="primary"
-                onClick={() => {
-                  setAreaModal({
-                    ...areaModal,
-                    show: true
-                  })
-                }}
-              >
-                配置区域
-              </Button>
-            </Space>
+            props.permission === 'configSeat' ? (
+              <Space>
+                <Button
+                  type="primary"
+                  onClick={() => {
+                    setModal({
+                      ...modal,
+                      show: true
+                    })
+                  }}
+                >
+                  {common('button.configAisle')}
+                </Button>
+                <Button
+                  type="primary"
+                  onClick={() => {
+                    setAreaModal({
+                      ...areaModal,
+                      show: true
+                    })
+                  }}
+                >
+                  {common('button.configArea')}
+                </Button>
+              </Space>
+            ) : null
           }
           extra={
             <Space>
-              <Button onClick={props?.onCancel}>取消</Button>
-              <Button type="primary" onClick={props?.onCancel}>
-                保存座位
-              </Button>
-              <Button
-                type="primary"
-                onClick={() => {
-                  console.log(area)
-                  // return
-                  const areaData = areaModal.data.map((item) => {
-                    return {
-                      ...item,
-                      seat: [...area[item.name]]
-                    }
-                  })
-                  console.log(areaData)
-                  http({
-                    url: 'theater/hall/seat/save',
-                    method: 'post',
-                    data: {
-                      theaterHallId: props.data.id,
-                      seat: data.reduce((total: SeatItem[], current) => {
-                        if (current.type === 'seat') {
-                          return total.concat(
-                            ...current.children.filter((children) => {
-                              return children.type === 'seat'
-                            })
-                          )
+              <Button onClick={props?.onCancel}>{common('button.cancel')}</Button>
+              {props.permission === 'selctSeat' ? (
+                <Button type="primary" onClick={props?.onCancel}>
+                  {common('button.saveSelectSeat')}
+                </Button>
+              ) : null}
+              {props.permission === 'configSeat' ? (
+                <CheckPermission code="theaterHall.saveSeatConfig">
+                  <Button
+                    type="primary"
+                    onClick={() => {
+                      http({
+                        url: 'theater/hall/seat/save',
+                        method: 'post',
+                        data: {
+                          theaterHallId: props.data.id,
+                          seat: data.reduce((total: SeatItem[], current) => {
+                            if (current.type === 'seat') {
+                              return total.concat(
+                                ...current.children.filter((children) => {
+                                  return children.type === 'seat'
+                                })
+                              )
+                            }
+                            return total
+                          }, []),
+                          area: areaModal.data.map((item) => {
+                            return {
+                              ...item,
+                              seat: [...area[item.name]]
+                            }
+                          }),
+                          aisle: modal.data
                         }
-                        return total
-                      }, []),
-                      area: areaData,
-                      aisle: modal.data
-                    }
-                  }).then(() => {
-                    // props.onConfirm?.()
-                  })
-                }}
-              >
-                保存座位配置
-              </Button>
+                      }).then(() => {
+                        props.onConfirm?.()
+                      })
+                    }}
+                  >
+                    {common('button.saveSeatConfig')}
+                  </Button>
+                </CheckPermission>
+              ) : null}
             </Space>
           }
         >
@@ -508,6 +521,25 @@ export default function SeatModal(props: ModalProps) {
                     break
                   case '3':
                     // 轮椅座
+                    setData(
+                      data.map((item) => {
+                        return {
+                          ...item,
+                          children: item.children.map((children) => {
+                            const key = `${children.x}-${children.y}`
+
+                            if (dragSelected.has(key)) {
+                              return {
+                                ...children,
+                                wheelChair: true
+                              }
+                            } else {
+                              return children
+                            }
+                          })
+                        }
+                      })
+                    )
                     break
                   case '4':
                     // 是否显示
@@ -519,7 +551,6 @@ export default function SeatModal(props: ModalProps) {
                             const key = `${children.x}-${children.y}`
 
                             if (dragSelected.has(key)) {
-                              console.log(children)
                               if (
                                 children.area?.name &&
                                 area[children.area?.name]
@@ -544,7 +575,6 @@ export default function SeatModal(props: ModalProps) {
                     )
                     setArea(area)
                     break
-                    break
                   case '5':
                     // 5 是否禁用
                     setData(
@@ -565,7 +595,6 @@ export default function SeatModal(props: ModalProps) {
 
                               return {
                                 ...children,
-                                show: true,
                                 disabled: !children.disabled,
                                 area: {
                                   hover: false,
@@ -580,7 +609,6 @@ export default function SeatModal(props: ModalProps) {
                       })
                     )
                     setArea(area)
-                    break
                     break
                   case '6':
                     setData(
@@ -603,6 +631,7 @@ export default function SeatModal(props: ModalProps) {
                                 ...children,
                                 show: true,
                                 disabled: false,
+                                wheelChair: false,
                                 seatPositionGroup: null,
                                 area: {
                                   hover: false,
@@ -622,27 +651,27 @@ export default function SeatModal(props: ModalProps) {
               },
               items: [
                 {
-                  label: '配置区域（最大5个）',
+                  label: t('seatModal.dropdownItem.configArea'),
                   key: '1'
                 },
                 {
-                  label: '配置情侣座',
+                  label: t('seatModal.dropdownItem.configCoupleSeat'),
                   key: '2'
                 },
                 {
-                  label: '配置轮椅座',
+                  label: t('seatModal.dropdownItem.configWheelChairSeat'),
                   key: '3'
                 },
                 {
-                  label: '是否显示',
+                  label: t('seatModal.dropdownItem.show'),
                   key: '4'
                 },
                 {
-                  label: '禁用/启用 座位',
+                  label: t('seatModal.dropdownItem.disabled'),
                   key: '5'
                 },
                 {
-                  label: '重置',
+                  label: t('seatModal.dropdownItem.reset'),
                   key: '6'
                 }
               ]
@@ -660,8 +689,6 @@ export default function SeatModal(props: ModalProps) {
               }}
             ></section>
           </Dropdown>
-
-          {/* <Grid></Grid> */}
           <section className="seat-container">
             <ul className="selected-seat">
               {selectedSeat.map((item, index: number) => {
@@ -790,7 +817,7 @@ export default function SeatModal(props: ModalProps) {
                     const dataset = el.dataset
 
                     const singleSelect = (x: number, y: number) => {
-                      if (selectedSeat.length < 5) {
+                      if (selectedSeat.length < maxSelectSeatCount) {
                         data[x].children[y].selected =
                           !data[x].children[y].selected
 
@@ -826,7 +853,9 @@ export default function SeatModal(props: ModalProps) {
                           setSelectedSeat([...selectedSeat])
                         } else {
                           message.warning(
-                            t('seatModal.message.max', { max: 5 })
+                            t('seatModal.message.max', {
+                              max: maxSelectSeatCount
+                            })
                           )
                         }
                       }
@@ -855,7 +884,7 @@ export default function SeatModal(props: ModalProps) {
                         setData([...data])
                       } else if (
                         split &&
-                        split.length + selectedSeat.length > 5
+                        split.length + selectedSeat.length > maxSelectSeatCount
                       ) {
                         message.warning(t('seatModal.message.max', { max: 5 }))
                       } else {
@@ -964,7 +993,16 @@ export default function SeatModal(props: ModalProps) {
                                   data-row-index={index}
                                   data-column-index={childrenIndex}
                                 >
-                                  <div>{key}</div>
+                                  <div>
+                                    {children.wheelChair ? (
+                                      <Image
+                                        src={wheelChair}
+                                        width={40}
+                                      ></Image>
+                                    ) : (
+                                      key
+                                    )}
+                                  </div>
                                 </div>
                               )
                             } else {
@@ -997,7 +1035,7 @@ export default function SeatModal(props: ModalProps) {
         </Drawer>
       </ConfigProvider>
       <Modal
-        title={`配置过道`}
+        title={t('seatModal.titlle')}
         open={modal.show}
         width="550px"
         onOk={() => {
@@ -1083,8 +1121,8 @@ export default function SeatModal(props: ModalProps) {
                         })
                       }}
                     >
-                      <Select.Option value="row">行</Select.Option>
-                      <Select.Option value="column">列</Select.Option>
+                      <Select.Option value="row">{t('seatModal.form.type.select.row')}</Select.Option>
+                      <Select.Option value="column">{t('seatModal.form.type.select.column')}</Select.Option>
                     </Select>
                     <InputNumber
                       min={1}
@@ -1134,7 +1172,7 @@ export default function SeatModal(props: ModalProps) {
                 }}
                 icon={<PlusOutlined />}
               >
-                Add field
+                {common('button.add')}
               </Button>
             </Space>
           </Form.Item>
@@ -1178,17 +1216,10 @@ export default function SeatModal(props: ModalProps) {
               })
             }
           })
-          console.log(area)
-          console.log(map)
+
           setArea({ ...area })
           setDragSelected(new Set())
           setData(map as seat[])
-
-          // getData()
-          // setModal({
-          //   ...modal,
-          //   show: false
-          // })
         }}
       ></AreaModal>
     </>
