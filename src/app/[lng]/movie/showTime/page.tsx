@@ -217,17 +217,12 @@ export default function MoviePage({ params: { lng } }: PageProps) {
             <CheckPermission code="">
               <Button
                 onClick={() => {
-                  http({
-                    url: '/movie_show_time/select_seat/list',
-                    method: 'get',
-                    params: {
-                      id: row.id
-                    }
-                  }).then((res) => {
-                    setModal({
-                      data: res.data,
-                      show: true
-                    })
+                  setModal({
+                    data: {
+                      movieShowTimeId: row.id,
+                      id: row.theaterHallId
+                    },
+                    show: true
                   })
                 }}
               >
@@ -422,6 +417,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
         type="create"
         show={modal.show}
         data={modal.data}
+        permission="selctSeat"
         onConfirm={() => {
           setModal({
             ...modal,

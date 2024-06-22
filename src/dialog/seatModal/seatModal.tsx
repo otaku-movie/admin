@@ -56,12 +56,12 @@ interface ModalState {
 
 export default function SeatModal(props: ModalProps) {
   const [data, setData] = useState<seat[]>([])
-  const [selectedSeat, setSelectedSeat] = useState<any[]>([])
+  const [selectedSeat, setSelectedSeat] = useState<SeatItem[]>([])
   const [mousedown, setMousedown] = useState(false)
   const dragContainerRef = useRef<HTMLElement | null>(null)
   const seatContainerRef = useRef<HTMLElement | null>(null)
-  const [dragSelected, setDragSelected] = useState<any>(new Set())
-  const [hoverSelected, setHoverSelected] = useState<any>(new Set())
+  const [dragSelected, setDragSelected] = useState<Set<string>>(new Set())
+  const [hoverSelected, setHoverSelected] = useState<Set<string>>(new Set())
   const [showDropDown, setShowDropDown] = useState(false)
   const [maxSelectSeatCount, setMaxSelectSeatCount] = useState(0)
   const dragBoxRef = useRef({
@@ -121,7 +121,7 @@ export default function SeatModal(props: ModalProps) {
         if (findIndex !== -1) {
           updatedData = updatedData.map((row) => {
             const newRow: any = [...row.children]
-            newRow.splice(findIndex, 0, { type: 'aisle' })
+            newRow.splice(findIndex + 1, 0, { type: 'aisle' })
             return { ...row, children: newRow }
           })
         }
@@ -135,7 +135,7 @@ export default function SeatModal(props: ModalProps) {
             type: 'aisle',
             children: []
           }
-          updatedData.splice(findIndex, 0, newRow)
+          updatedData.splice(findIndex + 1, 0, newRow)
         }
       }
     })
@@ -308,11 +308,16 @@ export default function SeatModal(props: ModalProps) {
   }, [mousedown, data])
 
   const getData = () => {
+    const newSelectSeat = []
     http({
-      url: 'theater/hall/seat/detail',
+      url:
+        props.permission === 'configSeat'
+          ? 'theater/hall/seat/detail'
+          : 'movie_show_time/select_seat/list',
       method: 'get',
       params: {
-        theaterHallId: props.data.id
+        theaterHallId: props.data.id,
+        movieShowTimeId: props.data.movieShowTimeId
       }
     }).then((res) => {
       const result = res.data.seat.map((item: seat) => {
@@ -320,6 +325,9 @@ export default function SeatModal(props: ModalProps) {
           ...item,
           type: 'seat',
           children: item.children.map((children: any) => {
+            if (children.selected) {
+              newSelectSeat.push(children)
+            }
             if (children.area) {
               // eslint-disable-next-line
               area[children.area.name] = new Set([
@@ -335,6 +343,7 @@ export default function SeatModal(props: ModalProps) {
           })
         }
       })
+      setSelectedSeat(newSelectSeat)
       setMaxSelectSeatCount(res.data.maxSelectSeatCount)
       setModal({
         ...modal,
@@ -352,7 +361,6 @@ export default function SeatModal(props: ModalProps) {
 
   useEffect(() => {
     if (props.show) {
-      // setData([])
       getData()
       // const result = generate2DArray()
       // const aisle = buildAisle(result)
@@ -423,9 +431,31 @@ export default function SeatModal(props: ModalProps) {
           }
           extra={
             <Space>
-              <Button onClick={props?.onCancel}>{common('button.cancel')}</Button>
+              <Button onClick={props?.onCancel}>
+                {common('button.cancel')}
+              </Button>
               {props.permission === 'selctSeat' ? (
-                <Button type="primary" onClick={props?.onCancel}>
+                <Button
+                  type="primary"
+                  onClick={() => {
+                    http({
+                      url: 'movie_show_time/select_seat/save',
+                      method: 'post',
+                      data: {
+                        theaterHallId: props.data.id,
+                        movieShowTimeId: props.data.movieShowTimeId,
+                        seatPosition: selectedSeat.map((item) => {
+                          return {
+                            x: item.x,
+                            y: item.y
+                          }
+                        })
+                      }
+                    }).then(() => {
+                      props.onConfirm?.()
+                    })
+                  }}
+                >
                   {common('button.saveSelectSeat')}
                 </Button>
               ) : null}
@@ -485,9 +515,9 @@ export default function SeatModal(props: ModalProps) {
                   case '2':
                     // 情侣座
                     if (dragSelected.size > 1) {
-                      const position: [string, string][] = []
+                      const position: string[][] = []
                       for (const item of dragSelected.keys()) {
-                        position.push(item.split('-'))
+                        position.push(item.split('-') as unknown as string[])
                       }
 
                       const every = position.every((item) => {
@@ -1121,8 +1151,12 @@ export default function SeatModal(props: ModalProps) {
                         })
                       }}
                     >
-                      <Select.Option value="row">{t('seatModal.form.type.select.row')}</Select.Option>
-                      <Select.Option value="column">{t('seatModal.form.type.select.column')}</Select.Option>
+                      <Select.Option value="row">
+                        {t('seatModal.form.type.select.row')}
+                      </Select.Option>
+                      <Select.Option value="column">
+                        {t('seatModal.form.type.select.column')}
+                      </Select.Option>
                     </Select>
                     <InputNumber
                       min={1}
