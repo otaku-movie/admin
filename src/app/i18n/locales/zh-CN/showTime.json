@@ -23,6 +23,24 @@
       "success": "删除成功"
     }
   },
+  "createOrderModal": {
+    "title": "确认订单",
+    "table": {
+      "name": "作品",
+      "spec": "上映规格",
+      "seat": "座位信息",
+      "area": "区域",
+      "price": "价格",
+      "plusPrice": "特殊上映追加价格",
+      "movieTicketType": "电影票类型"
+    },
+    "form": {
+      "movieTicketType": {
+        "label": "电影票类型",
+        "required": "请选择电影票类型"
+      }
+    }
+  },
   "showTimeModal": {
     "title": {
       "create": "添加场次",

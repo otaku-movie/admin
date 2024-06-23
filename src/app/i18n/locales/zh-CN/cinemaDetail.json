@@ -24,6 +24,17 @@
       "label": "最大可选座位数",
       "required": "请输入最大可选座位数"
     },
+    "spec": {
+      "label": "规格",
+      "required": "请选择规格"
+    },
+    "plusPrice": {
+      "required": "请输入特殊上映追加价格"
+    },
     "save": "保存"
+  },
+  "message": {
+    "required": "规格和特殊上映追加价格不能为空",
+    "repeat": "规格不能重复"
   }
 }

@@ -30,6 +30,7 @@ import dayjs from 'dayjs'
 import { CheckPermission } from '@/components/checkPermission'
 import { PageProps } from '../../layout'
 import { showTotal } from '@/utils/pagination'
+import { CreateOrderModal } from '@/dialog/createOrderModal'
 
 interface Query {
   name: string
@@ -48,10 +49,15 @@ export default function MoviePage({ params: { lng } }: PageProps) {
     data: [],
     show: false
   })
+  const [createOrderModal, setCreateOrderModal] = useState<any>({
+    data: [],
+    show: false
+  })
   const [modal, setModal] = useState<any>({
     data: [],
     show: false
   })
+  const [currentRow, setCurrentRow] = useState<{cinemaId?: number, id?: number}>({})
   const getDict = useCommonStore((state) => state.getDict)
   const { t } = useTranslation(lng, 'showTime')
   const { t: common } = useTranslation(lng, 'common')
@@ -144,9 +150,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
     },
     {
       title: t('table.spec'),
-      render(_, row) {
-        return <Dict code={row.theaterHallSpec} name={'cinema_spec'}></Dict>
-      }
+      dataIndex: 'theaterHallSpec'
     },
     {
       title: t('table.open'),
@@ -180,13 +184,13 @@ export default function MoviePage({ params: { lng } }: PageProps) {
     {
       title: t('table.seatSelectionRatio'),
       render(_, row) {
-        return `${row.seatTotal}/${row.selectedSeatCount}`
+        return `${row.seatCount}/${row.selectedSeatCount}`
       }
     },
     {
       title: t('table.attendance'),
       render(_, row) {
-        return `${row.selectedSeatCount / row.seatTotal}%`
+        return `${row.selectedSeatCount || 0 / row.seatCount || 0}%`
       }
     },
     {
@@ -217,6 +221,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
             <CheckPermission code="">
               <Button
                 onClick={() => {
+                  setCurrentRow(row)
                   setModal({
                     data: {
                       movieShowTimeId: row.id,
@@ -229,7 +234,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
                 {common('button.seatSelectedDetail')}
               </Button>
             </CheckPermission>
-            <CheckPermission code="">
+            <CheckPermission code="movieShowTime.save">
               <Button
                 type="primary"
                 onClick={() => {
@@ -251,7 +256,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
                 {common('button.edit')}
               </Button>
             </CheckPermission>
-            <CheckPermission code="">
+            <CheckPermission code="movieShowTime.remove">
               <Button
                 type="primary"
                 danger
@@ -314,7 +319,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
     <section>
       <Space direction="vertical" size={30}>
         <Row justify="end">
-          <CheckPermission code="">
+          <CheckPermission code="movieShowTime.save">
             <Button
               onClick={() => {
                 setShowTimeModal({
@@ -419,9 +424,14 @@ export default function MoviePage({ params: { lng } }: PageProps) {
         data={modal.data}
         permission="selctSeat"
         onConfirm={() => {
-          setModal({
-            ...modal,
-            show: false
+          // setModal({
+          //   ...modal,
+          //   show: false
+          // })
+          setCreateOrderModal({
+            ...createOrderModal,
+            data: currentRow,
+            show: true
           })
         }}
         onCancel={() => {
@@ -449,6 +459,24 @@ export default function MoviePage({ params: { lng } }: PageProps) {
           })
         }}
       ></MovieShowTimeModal>
+        <CreateOrderModal
+        show={createOrderModal.show}
+        type={createOrderModal.type}
+        data={createOrderModal.data}
+        onConfirm={() => {
+          setCreateOrderModal({
+            ...createOrderModal,
+            show: false
+          })
+          getData()
+        }}
+        onCancel={() => {
+          setCreateOrderModal({
+            ...createOrderModal,
+            show: false
+          })
+        }}
+      ></CreateOrderModal>
     </section>
   )
 }

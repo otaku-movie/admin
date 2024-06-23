@@ -255,7 +255,7 @@ export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
             >
               {theaterHallData.map((item) => (
                 <Select.Option value={item.id} key={item.id}>
-                  {item.name}
+                  {item.name}（{item.cinemaSpecName}）
                 </Select.Option>
               ))}
             </Select>

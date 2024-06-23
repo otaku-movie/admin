@@ -1,0 +1,16 @@
+{
+  "table": {
+    "name": "作品",
+    "showTime": "上映场次",
+    "orderNumber": "订单号",
+    "seatNumber": "座位号",
+    "payMethod": "支付方式",
+    "payTime": "支付时间",
+    "payState": "支付状态",
+    "payTotal": "支付总价",
+    "orderTime": "订单创建时间",
+    "orderState": "订单状态",
+    "orderTotal" : "订单总价",
+    "action": "操作"
+  }
+}

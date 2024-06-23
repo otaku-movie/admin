@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import { Table, Button, Space, Input, Row, message, Modal } from 'antd'
+import { Table, Button, Space, Input, Row, message, Modal, Tag } from 'antd'
 import type { TableColumnsType } from 'antd'
 import { useRouter } from 'next/navigation'
 import { useTranslation } from '@/app/i18n/client'
@@ -9,6 +9,7 @@ import http from '@/api'
 import { Query, QueryItem } from '@/components/query'
 import { processPath } from '@/config/router'
 import { CheckPermission } from '@/components/checkPermission'
+import { showTotal } from '@/utils/pagination'
 
 export default function CinemaPage({ params: { lng } }: PageProps) {
   const router = useRouter()
@@ -42,6 +43,31 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
     {
       title: t('table.name'),
       dataIndex: 'name'
+    },
+    {
+      title: t('table.spec'),
+      render(_, row) {
+        return (
+          <Space direction="vertical">
+            {row.spec?.map((item: { id: number; name: string }) => {
+              return (
+                <Tag
+                  key={item.id}
+                  style={{
+                    marginBottom: '10px'
+                  }}
+                >
+                  {item.name}
+                </Tag>
+              )
+            })}
+          </Space>
+        )
+      }
+    },
+    {
+      title: t('table.theaterCount'),
+      dataIndex: 'theaterCount'
     },
     {
       title: t('table.description'),
@@ -194,6 +220,10 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
           pageSize: 10,
           current: page,
           total,
+          showTotal,
+          onChange(page) {
+            getData(page)
+          },
           position: ['bottomCenter']
         }}
       />

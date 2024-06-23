@@ -308,7 +308,7 @@ export default function SeatModal(props: ModalProps) {
   }, [mousedown, data])
 
   const getData = () => {
-    const newSelectSeat = []
+    const newSelectSeat: SeatItem[] = []
     http({
       url:
         props.permission === 'configSeat'

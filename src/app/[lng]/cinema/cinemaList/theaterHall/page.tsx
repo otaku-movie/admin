@@ -1,14 +1,15 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import { Table, Button, Space, Row } from 'antd'
+import { Table, Button, Space, Row, Modal, message } from 'antd'
 import type { TableColumnsType } from 'antd'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import SeatModal from '@/dialog/seatModal/seatModal'
 import http from '@/api'
 import { PageProps } from '@/app/[lng]/layout'
 import { useTranslation } from '@/app/i18n/client'
 import TheaterHallModal from '@/dialog/theaterHallModal'
 import { CheckPermission } from '@/components/checkPermission'
+import { showTotal } from '@/utils/pagination'
 
 export default function Page({ params: { lng } }: PageProps) {
   const [modal, setModal] = useState<any>({
@@ -54,7 +55,7 @@ export default function Page({ params: { lng } }: PageProps) {
     },
     {
       title: t('table.spec'),
-      dataIndex: 'spec'
+      dataIndex: 'cinemaSpecName'
     },
     {
       title: t('table.rowCount'),
@@ -66,13 +67,7 @@ export default function Page({ params: { lng } }: PageProps) {
     },
     {
       title: t('table.seatCount'),
-      render(_, row) {
-        if (row.rowCount && row.columnCount) {
-          return row.rowCount * row.columnCount
-        } else {
-          return 0
-        }
-      }
+      dataIndex: 'seatCount'
     },
     {
       title: '操作',
@@ -119,7 +114,36 @@ export default function Page({ params: { lng } }: PageProps) {
               </Button>
             </CheckPermission>
             <CheckPermission code="theaterHall.remove">
-              <Button type="primary" danger>
+              <Button
+                type="primary"
+                danger
+                onClick={() => {
+                  Modal.confirm({
+                    title: common('button.remove'),
+                    content: t('message.remove.content'),
+                    onCancel() {
+                      console.log('Cancel')
+                    },
+                    onOk() {
+                      return new Promise((resolve, reject) => {
+                        http({
+                          url: 'admin/theater/hall/remove',
+                          method: 'delete',
+                          params: {
+                            id: row.id
+                          }
+                        })
+                          .then((res) => {
+                            message.success(t(res.message))
+                            getData()
+                            resolve(true)
+                          })
+                          .catch(reject)
+                      })
+                    }
+                  })
+                }}
+              >
                 {common('button.remove')}
               </Button>
             </CheckPermission>
@@ -160,6 +184,10 @@ export default function Page({ params: { lng } }: PageProps) {
           pageSize: 10,
           current: page,
           total,
+          showTotal,
+          onChange(page) {
+            getData(page)
+          },
           position: ['bottomCenter']
         }}
       />
@@ -173,6 +201,7 @@ export default function Page({ params: { lng } }: PageProps) {
             ...modal,
             show: false
           })
+          getData()
         }}
         onCancel={() => {
           setModal({

@@ -1,11 +1,13 @@
 {
   "table": {
     "name": "影院名称",
+    "spec": "规格",
     "address": "地址",
     "tel": "电话",
     "action": "操作",
     "description": "简介",
     "homePage": "官网",
+    "theaterCount": "影厅数",
     "maxSelectSeatCount": "可选座位数"
   },
   "message": {

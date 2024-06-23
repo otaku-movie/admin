@@ -36,7 +36,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
   const [query, setQuery] = useState<Partial<Query>>({})
-  const { t } = useTranslation(lng, 'showTime')
+  const { t } = useTranslation(lng, 'order')
   const { t: common } = useTranslation(lng, 'common')
 
   const getData = (page = 1) => {
@@ -91,27 +91,44 @@ export default function MoviePage({ params: { lng } }: PageProps) {
       }
     },
     {
-      title: '场次',
+      title: t('table.showTime'),
       dataIndex: 'startTime'
     },
     {
-      title: '座位号',
+      title: t('table.seatNumber'),
+      dataIndex: ''
+    },
+
+    {
+      title: t('table.orderNumber'),
+      dataIndex: 'startTime'
+    },
+    {
+      title: t('table.orderTotal'),
       dataIndex: ''
     },
     {
-      title: '支付方式',
+      title: t('table.orderTime'),
       dataIndex: ''
     },
     {
-      title: '支付时间',
+      title: t('table.orderState'),
       dataIndex: ''
     },
     {
-      title: '订单时间',
+      title: t('table.payTotal'),
+      dataIndex: 'startTime'
+    },
+    {
+      title: t('table.payTime'),
+      dataIndex: 'startTime'
+    },
+    {
+      title: t('table.payState'),
       dataIndex: ''
     },
     {
-      title: '订单状态',
+      title: t('table.payMethod'),
       dataIndex: ''
     },
     {
@@ -124,14 +141,6 @@ export default function MoviePage({ params: { lng } }: PageProps) {
           <Space>
             <Button
               type="primary"
-              onClick={() => {
-                router.push(`movieDetail?id=${row.id}`)
-              }}
-            >
-              {common('button.edit')}
-            </Button>
-            <Button
-              type="primary"
               danger
               onClick={() => {
                 Modal.confirm({
@@ -142,19 +151,19 @@ export default function MoviePage({ params: { lng } }: PageProps) {
                   },
                   onOk() {
                     return new Promise((resolve, reject) => {
-                      http({
-                        url: 'movie/remove',
-                        method: 'delete',
-                        params: {
-                          id: row.id
-                        }
-                      })
-                        .then(() => {
-                          message.success(t('message.remove.success'))
-                          getData()
-                          resolve(true)
-                        })
-                        .catch(reject)
+                      // http({
+                      //   url: 'movie/remove',
+                      //   method: 'delete',
+                      //   params: {
+                      //     id: row.id
+                      //   }
+                      // })
+                      //   .then(() => {
+                      //     message.success(t('message.remove.success'))
+                      //     getData()
+                      //     resolve(true)
+                      //   })
+                      //   .catch(reject)
                     })
                   }
                 })

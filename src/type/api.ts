@@ -24,6 +24,7 @@ export interface Cinema {
 export interface theaterHall {
   id: number
   name: string
+  cinemaSpecName: string
 }
 
 export interface DictItem {

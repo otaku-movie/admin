@@ -36,7 +36,6 @@ export default function TheaterHallModal(props: TheaterHallModalProps) {
   const [form] = Form.useForm()
 
   const onConfirm = () => {
-    console.log(props.data, query)
     const save = () => {
       http({
         url: 'admin/theater/hall/save',
@@ -72,14 +71,13 @@ export default function TheaterHallModal(props: TheaterHallModalProps) {
 
   const getData = () => {
     http({
-      url: 'cinema/spec/list',
-      method: 'post',
-      data: {
-        page: 1,
-        pageSize: 50
+      url: 'cinema/spec',
+      method: 'get',
+      params: {
+        cinemaId: searchParams.get('id')
       }
     }).then((res) => {
-      setSpecList(res.data.list)
+      setSpecList(res.data)
     })
   }
 
