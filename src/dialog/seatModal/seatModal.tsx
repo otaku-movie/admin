@@ -25,6 +25,7 @@ import { AreaModal } from './AreaModal'
 import { CheckPermission } from '@/components/checkPermission'
 import * as wheelChair from '@/assets/font/wheelChair.svg'
 import Image from 'next/image'
+import { findDataset } from '@/utils'
 
 // import { Draw } from './store'
 
@@ -843,9 +844,8 @@ export default function SeatModal(props: ModalProps) {
                   // style={style}
                   ref={seatContainerRef}
                   onClick={(e) => {
-                    const el = e.target as HTMLElement
-                    const dataset = el.dataset
-
+                    const dataset = findDataset(e.target as HTMLElement, 'rowIndex')!.dataset
+                    
                     const singleSelect = (x: number, y: number) => {
                       if (selectedSeat.length < maxSelectSeatCount) {
                         data[x].children[y].selected =

@@ -7,7 +7,6 @@ import {
   Row,
   Image,
   Tag,
-  Input,
   Select,
   Modal,
   message,
@@ -20,7 +19,7 @@ import { status, notFoundImage } from '@/config/index'
 
 import { Query, QueryItem } from '@/components/query'
 import http from '@/api/index'
-import { Cinema, SpecItem } from '@/type/api'
+import { Cinema, SpecItem, theaterHall } from '@/type/api'
 import { useTranslation } from '@/app/i18n/client'
 import SeatModal from '@/dialog/seatModal/seatModal'
 import { Dict } from '@/components/dict'
@@ -33,14 +32,14 @@ import { showTotal } from '@/utils/pagination'
 import { CreateOrderModal } from '@/dialog/createOrderModal'
 
 interface Query {
-  name: string
+  movieId: number
   cinemaId: number
+  theaterHallId: number
   status: number
   date: dayjs.Dayjs
 }
 
 export default function MoviePage({ params: { lng } }: PageProps) {
-  const [cinemaData, setCinemaData] = useState<Cinema[]>([])
   const [data, setData] = useState([])
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
@@ -57,7 +56,13 @@ export default function MoviePage({ params: { lng } }: PageProps) {
     data: [],
     show: false
   })
-  const [currentRow, setCurrentRow] = useState<{cinemaId?: number, id?: number}>({})
+  const [currentRow, setCurrentRow] = useState<{
+    cinemaId?: number
+    id?: number
+  }>({})
+  const [movieData, setMovieData] = useState([])
+  const [cinemaData, setCinemaData] = useState<Cinema[]>([])
+  const [theaterHallData, setTheaterHallData] = useState<theaterHall[]>([])
   const getDict = useCommonStore((state) => state.getDict)
   const { t } = useTranslation(lng, 'showTime')
   const { t: common } = useTranslation(lng, 'common')
@@ -79,15 +84,40 @@ export default function MoviePage({ params: { lng } }: PageProps) {
     })
   }
 
-  const getCinemaData = (
-    name: string = '',
-    id: number | undefined = undefined
-  ) => {
+  const getMovieData = (name: string = '') => {
+    http({
+      url: 'movie/list',
+      method: 'post',
+      data: {
+        name,
+        // 上映中
+        releaseStatus: 2,
+        page: 1,
+        pageSize: 10
+      }
+    }).then((res) => {
+      console.log(res.data.list)
+      setMovieData(res.data?.list)
+    })
+  }
+  const getTheaterHallData = (id: number) => {
+    http({
+      url: 'theater/hall/list',
+      method: 'post',
+      data: {
+        cinemaId: id,
+        page: 1,
+        pageSize: 100
+      }
+    }).then((res) => {
+      setTheaterHallData(res.data.list)
+    })
+  }
+  const getCinemaData = (name: string = '') => {
     http({
       url: 'cinema/list',
       method: 'post',
       data: {
-        id,
         name,
         page: 1,
         pageSize: 10
@@ -99,6 +129,8 @@ export default function MoviePage({ params: { lng } }: PageProps) {
 
   useEffect(() => {
     getDict(['cinema_play_state'])
+    getMovieData()
+    getCinemaData()
     getData()
   }, [])
 
@@ -344,20 +376,37 @@ export default function MoviePage({ params: { lng } }: PageProps) {
           }}
         >
           <QueryItem label={t('table.name')}>
-            <Input
-              value={query.name}
-              onChange={(e) => {
-                query.name = e.target.value
-                setQuery(query)
+            <Select
+              // showSearch
+              value={query.movieId}
+              onChange={(val) => {
+                setQuery({
+                  ...query,
+                  movieId: val
+                })
               }}
-            ></Input>
+              // onSearch={getMovieData}
+            >
+              {JSON.stringify(movieData)}
+              {movieData.map((item: any) => {
+                return (
+                  <Select.Option value={item.id} key={item.id}>
+                    {item.name}
+                  </Select.Option>
+                )
+              })}
+            </Select>
           </QueryItem>
-          <QueryItem label={t('query.cinema')}>
+          <QueryItem label={t('table.cinema')} column={1}>
             <Select
               showSearch
               onChange={(val) => {
-                query.cinemaId = val
-                setQuery(query)
+                getTheaterHallData(val)
+                setQuery({
+                  ...query,
+                  cinemaId: val,
+                  theaterHallId: undefined
+                })
               }}
               value={query.cinemaId}
               onSearch={getCinemaData}
@@ -365,6 +414,24 @@ export default function MoviePage({ params: { lng } }: PageProps) {
               {cinemaData.map((item) => (
                 <Select.Option value={item.id} key={item.id}>
                   {item.name}
+                </Select.Option>
+              ))}
+            </Select>
+          </QueryItem>
+          <QueryItem label={t('table.theaterHall')} column={1}>
+            <Select
+              value={query.theaterHallId}
+              showSearch
+              onChange={(val) => {
+                setQuery({
+                  ...query,
+                  theaterHallId: val
+                })
+              }}
+            >
+              {theaterHallData.map((item) => (
+                <Select.Option value={item.id} key={item.id}>
+                  {item.name}（{item.cinemaSpecName}）
                 </Select.Option>
               ))}
             </Select>
@@ -459,7 +526,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
           })
         }}
       ></MovieShowTimeModal>
-        <CreateOrderModal
+      <CreateOrderModal
         show={createOrderModal.show}
         type={createOrderModal.type}
         data={createOrderModal.data}

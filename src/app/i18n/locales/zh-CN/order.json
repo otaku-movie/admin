@@ -1,6 +1,9 @@
 {
   "table": {
     "name": "作品",
+    "cinemaName": "上映影院",
+    "theaterHallName": "上映影厅",
+    "specName": "上映规格",
     "showTime": "上映场次",
     "orderNumber": "订单号",
     "seatNumber": "座位号",
@@ -10,7 +13,20 @@
     "payTotal": "支付总价",
     "orderTime": "订单创建时间",
     "orderState": "订单状态",
-    "orderTotal" : "订单总价",
+    "orderTotal": "订单总价",
     "action": "操作"
+  },
+  "search": {
+    "cinema": "上映影院",
+    "theaterHall": "上映影厅",
+    "id": "订单号",
+    "orderTime": "订单时间",
+    "orderState": "订单状态",
+    "payState": "支付状态"
+  },
+  "message": {
+    "remove": {
+      "content": "是否确认删除当前订单？"
+    }
   }
 }

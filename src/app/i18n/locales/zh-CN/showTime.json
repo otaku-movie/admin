@@ -25,11 +25,17 @@
   },
   "createOrderModal": {
     "title": "确认订单",
+    "total": "合计",
+    "message": {
+      "movieTicketTypeId": {
+        "required": "电影票类型不能为空"
+      }
+    },
     "table": {
       "name": "作品",
       "spec": "上映规格",
       "seat": "座位信息",
-      "area": "区域",
+      "area": "区域名称/价格",
       "price": "价格",
       "plusPrice": "特殊上映追加价格",
       "movieTicketType": "电影票类型"

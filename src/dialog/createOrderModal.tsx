@@ -8,7 +8,8 @@ import {
   Space,
   Image,
   TableColumnsType,
-  Table
+  Table,
+  message
 } from 'antd'
 import http from '@/api'
 import { languageType, notFoundImage } from '@/config'
@@ -59,7 +60,7 @@ export function CreateOrderModal(props: ModalProps) {
     },
     {
       title: t('createOrderModal.table.spec'),
-      dataIndex: ''
+      dataIndex: 'specName'
     },
     {
       title: t('createOrderModal.table.seat'),
@@ -69,11 +70,15 @@ export function CreateOrderModal(props: ModalProps) {
     },
     {
       title: t('createOrderModal.table.area'),
-      dataIndex: 'areaName'
+      render(_, row) {
+        if (row.areaName) {
+          return `${row.areaName}（${row.areaPrice}${common('unit.jpy')}）`
+        }
+      }
     },
     {
       title: t('createOrderModal.table.price'),
-      dataIndex: 'areaPrice'
+      dataIndex: 'price'
     },
     {
       title: t('createOrderModal.table.plusPrice'),
@@ -82,52 +87,43 @@ export function CreateOrderModal(props: ModalProps) {
     {
       title: t('createOrderModal.table.movieTicketType'),
       width: 250,
-      render(_, row) {
-        if (!row.areaPrice) {
-          return (
-            <Form
-              name="basic"
-              labelCol={{ span: 8 }}
-              wrapperCol={{ span: 16 }}
-              style={{ maxWidth: 600 }}
-              form={form}
-            >
-              <Form.Item
-                rules={[
-                  {
-                    required: true,
-                    message: t('createOrderModal.form.movieTicketType.required')
-                  }
-                ]}
-                name="movieTicketTypeId"
-              >
-                <Select
-                  allowClear
-                  style={{ width: '250px' }}
-                  placeholder={t(
-                    'createOrderModal.form.movieTicketType.required'
-                  )}
-                  value={query.movieTicketTypeId}
-                  onChange={(val) => {
-                    setQuery({
-                      ...query,
-                      movieTicketTypeId: val
-                    })
-                  }}
-                >
-                  {ticketData.map((item: any) => {
-                    return (
-                      <Select.Option value={item.id} key={item.id}>
-                        {item.name}（{item.price}
-                        {common('unit.jpy')}）
-                      </Select.Option>
-                    )
-                  })}
-                </Select>
-              </Form.Item>
-            </Form>
-          )
-        }
+      render(_, row, index) {
+        return (
+          <Select
+            style={{ width: '250px' }}
+            placeholder={t('createOrderModal.form.movieTicketType.required')}
+            value={row.movieTicketTypeId}
+            onChange={(val) => {
+              data[index].movieTicketTypeId = val
+              const find: any = ticketData.find(
+                (item: { id: number; price: number }) =>
+                  item.id === data[index].movieTicketTypeId
+              )
+
+              if (find) {
+                // eslint-disable-next-line
+                console.log(
+                  find.price,
+                  row.areaPrice || 0,
+                  Number(row.plusPrice)
+                )
+                data[index].price =
+                  find.price + (row.areaPrice || 0) + Number(row.plusPrice)
+
+                setData([...data])
+              }
+            }}
+          >
+            {ticketData.map((item: any) => {
+              return (
+                <Select.Option value={item.id} key={item.id}>
+                  {item.name}（{item.price}
+                  {common('unit.jpy')}）
+                </Select.Option>
+              )
+            })}
+          </Select>
+        )
       }
     }
   ]
@@ -156,7 +152,6 @@ export function CreateOrderModal(props: ModalProps) {
   }
 
   useEffect(() => {
-    console.log(props.data)
     if (props.show && props.data.cinemaId) {
       form.resetFields()
       getTicketData()
@@ -168,9 +163,10 @@ export function CreateOrderModal(props: ModalProps) {
 
   const total = useMemo(() => {
     return data.reduce((total, current) => {
-      return current.areaPrice ? total + current.areaPrice : total
+      return current.price ? total + current.price || 0 : total
     }, 0)
   }, [data])
+
   return (
     <Modal
       title={t('createOrderModal.title')}
@@ -178,17 +174,32 @@ export function CreateOrderModal(props: ModalProps) {
       maskClosable={false}
       width={'80%'}
       onOk={() => {
-        form.validateFields().then(() => {
-          // http({
-          //   url: 'admin/character/save',
-          //   method: 'post',
-          //   data: {
-          //     ...query
-          //   }
-          // }).then(() => {
-          //   props?.onConfirm?.()
-          // })
-        })
+        const every = data.every((item) => item.movieTicketTypeId)
+        
+        if (every) {
+          if (data.length > 0) {
+            http({
+              url: 'order/create',
+              method: 'post',
+              data: {
+                movieShowTimeId: data[0]?.movieShowTimeId,
+                seat: data.map((item) => {
+                  return {
+                    x: item.x,
+                    y: item.y,
+                    movieTicketTypeId: item.movieTicketTypeId
+                  }
+                })
+              }
+            }).then(() => {
+              // props?.onConfirm?.()
+            })
+          }
+        } else {
+          message.warning(
+            t('createOrderModal.message.movieTicketTypeId.required')
+          )
+        }
       }}
       onCancel={props?.onCancel}
     >
@@ -200,11 +211,18 @@ export function CreateOrderModal(props: ModalProps) {
         summary={() => (
           <Table.Summary fixed>
             <Table.Summary.Row>
-              <Table.Summary.Cell index={0}>合计</Table.Summary.Cell>
+              <Table.Summary.Cell index={0}>
+                {t('createOrderModal.total')}
+              </Table.Summary.Cell>
               <Table.Summary.Cell index={1}></Table.Summary.Cell>
               <Table.Summary.Cell index={2}></Table.Summary.Cell>
-              <Table.Summary.Cell index={3}>{total}</Table.Summary.Cell>
-              <Table.Summary.Cell index={4}></Table.Summary.Cell>
+              <Table.Summary.Cell index={3}></Table.Summary.Cell>
+              <Table.Summary.Cell index={4}>
+                {total}
+                {common('unit.jpy')}
+              </Table.Summary.Cell>
+              <Table.Summary.Cell index={5}></Table.Summary.Cell>
+              <Table.Summary.Cell index={6}></Table.Summary.Cell>
             </Table.Summary.Row>
           </Table.Summary>
         )}

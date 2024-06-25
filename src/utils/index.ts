@@ -207,3 +207,10 @@ export const getFileSize = (fileSize: number): string => {
 
   return res as string
 }
+
+export const findDataset = (element: HTMLElement, key: string): HTMLElement | null => {
+  if (element === null) return null
+  if (element.dataset[key]) return element
+  
+  return findDataset(element.parentElement as HTMLElement, key)
+}

@@ -12,7 +12,14 @@ import {
 import http from '@/api'
 import { languageType } from '@/config'
 import { buttonItem } from '@/type/api'
-import { listToTree, callTree, flattern, setCheckedStatus, hasChecked, hasIndeterminate } from '@/utils'
+import {
+  listToTree,
+  callTree,
+  flattern,
+  setCheckedStatus,
+  hasChecked,
+  hasIndeterminate
+} from '@/utils'
 
 interface modalProps {
   show?: boolean
@@ -159,7 +166,7 @@ export function RolePermission(props: modalProps) {
       title={t('rolePermissionModal.title')}
       open={props.show}
       maskClosable={false}
-      width={800}
+      width={'80%'}
       onOk={() => {
         const buttonId: number[] = []
         const menuId: number[] = []

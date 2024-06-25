@@ -10,27 +10,39 @@ import {
   Input,
   Select,
   Modal,
-  message
+  message,
+  DatePicker
 } from 'antd'
 
 import type { TableColumnsType } from 'antd'
-import movie from '@/assets/image/conan-movie.png'
-import { status } from '@/config/index'
+import { status, notFoundImage } from '@/config/index'
 import { useRouter } from 'next/navigation'
 
 import { Query, QueryItem } from '@/components/query'
 import http from '@/api/index'
-import { Movie, paginationResponse, response } from '@/type/api'
+import {
+  Cinema,
+  Movie,
+  paginationResponse,
+  response,
+  theaterHall
+} from '@/type/api'
 import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '../layout'
+import { showTotal } from '@/utils/pagination'
+import { CheckPermission } from '@/components/checkPermission'
 
 interface Query {
-  name: string
-  status: number
+  id: number
+  movieId: number
+  cinemaId: number
+  theaterHallId: number
+  orderState: number
+  payState: number
 }
 
 export default function MoviePage({ params: { lng } }: PageProps) {
-  const router = useRouter()
+  // const router = useRouter()
 
   const [data, setData] = useState([])
   const [page, setPage] = useState(1)
@@ -38,10 +50,13 @@ export default function MoviePage({ params: { lng } }: PageProps) {
   const [query, setQuery] = useState<Partial<Query>>({})
   const { t } = useTranslation(lng, 'order')
   const { t: common } = useTranslation(lng, 'common')
+  const [movieData, setMovieData] = useState([])
+  const [cinemaData, setCinemaData] = useState<Cinema[]>([])
+  const [theaterHallData, setTheaterHallData] = useState<theaterHall[]>([])
 
   const getData = (page = 1) => {
     http({
-      url: 'movie/list',
+      url: 'order/list',
       method: 'post',
       data: {
         page,
@@ -53,6 +68,53 @@ export default function MoviePage({ params: { lng } }: PageProps) {
       setTotal(res.data.total)
     })
   }
+  const getMovieData = (name: string = '') => {
+    http({
+      url: 'movie/list',
+      method: 'post',
+      data: {
+        name,
+        // 上映中
+        releaseStatus: 2,
+        page: 1,
+        pageSize: 10
+      }
+    }).then((res) => {
+      console.log(res.data.list)
+      // eslint-disable-next-line no-unsafe-optional-chaining
+      setMovieData(res.data?.list || [])
+    })
+  }
+  const getTheaterHallData = (id: number) => {
+    http({
+      url: 'theater/hall/list',
+      method: 'post',
+      data: {
+        cinemaId: id,
+        page: 1,
+        pageSize: 100
+      }
+    }).then((res) => {
+      setTheaterHallData(res.data.list || [])
+    })
+  }
+  const getCinemaData = (name: string = '') => {
+    http({
+      url: 'cinema/list',
+      method: 'post',
+      data: {
+        name,
+        page: 1,
+        pageSize: 10
+      }
+    }).then((res) => {
+      setCinemaData(res.data.list || [])
+    })
+  }
+  useEffect(() => {
+    getMovieData()
+    getCinemaData()
+  }, [])
 
   useEffect(() => {
     getData()
@@ -60,31 +122,36 @@ export default function MoviePage({ params: { lng } }: PageProps) {
 
   useEffect(() => {}, [query, setQuery])
 
-  const columns: TableColumnsType<Movie> = [
+  const columns: TableColumnsType = [
     {
       title: t('table.name'),
       dataIndex: 'name',
-      width: 350,
+      width: 400,
+      fixed: 'left',
       render(_: any, row) {
         return (
           <Space align="start">
-            <Image width={120} src={movie.src} alt="poster"></Image>
+            <Image
+              width={100}
+              src={row.moviePoster}
+              alt="poster"
+              fallback={notFoundImage}
+              placeholder={true}
+              style={{
+                borderRadius: ' 4px'
+              }}
+            ></Image>
             <Space direction="vertical">
-              <span>{row.name}</span>
-              <section>
-                {['IMAX', 'DOLBY cinema', '2D', 'DOLBY ATOMS'].map((item) => {
-                  return (
-                    <Tag
-                      key={item}
-                      style={{
-                        marginBottom: '10px'
-                      }}
-                    >
-                      {item}
-                    </Tag>
-                  )
-                })}
-              </section>
+              <span>{row.movieName}</span>
+              <span>
+                {t('table.cinemaName')}：{row.cinemaName}
+              </span>
+              <span>
+                {t('table.theaterHallName')}：{row.theaterHallName}
+              </span>
+              <span>
+                {t('table.specName')}：{row.theaterHallSpecName}
+              </span>
             </Space>
           </Space>
         )
@@ -92,44 +159,71 @@ export default function MoviePage({ params: { lng } }: PageProps) {
     },
     {
       title: t('table.showTime'),
-      dataIndex: 'startTime'
+      render(_, row) {
+        return (
+          <Space direction="vertical">
+            {row.startTime}
+            {row.endTime}
+          </Space>
+        )
+      }
     },
     {
       title: t('table.seatNumber'),
-      dataIndex: ''
+      render(_, row) {
+        return (
+          <Space direction="vertical">
+            {row.seat.map(
+              (item: { seatX: number; seatY: number }, index: number) => {
+                return (
+                  <Tag key={index}>
+                    {item.seatX}排{item.seatY}座
+                  </Tag>
+                )
+              }
+            )}
+          </Space>
+        )
+      }
     },
 
     {
       title: t('table.orderNumber'),
-      dataIndex: 'startTime'
+      dataIndex: 'id'
     },
     {
       title: t('table.orderTotal'),
-      dataIndex: ''
+      dataIndex: 'orderTotal'
     },
     {
       title: t('table.orderTime'),
-      dataIndex: ''
+      dataIndex: 'orderTime'
     },
     {
       title: t('table.orderState'),
-      dataIndex: ''
+      render(_, row) {
+        return <span>订单已创建</span>
+      },
+      dataIndex: 'orderState'
     },
     {
       title: t('table.payTotal'),
-      dataIndex: 'startTime'
+      dataIndex: 'payTotal'
     },
     {
       title: t('table.payTime'),
-      dataIndex: 'startTime'
+      dataIndex: 'payTime'
     },
     {
       title: t('table.payState'),
-      dataIndex: ''
+      render(_, row) {
+        return <span>待支付</span>
+      },
+      dataIndex: 'payState'
     },
     {
       title: t('table.payMethod'),
-      dataIndex: ''
+      dataIndex: 'payMethod'
     },
     {
       title: t('table.action'),
@@ -138,40 +232,42 @@ export default function MoviePage({ params: { lng } }: PageProps) {
       // width: 100,
       render: (_, row) => {
         return (
-          <Space>
-            <Button
-              type="primary"
-              danger
-              onClick={() => {
-                Modal.confirm({
-                  title: common('button.remove'),
-                  content: t('message.remove.content'),
-                  onCancel() {
-                    console.log('Cancel')
-                  },
-                  onOk() {
-                    return new Promise((resolve, reject) => {
-                      // http({
-                      //   url: 'movie/remove',
-                      //   method: 'delete',
-                      //   params: {
-                      //     id: row.id
-                      //   }
-                      // })
-                      //   .then(() => {
-                      //     message.success(t('message.remove.success'))
-                      //     getData()
-                      //     resolve(true)
-                      //   })
-                      //   .catch(reject)
-                    })
-                  }
-                })
-              }}
-            >
-              {common('button.remove')}
-            </Button>
-          </Space>
+          <CheckPermission code="movieOrder.remove">
+            <Space>
+              <Button
+                type="primary"
+                danger
+                onClick={() => {
+                  Modal.confirm({
+                    title: common('button.remove'),
+                    content: t('message.remove.content'),
+                    onCancel() {
+                      console.log('Cancel')
+                    },
+                    onOk() {
+                      return new Promise((resolve, reject) => {
+                        http({
+                          url: 'movieOrder/remove',
+                          method: 'delete',
+                          params: {
+                            id: row.id
+                          }
+                        })
+                          .then(() => {
+                            message.success(t('message.remove.success'))
+                            getData()
+                            resolve(true)
+                          })
+                          .catch(reject)
+                      })
+                    }
+                  })
+                }}
+              >
+                {common('button.remove')}
+              </Button>
+            </Space>
+          </CheckPermission>
         )
       }
     }
@@ -180,15 +276,6 @@ export default function MoviePage({ params: { lng } }: PageProps) {
   return (
     <section>
       <Space direction="vertical" size={30}>
-        <Row justify="end">
-          <Button
-            onClick={() => {
-              router.push(`/movieDetail`)
-            }}
-          >
-            {common('button.add')}
-          </Button>
-        </Row>
         <Query
           model={query}
           onSearch={() => {
@@ -198,34 +285,131 @@ export default function MoviePage({ params: { lng } }: PageProps) {
             setQuery({ ...obj })
           }}
         >
-          {new Array(5).fill(undefined).map((_, index) => {
-            return (
-              <QueryItem label={t('table.name') + index} column={1} key={index}>
-                <Input
-                  value={query.name}
-                  onChange={(e) => {
-                    query.name = e.target.value
-
-                    setQuery(query)
-                  }}
-                ></Input>
-              </QueryItem>
-            )
-          })}
-          <QueryItem label={t('table.status')}>
+          <QueryItem label={t('search.id')}>
+            <Input
+              value={query.id}
+              onChange={(e) => {
+                setQuery({
+                  ...query,
+                  id: e.target.value
+                })
+              }}
+            ></Input>
+          </QueryItem>
+          <QueryItem label={t('search.orderTime')}>
+            <DatePicker.RangePicker
+              showTime
+              value={query.orderTime}
+              onChange={(_, val) => {
+                console.log(val)
+                setQuery({
+                  ...query,
+                  orderTime: val
+                })
+              }}
+            ></DatePicker.RangePicker>
+          </QueryItem>
+          <QueryItem label={t('table.name')}>
             <Select
-              value={query.status}
+              showSearch
+              value={query.movieId}
+              filterOption={false}
               onChange={(val) => {
-                query.status = val
-                setQuery(query)
+                setQuery({
+                  ...query,
+                  movieId: val
+                })
+              }}
+              onSearch={getMovieData}
+            >
+              {JSON.stringify(movieData)}
+              {movieData.map((item: any) => {
+                return (
+                  <Select.Option value={item.id} key={item.id}>
+                    {item.name}
+                  </Select.Option>
+                )
+              })}
+            </Select>
+          </QueryItem>
+
+          <QueryItem label={t('search.cinema')} column={1}>
+            <Select
+              showSearch
+              onChange={(val) => {
+                getTheaterHallData(val)
+                setQuery({
+                  ...query,
+                  cinemaId: val,
+                  theaterHallId: undefined
+                })
+              }}
+              value={query.cinemaId}
+              onSearch={getCinemaData}
+            >
+              {cinemaData.map((item) => (
+                <Select.Option value={item.id} key={item.id}>
+                  {item.name}
+                </Select.Option>
+              ))}
+            </Select>
+          </QueryItem>
+          <QueryItem label={t('search.theaterHall')} column={1}>
+            <Select
+              value={query.theaterHallId}
+              showSearch
+              onChange={(val) => {
+                setQuery({
+                  ...query,
+                  theaterHallId: val
+                })
               }}
             >
-              {Object.entries(status).map((item, index) => {
-                const [key, value] = item
+              {theaterHallData.map((item) => (
+                <Select.Option value={item.id} key={item.id}>
+                  {item.name}（{item.cinemaSpecName}）
+                </Select.Option>
+              ))}
+            </Select>
+          </QueryItem>
 
+          <QueryItem label={t('search.orderState')}>
+            <Select
+              value={query.orderState}
+              onChange={(val) => {
+                setQuery({
+                  ...query,
+                  orderState: val
+                })
+              }}
+              // onSearch={getMovieData}
+            >
+              {movieData.map((item: any) => {
                 return (
-                  <Select.Option value={key} key={index}>
-                    {value}
+                  <Select.Option value={item.id} key={item.id}>
+                    {item.name}
+                  </Select.Option>
+                )
+              })}
+            </Select>
+          </QueryItem>
+          <QueryItem label={t('search.payState')}>
+            <Select
+              // showSearch
+              value={query.movieId}
+              onChange={(val) => {
+                setQuery({
+                  ...query,
+                  movieId: val
+                })
+              }}
+              // onSearch={getMovieData}
+            >
+              {JSON.stringify(movieData)}
+              {movieData.map((item: any) => {
+                return (
+                  <Select.Option value={item.id} key={item.id}>
+                    {item.name}
                   </Select.Option>
                 )
               })}
@@ -241,6 +425,10 @@ export default function MoviePage({ params: { lng } }: PageProps) {
             pageSize: 10,
             current: page,
             total,
+            showTotal,
+            onChange(page) {
+              getData(page)
+            },
             position: ['bottomCenter']
           }}
         />
