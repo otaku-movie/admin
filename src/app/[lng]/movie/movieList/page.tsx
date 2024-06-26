@@ -41,7 +41,6 @@ export default function Page({ params: { lng } }: PageProps) {
   const [query, setQuery] = useState<Partial<Query>>({})
   const { t } = useTranslation(lng, 'movie')
   const { t: common } = useTranslation(lng, 'common')
-  const getDict = useCommonStore((state) => state.getDict)
 
   const getData = (page = 1) => {
     http({
@@ -60,7 +59,6 @@ export default function Page({ params: { lng } }: PageProps) {
   }
 
   useEffect(() => {
-    getDict(['release_status'])
     getData()
   }, [])
 
@@ -166,7 +164,7 @@ export default function Page({ params: { lng } }: PageProps) {
       title: t('table.status'),
       dataIndex: '',
       render(_, row) {
-        return <Dict code={row.status} name={'release_status'}></Dict>
+        return <Dict code={row.status} name={'releaseStatus'}></Dict>
       }
     },
     {

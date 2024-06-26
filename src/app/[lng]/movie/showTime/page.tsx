@@ -23,7 +23,6 @@ import { Cinema, SpecItem, theaterHall } from '@/type/api'
 import { useTranslation } from '@/app/i18n/client'
 import SeatModal from '@/dialog/seatModal/seatModal'
 import { Dict } from '@/components/dict'
-import { useCommonStore } from '@/store/useCommonStore'
 import MovieShowTimeModal from '@/dialog/movieShowTimeModal'
 import dayjs from 'dayjs'
 import { CheckPermission } from '@/components/checkPermission'
@@ -63,7 +62,6 @@ export default function MoviePage({ params: { lng } }: PageProps) {
   const [movieData, setMovieData] = useState([])
   const [cinemaData, setCinemaData] = useState<Cinema[]>([])
   const [theaterHallData, setTheaterHallData] = useState<theaterHall[]>([])
-  const getDict = useCommonStore((state) => state.getDict)
   const { t } = useTranslation(lng, 'showTime')
   const { t: common } = useTranslation(lng, 'common')
 
@@ -128,7 +126,6 @@ export default function MoviePage({ params: { lng } }: PageProps) {
   }
 
   useEffect(() => {
-    getDict(['cinema_play_state'])
     getMovieData()
     getCinemaData()
     getData()
@@ -239,7 +236,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
       title: t('table.playState'),
       dataIndex: '',
       render(_, row) {
-        return <Dict code={row.status} name={'cinema_play_state'}></Dict>
+        return <Dict code={row.status} name={'cinemaPlayState'}></Dict>
       }
     },
     {

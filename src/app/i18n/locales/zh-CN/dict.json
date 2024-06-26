@@ -8,5 +8,28 @@
     "remove": {
       "content": "是否要删除当前行，删除时，如果有字典项，也将会一并被删除，删除后无法恢复。"
     }
+  },
+  "dictItemModal": {
+    "title": "字典详情",
+    "message": {
+      "repeat": "字典 code 不能重复",
+      "required": "字典项不能为空"
+    }
+  },
+  "dictModal": {
+    "title": {
+      "create": "添加",
+      "edit": "编辑"
+    },
+    "form": {
+      "name": {
+        "label": "字典名称",
+        "required": "请输入字典名称"
+      },
+      "code": {
+        "label": "字典 code",
+        "required": "请输入字典 code"
+      }
+    }
   }
 }

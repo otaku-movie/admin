@@ -44,6 +44,7 @@
   "button": {
     "add": "添加",
     "edit": "编辑",
+    "dictDetail": "字典详情",
     "remove": "删除",
     "save": "保存",
     "login": "登录",

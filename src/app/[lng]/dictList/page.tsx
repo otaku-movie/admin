@@ -11,27 +11,43 @@ import {
   Form,
   InputNumber
 } from 'antd'
-import type { TableColumnsType } from 'antd'
+import type { FormInstance, TableColumnsType } from 'antd'
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
-import { useRouter } from 'next/navigation'
 import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '../layout'
 import http from '@/api'
 import { Query, QueryItem } from '@/components/query'
 import { CheckPermission } from '@/components/checkPermission'
+import { showTotal } from '@/utils/pagination'
+import { DictModal } from '@/dialog/dictModal'
+
+interface DictItemModal {
+  data: { name: string; code: string }[]
+  show: boolean
+  dictId: null | number
+  form: [FormInstance]
+}
+
+interface SearchQuery {
+  name?: string
+  code?: string
+}
 
 export default function CinemaPage({ params: { lng } }: PageProps) {
-  const router = useRouter()
-
   const [data, setData] = useState([])
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
-  // const form = Form.useFormInstance()
-  const [modal, setModal] = useState({
+  const [query, setQuery] = useState<SearchQuery>({})
+  const [modal, setModal] = useState<DictItemModal>({
     data: [],
     dictId: null,
-    form: Form.useFormInstance(),
+    form: Form.useForm(),
     show: false
+  })
+  const [dictModal, setDictModal] = useState({
+    type: 'create',
+    show: false,
+    data: {}
   })
   const { t } = useTranslation(lng, 'dict')
   const { t: common } = useTranslation(lng, 'common')
@@ -41,7 +57,8 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
       method: 'post',
       data: {
         page,
-        pageSize: 10
+        pageSize: 10,
+        ...query
       }
     }).then((res) => {
       setData(res.data.list)
@@ -71,7 +88,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
       render: (_, row) => {
         return (
           <Space>
-            <CheckPermission code="">
+            <CheckPermission code="dict.item.save">
               <Button
                 onClick={() => {
                   http({
@@ -88,19 +105,26 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
                       show: true
                     })
                   })
-
-                  // router.push(`/${lng}/cinemaDetail?id=${row.id}`)
                 }}
               >
-                {t('button.detail')}
+                {common('button.dictDetail')}
               </Button>
             </CheckPermission>
-            <CheckPermission code="">
-              <Button type="primary" onClick={() => {}}>
+            <CheckPermission code="dict.save">
+              <Button
+                type="primary"
+                onClick={() => {
+                  setDictModal({
+                    data: row,
+                    show: true,
+                    type: 'edit'
+                  })
+                }}
+              >
                 {common('button.edit')}
               </Button>
             </CheckPermission>
-            <CheckPermission code="">
+            <CheckPermission code="dict.remove">
               <Button
                 type="primary"
                 danger
@@ -114,14 +138,14 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
                     onOk() {
                       return new Promise((resolve, reject) => {
                         http({
-                          url: 'dict/remove',
+                          url: 'admin/dict/remove',
                           method: 'delete',
                           params: {
                             id: row.id
                           }
                         })
-                          .then(() => {
-                            message.success(t('message.remove.success'))
+                          .then((res) => {
+                            message.success(res.message)
                             getData()
                             resolve(true)
                           })
@@ -147,10 +171,6 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
     }
   }
 
-  const onFinish = (values: any) => {
-    console.log('Received values of form:', values)
-  }
-
   return (
     <section
       style={{
@@ -160,17 +180,53 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
       }}
     >
       <Row justify="end">
-        <Button
-          onClick={() => {
-            router.push(`/${lng}/cinemaDetail`)
-          }}
-        >
-          {common('button.add')}
-        </Button>
+        <CheckPermission code="dict.save">
+          <Button
+            onClick={() => {
+              setDictModal({
+                show: true,
+                data: {},
+                type: 'create'
+              })
+            }}
+          >
+            {common('button.add')}
+          </Button>
+        </CheckPermission>
       </Row>
-      <Query>
+      <Query
+        initialValues={{}}
+        onSearch={() => {
+          getData()
+        }}
+        onClear={(obj) => {
+          setQuery({ ...obj })
+          getData()
+        }}
+      >
         <QueryItem label={t('table.name')} column={1}>
-          <Input></Input>
+          <Input
+            allowClear
+            value={query.name}
+            onChange={(e) => {
+              setQuery({
+                ...query,
+                name: e.target.value
+              })
+            }}
+          ></Input>
+        </QueryItem>
+        <QueryItem label={t('table.code')} column={1}>
+          <Input
+            allowClear
+            value={query.code}
+            onChange={(e) => {
+              setQuery({
+                ...query,
+                code: e.target.value
+              })
+            }}
+          ></Input>
         </QueryItem>
       </Query>
       <Table
@@ -181,49 +237,113 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
           pageSize: 10,
           current: page,
           total,
+          showTotal,
+          onChange(page) {
+            getData(page)
+          },
           position: ['bottomCenter']
         }}
       />
+      <DictModal
+        type={dictModal.type as 'create' | 'edit'}
+        show={dictModal.show}
+        data={dictModal.data}
+        onCancel={() => {
+          setDictModal({
+            ...dictModal,
+            show: false
+          })
+        }}
+        onConfirm={() => {
+          getData()
+          setDictModal({
+            ...dictModal,
+            show: false
+          })
+        }}
+      ></DictModal>
       <Modal
-        title="Basic Modal"
+        title={t('dictItemModal.title')}
         open={modal.show}
         maskClosable={false}
         onOk={() => {
-          http({
-            url: '/dict/item/edit',
-            method: 'post',
-            data: {
-              dictId: modal.dictId,
-              dictItem: modal.data
+          modal.form[0].validateFields().then(() => {
+            const every = modal.data.every((item) => !!item.name && !!item.code)
+            const map = modal.data.map((item) => item.code)
+
+            if (!every) {
+              return message.warning(t('dictItemModal.message.required'))
             }
-          }).then(() => {
-            setModal({
-              ...modal,
-              data: [],
-              dictId: null,
-              show: false
-            })
+            if (modal.data.length !== new Set(map).size) {
+              return message.warning(t('dictItemModal.message.repeat'))
+            } else {
+              http({
+                url: '/admin/dict/item/save',
+                method: 'post',
+                data: {
+                  dictId: modal.dictId,
+                  dictItem: modal.data
+                }
+              }).then(() => {
+                setModal({
+                  ...modal,
+                  show: false
+                })
+              })
+            }
           })
         }}
         onCancel={() => {
           setModal({
             ...modal,
-            data: [],
-            dictId: null,
             show: false
           })
         }}
       >
         <Form
-          name="dynamic_form_item"
+          name="basic"
           {...formItemLayoutWithOutLabel}
-          onFinish={onFinish}
           initialValues={modal.data}
+          form={modal.form[0]}
         >
           <Form.Item
             label={''}
-            name="username"
-            rules={[{ required: true, message: 'Please input your username!' }]}
+            name={['name', 'code']}
+            required
+            rules={[
+              {
+                required: true,
+                validator() {
+                  const every = modal.data.every(
+                    (item) => !item.name && !item.code
+                  )
+
+                  if (every) {
+                    return Promise.reject(
+                      new Error(t('dictItemModal.message.required'))
+                    )
+                  } else {
+                    return Promise.resolve()
+                  }
+                },
+                validateTrigger: ['onBlur']
+              },
+              {
+                required: true,
+                validator() {
+                  const map = modal.data.map((item) => item.code)
+
+                  if (modal.data.length !== new Set(map).size) {
+                    return Promise.reject(
+                      new Error(t('dictItemModal.message.repeat'))
+                    )
+                  } else {
+                    return Promise.resolve()
+                  }
+                },
+                validateTrigger: ['onBlur']
+              }
+            ]}
           >
             <Space direction="vertical" size={15}>
               {modal.data.map((item: any, index: number) => {
@@ -284,7 +404,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
                 }}
                 icon={<PlusOutlined />}
               >
-                Add field
+                {common('button.add')}
               </Button>
             </Space>
           </Form.Item>

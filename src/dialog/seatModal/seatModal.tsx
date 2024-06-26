@@ -525,7 +525,6 @@ export default function SeatModal(props: ModalProps) {
                         return position[0][0] === item[0]
                       })
 
-                      console.log(every, position, position.join('-'))
                       if (every) {
                         setData(
                           data.map((item) => {

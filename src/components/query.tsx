@@ -36,6 +36,7 @@ export type QueryProps = {
   column?: number
   children: React.ReactNode
   model?: Record<string, unknown>
+  initialValues?: Record<string, unknown>
   maxLine?: number
   option?: Option
   onSearch?: () => void
@@ -90,7 +91,6 @@ export function Query(props: QueryProps) {
   }
   const { maxLine = 2, option = autoCol, defaultCol = 'lg' } = props
   const [expand, setExpand] = useState(false)
-  const initialValue = cloneDeep(props.model)
   const container = useRef(null)
   const row = 24
   const current = defaultCol
@@ -101,10 +101,12 @@ export function Query(props: QueryProps) {
   const children = React.Children.toArray(
     props.children
   ) as unknown as React.ReactElement<QueryItemProps>[]
-  const [totalSpan, setTotalSpan] = useState(children.reduce(
-    (total, current) => total + ((current.props?.column || 1) * row) / column,
-    0
-  ))
+  const [totalSpan, setTotalSpan] = useState(
+    children.reduce(
+      (total, current) => total + ((current.props?.column || 1) * row) / column,
+      0
+    )
+  )
 
   const { t } = useTranslation(
     globalThis?.navigator?.language as languageType,
@@ -176,7 +178,10 @@ export function Query(props: QueryProps) {
       arr.push(newNode)
     }
     // 是否显示展开折叠
-    const result = arr.reduce((total, current) => total + ((current.props?.column || 1) * row) / column, 0)
+    const result = arr.reduce(
+      (total, current) => total + ((current.props?.column || 1) * row) / column,
+      0
+    )
     setTotalSpan(result)
 
     return arr
@@ -216,7 +221,7 @@ export function Query(props: QueryProps) {
           form={form}
           name="advanced_search"
           style={formStyle}
-          initialValues={props.model}
+          initialValues={props.initialValues}
           onFinish={onFinish}
         >
           <Row gutter={row}>{renderChildren}</Row>
@@ -229,9 +234,9 @@ export function Query(props: QueryProps) {
               <Button
                 onClick={() => {
                   form.resetFields()
-                  console.log(props.model)
-                  console.log('clear =====', initialValue)
-                  props.onClear?.(initialValue)
+                  if (props.initialValues) {
+                    props.onClear?.({ ...props.initialValues })
+                  }
                 }}
               >
                 {t('query.clear')}

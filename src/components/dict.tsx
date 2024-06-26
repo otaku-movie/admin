@@ -1,7 +1,6 @@
 'use client'
 import { useCommonStore } from '@/store/useCommonStore'
 import React, { useEffect, useState } from 'react'
-import { camelCase } from '@/utils'
 
 export interface DictProps {
   code: number
@@ -9,15 +8,16 @@ export interface DictProps {
 }
 
 export function Dict(props: DictProps) {
-  const dict = useCommonStore((state) => state.dict)
+  const getDict = useCommonStore((state) => state.getDict)
+
   const [name, setName] = useState<string>('')
 
   useEffect(() => {
-    const key = camelCase(props.name)
-    const find = dict?.[key]?.find((item) => item.code === props.code)
-    setName(find?.name || '')
-    console.log(1)
-  }, [])
+    getDict([props.name]).then((dict) => {
+      const find = dict?.[props.name]?.find((item) => item.code === props.code)
+      setName(find?.name || '')
+    })
+  }, [props.name])
 
   return <span>{name}</span>
 }

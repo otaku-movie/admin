@@ -196,8 +196,6 @@ export function AreaModal(props: modalProps) {
         onOk={() => {
           form.validateFields().then(() => {
             if (data.length < 5) {
-
-              // const splice = areaColor.splice(props.data.length - 1)
               data.push({
                 ...query,
                 id: data.length,
@@ -236,7 +234,6 @@ export function AreaModal(props: modalProps) {
               { required: true, message: t('areaModal.form.name.required') },
               {
                 validator() {
-                  console.log(data, query.name)
                   if (modal.type === 'create') {
                     const findIndex = data.findIndex(
                       (item) => item.name === query.name

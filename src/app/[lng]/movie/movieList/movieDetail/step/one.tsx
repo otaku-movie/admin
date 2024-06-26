@@ -48,7 +48,6 @@ export function One(props: Props) {
   const [spec, setSpec] = useState<SpecItem[]>([])
   const dict = useCommonStore((state) => state.dict)
   const levelList = useCommonStore((state) => state.levelList)
-  const getDict = useCommonStore((state) => state.getDict)
   const getLevelList = useCommonStore((state) => state.getLevelList)
 
   const options = [
@@ -116,7 +115,6 @@ export function One(props: Props) {
   useEffect(() => {
     getSpec()
     getLevelList()
-    getDict(['release_status'])
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

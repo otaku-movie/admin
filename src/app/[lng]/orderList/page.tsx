@@ -4,7 +4,6 @@ import {
   Table,
   Button,
   Space,
-  Row,
   Image,
   Tag,
   Input,
@@ -15,8 +14,7 @@ import {
 } from 'antd'
 
 import type { TableColumnsType } from 'antd'
-import { status, notFoundImage } from '@/config/index'
-import { useRouter } from 'next/navigation'
+import { notFoundImage } from '@/config/index'
 
 import { Query, QueryItem } from '@/components/query'
 import http from '@/api/index'
@@ -31,6 +29,8 @@ import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '../layout'
 import { showTotal } from '@/utils/pagination'
 import { CheckPermission } from '@/components/checkPermission'
+import { DictSelect } from '@/components/DictSelect'
+import { Dict } from '@/components/dict'
 
 interface Query {
   id: number
@@ -60,7 +60,8 @@ export default function MoviePage({ params: { lng } }: PageProps) {
       method: 'post',
       data: {
         page,
-        pageSize: 10
+        pageSize: 10,
+        ...query
       }
     }).then((res) => {
       setData(res.data.list)
@@ -202,7 +203,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
     {
       title: t('table.orderState'),
       render(_, row) {
-        return <span>订单已创建</span>
+        return <Dict code={row.orderState} name={'orderState'}></Dict>
       },
       dataIndex: 'orderState'
     },
@@ -217,7 +218,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
     {
       title: t('table.payState'),
       render(_, row) {
-        return <span>待支付</span>
+        return <Dict code={row.payState} name={'payState'}></Dict>
       },
       dataIndex: 'payState'
     },
@@ -280,6 +281,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
           model={query}
           onSearch={() => {
             console.log(query)
+            getData()
           }}
           onClear={(obj) => {
             setQuery({ ...obj })
@@ -300,6 +302,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
             <DatePicker.RangePicker
               showTime
               value={query.orderTime}
+              allowClear
               onChange={(_, val) => {
                 console.log(val)
                 setQuery({
@@ -312,6 +315,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
           <QueryItem label={t('table.name')}>
             <Select
               showSearch
+              allowClear
               value={query.movieId}
               filterOption={false}
               onChange={(val) => {
@@ -322,7 +326,6 @@ export default function MoviePage({ params: { lng } }: PageProps) {
               }}
               onSearch={getMovieData}
             >
-              {JSON.stringify(movieData)}
               {movieData.map((item: any) => {
                 return (
                   <Select.Option value={item.id} key={item.id}>
@@ -336,6 +339,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
           <QueryItem label={t('search.cinema')} column={1}>
             <Select
               showSearch
+              allowClear
               onChange={(val) => {
                 getTheaterHallData(val)
                 setQuery({
@@ -374,7 +378,8 @@ export default function MoviePage({ params: { lng } }: PageProps) {
           </QueryItem>
 
           <QueryItem label={t('search.orderState')}>
-            <Select
+            <DictSelect
+              code="orderState"
               value={query.orderState}
               onChange={(val) => {
                 setQuery({
@@ -382,38 +387,19 @@ export default function MoviePage({ params: { lng } }: PageProps) {
                   orderState: val
                 })
               }}
-              // onSearch={getMovieData}
-            >
-              {movieData.map((item: any) => {
-                return (
-                  <Select.Option value={item.id} key={item.id}>
-                    {item.name}
-                  </Select.Option>
-                )
-              })}
-            </Select>
+            ></DictSelect>
           </QueryItem>
           <QueryItem label={t('search.payState')}>
-            <Select
-              // showSearch
-              value={query.movieId}
+            <DictSelect
+              code="payState"
+              value={query.orderState}
               onChange={(val) => {
                 setQuery({
                   ...query,
-                  movieId: val
+                  orderState: val
                 })
               }}
-              // onSearch={getMovieData}
-            >
-              {JSON.stringify(movieData)}
-              {movieData.map((item: any) => {
-                return (
-                  <Select.Option value={item.id} key={item.id}>
-                    {item.name}
-                  </Select.Option>
-                )
-              })}
-            </Select>
+            ></DictSelect>
           </QueryItem>
         </Query>
 
