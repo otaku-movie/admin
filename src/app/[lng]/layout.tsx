@@ -89,7 +89,6 @@ function RootLayout({ children, params: { lng } }: PageProps) {
     if (roleId) {
       getPermission(+roleId)
     }
-    // userStore.getBreadcrumb()
   }, [])
 
   const userInfo = getUserInfo()
@@ -177,17 +176,22 @@ function RootLayout({ children, params: { lng } }: PageProps) {
                           }
                         })}
                       />
-                      <Content
-                        style={{
-                          padding: 24,
-                          margin: 0,
-                          minHeight: 280,
-                          background: colorBgContainer,
-                          borderRadius: borderRadiusLG
-                        }}
+                      <section
+                        style={
+                          split[1] !== 'dataChart'
+                            ? {
+                                padding: 24,
+                                margin: 0,
+                                minHeight: 280,
+                                background: colorBgContainer,
+                                borderRadius: borderRadiusLG
+                              }
+                            : {}
+                        }
+                        className="main-container"
                       >
                         {children}
-                      </Content>
+                      </section>
                     </Space>
                   </Layout>
                 </Layout>

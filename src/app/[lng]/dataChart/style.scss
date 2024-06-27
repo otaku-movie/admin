@@ -1,0 +1,39 @@
+$shadow: 0 2px 8px 0 rgba(0, 35, 144, 10%);
+
+.chart {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  .top-message {
+    display: grid;
+    grid-gap: 20px;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 120px;
+    li {
+      // border: 2px solid red;
+      padding: 20px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background: white;
+      box-shadow: $shadow;
+      border-radius: 10px;
+      .count {
+        font-size: 36px;
+      }
+    }
+  }
+  .tab-chart {
+    background: white;
+    box-shadow: $shadow;
+    border-radius: 10px;
+    padding: 24px;
+
+    .user-chart {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 20px;
+    }
+  }
+}

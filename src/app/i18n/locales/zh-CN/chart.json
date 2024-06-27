@@ -1,0 +1,15 @@
+{
+  "top": {
+    "userCount": "用户数",
+    "movieCount": "电影数",
+    "cinemaCount": "影院数",
+    "movieScreeningCount": "今日电影上映场次"
+  },
+  "tab": {
+    "userRegisterCount": "日注册用户",
+    "orderCount": "日订单量",
+    "movieShowTimeCount": "日排片数"
+  },
+  "registerPlatform": "注册平台",
+  "movieBoxOffice": "票房"
+}

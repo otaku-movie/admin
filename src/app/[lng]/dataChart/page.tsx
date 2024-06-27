@@ -3,11 +3,99 @@ import React, { useState, useEffect } from 'react'
 import http from '@/api/index'
 import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '@/app/[lng]/layout'
+import { UserChart } from './chart/userChart'
+import { MovieShowTimeChart } from './chart/MovieShowTimeChart'
+import { Tabs } from 'antd'
+import './style.scss'
+import { formatNumber } from '@/utils'
 
 export default function Page({ params: { lng } }: PageProps) {
-  const { t } = useTranslation(lng, 'menu')
+  const { t } = useTranslation(lng, 'chart')
+  const { t: common } = useTranslation(lng, 'common')
+  const [data, setData] = useState<any>({
+    userCount: 0,
+    movieCount: 0,
+    cinemaCount: 0,
+    showTimeCount: 0,
+    statisticsUserData: [],
+    statisticsOfDailyMovieScreenings: []
+  })
 
-  useEffect(() => {}, [])
+  const getData = (page = 1) => {
+    http({
+      url: 'admin/chart',
+      method: 'get'
+    }).then((res) => {
+      console.log(res.data)
+      setData(res.data)
+      
+    })
+  }
 
-  return <section>hello world</section>
+  useEffect(() => {
+    getData()
+  }, [])
+  const unit = [
+    {
+      value: 1e8,
+      unit: common('unit.billion')
+    },
+    {
+      value: 1e6,
+      unit: common('unit.million')
+    }
+  ]
+
+  return (
+    <section className="chart">
+      <ul className="top-message">
+        <li>
+          <div>{t('top.userCount')}</div>
+          <div className="count">{formatNumber(data.userCount, unit)}</div>
+        </li>
+        <li>
+          <div> {t('top.movieCount')}</div>
+          <div className="count">{formatNumber(data.movieCount, unit)}</div>
+        </li>
+        <li>
+          <div>{t('top.cinemaCount')}</div>
+          <div className="count">{formatNumber(data.cinemaCount, unit)}</div>
+        </li>
+        <li>
+          <div>{t('top.movieScreeningCount')}</div>
+          <div className="count">{formatNumber(data.showTimeCount, unit)}</div>
+        </li>
+      </ul>
+      <section className="tab-chart">
+        <Tabs
+          defaultActiveKey="2"
+          tabPosition={'top'}
+          // tabBarExtraContent={{
+          //   right: 'hello world'
+          // }}
+          items={[
+            {
+              key: '1',
+              label: t('tab.userRegisterCount'),
+              children: <UserChart data={data.statisticsUserData}></UserChart>
+            },
+            {
+              key: '2',
+              label: t('tab.movieShowTimeCount'),
+              children: (
+                <MovieShowTimeChart
+                  data={data.statisticsOfDailyMovieScreenings}
+                ></MovieShowTimeChart>
+              )
+            },
+            {
+              key: '3',
+              label: t('tab.orderCount'),
+              children: <UserChart></UserChart>
+            }
+          ]}
+        />
+      </section>
+    </section>
+  )
 }

@@ -39,7 +39,9 @@
     }
   },
   "unit": {
-    "jpy": "日元"
+    "jpy": "日元",
+    "billion": "亿",
+    "million": "万"
   },
   "button": {
     "add": "添加",

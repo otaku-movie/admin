@@ -192,7 +192,7 @@ export function CreateOrderModal(props: ModalProps) {
                 })
               }
             }).then(() => {
-              // props?.onConfirm?.()
+              props?.onConfirm?.()
             })
           }
         } else {

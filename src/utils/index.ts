@@ -214,3 +214,22 @@ export const findDataset = (element: HTMLElement, key: string): HTMLElement | nu
   
   return findDataset(element.parentElement as HTMLElement, key)
 }
+
+type Units = {
+  value: number
+  unit: string
+}[]
+
+export function formatNumber(
+  num: number, 
+    units: Units
+  ): string {
+  for (let i = 0; i < units.length; i++) {
+    const { value, unit } = units[i]
+    if (num >= value) {
+      return (num / value).toFixed(2).replace(/\.00$/, '') + unit
+    }
+  }
+  // 低于最小单位的数字，格式化为xxx,xxx
+  return num ? num.toLocaleString() : '0'
+}
