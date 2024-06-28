@@ -33,7 +33,7 @@ export function DictSelect(props: DictProps) {
       }}
     >
       {dict[props.code]?.map((item) => (
-        <Select.Option value={item.id} key={item.id}>
+        <Select.Option value={item.code} key={item.id}>
           {item.name}
         </Select.Option>
       ))}

@@ -175,11 +175,11 @@ export function CreateOrderModal(props: ModalProps) {
       width={'80%'}
       onOk={() => {
         const every = data.every((item) => item.movieTicketTypeId)
-        
+
         if (every) {
           if (data.length > 0) {
             http({
-              url: 'order/create',
+              url: 'movieOrder/create',
               method: 'post',
               data: {
                 movieShowTimeId: data[0]?.movieShowTimeId,

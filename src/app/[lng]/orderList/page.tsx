@@ -10,7 +10,8 @@ import {
   Select,
   Modal,
   message,
-  DatePicker
+  DatePicker,
+  Form
 } from 'antd'
 
 import type { TableColumnsType } from 'antd'
@@ -31,6 +32,7 @@ import { showTotal } from '@/utils/pagination'
 import { CheckPermission } from '@/components/checkPermission'
 import { DictSelect } from '@/components/DictSelect'
 import { Dict } from '@/components/dict'
+import { OrderState } from '@/config/enum'
 
 interface Query {
   id: number
@@ -39,6 +41,7 @@ interface Query {
   theaterHallId: number
   orderState: number
   payState: number
+  orderTime: any[]
 }
 
 export default function MoviePage({ params: { lng } }: PageProps) {
@@ -47,16 +50,27 @@ export default function MoviePage({ params: { lng } }: PageProps) {
   const [data, setData] = useState([])
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
-  const [query, setQuery] = useState<Partial<Query>>({})
+  const [query, setQuery] = useState<Partial<Query>>({
+    orderTime: []
+  })
   const { t } = useTranslation(lng, 'order')
   const { t: common } = useTranslation(lng, 'common')
   const [movieData, setMovieData] = useState([])
   const [cinemaData, setCinemaData] = useState<Cinema[]>([])
   const [theaterHallData, setTheaterHallData] = useState<theaterHall[]>([])
+  const [updateOrderStateModal, setUpdateOrderStateModal] = useState({
+    show: false,
+    form: Form.useForm(),
+    data: {
+      id: 0,
+      orderState: 0,
+      payState: 0
+    }
+  })
 
   const getData = (page = 1) => {
     http({
-      url: 'order/list',
+      url: 'admin/movieOrder/list',
       method: 'post',
       data: {
         page,
@@ -160,6 +174,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
     },
     {
       title: t('table.showTime'),
+      width: 220,
       render(_, row) {
         return (
           <Space direction="vertical">
@@ -175,10 +190,17 @@ export default function MoviePage({ params: { lng } }: PageProps) {
         return (
           <Space direction="vertical">
             {row.seat.map(
-              (item: { seatX: number; seatY: number }, index: number) => {
+              (
+                item: {
+                  seatX: number
+                  seatY: number
+                  movieTicketTypeName: string
+                },
+                index: number
+              ) => {
                 return (
                   <Tag key={index}>
-                    {item.seatX}排{item.seatY}座
+                    {item.seatX}排{item.seatY}座（{item.movieTicketTypeName}）
                   </Tag>
                 )
               }
@@ -230,11 +252,38 @@ export default function MoviePage({ params: { lng } }: PageProps) {
       title: t('table.action'),
       key: 'operation',
       fixed: 'right',
-      // width: 100,
+      align: 'center',
+      width: 120,
       render: (_, row) => {
         return (
-          <CheckPermission code="movieOrder.remove">
-            <Space>
+          <CheckPermission code="movieOrder.updateOrderState">
+            <Space direction="vertical" align="center">
+              {row.orderState === OrderState.order_created ? (
+                <Button
+                  type="primary"
+                  onClick={() => {
+                    setUpdateOrderStateModal({
+                      ...updateOrderStateModal,
+                      data: {
+                        id: row.id,
+                        orderState: row.orderState,
+                        payState: row.payState
+                      },
+                      show: true
+                    })
+                    updateOrderStateModal.form[0].resetFields()
+                    updateOrderStateModal.form[0].setFieldsValue(row)
+                  }}
+                >
+                  {common('button.order.updateOrderState')}
+                </Button>
+              ) : null}
+              {row.orderState === OrderState.order_succeed ? (
+                <Button type="primary" onClick={() => {}}>
+                  {common('button.order.generateQRcode')}
+                </Button>
+              ) : null}
+
               <Button
                 type="primary"
                 danger
@@ -248,14 +297,14 @@ export default function MoviePage({ params: { lng } }: PageProps) {
                     onOk() {
                       return new Promise((resolve, reject) => {
                         http({
-                          url: 'movieOrder/remove',
+                          url: 'admin/movieOrder/remove',
                           method: 'delete',
                           params: {
                             id: row.id
                           }
                         })
-                          .then(() => {
-                            message.success(t('message.remove.success'))
+                          .then((res) => {
+                            message.success(res.message)
                             getData()
                             resolve(true)
                           })
@@ -407,6 +456,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
           columns={columns}
           dataSource={data}
           bordered={true}
+          // scroll={{ y: 500 }}
           pagination={{
             pageSize: 10,
             current: page,
@@ -419,6 +469,90 @@ export default function MoviePage({ params: { lng } }: PageProps) {
           }}
         />
       </Space>
+      <Modal
+        title={t('updateOrderStateModal.title')}
+        open={updateOrderStateModal.show}
+        maskClosable={false}
+        onOk={() => {
+          updateOrderStateModal.form[0].validateFields().then(() => {
+            http({
+              url: 'admin/movieOrder/updateOrderState',
+              method: 'post',
+              data: {
+                ...updateOrderStateModal.data
+              }
+            }).then(() => {
+              setUpdateOrderStateModal({
+                ...updateOrderStateModal,
+                show: false
+              })
+              getData()
+            })
+          })
+        }}
+        onCancel={() => {
+          setUpdateOrderStateModal({
+            ...updateOrderStateModal,
+            show: false
+          })
+        }}
+      >
+        <Form
+          name="basic"
+          labelCol={{ span: 8 }}
+          wrapperCol={{ span: 16 }}
+          style={{ maxWidth: 600 }}
+          form={updateOrderStateModal.form[0]}
+        >
+          <Form.Item
+            label={t('updateOrderStateModal.form.orderState.label')}
+            name="orderState"
+            rules={[
+              {
+                required: true,
+                message: t('updateOrderStateModal.form.payState.required')
+              }
+            ]}
+          >
+            <DictSelect
+              code="orderState"
+              value={updateOrderStateModal.data.orderState}
+              onChange={(val) => {
+                // updateOrderStateModal.form[0].setFieldValue('orderState', val)
+                setUpdateOrderStateModal({
+                  ...updateOrderStateModal,
+                  data: {
+                    ...updateOrderStateModal.data,
+                    orderState: val
+                  }
+                })
+              }}
+            ></DictSelect>
+          </Form.Item>
+          {/* <Form.Item
+            label={t('updateOrderStateModal.form.payState.label')}
+            name="payState"
+            rules={[
+              {
+                required: true,
+                message: t('updateOrderStateModal.form.payState.required')
+              }
+            ]}
+          >
+            <DictSelect
+              code="payState"
+              value={updateOrderStateModal.data.payState}
+              onChange={(val) => {
+                updateOrderStateModal.form[0].setFieldValue('payState', val)
+                // setQuery({
+                //   ...query,
+                //   payState: val
+                // })
+              }}
+            ></DictSelect>
+          </Form.Item> */}
+        </Form>
+      </Modal>
     </section>
   )
 }

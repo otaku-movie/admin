@@ -44,7 +44,7 @@ export const useCommonStore = create<commonStore>((set, get) => {
           http({
             url: 'dict/specify',
             method: 'post',
-            data: { code }
+            data: { code: [code] }
           }).then((res) => {
             const dict =  Object.keys(res.data).reduce((map, current) => {
               map[current] = res.data[current]

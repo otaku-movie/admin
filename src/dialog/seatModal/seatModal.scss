@@ -87,15 +87,16 @@ $gap: 10px;
     border: 1.5px solid #f402e4;
     color: black;
   }
-  .seat-sold {
-    background-color: white;
-    border: 1.5px solid purple;
-  }
 
   .seat-selceted {
     background-color: orange;
     border: 1.5px solid orange;
     color: white;
+  }
+  .seat-sold {
+    background-color: white;
+    border: 1.5px solid purple;
+    color: black;
   }
 }
 

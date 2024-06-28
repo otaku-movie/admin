@@ -28,5 +28,18 @@
     "remove": {
       "content": "是否确认删除当前订单？"
     }
+  },
+  "updateOrderStateModal": {
+    "title": "修改订单状态",
+    "form": {
+      "orderState": {
+        "label": "订单状态",
+        "required": "请选择订单状态"
+      },
+      "payState": {
+        "label": "支付状态",
+        "required": "请选择支付状态"
+      }
+    }
   }
 }
