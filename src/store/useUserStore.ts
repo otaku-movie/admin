@@ -73,7 +73,6 @@ export const useUserStore = create<userInfoStore>((set, get) => {
 
         get().getBreadcrumb(permission.data)
         localStorage.setItem('route', JSON.stringify(permission.data))
-        localStorage.setItem('roleId', `${roleId}`)
         return Promise.resolve(true)
       } else {
         return Promise.resolve(false)
@@ -95,6 +94,7 @@ export const useUserStore = create<userInfoStore>((set, get) => {
         }
       })
       
+      
       localStorage.setItem('userInfo', JSON.stringify(userInfo.data))
       localStorage.setItem('token', userInfo.data.token)
       localStorage.setItem('loginTime', dayjs().format('YYYY-MM-DD HH:mm:ss'))
@@ -102,6 +102,7 @@ export const useUserStore = create<userInfoStore>((set, get) => {
       const first: role = userRole.data.shift()
       
       if (userRole) {
+        localStorage.setItem('roleId', `${first.id}`)
         const result = await get().permission(first.id)
 
         if (!result) {

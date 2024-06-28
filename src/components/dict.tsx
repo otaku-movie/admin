@@ -13,7 +13,7 @@ export function Dict(props: DictProps) {
   const [name, setName] = useState<string>('')
 
   useEffect(() => {
-    getDict([props.name]).then((dict) => {
+    getDict(props.name).then((dict) => {
       const find = dict?.[props.name]?.find((item) => item.code === props.code)
       setName(find?.name || '')
     })

@@ -532,6 +532,10 @@ export default function MoviePage({ params: { lng } }: PageProps) {
             ...createOrderModal,
             show: false
           })
+          setModal({
+            ...modal,
+            show: false
+          })
           getData()
         }}
         onCancel={() => {

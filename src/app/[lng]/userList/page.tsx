@@ -126,7 +126,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
       render: (_, row) => {
         return (
           <Space>
-            <CheckPermission code="">
+            <CheckPermission code="user.save">
               <Button
                 type="primary"
                 onClick={() => {
@@ -149,7 +149,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
                 {common('button.edit')}
               </Button>
             </CheckPermission>
-            <CheckPermission code="">
+            <CheckPermission code="user.configRole">
               <Button
                 type="primary"
                 onClick={() => {
@@ -175,7 +175,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
                 {common('button.configRole')}
               </Button>
             </CheckPermission>
-            <CheckPermission code="">
+            <CheckPermission code="user.remove">
               <Button
                 type="primary"
                 danger
@@ -224,7 +224,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
       }}
     >
       <Row justify="end">
-        <CheckPermission code="">
+        <CheckPermission code="user.save">
           <Button
             onClick={() => {
               setModal({

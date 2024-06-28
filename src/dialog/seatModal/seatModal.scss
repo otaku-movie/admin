@@ -20,20 +20,21 @@ $gap: 10px;
 }
 
 .seat-area {
-  display: flex;
   gap: 30px;
   margin: 10px;
-  justify-content: center;
 }
+
 .seat-number-top,
 .seat-number-bottom {
   // grid-area: 'seat-number-top';
   display: flex;
   box-sizing: border-box;
 }
+
 .seat-number-top {
   margin-top: $gap;
 }
+
 .seat-number-bottom {
   margin-top: $gap;
 }
@@ -58,15 +59,6 @@ $gap: 10px;
   border: 2px solid black;
 }
 
-.seat-not-selected {
-  background-color: white;
-  border: 1.5px solid #adadad;
-}
-
-.seat-selceted {
-  background-color: orange;
-  color: white;
-}
 .drag-container {
   width: 0;
   height: 0;
@@ -80,8 +72,61 @@ $gap: 10px;
   border: 1.5px solid lightgreen !important;
 }
 
-.seat-disabled {
-  background: rgb(243 243 243);
-  border: 1.5px solid #d9d9d9;
-  cursor: not-allowed !important;
+.seat-row {
+  .seat-not-selected {
+    background-color: white;
+    border: 1.5px solid #adadad;
+  }
+  .seat-disabled {
+    background: rgb(243 243 243);
+    border: 1.5px solid #d9d9d9;
+    cursor: not-allowed !important;
+  }
+  .seat-locked {
+    background: white;
+    border: 1.5px solid #f402e4;
+    color: black;
+  }
+  .seat-sold {
+    background-color: white;
+    border: 1.5px solid purple;
+  }
+
+  .seat-selceted {
+    background-color: orange;
+    border: 1.5px solid orange;
+    color: white;
+  }
+}
+
+.seat-state {
+  display: flex;
+  gap: 30px;
+  margin: 10px;
+  justify-content: center;
+  img {
+    vertical-align: sub;
+  }
+  span:nth-of-type(1) {
+    display: inline-block;
+    min-width: 30px;
+    height: 30px;
+    vertical-align: middle;
+    border-radius: 4px;
+    margin-right: 4px;
+  }
+  .seat-available span:nth-of-type(1) {
+    border: 1.5px solid #adadad;
+  }
+  .seat-locked span:nth-of-type(1) {
+    border: 1.5px solid #f402e4;
+  }
+  .seat-sold span:nth-of-type(1) {
+    border: 1.5px solid purple;
+  }
+  .seat-disabled span:nth-of-type(1) {
+    background: rgb(243 243 243);
+    border: 1.5px solid #d9d9d9;
+    cursor: not-allowed !important;
+  }
 }

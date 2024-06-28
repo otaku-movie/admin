@@ -26,7 +26,7 @@ import { CheckPermission } from '@/components/checkPermission'
 import * as wheelChair from '@/assets/font/wheelChair.svg'
 import Image from 'next/image'
 import { findDataset } from '@/utils'
-
+import { SelectSeatState } from '@/config/enum'
 // import { Draw } from './store'
 
 interface ModalProps {
@@ -766,29 +766,61 @@ export default function SeatModal(props: ModalProps) {
                 )
               })}
             </ul>
-            <ul className="seat-area">
-              {areaModal.data.map((item, index) => {
-                return (
-                  <li key={index}>
-                    <span
-                      style={{
-                        display: 'inline-block',
-                        width: '14px',
-                        height: '14px',
-                        borderRadius: '4px',
-                        border: `2px solid ${item.color}`,
-                        boxSizing: 'border-box',
-                        verticalAlign: 'middle',
-                        marginRight: '4px'
-                      }}
-                    ></span>
-                    <span style={{ verticalAlign: 'middle' }}>
-                      {item.name}：{item.price}円
-                    </span>
-                  </li>
-                )
-              })}
-            </ul>
+            <section style={{
+              display: 'flex',
+              justifyContent: 'center'
+            }}>
+              <ul className="seat-state">
+                <li>
+                  {/* <span></span> */}
+                  <Image src={wheelChair} width={30} alt="wheel chair"></Image>
+                  <span>{common('enum.seatType.wheelChair')}</span>
+                </li>
+                <li className="seat-disabled">
+                  <span></span>
+                  <span>{common('enum.seatType.disabled')}</span>
+                </li>
+                <li className="seat-available">
+                  <span></span>
+                  <span>{common('enum.selectSeatState.available')}</span>
+                </li>
+                <li className="seat-locked">
+                  <span></span>
+                  <span>{common('enum.selectSeatState.locked')}</span>
+                </li>
+                <li className="seat-sold">
+                  <span></span>
+                  <span>{common('enum.selectSeatState.sold')}</span>
+                </li>
+              </ul>
+              <ul className="seat-area">
+                <li className="seat-available"></li>
+                <li className="seat-locked"></li>
+                <li className="seat-sold"></li>
+                {areaModal.data.map((item, index) => {
+                  return (
+                    <li key={index}>
+                      <span
+                        style={{
+                          display: 'inline-block',
+                          width: '30px',
+                          height: '30px',
+                          borderRadius: '4px',
+                          border: `2px solid ${item.color}`,
+                          boxSizing: 'border-box',
+                          verticalAlign: 'middle',
+                          marginRight: '4px'
+                        }}
+                      ></span>
+                      <span style={{ verticalAlign: 'middle' }}>
+                        {item.name}：{item.price}
+                        {common('unit.jpy')}
+                      </span>
+                    </li>
+                  )
+                })}
+              </ul>
+            </section>
 
             <section
               className="section"
@@ -833,7 +865,7 @@ export default function SeatModal(props: ModalProps) {
                   {data?.[0]?.children?.map((children: any, index: number) => {
                     return (
                       <div key={index} className="seat-row-column">
-                        {children.columnName}
+                        {children.y}
                       </div>
                     )
                   })}
@@ -843,8 +875,11 @@ export default function SeatModal(props: ModalProps) {
                   // style={style}
                   ref={seatContainerRef}
                   onClick={(e) => {
-                    const dataset = findDataset(e.target as HTMLElement, 'rowIndex')!.dataset
-                    
+                    const dataset = findDataset(
+                      e.target as HTMLElement,
+                      'rowIndex'
+                    )!.dataset
+
                     const singleSelect = (x: number, y: number) => {
                       if (selectedSeat.length < maxSelectSeatCount) {
                         data[x].children[y].selected =
@@ -937,6 +972,15 @@ export default function SeatModal(props: ModalProps) {
                       const x = +dataset.rowIndex
                       const y = +dataset.columnIndex
 
+                      if (
+                        data[x].children[y].selectSeatState ===
+                          SelectSeatState.sold ||
+                        data[x].children[y].selectSeatState ===
+                          SelectSeatState.locked
+                      ) {
+                        return
+                      }
+
                       if (!data[x].children[y].disabled) {
                         if (data[x].children[y].seatPositionGroup) {
                           doubleSelect(x, y)
@@ -992,7 +1036,13 @@ export default function SeatModal(props: ModalProps) {
                                       ? 'seat-selceted'
                                       : 'seat-not-selected',
                                     {
+                                      'seat-locked':
+                                        children.selectSeatState ===
+                                        SelectSeatState.locked,
                                       'seat-disabled': children.disabled,
+                                      'seat-sold':
+                                        children.selectSeatState ===
+                                        SelectSeatState.sold,
                                       'seat-area-hover':
                                         children.area?.hover ||
                                         children.area?.selected
@@ -1027,6 +1077,7 @@ export default function SeatModal(props: ModalProps) {
                                       <Image
                                         src={wheelChair}
                                         width={40}
+                                        alt="wheel chair"
                                       ></Image>
                                     ) : (
                                       key
@@ -1053,7 +1104,7 @@ export default function SeatModal(props: ModalProps) {
                   {data[0]?.children?.map((children: any, index: number) => {
                     return (
                       <div key={index} className="seat-row-column">
-                        {children.columnName}
+                        {children.y}
                       </div>
                     )
                   })}

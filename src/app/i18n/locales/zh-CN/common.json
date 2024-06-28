@@ -62,5 +62,16 @@
     "configAisle": "配置过道",
     "configArea": "配置区域",
     "cancel": "取消"
+  },
+  "enum": {
+    "selectSeatState": {
+      "available": "可选座",
+      "locked": "已锁定",
+      "sold": "已售出"
+    },
+    "seatType": {
+      "wheelChair": "轮椅座",
+      "disabled": "已禁用"
+    }
   }
 }

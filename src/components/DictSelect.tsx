@@ -20,7 +20,7 @@ export function DictSelect(props: DictProps) {
   }, [props.value])
 
   useEffect(() => {
-    getDict([props.code])
+    getDict(props.code)
   }, [props.code])
 
   return (

@@ -128,6 +128,8 @@ export interface SeatItem {
   x: number
   y: number
   z: number
+  selectSeatState: 1 | 2 | 3
+  // 代表 selectSeatState的 1 2， 1为false 2 为true
   selected: boolean
   left?: number
   top?: number
