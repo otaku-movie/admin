@@ -48,7 +48,6 @@ export function ConfigUserRoleModal(props: ModalProps) {
     if (props.data?.id) {
       form.setFieldsValue(props.data)
       setQuery(props.data)
-      console.log(props.data, query)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.show, props.data])

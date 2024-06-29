@@ -111,10 +111,6 @@ export function RolePermission(props: modalProps) {
       dataIndex: 'i18nKey'
     },
     {
-      title: 'id',
-      dataIndex: 'id'
-    },
-    {
       title: t('rolePermissionModal.table.show'),
       dataIndex: '',
       render(_, row) {

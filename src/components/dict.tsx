@@ -10,7 +10,6 @@ export interface DictProps {
 export function Dict(props: DictProps) {
   const dict = useCommonStore((state) => state.dict)
   const getDict = useCommonStore((state) => state.getDict)
-  const [code, setCode] = useState<number>()
   const [name, setName] = useState<string>('')
 
   useEffect(() => {
