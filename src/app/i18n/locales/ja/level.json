@@ -1,0 +1,29 @@
+{
+  "table": {
+    "name": "名称",
+    "description": "概要",
+    "action": "操作"
+  },
+  "modal": {
+    "title": {
+      "create": "追加",
+      "edit": "編集"
+    },
+    "form": {
+      "name": {
+        "label": "名称",
+        "required": "名称を入力してください"
+      },
+      "description": {
+        "label": "概要",
+        "required": "概要を入力してください"
+      }
+    }
+  },
+  "message": {
+    "remove": {
+      "content": "現在のデータを削除してもよろしいですか？",
+      "success": "削除に成功しました"
+    }
+  }
+}

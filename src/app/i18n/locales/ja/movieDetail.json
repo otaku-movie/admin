@@ -1,0 +1,124 @@
+{
+  "form": {
+    "cover": {
+      "label": "カバー",
+      "required": "映画のカバーをアップロードしてください"
+    },
+    "name": {
+      "label": "映画の名前",
+      "required": "映画の名前を入力してください"
+    },
+    "originalName": {
+      "label": "映画の原題",
+      "required": "映画の原題を入力してください"
+    },
+    "time": {
+      "label": "映画の長さ",
+      "required": "映画の長さを入力してください"
+    },
+    "level": {
+      "label": "映画のレベル",
+      "required": "レベルを選択してください"
+    },
+    "spec": {
+      "label": "上映仕様",
+      "required": "上映仕様を選択してください"
+    },
+    "description": {
+      "label": "映画の説明",
+      "required": "映画の説明を入力してください"
+    },
+    "status": {
+      "label": "上映状態",
+      "required": "上映状態を選択してください"
+    },
+    "startDate": {
+      "label": "上映開始日",
+      "required": "上映開始日を選択してください"
+    },
+    "endDate": {
+      "label": "上映終了日",
+      "required": "上映終了日を選択してください",
+      "startAfterEnd": "終了日は開始日より後でなければなりません"
+    },
+    "homePage": {
+      "label": "公式サイト",
+      "required": "公式サイトのアドレスを入力してください"
+    },
+    "staff": {
+      "label": "スタッフ"
+    },
+    "character": {
+      "label": "キャラクター"
+    }
+  },
+  "staff": {
+    "select": "スタッフを選択",
+    "table": {
+      "position": "ポジション",
+      "cover": "画像",
+      "name": "名前",
+      "action": "操作"
+    },
+    "button": {
+      "edit": "編集",
+      "remove": "削除"
+    },
+    "message": {
+      "notRepeat": "このポジションは既に追加されています"
+    },
+    "modal": {
+      "button": {
+        "addPosition": "ポジションを追加",
+        "addStaff": "スタッフを追加"
+      },
+      "form": {
+        "staff": {
+          "label": "スタッフ",
+          "required": "スタッフを選択してください"
+        },
+        "position": {
+          "label": "ポジション名",
+          "required": "ポジションを選択してください"
+        }
+      }
+    }
+  },
+  "character": {
+    "select": "キャラクターを選択",
+    "table": {
+      "cover": "画像",
+      "name": "名前",
+      "staff": "俳優または声優",
+      "action": "操作"
+    },
+    "button": {
+      "edit": "編集",
+      "remove": "削除"
+    },
+    "message": {
+      "notRepeat": "このキャラクターは既に追加されています"
+    },
+    "modal": {
+      "button": {
+        "addCharacter": "キャラクターを追加"
+      },
+      "form": {
+        "movie": {
+          "label": "所属映画",
+          "required": "映画を選択してください"
+        },
+        "character": {
+          "label": "キャラクター",
+          "required": "キャラクターを選択してください"
+        }
+      }
+    }
+  },
+  "button": {
+    "prev": "前のステップ",
+    "next": "次のステップ",
+    "save": "保存",
+    "upload": "アップロード"
+  }
+}

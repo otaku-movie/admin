@@ -1,0 +1,40 @@
+{
+  "form": {
+    "name": {
+      "label": "映画館名",
+      "required": "映画館名を入力してください"
+    },
+    "description": {
+      "label": "映画館概要",
+      "required": "映画館概要を入力してください"
+    },
+    "address": {
+      "label": "住所",
+      "required": "住所を入力してください"
+    },
+    "tel": {
+      "label": "電話番号",
+      "required": "電話番号を入力してください"
+    },
+    "homePage": {
+      "label": "公式サイト",
+      "required": "公式サイトのURLを入力してください"
+    },
+    "maxSelectSeatCount": {
+      "label": "最大選択可能な座席数",
+      "required": "最大選択可能な座席数を入力してください"
+    },
+    "spec": {
+      "label": "規格",
+      "required": "規格を選択してください"
+    },
+    "plusPrice": {
+      "required": "特別上映の追加料金を入力してください"
+    },
+    "save": "保存"
+  },
+  "message": {
+    "required": "規格と特別上映の追加料金は必須です",
+    "repeat": "規格は重複できません"
+  }
+}

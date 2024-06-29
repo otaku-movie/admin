@@ -1,0 +1,46 @@
+{
+  "table": {
+    "name": "ページ名",
+    "button": "ボタン",
+    "buttonName": "ボタン名",
+    "buttonCode": "ボタンコード",
+    "apiName": "API名",
+    "apiCode": "APIコード",
+    "i18nKey": "国際化キー",
+    "action": "操作"
+  },
+  "message": {
+    "remove": {
+      "content": "現在のボタンを削除してもよろしいですか？削除後は元に戻せません",
+      "success": "削除に成功しました"
+    }
+  },
+  "modal": {
+    "title": {
+      "create": "ボタンを追加",
+      "edit": "ボタンを編集"
+    },
+    "form": {
+      "menuId": {
+        "label": "所属メニュー",
+        "required": "メニューを選択してください"
+      },
+      "i18nKey": {
+        "label": "国際化キー",
+        "required": "国際化キーを入力してください"
+      },
+      "name": {
+        "label": "ボタン名",
+        "required": "ボタン名を入力してください"
+      },
+      "code": {
+        "label": "ボタンコード",
+        "required": "ボタンコードを入力してください"
+      },
+      "apiCode": {
+        "label": "APIコード",
+        "required": "APIコードを入力してください"
+      }
+    }
+  }
+}

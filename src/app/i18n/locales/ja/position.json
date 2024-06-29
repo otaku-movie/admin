@@ -1,0 +1,24 @@
+{
+  "table": {
+    "name": "役職名",
+    "action": "操作"
+  },
+  "modal": {
+    "title": {
+      "create": "役職の追加",
+      "edit": "役職の編集"
+    },
+    "form": {
+      "name": {
+        "label": "役職名",
+        "required": "役職名を入力してください"
+      }
+    }
+  },
+  "message": {
+    "remove": {
+      "content": "現在の役職を削除してもよろしいですか？",
+      "success": "削除が成功しました"
+    }
+  }
+}

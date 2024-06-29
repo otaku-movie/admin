@@ -38,6 +38,10 @@
       }
     }
   },
+  "message": {
+    "notPermission": "没有权限",
+    "save": "保存成功"
+  },
   "unit": {
     "jpy": "日元",
     "billion": "亿",
@@ -65,6 +69,12 @@
     "order": {
       "updateOrderState": "修改订单状态",
       "generateQRcode": "生成取票码"
+    },
+    "comment": {
+      "replyList": "回复列表"
+    },
+    "reply": {
+      "reply": "回复"
     }
   },
   "enum": {

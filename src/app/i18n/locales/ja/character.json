@@ -1,0 +1,49 @@
+{
+  "table": {
+    "cover": "画像",
+    "name": "キャラクター名",
+    "originalName": "原名",
+    "description": "概要",
+    "movie": "所属映画",
+    "staff": "俳優または声優",
+    "action": "操作"
+  },
+  "modal": {
+    "title": {
+      "create": "キャラクターを追加",
+      "edit": "キャラクターを編集"
+    },
+    "form": {
+      "movie": {
+        "label": "映画名",
+        "required": "映画を選択してください"
+      },
+      "cover": {
+        "label": "画像",
+        "required": "画像をアップロードしてください"
+      },
+      "name": {
+        "label": "キャラクター名",
+        "required": "キャラクター名を入力してください"
+      },
+      "originalName": {
+        "label": "原名",
+        "required": "原名を入力してください"
+      },
+      "description": {
+        "label": "概要",
+        "required": "概要を入力してください"
+      },
+      "staffId": {
+        "label": "スタッフ",
+        "required": "スタッフを選択してください"
+      }
+    }
+  },
+  "message": {
+    "remove": {
+      "content": "現在のキャラクターを削除してもよろしいですか？削除後は元に戻せません",
+      "success": "削除に成功しました"
+    }
+  }
+}

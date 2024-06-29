@@ -1,0 +1,39 @@
+{
+  "table": {
+    "cover": "画像",
+    "name": "演技者名",
+    "originalName": "原名",
+    "description": "概要",
+    "action": "操作"
+  },
+  "modal": {
+    "title": {
+      "create": "演技者の追加",
+      "edit": "演技者の編集"
+    },
+    "form": {
+      "cover": {
+        "label": "画像",
+        "required": "画像をアップロードしてください"
+      },
+      "name": {
+        "label": "演技者名",
+        "required": "演技者名を入力してください"
+      },
+      "originalName": {
+        "label": "原名",
+        "required": "原名を入力してください"
+      },
+      "description": {
+        "label": "概要",
+        "required": "概要を入力してください"
+      }
+    }
+  },
+  "message": {
+    "remove": {
+      "content": "現在の演技者を削除してもよろしいですか？",
+      "success": "削除が成功しました"
+    }
+  }
+}

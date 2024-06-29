@@ -1,0 +1,45 @@
+{
+  "table": {
+    "name": "作品",
+    "cinemaName": "上映映画館",
+    "theaterHallName": "上映劇場",
+    "specName": "上映仕様",
+    "showTime": "上映時間",
+    "orderNumber": "注文番号",
+    "seatNumber": "座席番号",
+    "payMethod": "支払い方法",
+    "payTime": "支払い時間",
+    "payState": "支払い状態",
+    "payTotal": "支払い総額",
+    "orderTime": "注文作成時間",
+    "orderState": "注文状態",
+    "orderTotal": "注文総額",
+    "action": "操作"
+  },
+  "search": {
+    "cinema": "上映映画館",
+    "theaterHall": "上映劇場",
+    "id": "注文番号",
+    "orderTime": "注文時間",
+    "orderState": "注文状態",
+    "payState": "支払い状態"
+  },
+  "message": {
+    "remove": {
+      "content": "現在の注文を削除してもよろしいですか？"
+    }
+  },
+  "updateOrderStateModal": {
+    "title": "注文状態の変更",
+    "form": {
+      "orderState": {
+        "label": "注文状態",
+        "required": "注文状態を選択してください"
+      },
+      "payState": {
+        "label": "支払い状態",
+        "required": "支払い状態を選択してください"
+      }
+    }
+  }
+}

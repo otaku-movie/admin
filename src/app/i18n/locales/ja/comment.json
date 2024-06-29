@@ -1,0 +1,29 @@
+{
+  "table": {
+    "user": "コメント者",
+    "content": "コメント内容",
+    "time": "コメント時間",
+    "replyCount": "返信数",
+    "likeCount": "いいね数",
+    "stepOnCount": "低評価数",
+    "action": "操作"
+  },
+  "modal": {
+    "title": {
+      "create": "コメントを追加",
+      "edit": "コメントを編集"
+    },
+    "form": {
+      "comment": {
+        "label": "コメント内容",
+        "required": "コメント内容を入力してください",
+        "max": "文字数は1000を超えてはいけません"
+      }
+    }
+  },
+  "message": {
+    "remove": {
+      "content": "現在の行を削除しますか？"
+    }
+  }
+}

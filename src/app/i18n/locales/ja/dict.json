@@ -1,0 +1,35 @@
+{
+  "table": {
+    "name": "辞書名",
+    "code": "コード",
+    "action": "操作"
+  },
+  "message": {
+    "remove": {
+      "content": "現在の行を削除しますか？削除する際に、辞書項目も一緒に削除されます"
+    }
+  },
+  "dictItemModal": {
+    "title": "辞書詳細",
+    "message": {
+      "repeat": "辞書コードは重複できません",
+      "required": "辞書項目は空にできません"
+    }
+  },
+  "dictModal": {
+    "title": {
+      "create": "追加",
+      "edit": "編集"
+    },
+    "form": {
+      "name": {
+        "label": "辞書名",
+        "required": "辞書名を入力してください"
+      },
+      "code": {
+        "label": "辞書コード",
+        "required": "辞書コードを入力してください"
+      }
+    }
+  }
+}

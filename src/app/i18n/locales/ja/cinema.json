@@ -1,8 +1,19 @@
 {
   "table": {
-    "name": "劇場名",
+    "name": "映画館名",
+    "spec": "規格",
     "address": "住所",
     "tel": "電話番号",
-    "action": "操作"
+    "action": "操作",
+    "description": "概要",
+    "homePage": "公式サイト",
+    "theaterCount": "スクリーン数",
+    "maxSelectSeatCount": "選択可能な座席数"
+  },
+  "message": {
+    "remove": {
+      "content": "現在の映画館を削除してもよろしいですか？",
+      "success": "削除に成功しました"
+    }
   }
 }

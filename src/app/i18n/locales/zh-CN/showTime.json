@@ -19,7 +19,7 @@
   "message": {
     "remove": {
       "selectedCount": "当前已有{{count}}人选座，是否仍要删除",
-      "content": "是否确认要删除当前场次，删除后不可恢复",
+      "content": "是否确认要删除当前场次?",
       "success": "删除成功"
     }
   },

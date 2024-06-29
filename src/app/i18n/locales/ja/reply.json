@@ -1,0 +1,31 @@
+{
+  "table": {
+    "commentUser": "コメント者",
+    "replyUser": "返信者",
+    "content": "返信内容",
+    "time": "返信時間",
+    "replyCount": "返信数",
+    "likeCount": "いいね数",
+    "stepOnCount": "嫌い数",
+    "action": "操作"
+  },
+  "modal": {
+    "title": {
+      "create": "返信の追加",
+      "edit": "返信の編集"
+    },
+    "form": {
+      "comment": {
+        "label": "返信内容",
+        "required": "返信内容を入力してください",
+        "max": "文字数は1000以内にしてください"
+      }
+    }
+  },
+  "message": {
+    "remove": {
+      "content": "現在の行を削除してもよろしいですか？",
+      "success": "削除が成功しました"
+    }
+  }
+}

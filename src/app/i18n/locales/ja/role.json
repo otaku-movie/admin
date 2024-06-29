@@ -1,0 +1,33 @@
+{
+  "table": {
+    "name": "ロール名",
+    "action": "操作"
+  },
+  "modal": {
+    "title": {
+      "create": "ロールの追加",
+      "edit": "ロールの編集"
+    },
+    "form": {
+      "name": {
+        "label": "ロール名",
+        "required": "ロール名を入力してください"
+      }
+    }
+  },
+  "rolePermissionModal": {
+    "title": "権限の設定",
+    "table": {
+      "name": "メニュー名",
+      "button": "ボタン",
+      "show": "表示"
+    }
+  },
+  "message": {
+    "noSelectMenu": "メニューを選択してください",
+    "remove": {
+      "content": "現在のロールを削除してもよろしいですか？",
+      "success": "削除が成功しました"
+    }
+  }
+}

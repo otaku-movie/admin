@@ -2,52 +2,87 @@
   "menu": {
     "dataChart": "データチャート",
     "cinema": {
-      "name": "劇場管理",
+      "name": "映画館管理",
       "children": {
-        "cinemaList": "劇場リスト",
-        "specList": "スペックリスト"
+        "cinemaList": "映画館リスト",
+        "cinemaDetail": "映画館詳細",
+        "theaterHall": "スクリーンリスト",
+        "specList": "規格リスト",
+        "ticketType": "チケットタイプ"
       }
     },
     "movie": {
       "name": "映画管理",
       "children": {
         "movieList": "映画リスト",
-        "showTimeList": "映画番組リスト",
+        "showTimeList": "上映時間リスト",
         "characterList": "キャラクターリスト",
         "staffList": "スタッフリスト",
         "positionList": "ポジションリスト",
         "levelList": "レベルリスト",
         "movieDetail": "映画詳細",
-        "commentList": "コメントリスト"
+        "commentList": "コメントリスト",
+        "replyList": "返信リスト"
       }
     },
     "userList": "ユーザーリスト",
     "dictList": "辞書リスト",
-    "orderList": "オーダーリスト",
+    "orderList": "注文リスト",
     "permission": {
       "name": "権限管理",
       "children": {
         "roleList": "役割リスト",
         "menuList": "メニューリスト",
         "buttonList": "ボタンリスト",
-        "apiList": "API リスト"
+        "apiList": "APIリスト"
       }
     }
   },
   "message": {
-    "notPermission": "権限ありません",
+    "notPermission": "権限がありません",
     "save": "保存成功"
   },
+  "unit": {
+    "jpy": "円",
+    "billion": "億",
+    "million": "万"
+  },
   "button": {
-    "add": "新規",
+    "add": "追加",
     "edit": "編集",
+    "dictDetail": "辞書詳細",
     "remove": "削除",
     "save": "保存",
     "login": "ログイン",
-    "theaterHallDetail": "シアター詳細",
+    "ticketType": "チケットタイプ",
+    "theaterHallDetail": "スクリーン詳細",
     "commentList": "コメントリスト",
-    "configPermission": "権限配置",
-    "configRole": "役割配置",
-    "seatSelectedDetail": "座席選択詳細"
+    "configPermission": "権限を設定",
+    "configRole": "役割を設定",
+    "seatSelectedDetail": "座席選択",
+    "configSeat": "座席を設定",
+    "saveSeatConfig": "座席設定を保存",
+    "saveSelectSeat": "座席選択を確認",
+    "configAisle": "通路を設定",
+    "configArea": "エリアを設定",
+    "cancel": "キャンセル",
+    "order": {
+      "updateOrderState": "注文状態を変更",
+      "generateQRcode": "QRコードを生成"
+    },
+    "comment": {
+      "replyList": "返信リスト"
+    }
+  },
+  "enum": {
+    "selectSeatState": {
+      "available": "選択可能",
+      "locked": "ロック済み",
+      "sold": "販売済み"
+    },
+    "seatType": {
+      "wheelChair": "車椅子席",
+      "disabled": "無効"
+    }
   }
 }

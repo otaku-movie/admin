@@ -1,14 +1,23 @@
 {
   "table": {
-    "name": "タイトル",
-    "time": "タイム",
+    "name": "作品",
+    "originalName": "原題",
+    "time": "上映時間",
     "level": "レベル",
+    "cinemaCount": "上映映画館数",
+    "theaterCount": "上映劇場数",
     "commentCount": "コメント数",
-    "watchedCount": "鑑賞数",
-    "wantToSeeCount": "みたい数",
-    "startDate": "上映開始時期",
-    "endDate": "上映終了時期",
+    "watchedCount": "視聴済み",
+    "wantToSeeCount": "見たい数",
+    "startDate": "開始日",
+    "endDate": "終了日",
     "status": "上映ステータス",
     "action": "操作"
+  },
+  "message": {
+    "remove": {
+      "content": "現在の映画を削除しますか？",
+      "success": "削除に成功しました"
+    }
   }
 }

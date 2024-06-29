@@ -1,0 +1,46 @@
+{
+  "table": {
+    "name": "ページ名称",
+    "i18nKey": "国際化キー",
+    "routerPath": "ルーティングパス",
+    "routerName": "ルーティング名",
+    "show": "表示",
+    "action": "操作"
+  },
+  "message": {
+    "remove": {
+      "content": "現在のメニューを削除してもよろしいですか？",
+      "success": "削除に成功しました"
+    }
+  },
+  "modal": {
+    "title": {
+      "create": "メニューを追加",
+      "edit": "メニューを編集"
+    },
+    "form": {
+      "i18nKey": {
+        "label": "国際化キー",
+        "required": "国際化キーを入力してください"
+      },
+      "name": {
+        "label": "メニュー名称",
+        "required": "メニュー名称を入力してください"
+      },
+      "path": {
+        "label": "ルーティングパス",
+        "required": "ルーティングパスを入力してください"
+      },
+      "pathName": {
+        "label": "ルーティングパス名",
+        "required": "ルーティングパス名を入力してください"
+      },
+      "show": {
+        "label": "表示"
+      },
+      "parentId": {
+        "label": "親メニュー"
+      }
+    }
+  }
+}

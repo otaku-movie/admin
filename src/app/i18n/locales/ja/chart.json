@@ -1,0 +1,15 @@
+{
+  "top": {
+    "userCount": "ユーザー数",
+    "movieCount": "映画数",
+    "cinemaCount": "映画館数",
+    "movieScreeningCount": "今日の上映回数"
+  },
+  "tab": {
+    "userRegisterCount": "日別登録ユーザー数",
+    "orderCount": "日別注文数",
+    "movieShowTimeCount": "日別上映回数"
+  },
+  "registerPlatform": "登録プラットフォーム",
+  "movieBoxOffice": "興行収入"
+}

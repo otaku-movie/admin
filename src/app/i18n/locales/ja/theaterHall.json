@@ -1,0 +1,98 @@
+{
+  "table": {
+    "name": "シアター名",
+    "spec": "仕様",
+    "rowCount": "行数",
+    "columnCount": "列数",
+    "seatCount": "座席数",
+    "action": "操作"
+  },
+  "areaModal": {
+    "title": "エリアの設定",
+    "message": {
+      "max": "エリアの数は最大で5つまでです",
+      "required": "エリアの選択数は必須です"
+    },
+    "table": {
+      "color": "カラー",
+      "action": "操作"
+    },
+    "form": {
+      "name": {
+        "label": "エリア名",
+        "required": "エリア名を入力してください",
+        "repeat": "エリア名は重複できません"
+      },
+      "price": {
+        "label": "価格",
+        "required": "価格を入力してください"
+      }
+    }
+  },
+  "seatModal": {
+    "title": "通路の設定",
+    "seatCount": "座席数",
+    "dropdownItem": {
+      "configCoupleSeat": "カップル席の設定",
+      "configArea": "エリアの設定（最大5つ）",
+      "configWheelChairSeat": "車椅子席の設定",
+      "show": "座席の表示/非表示",
+      "disabled": "座席の無効化/有効化",
+      "reset": "リセット"
+    },
+    "message": {
+      "required": "通路の設定は必須です",
+      "repeat": "通路が重複しています",
+      "max": "最大で{{max}}個まで選択できます"
+    },
+    "form": {
+      "type": {
+        "label": "通路の種類",
+        "required": "通路の種類を選択してください",
+        "placeholder": "行または列を選択してください",
+        "select": {
+          "row": "行",
+          "column": "列"
+        }
+      },
+      "start": {
+        "label": "開始位置",
+        "required": "開始位置を入力してください",
+        "placeholder": "開始位置を入力してください"
+      }
+    }
+  },
+  "theaterHallModal": {
+    "title": {
+      "create": "シアターの追加",
+      "edit": "シアターの編集"
+    },
+    "form": {
+      "name": {
+        "label": "シアター名",
+        "required": "シアター名を入力してください"
+      },
+      "spec": {
+        "label": "シアターの仕様",
+        "required": "シアターの仕様を選択してください"
+      },
+      "rowCount": {
+        "label": "行数",
+        "required": "行数を入力してください"
+      },
+      "columnCount": {
+        "label": "列数",
+        "required": "列数を入力してください"
+      }
+    }
+  },
+  "message": {
+    "changeSeatCount": {
+      "content": "行数と列数を変更しても元には戻せませんが、変更しますか？"
+    },
+    "remove": {
+      "content": "この行を削除してもよろしいですか？",
+      "success": "削除に成功しました"
+    }
+  }
+}
