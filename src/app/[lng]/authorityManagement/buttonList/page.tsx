@@ -49,7 +49,7 @@ export default function Page({ params: { lng } }: PageProps) {
   const columns: TableColumnsType<buttonItem> = [
     {
       title: t('table.name'),
-      // width: 200,
+      width: 250,
       dataIndex: 'i18nKey',
       render(key) {
         return common(key)
@@ -58,6 +58,7 @@ export default function Page({ params: { lng } }: PageProps) {
     {
       title: t('table.button'),
       className: 'button-cell',
+      width: 800,
       render(value, item) {
         return (
           <ul
@@ -187,6 +188,13 @@ export default function Page({ params: { lng } }: PageProps) {
         dataSource={data}
         bordered={true}
         rowKey={'id'}
+        scroll={{
+          x: columns.reduce(
+            (total, current) => total + (current.width as number),
+            0
+          )
+        }}
+        sticky={{ offsetHeader: -20 }}
       />
       <ButtonModal
         type={modal.type as 'create' | 'edit'}

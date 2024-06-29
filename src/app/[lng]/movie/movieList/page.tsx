@@ -10,7 +10,8 @@ import {
   Tag,
   Select,
   Modal,
-  message
+  message,
+  Flex
 } from 'antd'
 
 import type { TableColumnsType } from 'antd'
@@ -121,11 +122,13 @@ export default function Page({ params: { lng } }: PageProps) {
     },
     {
       title: t('table.originalName'),
+      width: 200,
       dataIndex: 'originalName'
     },
     {
       title: t('table.time'),
       dataIndex: 'time',
+      width: 200,
       render(text: number) {
         if (text) {
           return <span>{text}分</span>
@@ -134,34 +137,42 @@ export default function Page({ params: { lng } }: PageProps) {
     },
     {
       title: t('table.cinemaCount'),
+      width: 200,
       dataIndex: 'cinemaCount'
     },
     {
       title: t('table.theaterCount'),
+      width: 200,
       dataIndex: 'theaterCount'
     },
     {
       title: t('table.commentCount'),
+      width: 200,
       dataIndex: 'commentCount'
     },
     {
       title: t('table.watchedCount'),
+      width: 200,
       dataIndex: 'watchedCount'
     },
     {
       title: t('table.wantToSeeCount'),
+      width: 200,
       dataIndex: 'wantToSeeCount'
     },
     {
       title: t('table.startDate'),
+      width: 200,
       dataIndex: 'startDate'
     },
     {
       title: t('table.endDate'),
+      width: 200,
       dataIndex: 'endDate'
     },
     {
       title: t('table.status'),
+      width: 200,
       dataIndex: '',
       render(_, row) {
         return <Dict code={row.status} name={'releaseStatus'}></Dict>
@@ -244,7 +255,7 @@ export default function Page({ params: { lng } }: PageProps) {
 
   return (
     <section>
-      <Space direction="vertical" size={30}>
+      <Flex vertical gap={30}>
         <Row justify="end">
           <CheckPermission code="movie.save">
             <Button
@@ -301,6 +312,13 @@ export default function Page({ params: { lng } }: PageProps) {
           columns={columns}
           dataSource={data}
           bordered={true}
+          scroll={{
+            x: columns.reduce(
+              (total, current) => total + (current.width as number),
+              0
+            )
+          }}
+          sticky={{ offsetHeader: -20 }}
           pagination={{
             pageSize: 10,
             current: page,
@@ -311,9 +329,8 @@ export default function Page({ params: { lng } }: PageProps) {
             },
             position: ['bottomCenter']
           }}
-          scroll={{ x: 1200 }}
         />
-      </Space>
+      </Flex>
     </section>
   )
 }

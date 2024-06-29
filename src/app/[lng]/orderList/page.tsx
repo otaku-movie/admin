@@ -11,7 +11,8 @@ import {
   Modal,
   message,
   DatePicker,
-  Form
+  Form,
+  Flex
 } from 'antd'
 
 import type { TableColumnsType } from 'antd'
@@ -186,6 +187,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
     },
     {
       title: t('table.seatNumber'),
+      width: 300,
       render(_, row) {
         return (
           <Space direction="vertical">
@@ -212,18 +214,22 @@ export default function MoviePage({ params: { lng } }: PageProps) {
 
     {
       title: t('table.orderNumber'),
+      width: 100,
       dataIndex: 'id'
     },
     {
       title: t('table.orderTotal'),
+      width: 100,
       dataIndex: 'orderTotal'
     },
     {
       title: t('table.orderTime'),
+      width: 150,
       dataIndex: 'orderTime'
     },
     {
       title: t('table.orderState'),
+      width: 100,
       render(_, row) {
         return <Dict code={row.orderState} name={'orderState'}></Dict>
       },
@@ -231,14 +237,17 @@ export default function MoviePage({ params: { lng } }: PageProps) {
     },
     {
       title: t('table.payTotal'),
+      width: 150,
       dataIndex: 'payTotal'
     },
     {
       title: t('table.payTime'),
+      width: 150,
       dataIndex: 'payTime'
     },
     {
       title: t('table.payState'),
+      width: 150,
       render(_, row) {
         return <Dict code={row.payState} name={'payState'}></Dict>
       },
@@ -246,6 +255,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
     },
     {
       title: t('table.payMethod'),
+      width: 150,
       dataIndex: 'payMethod'
     },
     {
@@ -253,7 +263,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
       key: 'operation',
       fixed: 'right',
       align: 'center',
-      width: 120,
+      width: 200,
       render: (_, row) => {
         return (
           <CheckPermission code="movieOrder.updateOrderState">
@@ -325,7 +335,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
 
   return (
     <section>
-      <Space direction="vertical" size={30}>
+      <Flex vertical gap={30}>
         <Query
           model={query}
           onSearch={() => {
@@ -456,7 +466,13 @@ export default function MoviePage({ params: { lng } }: PageProps) {
           columns={columns}
           dataSource={data}
           bordered={true}
-          // scroll={{ y: 500 }}
+          sticky={{ offsetHeader: -20 }}
+          scroll={{
+            x: columns.reduce(
+              (total, current) => total + (current.width as number),
+              0
+            )
+          }}
           pagination={{
             pageSize: 10,
             current: page,
@@ -468,7 +484,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
             position: ['bottomCenter']
           }}
         />
-      </Space>
+      </Flex>
       <Modal
         title={t('updateOrderStateModal.title')}
         open={updateOrderStateModal.show}

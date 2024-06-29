@@ -42,10 +42,13 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
   const columns: TableColumnsType = [
     {
       title: t('table.name'),
+      width: 250,
+      fixed: 'left',
       dataIndex: 'name'
     },
     {
       title: t('table.spec'),
+      width: 250,
       render(_, row) {
         return (
           <Space direction="vertical">
@@ -67,25 +70,26 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
     },
     {
       title: t('table.theaterCount'),
+      width: 150,
       dataIndex: 'theaterCount'
     },
     {
-      title: t('table.description'),
-      dataIndex: 'description'
-    },
-    {
       title: t('table.address'),
+      width: 300,
       dataIndex: 'address'
     },
     {
       title: t('table.tel'),
+      width: 200,
       dataIndex: 'tel'
     },
     {
       title: t('table.homePage'),
+      width: 300,
       dataIndex: 'homePage'
     },
     {
+      width: 200,
       title: t('table.maxSelectSeatCount'),
       dataIndex: 'maxSelectSeatCount'
     },
@@ -93,7 +97,8 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
       title: t('table.action'),
       key: 'operation',
       fixed: 'right',
-      width: 200,
+      align: 'center',
+      width: 450,
       render: (_, row) => {
         return (
           <Space>
@@ -113,20 +118,20 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
               {common('button.ticketType')}
             </Button>
             <Button
-                type="primary"
-                onClick={() => {
-                  router.push(
-                    processPath({
-                      name: 'theaterHall',
-                      query: {
-                        id: row.id
-                      }
-                    })
-                  )
-                }}
-              >
-                {common('button.theaterHallDetail')}
-              </Button>
+              type="primary"
+              onClick={() => {
+                router.push(
+                  processPath({
+                    name: 'theaterHall',
+                    query: {
+                      id: row.id
+                    }
+                  })
+                )
+              }}
+            >
+              {common('button.theaterHallDetail')}
+            </Button>
             <CheckPermission code="cinema.save">
               <Button
                 type="primary"
@@ -212,6 +217,12 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
         columns={columns}
         dataSource={data}
         bordered={true}
+        scroll={{
+          x: columns.reduce(
+            (total, current) => total + (current.width as number),
+            0
+          )
+        }}
         pagination={{
           pageSize: 10,
           current: page,

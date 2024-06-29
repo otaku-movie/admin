@@ -165,7 +165,13 @@ function RootLayout({ children, params: { lng } }: PageProps) {
                   <Sider width={200} style={{ background: colorBgContainer }}>
                     <Menu data={menu}></Menu>
                   </Sider>
-                  <Layout style={{ padding: '20px' }}>
+                  <Layout
+                    style={{
+                      padding: '20px',
+                      height: 'calc(100vh - 64px)',
+                      overflow: 'auto'
+                    }}
+                  >
                     <Space direction="vertical" size={20}>
                       <Breadcrumb
                         separator=">"

@@ -11,7 +11,8 @@ import {
   Modal,
   message,
   Switch,
-  DatePicker
+  DatePicker,
+  Flex
 } from 'antd'
 
 import type { TableColumnsType } from 'antd'
@@ -171,19 +172,23 @@ export default function MoviePage({ params: { lng } }: PageProps) {
     },
     {
       title: t('table.cinema'),
+      width: 200,
       dataIndex: 'cinemaName'
     },
     {
       title: t('table.theaterHall'),
+      width: 200,
       dataIndex: 'theaterHallName'
     },
     {
       title: t('table.spec'),
+      width: 200,
       dataIndex: 'theaterHallSpec'
     },
     {
       title: t('table.open'),
       dataIndex: '',
+      width: 200,
       render(_, row) {
         return (
           <Switch
@@ -212,29 +217,32 @@ export default function MoviePage({ params: { lng } }: PageProps) {
     },
     {
       title: t('table.seatSelectionRatio'),
+      width: 200,
       render(_, row) {
         return `${row.seatCount}/${row.selectedSeatCount}`
       }
     },
     {
       title: t('table.attendance'),
+      width: 200,
       render(_, row) {
         return `${row.selectedSeatCount || 0 / row.seatCount || 0}%`
       }
     },
     {
       title: t('table.startDate'),
-      width: 130,
+      width: 200,
       dataIndex: 'startTime'
     },
     {
       title: t('table.endDate'),
-      width: 130,
+      width: 200,
       dataIndex: 'endTime'
     },
     {
       title: t('table.playState'),
       dataIndex: '',
+      width: 150,
       render(_, row) {
         return <Dict code={row.status} name={'cinemaPlayState'}></Dict>
       }
@@ -243,7 +251,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
       title: t('table.action'),
       key: 'operation',
       fixed: 'right',
-      width: 100,
+      width: 150,
       render: (_, row) => {
         return (
           <Space direction="vertical" align="center">
@@ -344,7 +352,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
 
   return (
     <section>
-      <Space direction="vertical" size={30}>
+      <Flex vertical gap={30}>
         <Row justify="end">
           <CheckPermission code="movieShowTime.save">
             <Button
@@ -382,7 +390,6 @@ export default function MoviePage({ params: { lng } }: PageProps) {
               }}
               // onSearch={getMovieData}
             >
-              {JSON.stringify(movieData)}
               {movieData.map((item: any) => {
                 return (
                   <Select.Option value={item.id} key={item.id}>
@@ -468,6 +475,13 @@ export default function MoviePage({ params: { lng } }: PageProps) {
           columns={columns}
           dataSource={data}
           bordered={true}
+          sticky={{ offsetHeader: -20 }}
+          scroll={{
+            x: columns.reduce(
+              (total, current) => total + (current.width as number),
+              0
+            )
+          }}
           pagination={{
             pageSize: 10,
             current: page,
@@ -479,7 +493,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
             position: ['bottomCenter']
           }}
         />
-      </Space>
+      </Flex>
       <SeatModal
         type="create"
         show={modal.show}

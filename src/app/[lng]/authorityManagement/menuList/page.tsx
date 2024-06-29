@@ -43,6 +43,8 @@ export default function MoviePage({ params: { lng } }: PageProps) {
   const columns: TableColumnsType<menuItem> = [
     {
       title: t('table.name'),
+      fixed: 'left',
+      width: 250,
       render(key) {
         return common(key)
       },
@@ -50,19 +52,23 @@ export default function MoviePage({ params: { lng } }: PageProps) {
     },
     {
       title: t('table.i18nKey'),
+      width: 200,
       dataIndex: 'i18nKey'
     },
     {
       title: t('table.routerPath'),
+      width: 200,
       dataIndex: 'path'
     },
     {
       title: t('table.routerName'),
+      width: 200,
       dataIndex: 'pathName'
     },
     {
       title: t('table.show'),
       dataIndex: '',
+      width: 100,
       render(_, row) {
         return <Switch value={row.show} disabled />
       }
@@ -70,7 +76,8 @@ export default function MoviePage({ params: { lng } }: PageProps) {
     {
       title: t('table.action'),
       key: 'operation',
-      width: 100,
+      fixed: 'right',
+      width: 200,
       render: (_, row) => {
         return (
           <Space>
@@ -189,6 +196,13 @@ export default function MoviePage({ params: { lng } }: PageProps) {
         bordered={true}
         rowKey={'id'}
         pagination={false}
+        scroll={{
+          x: columns.reduce(
+            (total, current) => total + (current.width as number),
+            0
+          )
+        }}
+        sticky={{ offsetHeader: -20 }}
       />
       <MenuModal
         type={modal.type as 'create' | 'edit'}
