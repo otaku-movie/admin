@@ -9,7 +9,7 @@ import { CheckPermission } from '@/components/checkPermission'
 import { ReplyModal } from '@/dialog/replyModal'
 import { showTotal } from '@/utils/pagination'
 
-export default function CinemaPage({ params: { lng } }: PageProps) {
+export default function Page({ params: { lng } }: PageProps) {
   const [data, setData] = useState([])
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
@@ -113,9 +113,9 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
                 })
               }}
             >
-              {t('button.reply')}
+              {common('button.reply.reply')}
             </Button>
-            <CheckPermission code="">
+            <CheckPermission code="reply.remove">
               <Button
                 type="primary"
                 danger

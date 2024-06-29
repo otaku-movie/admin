@@ -11,7 +11,7 @@ export function CheckPermission(props: CheckPermissionProps) {
 
   // console.log(buttonPermission)
 
-  if (buttonPermission.has(props.code) || props.code === '') {
+  if (buttonPermission.has(props.code)) {
     return props.children
   }
 }

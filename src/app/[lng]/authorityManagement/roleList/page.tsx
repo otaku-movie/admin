@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, useEffect } from 'react'
 import { Table, Button, Space, Row, Input, Modal, message } from 'antd'
-
+import { showTotal } from '@/utils/pagination'
 import type { TableColumnsType } from 'antd'
 import { Query, QueryItem } from '@/components/query'
 import http from '@/api/index'
@@ -16,7 +16,7 @@ interface Query {
   status: number
 }
 
-export default function MoviePage({ params: { lng } }: PageProps) {
+export default function Page({ params: { lng } }: PageProps) {
   const [data, setData] = useState([])
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
@@ -67,7 +67,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
       render: (_, row) => {
         return (
           <Space>
-            <CheckPermission code="">
+            <CheckPermission code="role.save">
               <Button
                 type="primary"
                 onClick={() => {
@@ -90,7 +90,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
                 {common('button.edit')}
               </Button>
             </CheckPermission>
-            <CheckPermission code="">
+            <CheckPermission code="role.configPermission">
               <Button
                 type="primary"
                 onClick={() => {
@@ -106,7 +106,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
                 {common('button.configPermission')}
               </Button>
             </CheckPermission>
-            <CheckPermission code="">
+            <CheckPermission code="role.remove">
               <Button
                 type="primary"
                 danger
@@ -155,7 +155,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
       }}
     >
       <Row justify="end">
-        <CheckPermission code="">
+        <CheckPermission code="role.save">
           <Button
             onClick={() => {
               setModal({
@@ -199,6 +199,10 @@ export default function MoviePage({ params: { lng } }: PageProps) {
           pageSize: 10,
           current: page,
           total,
+          showTotal,
+          onChange(page) {
+            getData(page)
+          },
           position: ['bottomCenter']
         }}
       />

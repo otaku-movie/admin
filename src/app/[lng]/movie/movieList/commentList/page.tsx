@@ -12,7 +12,7 @@ import { CheckPermission } from '@/components/checkPermission'
 import { CommentModal } from '@/dialog/commentModal'
 import { showTotal } from '@/utils/pagination'
 
-export default function CinemaPage({ params: { lng } }: PageProps) {
+export default function Page({ params: { lng } }: PageProps) {
   const router = useRouter()
 
   const [data, setData] = useState([])
@@ -112,9 +112,9 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
                 )
               }}
             >
-              {t('button.detail')}
+              {common('button.comment.replyList')}
             </Button>
-            <CheckPermission code="">
+            <CheckPermission code="comment.remove">
               <Button
                 type="primary"
                 danger

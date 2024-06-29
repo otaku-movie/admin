@@ -247,22 +247,20 @@ export default function MoviePage({ params: { lng } }: PageProps) {
       render: (_, row) => {
         return (
           <Space direction="vertical" align="center">
-            <CheckPermission code="">
-              <Button
-                onClick={() => {
-                  setCurrentRow(row)
-                  setModal({
-                    data: {
-                      movieShowTimeId: row.id,
-                      id: row.theaterHallId
-                    },
-                    show: true
-                  })
-                }}
-              >
-                {common('button.seatSelectedDetail')}
-              </Button>
-            </CheckPermission>
+            <Button
+              onClick={() => {
+                setCurrentRow(row)
+                setModal({
+                  data: {
+                    movieShowTimeId: row.id,
+                    id: row.theaterHallId
+                  },
+                  show: true
+                })
+              }}
+            >
+              {common('button.seatSelectedDetail')}
+            </Button>
             <CheckPermission code="movieShowTime.save">
               <Button
                 type="primary"

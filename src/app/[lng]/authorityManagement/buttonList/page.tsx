@@ -88,7 +88,7 @@ export default function Page({ params: { lng } }: PageProps) {
                   </div>
                   <div className="button-table-cell">
                     <Space>
-                      <CheckPermission code="">
+                      <CheckPermission code="button.save">
                         <Button
                           type="primary"
                           onClick={() => {
@@ -111,7 +111,7 @@ export default function Page({ params: { lng } }: PageProps) {
                           {common('button.edit')}
                         </Button>
                       </CheckPermission>
-                      <CheckPermission code="">
+                      <CheckPermission code="button.remove">
                         <Button
                           type="primary"
                           danger
@@ -125,7 +125,7 @@ export default function Page({ params: { lng } }: PageProps) {
                               onOk() {
                                 return new Promise((resolve, reject) => {
                                   http({
-                                    url: 'admin/permission/menu/remove',
+                                    url: 'admin/permission/button/remove',
                                     method: 'delete',
                                     params: {
                                       id: button.id
@@ -167,7 +167,7 @@ export default function Page({ params: { lng } }: PageProps) {
       }}
     >
       <Row justify="end">
-        <CheckPermission code="">
+        <CheckPermission code="button.save">
           <Button
             onClick={() => {
               setModal({

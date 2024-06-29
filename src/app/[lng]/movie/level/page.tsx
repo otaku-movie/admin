@@ -63,7 +63,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
       render: (_, row) => {
         return (
           <Space>
-            <CheckPermission code="">
+            <CheckPermission code="level.save">
               <Button
                 type="primary"
                 onClick={() => {
@@ -86,7 +86,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
                 {common('button.edit')}
               </Button>
             </CheckPermission>
-            <CheckPermission code="">
+            <CheckPermission code="level.remove">
               <Button
                 type="primary"
                 danger
@@ -135,7 +135,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
       }}
     >
       <Row justify="end">
-        <CheckPermission code="">
+        <CheckPermission code="level.save">
           <Button
             onClick={() => {
               setModal({
@@ -154,12 +154,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
         columns={columns}
         dataSource={data}
         bordered={true}
-        pagination={{
-          pageSize: 10,
-          current: page,
-          total,
-          position: ['bottomCenter']
-        }}
+        pagination={false}
       />
       <LevelModal
         type={modal.type as 'create' | 'edit'}

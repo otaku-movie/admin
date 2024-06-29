@@ -97,25 +97,22 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
       render: (_, row) => {
         return (
           <Space>
-            <CheckPermission code="">
-              <Button
-                type="primary"
-                onClick={() => {
-                  router.push(
-                    processPath({
-                      name: 'ticketType',
-                      query: {
-                        id: row.id
-                      }
-                    })
-                  )
-                }}
-              >
-                {common('button.ticketType')}
-              </Button>
-            </CheckPermission>
-            <CheckPermission code="">
-              <Button
+            <Button
+              type="primary"
+              onClick={() => {
+                router.push(
+                  processPath({
+                    name: 'ticketType',
+                    query: {
+                      id: row.id
+                    }
+                  })
+                )
+              }}
+            >
+              {common('button.ticketType')}
+            </Button>
+            <Button
                 type="primary"
                 onClick={() => {
                   router.push(
@@ -130,8 +127,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
               >
                 {common('button.theaterHallDetail')}
               </Button>
-            </CheckPermission>
-            <CheckPermission code="cinema.edit">
+            <CheckPermission code="cinema.save">
               <Button
                 type="primary"
                 onClick={() => {
@@ -197,7 +193,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
       }}
     >
       <Row justify="end">
-        <CheckPermission code="cinema.add">
+        <CheckPermission code="cinema.save">
           <Button
             onClick={() => {
               router.push(processPath('cinemaDetail'))

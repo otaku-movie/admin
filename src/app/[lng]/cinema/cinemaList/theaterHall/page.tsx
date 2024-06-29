@@ -161,7 +161,7 @@ export default function Page({ params: { lng } }: PageProps) {
           marginBottom: '30px'
         }}
       >
-        <CheckPermission code="">
+        <CheckPermission code="theaterHall.save">
           <Button
             onClick={() => {
               setTheaterHallModal({

@@ -87,7 +87,7 @@ export default function Page({ params: { lng } }: PageProps) {
       render: (_, row) => {
         return (
           <Space>
-            <CheckPermission code="">
+            <CheckPermission code="staff.save">
               <Button
                 type="primary"
                 onClick={() => {
@@ -110,7 +110,7 @@ export default function Page({ params: { lng } }: PageProps) {
                 {common('button.edit')}
               </Button>
             </CheckPermission>
-            <CheckPermission code="">
+            <CheckPermission code="staff.remove">
               <Button
                 type="primary"
                 danger
@@ -159,7 +159,7 @@ export default function Page({ params: { lng } }: PageProps) {
       }}
     >
       <Row justify="end">
-        <CheckPermission code="">
+        <CheckPermission code="staff.save">
           <Button
             onClick={() => {
               setModal({

@@ -123,7 +123,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
       render: (_, row) => {
         return (
           <Space>
-            <CheckPermission code="">
+            <CheckPermission code="character.save">
               <Button
                 type="primary"
                 onClick={() => {
@@ -146,7 +146,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
                 {common('button.edit')}
               </Button>
             </CheckPermission>
-            <CheckPermission code="">
+            <CheckPermission code="character.remove">
               <Button
                 type="primary"
                 danger
@@ -195,7 +195,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
       }}
     >
       <Row justify="end">
-        <CheckPermission code="">
+        <CheckPermission code="character.save">
           <Button
             onClick={() => {
               setModal({
