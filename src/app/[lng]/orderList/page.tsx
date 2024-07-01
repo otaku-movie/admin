@@ -68,7 +68,13 @@ export default function MoviePage({ params: { lng } }: PageProps) {
       payState: 0
     }
   })
-
+  const [QRcodeModal, setQRcodeModal] = useState<{
+    show: boolean
+    data: string
+  }>({
+    show: false,
+    data: ''
+  })
   const getData = (page = 1) => {
     http({
       url: 'admin/movieOrder/list',
@@ -289,7 +295,22 @@ export default function MoviePage({ params: { lng } }: PageProps) {
                 </Button>
               ) : null}
               {row.orderState === OrderState.order_succeed ? (
-                <Button type="primary" onClick={() => {}}>
+                <Button
+                  type="primary"
+                  onClick={() => {
+                    http({
+                      url: 'movieOrder/generatorQRcode',
+                      method: 'get',
+                      responseType: 'blob'
+                    }).then((res: any) => {
+                      console.log(res)
+                      setQRcodeModal({
+                        show: true,
+                        data: URL.createObjectURL(res)
+                      })
+                    })
+                  }}
+                >
                   {common('button.order.generateQRcode')}
                 </Button>
               ) : null}
@@ -568,6 +589,26 @@ export default function MoviePage({ params: { lng } }: PageProps) {
             ></DictSelect>
           </Form.Item> */}
         </Form>
+      </Modal>
+      <Modal
+        title={t('QRcodeModal.title')}
+        open={QRcodeModal.show}
+        onOk={() => {
+          setQRcodeModal({
+            ...QRcodeModal,
+            show: false
+          })
+        }}
+        onCancel={() => {
+          setQRcodeModal({
+            ...QRcodeModal,
+            show: false
+          })
+        }}
+      >
+        <Flex justify="center">
+          <Image src={QRcodeModal.data} preview={false} alt="qrCode"></Image>
+        </Flex>
       </Modal>
     </section>
   )

@@ -45,6 +45,9 @@ http.interceptors.request.use((config: any) => {
 })
 
 http.interceptors.response.use((res: AxiosResponse<response>) => {
+  if (res.headers['content-disposition']) {
+    return res.data
+  }
   // 对响应数据做点什么
   if ((res.status === 200 || res.status === 201) && res.data.code === 200) {
     return toCamelCase(res.data)

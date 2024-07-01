@@ -41,5 +41,8 @@
         "required": "请选择支付状态"
       }
     }
+  },
+  "QRcodeModal": {
+    "title": "二维码"
   }
 }
