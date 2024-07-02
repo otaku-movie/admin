@@ -83,6 +83,13 @@
       "locked": "已锁定",
       "sold": "已售出"
     },
+    "orderState": {
+      "orderCreated": "订单已创建",
+      "orderSucceed": "订单已完成",
+      "orderFailed": "订单失败",
+      "canceledOrder": "订单已取消",
+      "orderTimeout": "订单超时"
+    },
     "seatType": {
       "wheelChair": "轮椅座",
       "disabled": "已禁用"

@@ -8,7 +8,8 @@
   "tab": {
     "userRegisterCount": "日別登録ユーザー数",
     "orderCount": "日別注文数",
-    "movieShowTimeCount": "日別上映回数"
+    "movieShowTimeCount": "日別上映回数",
+    "DailyTransactionAmount": "一日の取引額"
   },
   "registerPlatform": "登録プラットフォーム",
   "movieBoxOffice": "興行収入"

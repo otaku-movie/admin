@@ -23,6 +23,24 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 - Chinese
 - Japanese
 
+
+## 代办列表
+- 数据隔离（影院只能查看自己的影院的信息，和订单以及场次）
+- 搜索完善
+- 座位拖拽选中bug
+- 支付方式统计
+- 订单统计
+- 路由跳转的权限验证
+- 文件的校验
+- 交易金额统计
+
+> 功能
+- 电影图片以及预告片列表
+- 影院品牌
+- 电影标签
+- 标签: 字幕 舞台纪念 等
+- 重映
+
 ## stack
 
 ![React](public/logo/React.png)
@@ -39,19 +57,3 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 ![permission](./screenshot/07.png)
 ![button](./screenshot/08.png)
 
-代办列表
-数据隔离（影院只能查看自己的影院的信息，和订单以及场次）
-生成二维码
-搜索完善
-座位拖拽选中bug
-支付方式统计
-订单统计
-路由跳转的权限验证
-文件的校验
-交易金额统计
-日语翻译
-
-电影图片以及预告片列表
-影院品牌
-电影标签
-标签: 字幕 舞台纪念 等

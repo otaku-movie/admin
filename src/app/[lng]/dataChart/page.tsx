@@ -5,6 +5,8 @@ import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '@/app/[lng]/layout'
 import { UserChart } from './chart/userChart'
 import { MovieShowTimeChart } from './chart/MovieShowTimeChart'
+import { DailyTransactionAmount } from './chart/dailyTransactionAmount'
+import { DailyOrderStatistics } from './chart/dailyOrderStatistics'
 import { Tabs } from 'antd'
 import './style.scss'
 import { formatNumber } from '@/utils'
@@ -28,7 +30,6 @@ export default function Page({ params: { lng } }: PageProps) {
     }).then((res) => {
       console.log(res.data)
       setData(res.data)
-      
     })
   }
 
@@ -61,14 +62,10 @@ export default function Page({ params: { lng } }: PageProps) {
           <div>{t('top.cinemaCount')}</div>
           <div className="count">{formatNumber(data.cinemaCount, unit)}</div>
         </li>
-        <li>
-          <div>{t('top.movieScreeningCount')}</div>
-          <div className="count">{formatNumber(data.showTimeCount, unit)}</div>
-        </li>
       </ul>
       <section className="tab-chart">
         <Tabs
-          defaultActiveKey="2"
+          defaultActiveKey="3"
           tabPosition={'top'}
           // tabBarExtraContent={{
           //   right: 'hello world'
@@ -91,7 +88,20 @@ export default function Page({ params: { lng } }: PageProps) {
             {
               key: '3',
               label: t('tab.orderCount'),
-              children: <UserChart></UserChart>
+              children: (
+                <DailyOrderStatistics
+                  data={data.dailyOrderStatistics}
+                ></DailyOrderStatistics>
+              )
+            },
+            {
+              key: '4',
+              label: t('tab.DailyTransactionAmount'),
+              children: (
+                <DailyTransactionAmount
+                  data={data.dailyTransactionAmount}
+                ></DailyTransactionAmount>
+              )
             }
           ]}
         />

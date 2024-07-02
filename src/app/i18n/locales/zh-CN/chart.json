@@ -8,7 +8,8 @@
   "tab": {
     "userRegisterCount": "日注册用户",
     "orderCount": "日订单量",
-    "movieShowTimeCount": "日排片数"
+    "movieShowTimeCount": "日排片数",
+    "DailyTransactionAmount": "日成交金额"
   },
   "registerPlatform": "注册平台",
   "movieBoxOffice": "票房"

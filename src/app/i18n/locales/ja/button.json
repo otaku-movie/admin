@@ -42,5 +42,10 @@
         "required": "APIコードを入力してください"
       }
     }
+  },
+  "button": {
+    "reply": {
+      "reply": "返事"
+    }
   }
 }

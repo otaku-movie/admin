@@ -83,6 +83,13 @@
     "seatType": {
       "wheelChair": "車椅子席",
       "disabled": "無効"
+    },
+    "orderState": {
+      "orderCreated": "注文作成済み",
+      "orderSucceed": "注文完了",
+      "orderFailed": "注文失敗",
+      "canceledOrder": "注文キャンセル",
+      "orderTimeout": "注文タイムアウト"
     }
   }
 }
