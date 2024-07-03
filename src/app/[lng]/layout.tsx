@@ -24,6 +24,7 @@ import { processPath } from '@/config/router'
 import { useUserStore } from '@/store/useUserStore'
 import { getUserInfo, listToTree } from '@/utils'
 import { Menu } from '@/components/menu'
+import Cookies from 'js-cookie'
 
 export interface PageProps {
   children: React.ReactNode
@@ -88,11 +89,20 @@ function RootLayout({ children, params: { lng } }: PageProps) {
     const roleId = localStorage.getItem('roleId')
     if (roleId) {
       getPermission(+roleId)
+      Cookies.set('roleId', +roleId, { expires: 30 })
+      
     }
   }, [])
 
   const userInfo = getUserInfo()
   const lang = pathname.split('/')[1]
+
+  // useEffect(() => {
+  //   if (userStore.permissionList.length !== 0) {
+  //     // 更新面包屑
+  //     userStore.getBreadcrumb()
+  //   }
+  // }, [pathname, userStore, userStore.menuPermission])
 
   localStorage.setItem('language', lang)
 
@@ -100,6 +110,7 @@ function RootLayout({ children, params: { lng } }: PageProps) {
     <html lang={lng} dir={lng}>
       <body>
         <AntdRegistry>
+          {/* <NavigationEvents /> */}
           <ConfigProvider locale={locale[lng as keyof typeof locale]}>
             {set.has(split[1]) ? (
               children

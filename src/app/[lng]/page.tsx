@@ -17,5 +17,7 @@ export default function Page({params: { lng } }: PageProps) {
   const router = useRouter()
 
   router.push(processPath('home'))
+
+  return null
 }
  

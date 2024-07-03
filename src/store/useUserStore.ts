@@ -14,11 +14,12 @@ export interface userInfoStore {
   userInfo: Partial<userInfo>
   roleInfo: Partial<role>,
   buttonPermission: Set<string>
+  permissionList: permission[]
   menuPermission: permission[]
   breadcrumb: permission[]
   login(query: Query): Promise<boolean>
   permission(roleId: number): Promise<boolean>
-  getBreadcrumb(data: permission[]): void
+  getBreadcrumb(data?: permission[]): void
 }
 
 export const useUserStore = create<userInfoStore>((set, get) => {
@@ -26,9 +27,10 @@ export const useUserStore = create<userInfoStore>((set, get) => {
     userInfo: {},
     roleInfo: {},
     buttonPermission: new Set([]),
+    permissionList: [],
     menuPermission: [],
     breadcrumb: [],
-    getBreadcrumb (data) {
+    getBreadcrumb (data = get().permissionList) {
       const map = new Map(
         data.map(item => {
           return [item.pathName, item]
@@ -61,6 +63,7 @@ export const useUserStore = create<userInfoStore>((set, get) => {
       if (permission.data.length !== 0) {
         const filter = permission.data.filter((item: permission) => item.show)
         set({
+          permissionList: permission.data,
           menuPermission: filter,
           buttonPermission: new Set(
             permission.data.reduce((total: string[], current: permission) => {

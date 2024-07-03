@@ -34,6 +34,7 @@ import { CheckPermission } from '@/components/checkPermission'
 import { DictSelect } from '@/components/DictSelect'
 import { Dict } from '@/components/dict'
 import { OrderState } from '@/config/enum'
+import { RangePicker, dateValue } from '@/components/rangePicker'
 
 interface Query {
   id: number
@@ -75,6 +76,10 @@ export default function MoviePage({ params: { lng } }: PageProps) {
     show: false,
     data: ''
   })
+  const [orderDate, setOrderDate] = useState<dateValue>({
+    start: null,
+    end: null
+  })
   const getData = (page = 1) => {
     http({
       url: 'admin/movieOrder/list',
@@ -82,7 +87,11 @@ export default function MoviePage({ params: { lng } }: PageProps) {
       data: {
         page,
         pageSize: 10,
-        ...query
+        ...query,
+        orderTime: [
+          orderDate.start?.format('YYYY-MM-DD HH:mm:ss'),
+          orderDate.end?.format('YYYY-MM-DD HH:mm:ss')
+        ]
       }
     }).then((res) => {
       setData(res.data.list)
@@ -370,6 +379,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
           <QueryItem label={t('search.id')}>
             <Input
               value={query.id}
+              allowClear
               onChange={(e) => {
                 setQuery({
                   ...query,
@@ -378,19 +388,13 @@ export default function MoviePage({ params: { lng } }: PageProps) {
               }}
             ></Input>
           </QueryItem>
-          <QueryItem label={t('search.orderTime')}>
-            <DatePicker.RangePicker
-              showTime
-              value={query.orderTime}
-              allowClear
-              onChange={(_, val) => {
-                console.log(val)
-                setQuery({
-                  ...query,
-                  orderTime: val
-                })
+          <QueryItem label={t('search.orderTime')} column={2}>
+            <RangePicker
+              value={orderDate}
+              onChange={(date) => {
+                setOrderDate({ ...date })
               }}
-            ></DatePicker.RangePicker>
+            ></RangePicker>
           </QueryItem>
           <QueryItem label={t('table.name')}>
             <Select

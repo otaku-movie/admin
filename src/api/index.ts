@@ -1,3 +1,4 @@
+
 import { BASE_URL } from './../config/index'
 import axios, { AxiosError, AxiosRequestHeaders, AxiosResponse } from 'axios'
 import { message } from 'antd'
@@ -24,7 +25,8 @@ const httpStatus = {
 http.interceptors.request.use((config: any) => {
   // 在发送请求之前做些什么
   const token = localStorage.getItem('token')
-  const language = localStorage.getItem('language') || 'ja'
+  const language = localStorage.getItem('language') ?? 'ja'
+  const roleId = localStorage.getItem('roleId')
   
   config.headers = {
     'Accept-Language': language
@@ -33,7 +35,8 @@ http.interceptors.request.use((config: any) => {
   if (token) {
     config.headers = {
       ...config.headers,
-      token
+      token,
+      'role-id': roleId
     } as unknown as AxiosRequestHeaders
   }
 
@@ -66,7 +69,7 @@ http.interceptors.response.use((res: AxiosResponse<response>) => {
     } else {
       const status = err.response.status as keyof typeof httpStatus
       if (httpStatus[status]) {
-        message.warning(httpStatus[status] as string)
+        message.warning(httpStatus[status])
       } else {
         const msg = err.response.data.message
         message.warning(Array.isArray(msg) ? msg.join('、') : msg)

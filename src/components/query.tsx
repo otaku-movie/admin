@@ -201,7 +201,7 @@ export function Query(props: QueryProps) {
       setRenderChildren([...collapse()])
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [expand])
+  }, [expand, renderChildren])
 
   return (
     <section

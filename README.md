@@ -29,7 +29,6 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 - 搜索完善
 - 座位拖拽选中bug
 - 支付方式统计
-- 订单统计
 - 路由跳转的权限验证
 - 文件的校验
 - 交易金额统计

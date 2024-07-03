@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import acceptLanguage from 'accept-language'
-import { fallbackLng, languages, cookieName } from './src/app/i18n/settings'
+import { fallbackLng, languages, cookieName } from './app/i18n/settings'
 
 const arr = Object.keys(languages)
 
@@ -8,10 +8,15 @@ acceptLanguage.languages(arr)
 
 export const config = {
   // matcher: '/:lng*'
-  matcher: ['/((?!api|_next/static|_next/image|assets|favicon.ico|sw.js).*)']
+  matcher: ['/:lng*', '/api/:path*']
 }
 
 export function middleware(req: NextRequest) {
+  console.log(req.cookies)
+  console.log('++++++++++++++',  req.url, req.nextUrl)
+  if (req.headers.get('Role-Id')) {
+    console.log(req.headers.entries())
+  }
   let lng
   if (req.cookies.has(cookieName)) lng = acceptLanguage.get(req.cookies.get(cookieName)!.value)
   if (!lng) lng = acceptLanguage.get(req.headers.get('Accept-Language'))
@@ -33,6 +38,5 @@ export function middleware(req: NextRequest) {
     return response
   }
 
-  console.log(req)
   return NextResponse.next()
 }
