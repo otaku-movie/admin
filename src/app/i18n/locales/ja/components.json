@@ -4,5 +4,18 @@
     "clear": "クリア",
     "collapse": "折りたたみ",
     "collapseClose": "折りたたみ"
+  },
+  "upload": {
+    "error": {
+      "noSupportedFormat": "サポートされていないフォーマットです。フォーマット{{ext}}",
+      "fileSize": "ファイルサイズが大きすぎます。最大サイズ：{{size}}"
+    },
+    "hint": {
+      "supportFormat": "サポートされているフォーマット：",
+      "fileSize": "ファイルサイズの上限："
+    }
+  },
+  "cropper": {
+    "title": "画像のトリミング"
   }
 }

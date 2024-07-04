@@ -4,5 +4,18 @@
     "clear": "清空",
     "collapse": "展开",
     "collapseClose": "收起"
+  },
+  "upload": {
+    "error": {
+      "noSupportedFormat": "不支持的文件格式，仅支持：{{ext}}",
+      "fileSize": "文件过大，最大大小为：{{size}}"
+    },
+    "hint": {
+      "supportFormat": "支持的文件格式：",
+      "fileSize": "文件大小最大不能超过："
+    }
+  },
+  "cropper": {
+    "title": "裁剪图片"
   }
 }

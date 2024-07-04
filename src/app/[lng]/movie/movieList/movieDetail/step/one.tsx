@@ -24,6 +24,7 @@ import { Upload } from '@/components/upload/Upload'
 import { useMovieStore, SaveMovieQuery } from '@/store/useMovieStore'
 import { matchFormat } from '@/utils'
 import advancedFormat from 'dayjs/plugin/advancedFormat'
+import { useSearchParams } from 'next/navigation'
 
 dayjs.extend(advancedFormat)
 
@@ -49,6 +50,7 @@ export function One(props: Props) {
   const dict = useCommonStore((state) => state.dict)
   const levelList = useCommonStore((state) => state.levelList)
   const getLevelList = useCommonStore((state) => state.getLevelList)
+  const searchParams = useSearchParams()
 
   const options = [
     {
@@ -62,7 +64,7 @@ export function One(props: Props) {
     {
       name: '日期',
       type: 'date'
-    },
+    }
     // {
     //   name: '季节',
     //   type: 'quarter'
@@ -90,28 +92,27 @@ export function One(props: Props) {
   }
 
   useEffect(() => {
-    const updateDates = () => {
-      setStartDate(() => toDayjs('start', movieStore.movie.startDate as string))
-      setEndDate(() => toDayjs('end', movieStore.movie.endDate as string))
+    if (searchParams.has('id')) {
+      const updateDates = () => {
+        setStartDate(() =>
+          toDayjs('start', movieStore.movie.startDate as string)
+        )
+        setEndDate(() => toDayjs('end', movieStore.movie.endDate as string))
 
-      form.setFieldsValue({
-        ...movieStore.movie,
-        startDate: toDayjs('start', movieStore.movie.startDate as string),
-        endDate: toDayjs('end', movieStore.movie.endDate as string)
+        form.setFieldsValue({
+          ...movieStore.movie,
+          startDate: toDayjs('start', movieStore.movie.startDate as string),
+          endDate: toDayjs('end', movieStore.movie.endDate as string)
+        })
+      }
+      console.log(movieStore)
+      setData({
+        ...movieStore.movie
       })
-
-      console.log(startDate?.format('YYYY-[Q]Q'))
+      updateDates()
     }
-    setData({
-      ...movieStore.movie
-    })
-
-    updateDates()
   }, [form, movieStore.movie, movieStore.movie.startDate])
 
-  useEffect(() => {
-    console.log(startDate)
-  }, [startDate])
   useEffect(() => {
     getSpec()
     getLevelList()
@@ -198,6 +199,9 @@ export function One(props: Props) {
           <Upload
             value={data.cover || ''}
             crop={true}
+            cropperOptions={{
+              aspectRatio: 1006 / 1339
+            }}
             onChange={(val) => {
               setData({
                 ...data,
@@ -411,8 +415,14 @@ export function One(props: Props) {
             },
             {
               validator() {
-                if (!startDate?.isBefore(endDate)) {
-                  return Promise.reject(t('form.endDate.startAfterEnd'))
+                if (startDate && endDate) {
+                  if (!startDate?.isBefore(endDate)) {
+                    return Promise.reject(
+                      new Error(t('form.endDate.startAfterEnd'))
+                    )
+                  } else {
+                    return Promise.resolve()
+                  }
                 } else {
                   return Promise.resolve()
                 }
@@ -433,8 +443,14 @@ export function One(props: Props) {
             },
             {
               validator() {
-                if (!startDate?.isBefore(endDate)) {
-                  return Promise.reject(t('form.endDate.startAfterEnd'))
+                if (startDate && endDate) {
+                  if (!startDate?.isBefore(endDate)) {
+                    return Promise.reject(
+                      new Error(t('form.endDate.startAfterEnd'))
+                    )
+                  } else {
+                    return Promise.resolve()
+                  }
                 } else {
                   return Promise.resolve()
                 }

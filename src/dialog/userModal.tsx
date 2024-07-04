@@ -52,7 +52,7 @@ export default function UserModal(props: UserModalProps) {
       maskClosable={false}
       onOk={() => {
         form.validateFields().then(() => {
-          const data = {...query}
+          const data = { ...query }
 
           if (data.password) {
             data.password = md5(query.password as string)
@@ -83,8 +83,11 @@ export default function UserModal(props: UserModalProps) {
           <Upload
             value={query.cover || ''}
             crop={true}
-            options={{
-              aspectRatio: 100 / 100
+            cropperOptions={{
+              aspectRatio: 1,
+              cropBoxResizable: false,
+              minCropBoxWidth: 100,
+              minCropBoxHeight: 100
             }}
             onChange={(val) => {
               setQuery({

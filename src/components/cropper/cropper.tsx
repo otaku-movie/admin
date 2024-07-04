@@ -2,8 +2,11 @@ import React, { useLayoutEffect, useState, useRef, useEffect } from 'react'
 import classNames from 'classnames'
 import Cropper from 'cropperjs'
 import { Modal } from 'antd'
+import { useTranslation } from '@/app/i18n/client'
 import 'cropperjs/src/css/cropper.scss'
 import './cropper.scss'
+import { languageType } from '@/config'
+import { Image } from 'next/image'
 
 interface OutputResult {
   file: File
@@ -18,8 +21,6 @@ export interface ImageCropperProps {
   action?: React.ReactNode
   outputFilename?: string
   children?: React.ReactNode
-  fixed?: boolean
-  fixedNumber?: number
   getInstance?: (instance: Cropper) => void
   onClose?: () => void
   onCancel?: () => void
@@ -32,8 +33,6 @@ export function ImageCropper(props: ImageCropperProps) {
     visible,
     options,
     // action,
-    fixed,
-    fixedNumber,
     circle = false,
     outputFilename = 'cropper.png',
     getInstance,
@@ -46,6 +45,7 @@ export function ImageCropper(props: ImageCropperProps) {
   const container = useRef<HTMLDivElement>(null)
   const [cropperInstance, setCropperInstance] = useState<Cropper | null>(null)
   const [show, setShow] = useState(visible)
+  const { t } = useTranslation(navigator.language as languageType, 'components')
 
   useEffect(() => {
     if (visible) {
@@ -70,7 +70,7 @@ export function ImageCropper(props: ImageCropperProps) {
         cropper.destroy()
       }
     }
-  }, [show, fixed, fixedNumber, options, getInstance])
+  }, [show, options, getInstance])
 
   const cancel = () => {
     setShow(false)
@@ -109,7 +109,7 @@ export function ImageCropper(props: ImageCropperProps) {
     <aside className="otaku-cropper-container">
       <Modal
         open={show}
-        title="图片裁剪"
+        title={t('cropper.title')}
         className="otaku-cropper-dialog"
         maskClosable={false}
         width="80vw"
@@ -122,7 +122,7 @@ export function ImageCropper(props: ImageCropperProps) {
       >
         <section className="otaku-dialog-content">
           <div className="otaku-image-cropper">
-            <img
+            <Image
               src={imageURL}
               alt=""
               ref={image}

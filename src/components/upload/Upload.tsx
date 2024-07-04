@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react'
 import { PlusOutlined } from '@ant-design/icons'
 import { Image, Upload as AntdUpload, message } from 'antd'
 import type { GetProp, UploadFile, UploadProps as AntdUploadProps } from 'antd'
-import { BASE_URL } from '@/config'
+import { BASE_URL, languageType } from '@/config'
 import { ImageCropper } from '../cropper/cropper'
 import './style.scss'
 import http from '@/api'
 import { getFileSize } from '@/utils'
+import { useTranslation } from '@/app/i18n/client'
 
 type FileType = Parameters<GetProp<AntdUploadProps, 'beforeUpload'>>[0]
 
@@ -22,11 +23,12 @@ const getBase64 = (file: FileType): Promise<string> => {
 export interface UploadProps {
   value: string
   crop?: boolean
-  ext: string[]
-  fileSize: number
-  options?: Omit<Cropper.Options, 'preview'>
+  ext?: string[]
+  fileSize?: number
+  cropperOptions?: Omit<Cropper.Options, 'preview'>
   onChange?: (val: string) => void
 }
+type uploadType = 'upload' | 'preview' | 'error' | 'crop'
 
 export function Upload(props: UploadProps) {
   const {
@@ -34,6 +36,8 @@ export function Upload(props: UploadProps) {
     fileSize = 5 * Math.pow(1024, 2)
   } = props
 
+  const [type, setType] = useState<uploadType>('upload')
+  const { t } = useTranslation(navigator.language as languageType, 'components')
   const [crop] = useState(props.crop)
   const [previewOpen, setPreviewOpen] = useState(false)
   const [previewImage, setPreviewImage] = useState('')
@@ -47,7 +51,6 @@ export function Upload(props: UploadProps) {
   useEffect(() => {
     setCropperURL('')
 
-    console.log('image', props.value)
     if (props.value) {
       setFileList([
         {
@@ -78,7 +81,6 @@ export function Upload(props: UploadProps) {
   }
 
   const handleChange: AntdUploadProps['onChange'] = ({ fileList, file }) => {
-    setFileList(fileList)
     if (file.status === 'done') {
       const url = file.response.data.url
       setImageURL(url)
@@ -100,27 +102,58 @@ export function Upload(props: UploadProps) {
       params: {
         path: imageURL.split('/').slice(4).join('/')
       }
-    }).then(() => {
-      message.success('success')
+    }).then((res) => {
+      message.success(res.message)
+      setFileList([])
     })
   }
+
   const uploadFile = (fd: FormData) => {
     http({
       url: '/upload',
       method: 'post',
       data: fd
-    }).then((res: any) => {
-      setFileList([
-        {
-          uid: '-1',
-          name: 'image.png',
-          status: 'done',
-          url: res.data.url
-        }
-      ])
-      props.onChange?.(res.data.url)
-      message.success('success')
     })
+      .then((res: any) => {
+        setFileList([
+          {
+            uid: '-1',
+            name: 'image.png',
+            status: 'done',
+            url: res.data.url
+          }
+        ])
+        props.onChange?.(res.data.url)
+        message.success(res.message)
+        setType('preview')
+      })
+      .catch(() => {
+        setFileList([])
+      })
+  }
+
+  const beforeUpload = (file: FileType) => {
+    const isValidFormat = ext.includes(`.${file.type.split('/')[1]}`)
+    if (!isValidFormat) {
+      message.error(
+        t('upload.error.noSupportedFormat', {
+          ext: ext.join('、')
+        })
+      )
+      return false
+    }
+
+    const isValidSize = file.size <= fileSize
+    if (!isValidSize) {
+      message.error(
+        t('upload.error.fileSize', {
+          size: getFileSize(fileSize)
+        })
+      )
+      return false
+    }
+
+    return true
   }
 
   return (
@@ -129,22 +162,17 @@ export function Upload(props: UploadProps) {
         action={BASE_URL + '/upload'}
         listType="picture-card"
         fileList={fileList}
-        // beforeUpload={() => {
-        //   return false
-        // }}
+        beforeUpload={beforeUpload}
         onPreview={handlePreview}
         onChange={handleChange}
         customRequest={(options) => {
           if (crop) {
-            setModal({
-              show: true
-            })
+            setModal({ show: true })
             const file = options.file as File
-            const blob = new Blob([options.file], {
-              type: file.type
-            })
+            const blob = new Blob([options.file], { type: file.type })
 
             setCropperURL(URL.createObjectURL(blob))
+            setType('crop')
           } else {
             const fd = new FormData()
             fd.append('file', options.file)
@@ -158,14 +186,18 @@ export function Upload(props: UploadProps) {
         {fileList.length >= 1 ? null : uploadButton}
       </AntdUpload>
       <section className="upload-hint">
-        <p>支持的格式为：{ext.join('、')}</p>
-        <p>限制文件大小为：{getFileSize(fileSize)}</p>
+        <p>
+          {t('upload.hint.supportFormat')}：{ext.join('、')}
+        </p>
+        <p>
+          {t('upload.hint.fileSize')}：{getFileSize(fileSize)}
+        </p>
       </section>
       <ImageCropper
         imageURL={cropperURL}
         visible={modal.show}
         fixed={true}
-        options={props.options}
+        options={props.cropperOptions}
         onConfirm={(data) => {
           const fd = new FormData()
           fd.append('file', data.file)

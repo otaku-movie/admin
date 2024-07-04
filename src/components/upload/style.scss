@@ -1,4 +1,12 @@
-.ant-upload-list-item-container, .ant-upload {
+.ant-upload-list-item-container,
+.ant-upload {
   width: 160px !important;
   height: 190px !important;
+}
+.upload-hint {
+  margin-top: 10px;
+  p {
+    margin-bottom: 10px;
+    line-height: 18px;
+  }
 }
