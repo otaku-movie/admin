@@ -94,5 +94,11 @@
       "wheelChair": "轮椅座",
       "disabled": "已禁用"
     }
+  },
+  "error": {
+    "403": {
+      "title": "没有访问权限",
+      "button": "回到登录页"
+    }
   }
 }

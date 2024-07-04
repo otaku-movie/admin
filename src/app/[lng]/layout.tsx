@@ -80,29 +80,34 @@ function RootLayout({ children, params: { lng } }: PageProps) {
     ja,
     'zh-CN': zhCN
   }
-  const split = usePathname()
+  const str = usePathname()
     .split('/')
     .filter((item) => item !== '')
-  const set = new Set(['login'])
+    .slice(1)
+    .join('/')
+  const set = new Set(['login', 'error/403'])
 
   useEffect(() => {
     const roleId = localStorage.getItem('roleId')
-    if (roleId) {
+    const token = localStorage.getItem('token')
+
+    if (roleId && token) {
       getPermission(+roleId)
-      Cookies.set('roleId', +roleId, { expires: 30 })
-      
+      Cookies.set('token', token, { expires: 30 })
+      Cookies.set('roleId', roleId, { expires: 30 })
     }
   }, [])
 
   const userInfo = getUserInfo()
   const lang = pathname.split('/')[1]
 
-  // useEffect(() => {
-  //   if (userStore.permissionList.length !== 0) {
-  //     // 更新面包屑
-  //     userStore.getBreadcrumb()
-  //   }
-  // }, [pathname, userStore, userStore.menuPermission])
+  useEffect(() => {
+    if (userStore.permissionList.length !== 0 && !set.has(str)) {
+      // 更新面包屑
+      userStore.getBreadcrumb()
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname, userStore.menuPermission])
 
   localStorage.setItem('language', lang)
 
@@ -112,7 +117,7 @@ function RootLayout({ children, params: { lng } }: PageProps) {
         <AntdRegistry>
           {/* <NavigationEvents /> */}
           <ConfigProvider locale={locale[lng as keyof typeof locale]}>
-            {set.has(split[1]) ? (
+            {set.has(str) ? (
               children
             ) : (
               <Layout
@@ -195,7 +200,7 @@ function RootLayout({ children, params: { lng } }: PageProps) {
                       />
                       <section
                         style={
-                          split[1] !== 'dataChart'
+                          str !== 'dataChart'
                             ? {
                                 padding: 24,
                                 margin: 0,

@@ -1,42 +1,64 @@
 import { NextRequest, NextResponse } from 'next/server'
 import acceptLanguage from 'accept-language'
 import { fallbackLng, languages, cookieName } from './app/i18n/settings'
+import axios from 'axios'
 
-const arr = Object.keys(languages)
-
-acceptLanguage.languages(arr)
+const supportedLanguages = Object.keys(languages)
+acceptLanguage.languages(supportedLanguages)
 
 export const config = {
-  // matcher: '/:lng*'
   matcher: ['/:lng*', '/api/:path*']
 }
 
-export function middleware(req: NextRequest) {
-  console.log(req.cookies)
-  console.log('++++++++++++++',  req.url, req.nextUrl)
-  if (req.headers.get('Role-Id')) {
-    console.log(req.headers.entries())
-  }
-  let lng
-  if (req.cookies.has(cookieName)) lng = acceptLanguage.get(req.cookies.get(cookieName)!.value)
-  if (!lng) lng = acceptLanguage.get(req.headers.get('Accept-Language'))
-  if (!lng) lng = fallbackLng
+export async function middleware(req: NextRequest) {
+  const url = req.nextUrl
+  const cookies = req.cookies
+  const headers = req.headers
 
-  // Redirect if lng in path is not supported
-  if (
-    !arr.some(loc => req.nextUrl.pathname.startsWith(`/${loc}`)) &&
-    !req.nextUrl.pathname.startsWith('/_next')
-  ) {
-    return NextResponse.redirect(new URL(`/${lng}${req.nextUrl.pathname}`, req.url))
+  // 获取语言设置
+  let lng = fallbackLng
+  if (cookies.has(cookieName)) {
+    lng = acceptLanguage.get(cookies.get(cookieName)?.value) || lng
+  } else if (headers.has('Accept-Language')) {
+    lng = acceptLanguage.get(headers.get('Accept-Language')) || lng
   }
 
-  if (req.headers.has('referer')) {
-    const refererUrl = new URL(req.headers.get('referer')!)
-    const lngInReferer = arr.find((l) => refererUrl.pathname.startsWith(`/${l}`))
-    const response = NextResponse.next()
-    if (lngInReferer) response.cookies.set(cookieName, lngInReferer)
-    return response
+  // 检查路径是否在支持的语言中
+  const isSupportedPath = supportedLanguages.some(lang => url.pathname.startsWith(`/${lang}`))
+
+  // 如果路径不受支持且不是 Next.js 内部路径，则重定向到默认语言的路径
+  if (!isSupportedPath && !url.pathname.startsWith('/_next')) {
+    return NextResponse.redirect(new URL(`/${lng}${url.pathname}`, req.url))
   }
 
-  return NextResponse.next()
+  // 检查是否存在 roleId 和 token
+  const roleId = cookies.get('roleId')?.value
+  const token = cookies.get('token')?.value
+
+  if (!roleId || !token) {
+    return NextResponse.redirect(new URL(`/${lng}/login`, req.url))
+  }
+
+  // try {
+    const response = await axios.get('http://localhost:8080/api/admin/permission/role/permission', {
+      headers: {
+        'Accept-Language': lng,
+        token
+      },
+      params: { id: +roleId }
+    })
+
+    // 从路径中提取相对路径并检查权限
+    const relativePath = `/${url.pathname.split('/').slice(2).join('/')}`
+    const hasPermission = response.data.data.some((item: any) => item.path === relativePath)
+    const allowedPaths = new Set(['/error/403', '/login'])
+
+    // console.log(relativePath)
+    if (isSupportedPath && (hasPermission || allowedPaths.has(relativePath))) {
+      return NextResponse.next()
+    } else if (isSupportedPath) {
+      return NextResponse.redirect(new URL(`/${lng}/error/403`, req.url))
+    } else {
+      return NextResponse.next()
+    }
 }

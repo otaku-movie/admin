@@ -91,5 +91,11 @@
       "canceledOrder": "注文キャンセル",
       "orderTimeout": "注文タイムアウト"
     }
+  },
+  "error": {
+    "403": {
+      "button": "ログインへ",
+      "title": "権限ありません。"
+    }
   }
 }
