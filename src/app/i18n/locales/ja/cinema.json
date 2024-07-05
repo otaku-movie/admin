@@ -1,5 +1,6 @@
 {
   "table": {
+    "brandName": "ブランド名",
     "name": "映画館名",
     "spec": "規格",
     "address": "住所",

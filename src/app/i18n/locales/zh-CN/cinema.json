@@ -1,5 +1,6 @@
 {
   "table": {
+    "brandName": "品牌名称",
     "name": "影院名称",
     "spec": "规格",
     "address": "地址",

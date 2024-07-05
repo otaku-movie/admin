@@ -1,6 +1,16 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import { Table, Button, Space, Input, Row, message, Modal, Tag } from 'antd'
+import {
+  Table,
+  Button,
+  Space,
+  Input,
+  Row,
+  message,
+  Modal,
+  Tag,
+  Flex
+} from 'antd'
 import type { TableColumnsType } from 'antd'
 import { useRouter } from 'next/navigation'
 import { useTranslation } from '@/app/i18n/client'
@@ -45,6 +55,11 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
       width: 250,
       fixed: 'left',
       dataIndex: 'name'
+    },
+    {
+      title: t('table.brandName'),
+      width: 150,
+      dataIndex: 'brandName'
     },
     {
       title: t('table.spec'),
@@ -98,10 +113,10 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
       key: 'operation',
       fixed: 'right',
       align: 'center',
-      width: 450,
+      width: 150,
       render: (_, row) => {
         return (
-          <Space>
+          <Flex gap={10} vertical>
             <Button
               type="primary"
               onClick={() => {
@@ -183,7 +198,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
                 {common('button.remove')}
               </Button>
             </CheckPermission>
-          </Space>
+          </Flex>
         )
       }
     }

@@ -1,0 +1,29 @@
+{
+  "table": {
+    "name": "语言名称",
+    "code": "语言 code",
+    "action": "操作"
+  },
+  "modal": {
+    "title": {
+      "create": "添加语言",
+      "edit": "编辑语言"
+    },
+    "form": {
+      "name": {
+        "label": "语言名称",
+        "required": "请输入语言名称"
+      },
+      "code": {
+        "label": "语言code",
+        "required": "请输入语言code"
+      }
+    }
+  },
+  "message": {
+    "remove": {
+      "content": "是否确认要删除当前语言?",
+      "success": "删除成功"
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "table": {
+    "name": "言語名",
+    "code": "言語コード",
+    "action": "操作"
+  },
+  "modal": {
+    "title": {
+      "create": "言語を追加",
+      "edit": "言語を編集"
+    },
+    "form": {
+      "name": {
+        "label": "言語名",
+        "required": "言語名を入力してください"
+      },
+      "code": {
+        "label": "言語コード",
+        "required": "言語コードを入力してください"
+      }
+    }
+  },
+  "message": {
+    "remove": {
+      "content": "現在の言語を削除してもよろしいですか？",
+      "success": "削除成功"
+    }
+  }
+}

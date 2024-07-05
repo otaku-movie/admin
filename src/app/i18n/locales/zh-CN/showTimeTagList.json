@@ -1,0 +1,24 @@
+{
+  "table": {
+    "name": "上映场次标签名称",
+    "action": "操作"
+  },
+  "modal": {
+    "title": {
+      "create": "添加上映场次标签",
+      "edit": "编辑上映场次标签"
+    },
+    "form": {
+      "name": {
+        "label": "上映场次标签名称",
+        "required": "请输入上映场次标签名称"
+      }
+    }
+  },
+  "message": {
+    "remove": {
+      "content": "是否确认要删除当前上映场次标签?",
+      "success": "删除成功"
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "table": {
+    "name": "品牌名称",
+    "action": "操作"
+  },
+  "modal": {
+    "title": {
+      "create": "添加品牌",
+      "edit": "编辑品牌"
+    },
+    "form": {
+      "name": {
+        "label": "品牌名称",
+        "required": "请输入品牌名称"
+      }
+    }
+  },
+  "message": {
+    "remove": {
+      "content": "是否确认要删除当前品牌?",
+      "success": "删除成功"
+    }
+  }
+}

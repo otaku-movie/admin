@@ -1,5 +1,9 @@
 {
   "form": {
+    "brandId": {
+      "label": "ブランド名",
+      "required": "ブランド名を入力してください"
+    },
     "name": {
       "label": "映画館名",
       "required": "映画館名を入力してください"

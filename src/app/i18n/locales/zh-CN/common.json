@@ -8,21 +8,30 @@
         "cinemaDetail": "影院详情",
         "theaterHall": "影厅列表",
         "specList": "规格列表",
-        "ticketType": "电影票类型"
+        "ticketType": "电影票类型",
+        "brandList": "品牌列表"
       }
     },
     "movie": {
       "name": "电影管理",
       "children": {
         "movieList": "电影列表",
-        "showTimeList": "电影场次列表",
         "characterList": "角色列表",
         "staffList": "演职员列表",
         "positionList": "职位列表",
         "levelList": "分级列表",
         "movieDetail": "电影详情",
         "commentList": "评论列表",
-        "replyList": "回复列表"
+        "replyList": "回复列表",
+        "tagList": "标签列表",
+        "languageList": "语言列表"
+      }
+    },
+    "showTime": {
+      "name": "场次管理",
+      "children": {
+        "showTimeList": "电影场次列表",
+        "showTimeTag": "场次标签列表"
       }
     },
     "userList": "用户列表",

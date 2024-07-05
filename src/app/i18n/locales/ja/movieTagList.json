@@ -1,0 +1,24 @@
+{
+  "table": {
+    "name": "タグ名",
+    "action": "操作"
+  },
+  "modal": {
+    "title": {
+      "create": "タグを追加",
+      "edit": "タグを編集"
+    },
+    "form": {
+      "name": {
+        "label": "タグ名",
+        "required": "タグ名を入力してください"
+      }
+    }
+  },
+  "message": {
+    "remove": {
+      "content": "現在のタグを削除してもよろしいですか？",
+      "success": "削除成功"
+    }
+  }
+}

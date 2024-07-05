@@ -1,0 +1,24 @@
+{
+  "table": {
+    "name": "ブランド名",
+    "action": "操作"
+  },
+  "modal": {
+    "title": {
+      "create": "ブランドを追加",
+      "edit": "ブランドを編集"
+    },
+    "form": {
+      "name": {
+        "label": "ブランド名",
+        "required": "ブランド名を入力してください"
+      }
+    }
+  },
+  "message": {
+    "remove": {
+      "content": "現在のブランドを削除してもよろしいですか?",
+      "success": "削除成功"
+    }
+  }
+}

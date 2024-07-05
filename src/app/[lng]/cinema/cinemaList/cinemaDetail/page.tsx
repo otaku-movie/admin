@@ -17,9 +17,28 @@ export default function Page({ params: { lng } }: PageProps) {
     spec: []
   })
   const [specList, setSpecList] = useState<any[]>([])
+  const [brandList, setBrandList] = useState<any[]>([])
   const [form] = Form.useForm()
   const router = useRouter()
   const searchParams = useSearchParams()
+
+  const getBrandData = (
+    name: string = '',
+    id: number | undefined = undefined
+  ) => {
+    http({
+      url: 'brand/list',
+      method: 'post',
+      data: {
+        id,
+        name,
+        page: 1,
+        pageSize: 10
+      }
+    }).then((res) => {
+      setBrandList(res.data?.list)
+    })
+  }
 
   const getData = () => {
     if (searchParams.has('id')) {
@@ -30,7 +49,9 @@ export default function Page({ params: { lng } }: PageProps) {
           id: searchParams.get('id')
         }
       }).then((res) => {
-        console.log(res.data)
+        if (res.data.brandId) {
+          getBrandData('', res.data.brandId)
+        }
         form.setFieldsValue({
           ...res.data,
           spec:
@@ -68,6 +89,7 @@ export default function Page({ params: { lng } }: PageProps) {
   }
 
   useEffect(() => {
+    getBrandData()
     getData()
     getSpecData()
   }, [])
@@ -89,6 +111,31 @@ export default function Page({ params: { lng } }: PageProps) {
         variant="filled"
         style={{ maxWidth: 600 }}
       >
+        <Form.Item
+          label={t('form.brandId.label')}
+          rules={[{ required: true, message: t('form.brandId.required') }]}
+          name="brandId"
+        >
+          <Select
+            showSearch
+            value={data.brandId}
+            onChange={(val) => {
+              setData({
+                ...data,
+                brandId: val
+              })
+            }}
+            onSearch={getBrandData}
+          >
+            {brandList.map((item: any) => {
+              return (
+                <Select.Option value={item.id} key={item.id}>
+                  {item.name}
+                </Select.Option>
+              )
+            })}
+          </Select>
+        </Form.Item>
         <Form.Item
           label={t('form.name.label')}
           rules={[{ required: true, message: t('form.name.required') }]}

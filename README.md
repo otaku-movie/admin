@@ -37,6 +37,8 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 - 电影标签
 - 标签: 字幕 舞台纪念 等
 - 重映
+- hello movie  (残障人士)
+- 配音
 
 ## stack
 

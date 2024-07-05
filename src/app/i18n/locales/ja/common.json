@@ -8,21 +8,30 @@
         "cinemaDetail": "映画館詳細",
         "theaterHall": "スクリーンリスト",
         "specList": "規格リスト",
-        "ticketType": "チケットタイプ"
+        "ticketType": "チケットタイプ",
+        "brandList": "ブランドリスト"
       }
     },
     "movie": {
       "name": "映画管理",
       "children": {
         "movieList": "映画リスト",
-        "showTimeList": "上映時間リスト",
         "characterList": "キャラクターリスト",
         "staffList": "スタッフリスト",
         "positionList": "ポジションリスト",
         "levelList": "レベルリスト",
         "movieDetail": "映画詳細",
         "commentList": "コメントリスト",
-        "replyList": "返信リスト"
+        "replyList": "返信リスト",
+        "tagList": "タグリスト",
+        "languageList": "言語リスト"
+      }
+    },
+    "showTime": {
+      "name": "上映スケジュール管理",
+      "children": {
+        "showTimeList": "映画上映スケジュールリスト",
+        "showTimeTag": "上映スケジュールタグリスト"
       }
     },
     "userList": "ユーザーリスト",

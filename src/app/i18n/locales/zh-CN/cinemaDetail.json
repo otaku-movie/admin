@@ -1,5 +1,9 @@
 {
   "form": {
+    "brandId": {
+      "label": "品牌名称",
+      "required": "请选择品牌名称"
+    },
     "name": {
       "label": "影院名称",
       "required": "请输入影院名称"

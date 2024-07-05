@@ -6,7 +6,7 @@ import { Query, QueryItem } from '@/components/query'
 import http from '@/api/index'
 import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '../../layout'
-import { PositionModal } from '@/dialog/positionModal'
+import { ShowTimeTagModal } from '@/dialog/ShowTimeTagModal'
 import { CheckPermission } from '@/components/checkPermission'
 import { showTotal } from '@/utils/pagination'
 
@@ -15,12 +15,12 @@ interface Query {
   status: number
 }
 
-export default function MoviePage({ params: { lng } }: PageProps) {
+export default function Page({ params: { lng } }: PageProps) {
   const [data, setData] = useState([])
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
   const [query, setQuery] = useState<Partial<Query>>({})
-  const { t } = useTranslation(lng, 'position')
+  const { t } = useTranslation(lng, 'showTimeTagList')
   const { t: common } = useTranslation(lng, 'common')
   const [modal, setModal] = useState({
     type: 'create',
@@ -30,7 +30,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
 
   const getData = (page = 1) => {
     http({
-      url: '/position/list',
+      url: '/showTimeTag/list',
       method: 'post',
       data: {
         page,
@@ -62,12 +62,12 @@ export default function MoviePage({ params: { lng } }: PageProps) {
       render: (_, row) => {
         return (
           <Space>
-            <CheckPermission code="position.save">
+            <CheckPermission code="showTimeTag.save">
               <Button
                 type="primary"
                 onClick={() => {
                   http({
-                    url: 'position/detail',
+                    url: 'showTimeTag/detail',
                     method: 'get',
                     params: {
                       id: row.id
@@ -85,7 +85,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
                 {common('button.edit')}
               </Button>
             </CheckPermission>
-            <CheckPermission code="position.remove">
+            <CheckPermission code="showTimeTag.remove">
               <Button
                 type="primary"
                 danger
@@ -99,7 +99,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
                     onOk() {
                       return new Promise((resolve, reject) => {
                         http({
-                          url: 'admin/position/remove',
+                          url: 'admin/showTimeTag/remove',
                           method: 'delete',
                           params: {
                             id: row.id
@@ -134,7 +134,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
       }}
     >
       <Row justify="end">
-        <CheckPermission code="position.save">
+        <CheckPermission code="showTimeTag.save">
           <Button
             onClick={() => {
               setModal({
@@ -185,7 +185,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
           position: ['bottomCenter']
         }}
       />
-      <PositionModal
+      <ShowTimeTagModal
         type={modal.type as 'create' | 'edit'}
         show={modal.show}
         data={modal.data}
@@ -202,7 +202,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
             show: false
           })
         }}
-      ></PositionModal>
+      ></ShowTimeTagModal>
     </section>
   )
 }
