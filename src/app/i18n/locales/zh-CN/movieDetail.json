@@ -20,6 +20,15 @@
       "label": "电影分级",
       "required": "请选择分级"
     },
+    "tag": {
+      "label": "标签",
+      "required": "请选择标签"
+    },
+    "helloMovie": {
+      "label": "Hello Movie（无障碍）",
+      "required": "Hello Movie 不能为空",
+      "notRepeat": "Hello Movie 不能重复"
+    },
     "spec": {
       "label": "上映规格",
       "required": "请选择上映规格"
@@ -45,7 +54,7 @@
       "label": "官网",
       "required": "请输入官网地址"
     },
-    
+
     "staff": {
       "label": "工作人员"
     },

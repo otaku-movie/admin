@@ -2,6 +2,8 @@
   "table": {
     "name": "作品",
     "originalName": "原題",
+    "tags": "タグ",
+    "helloMovie": "hello movie",
     "time": "上映時間",
     "level": "レベル",
     "cinemaCount": "上映映画館数",

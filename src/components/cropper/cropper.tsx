@@ -6,7 +6,7 @@ import { useTranslation } from '@/app/i18n/client'
 import 'cropperjs/src/css/cropper.scss'
 import './cropper.scss'
 import { languageType } from '@/config'
-import { Image } from 'next/image'
+import Image from 'next/image'
 
 interface OutputResult {
   file: File

@@ -242,7 +242,7 @@ export default function SeatModal(props: ModalProps) {
         })
 
         setHoverSelected(hoverSelected)
-        setData(updatedData)
+        setData(updatedData as any)
       }
     }
   }

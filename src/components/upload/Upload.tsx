@@ -28,7 +28,6 @@ export interface UploadProps {
   cropperOptions?: Omit<Cropper.Options, 'preview'>
   onChange?: (val: string) => void
 }
-type uploadType = 'upload' | 'preview' | 'error' | 'crop'
 
 export function Upload(props: UploadProps) {
   const {
@@ -36,7 +35,6 @@ export function Upload(props: UploadProps) {
     fileSize = 5 * Math.pow(1024, 2)
   } = props
 
-  const [type, setType] = useState<uploadType>('upload')
   const { t } = useTranslation(navigator.language as languageType, 'components')
   const [crop] = useState(props.crop)
   const [previewOpen, setPreviewOpen] = useState(false)
@@ -80,7 +78,7 @@ export function Upload(props: UploadProps) {
     setPreviewOpen(true)
   }
 
-  const handleChange: AntdUploadProps['onChange'] = ({ fileList, file }) => {
+  const handleChange: AntdUploadProps['onChange'] = ({ file }) => {
     if (file.status === 'done') {
       const url = file.response.data.url
       setImageURL(url)
@@ -125,7 +123,6 @@ export function Upload(props: UploadProps) {
         ])
         props.onChange?.(res.data.url)
         message.success(res.message)
-        setType('preview')
       })
       .catch(() => {
         setFileList([])
@@ -172,7 +169,6 @@ export function Upload(props: UploadProps) {
             const blob = new Blob([options.file], { type: file.type })
 
             setCropperURL(URL.createObjectURL(blob))
-            setType('crop')
           } else {
             const fd = new FormData()
             fd.append('file', options.file)
@@ -196,7 +192,6 @@ export function Upload(props: UploadProps) {
       <ImageCropper
         imageURL={cropperURL}
         visible={modal.show}
-        fixed={true}
         options={props.cropperOptions}
         onConfirm={(data) => {
           const fd = new FormData()

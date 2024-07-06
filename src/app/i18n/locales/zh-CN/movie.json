@@ -3,6 +3,8 @@
     "name": "作品",
     "originalName": "原名",
     "time": "片长",
+    "tags": "标签",
+    "helloMovie": "hello movie",
     "level": "分级",
     "cinemaCount": "上映影院数",
     "theaterCount": "上映场馆数",

@@ -9,6 +9,7 @@ import { Two } from './step/two'
 import { useMovieStore } from '@/store/useMovieStore'
 
 export default function MovieDetail({ params: { lng } }: PageProps) {
+  
   const [step, setStep] = useState(0)
   const movieStore = useMovieStore()
   const searchParams = useSearchParams()
@@ -29,6 +30,8 @@ export default function MovieDetail({ params: { lng } }: PageProps) {
       })
     }
   }
+
+  
 
   const next = () => {
     if (step < components.length) {

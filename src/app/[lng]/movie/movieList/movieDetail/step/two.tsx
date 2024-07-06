@@ -257,7 +257,9 @@ export function Two(props: Props) {
     const obj = type === 'staff' ? staff : character
 
     if (obj.modal.type === 'create') {
-      const some = obj.data.some((item: {name: string}) => item.name === data.name)
+      const some = obj.data.some(
+        (item: { name: string }) => item.name === data.name
+      )
 
       if (some) {
         message.warning(t(`${type}.message.notRepeat`))
@@ -275,7 +277,7 @@ export function Two(props: Props) {
       }
     } else {
       const old = obj.data[obj.modal.index]
-      const filter = obj.data.filter(item => item.name !== old.name)
+      const filter = obj.data.filter((item) => item.name !== old.name)
       const some = filter.some((item) => item.name === data.name)
       if (old.name === data.name || some) {
         message.warning(t(`${type}.message.notRepeat`))

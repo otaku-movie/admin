@@ -25,6 +25,8 @@ import { useMovieStore, SaveMovieQuery } from '@/store/useMovieStore'
 import { matchFormat } from '@/utils'
 import advancedFormat from 'dayjs/plugin/advancedFormat'
 import { useSearchParams } from 'next/navigation'
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
+import { DictSelect } from '@/components/DictSelect'
 
 dayjs.extend(advancedFormat)
 
@@ -35,8 +37,9 @@ export interface Props {
 }
 
 export function One(props: Props) {
-  const { t } = useTranslation(props.language, 'movieDetail')
   const { t: common } = useTranslation(props.language, 'common')
+  const { t } = useTranslation(props.language, 'movieDetail')
+  const [tagData, setTagData] = useState<{ id: number; name: string }[]>([])
   const [picker, setPicker] = useState('date')
   const [startDate, setStartDate] = useState<dayjs.Dayjs | null>(null)
   const [endDate, setEndDate] = useState<dayjs.Dayjs | null>(null)
@@ -44,10 +47,11 @@ export function One(props: Props) {
   const [form] = Form.useForm()
   const movieStore = useMovieStore()
   const [data, setData] = useState<SaveMovieQuery>({
-    spec: []
+    spec: [],
+    tags: []
   })
+  const [helloMovie, setHelloMovie] = useState<any[]>([])
   const [spec, setSpec] = useState<SpecItem[]>([])
-  const dict = useCommonStore((state) => state.dict)
   const levelList = useCommonStore((state) => state.levelList)
   const getLevelList = useCommonStore((state) => state.getLevelList)
   const searchParams = useSearchParams()
@@ -70,6 +74,18 @@ export function One(props: Props) {
     //   type: 'quarter'
     // }
   ]
+
+  const getTagData = () => {
+    http({
+      url: '/movieTag/list',
+      method: 'post',
+      data: {
+        pageSize: 100
+      }
+    }).then((res) => {
+      setTagData(res.data.list)
+    })
+  }
 
   const getSpec = () => {
     http({
@@ -101,19 +117,33 @@ export function One(props: Props) {
 
         form.setFieldsValue({
           ...movieStore.movie,
+          tags: movieStore.movie.tags?.map((item) => item.id),
           startDate: toDayjs('start', movieStore.movie.startDate as string),
           endDate: toDayjs('end', movieStore.movie.endDate as string)
         })
+        if (movieStore.movie.helloMovie) {
+          setHelloMovie(
+            movieStore.movie.helloMovie.map((item) => {
+              return {
+                ...item,
+                date: dayjs(item.date, 'YYYY-MM-DD')
+              }
+            })
+          )
+        }
       }
-      console.log(movieStore)
+
+      console.log(movieStore.movie)
       setData({
-        ...movieStore.movie
+        ...movieStore.movie,
+        tags: movieStore.movie.tags?.map((item) => item.id) as any
       })
       updateDates()
     }
   }, [form, movieStore.movie, movieStore.movie.startDate])
 
   useEffect(() => {
+    getTagData()
     getSpec()
     getLevelList()
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -179,12 +209,10 @@ export function One(props: Props) {
       <Form
         {...{
           labelCol: {
-            xs: { span: 24 },
-            sm: { span: 6 }
+            span: 5
           },
           wrapperCol: {
-            xs: { span: 24 },
-            sm: { span: 15 }
+            offset: 0
           }
         }}
         form={form}
@@ -277,6 +305,144 @@ export function One(props: Props) {
             }}
           />
         </Form.Item>
+
+        <Form.Item wrapperCol={{ offset: 6, span: 16 }}>
+          <CheckPermission code="movie.save">
+            <Button
+              type="primary"
+              htmlType="submit"
+              onClick={() => {
+                form.validateFields().then(() => {
+                  console.log(data)
+                  http({
+                    url: 'admin/movie/save',
+                    method: 'post',
+                    data: {
+                      ...data,
+                      startDate: formatDate(startDate),
+                      endDate: formatDate(endDate, 'date'),
+                      tags: data.tags,
+                      helloMovie: helloMovie.map((item) => {
+                        return {
+                          ...item,
+                          date: formatDate(item.date, 'date')
+                        }
+                      })
+                    }
+                  }).then((res: any) => {
+                    message.success('保存成功')
+                    movieStore.setMovie({
+                      ...res.data
+                    })
+                    props.onNext?.()
+                  })
+                })
+              }}
+            >
+              {t('button.next')}
+            </Button>
+          </CheckPermission>
+        </Form.Item>
+      </Form>
+      <Form
+        {...{
+          labelCol: {
+            span: 8,
+            offset: 2
+          },
+          wrapperCol: {
+            offset: 1
+          }
+        }}
+        form={form}
+        variant="filled"
+        style={{ width: 600 }}
+        name="movieDetail2"
+      >
+        <Form.Item
+          required={true}
+          name={['code', 'date']}
+          rules={[
+            {
+              validateTrigger: ['onBlur'],
+              validator() {
+                const some = helloMovie.some((item) => {
+                  if (!item.code || !item.date) {
+                    return true
+                  }
+                  return false
+                })
+                if (some) {
+                  return Promise.reject(
+                    new Error(t('form.helloMovie.required'))
+                  )
+                }
+
+                const set = new Set(helloMovie.map((item) => item.code))
+
+                if (set.size !== helloMovie.length) {
+                  return Promise.reject(
+                    new Error(t('form.helloMovie.notRepeat'))
+                  )
+                }
+
+                return Promise.resolve()
+              }
+            }
+          ]}
+          label={t('form.helloMovie.label')}
+        >
+          <Space direction="vertical" size={15}>
+            {helloMovie.map((item: any, index: number) => {
+              return (
+                <Space size={15} key={item.id}>
+                  <DictSelect
+                    code="helloMovie"
+                    value={item.code}
+                    style={{ width: '250px' }}
+                    onChange={(val) => {
+                      item.code = val
+                      setHelloMovie([...helloMovie])
+                    }}
+                  ></DictSelect>
+                  <DatePicker
+                    style={{ width: '200px' }}
+                    value={item.date}
+                    onChange={(date) => {
+                      item.date = date
+                      setHelloMovie([...helloMovie])
+                    }}
+                  />
+                  <MinusCircleOutlined
+                    onClick={() => {
+                      helloMovie.splice(index, 1)
+                      setHelloMovie([...helloMovie])
+                    }}
+                  />
+                </Space>
+              )
+            })}
+            {helloMovie.length < 2 ? (
+              <Button
+                type="dashed"
+                style={{
+                  width: '100%'
+                }}
+                onClick={() => {
+                  helloMovie.push({
+                    id: helloMovie.length,
+                    status: false
+                  } as never)
+
+                  setHelloMovie([...helloMovie])
+                }}
+                icon={<PlusOutlined />}
+              >
+                {common('button.add')}
+              </Button>
+            ) : null}
+          </Space>
+        </Form.Item>
         <Form.Item
           label={t('form.homePage.label')}
           rules={[{ required: false, message: t('form.homePage.required') }]}
@@ -313,51 +479,6 @@ export function One(props: Props) {
             })}
           </Select>
         </Form.Item>
-
-        <Form.Item wrapperCol={{ offset: 6, span: 16 }}>
-          <CheckPermission code="movie.save">
-            <Button
-              type="primary"
-              htmlType="submit"
-              onClick={() => {
-                form.validateFields().then(() => {
-                  http({
-                    url: 'admin/movie/save',
-                    method: 'post',
-                    data: {
-                      ...data,
-                      startDate: formatDate(startDate),
-                      endDate: formatDate(endDate, 'date')
-                    }
-                  }).then((res: any) => {
-                    message.success('保存成功')
-                    movieStore.setMovie({
-                      ...res.data
-                    })
-                    props.onNext?.()
-                  })
-                })
-              }}
-            >
-              {t('button.next')}
-            </Button>
-          </CheckPermission>
-        </Form.Item>
-      </Form>
-      <Form
-        {...{
-          labelCol: {
-            span: 8
-          },
-          wrapperCol: {
-            offset: 1
-          }
-        }}
-        form={form}
-        variant="filled"
-        style={{ width: 500 }}
-        name="movieDetail"
-      >
         <Form.Item
           label={t('form.spec.label')}
           rules={[{ required: false, message: t('form.spec.required') }]}
@@ -388,21 +509,15 @@ export function One(props: Props) {
           rules={[{ required: false, message: t('form.level.required') }]}
           name="status"
         >
-          <Select
+          <DictSelect
+            code="releaseStatus"
             value={data.status}
+            style={{ width: '250px' }}
             onChange={(val) => {
-              data.status = val
+              data.status = val as any
               setData({ ...data })
             }}
-          >
-            {dict.releaseStatus?.map((item) => {
-              return (
-                <Select.Option value={item.code} key={item.code}>
-                  {item.name}
-                </Select.Option>
-              )
-            })}
-          </Select>
+          ></DictSelect>
         </Form.Item>
 
         <Form.Item
@@ -469,17 +584,32 @@ export function One(props: Props) {
               setEndDate(date)
             }}
           />
-          {/* <DatePicker
-            value={}
-            style={{
-              width: '300px'
+        </Form.Item>
+
+        <Form.Item
+          label={t('form.tag.label')}
+          rules={[{ required: false, message: t('form.tag.required') }]}
+          name="tags"
+        >
+          <Checkbox.Group
+            value={data.tags}
+            onChange={(val) => {
+              setData({
+                ...data,
+                tags: val
+              })
             }}
-            onChange={(date) => {
-              debugger
-            
-              setEndDate(date)
-            }}
-          /> */}
+          >
+            <Row gutter={[20, 10]}>
+              {tagData.map((item) => {
+                return (
+                  <Col key={item.id}>
+                    <Checkbox value={item.id}>{item.name}</Checkbox>
+                  </Col>
+                )
+              })}
+            </Row>
+          </Checkbox.Group>
         </Form.Item>
       </Form>
     </Space>

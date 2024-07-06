@@ -126,6 +126,36 @@ export default function Page({ params: { lng } }: PageProps) {
       dataIndex: 'originalName'
     },
     {
+      title: t('table.tags'),
+      width: 100,
+      dataIndex: 'tags',
+      render(_, row) {
+        return (
+          <Space direction="vertical">
+            {row.tags.map((item) => {
+              return <Tag key={item.id}>{item.name}</Tag>
+            })}
+          </Space>
+        )
+      }
+    },
+    {
+      title: t('table.helloMovie'),
+      width: 150,
+      dataIndex: 'helloMovie',
+      render(_, row) {
+        return (
+          <Space direction="vertical">
+            {row.helloMovie.map((item) => {
+              return (
+                <Dict code={item.code} name="helloMovie" key={item.code}></Dict>
+              )
+            })}
+          </Space>
+        )
+      }
+    },
+    {
       title: t('table.time'),
       dataIndex: 'time',
       width: 200,
@@ -137,42 +167,42 @@ export default function Page({ params: { lng } }: PageProps) {
     },
     {
       title: t('table.cinemaCount'),
-      width: 200,
+      width: 150,
       dataIndex: 'cinemaCount'
     },
     {
       title: t('table.theaterCount'),
-      width: 200,
+      width: 150,
       dataIndex: 'theaterCount'
     },
     {
       title: t('table.commentCount'),
-      width: 200,
+      width: 150,
       dataIndex: 'commentCount'
     },
     {
       title: t('table.watchedCount'),
-      width: 200,
+      width: 150,
       dataIndex: 'watchedCount'
     },
     {
       title: t('table.wantToSeeCount'),
-      width: 200,
+      width: 150,
       dataIndex: 'wantToSeeCount'
     },
     {
       title: t('table.startDate'),
-      width: 200,
+      width: 150,
       dataIndex: 'startDate'
     },
     {
       title: t('table.endDate'),
-      width: 200,
+      width: 150,
       dataIndex: 'endDate'
     },
     {
       title: t('table.status'),
-      width: 200,
+      width: 150,
       dataIndex: '',
       render(_, row) {
         return <Dict code={row.status} name={'releaseStatus'}></Dict>

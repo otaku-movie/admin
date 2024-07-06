@@ -22,14 +22,13 @@ export interface commonStore {
   levelList: level[]
   staffList: staff[]
   dict: Record<string, DictItem[]>
+  dictSet: Set<string>
   getDict(code: string): Promise<Record<string, DictItem[]>>
   getCharacterList(query?: CharacterQuery): Promise<character[]>
   getPositionList(query?: PositionListQuery): void
   getStaffList(query?: StaffListQuery): Promise<staff[]>
   getLevelList (): void
 }
-
-
 
 export const useCommonStore = create<commonStore>((set, get) => {
   return {

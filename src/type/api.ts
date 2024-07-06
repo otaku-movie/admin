@@ -10,6 +10,11 @@ export interface response<T = any> {
   data: paginationResponse<T> | T
 }
 
+export interface HelloMovie {
+  id: number
+  code: number
+  date: string
+}
 
 export interface Cinema {
   id: number
@@ -40,6 +45,11 @@ export interface SpecItem {
   description: string
 }
 
+export interface Tag {
+  id: number
+  name: string
+}
+
 export interface Movie {
   id: number
   cover: string
@@ -52,6 +62,8 @@ export interface Movie {
   levelId: number
   levelName: string
   spec: SpecItem[]
+  tags: Tag[]
+  helloMovie: HelloMovie[]
 }
 
 export interface user {

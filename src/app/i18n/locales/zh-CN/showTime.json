@@ -73,5 +73,8 @@
         "startAfterEnd": "结束时间必须大于开始时间"
       }
     }
+  },
+  "seatModal": {
+    "title": "设置过道"
   }
 }

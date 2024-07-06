@@ -4,6 +4,7 @@ import { Movie } from '@/type/api'
 export type SaveMovieQuery = Partial<
 Omit<Movie, 'spec'> & {
   spec: number[]
+  tags: number[]
   startDate: null | string
   endDate: null | string
 }>
