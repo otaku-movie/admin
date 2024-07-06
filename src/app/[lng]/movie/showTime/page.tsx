@@ -171,6 +171,16 @@ export default function MoviePage({ params: { lng } }: PageProps) {
       }
     },
     {
+      title: t('table.subtitle'),
+      width: 100,
+      dataIndex: 'subtitleName'
+    },
+    {
+      title: t('table.showTimeTag'),
+      width: 150,
+      dataIndex: 'showTimeTagName'
+    },
+    {
       title: t('table.cinema'),
       width: 200,
       dataIndex: 'cinemaName'

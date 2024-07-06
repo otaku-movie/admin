@@ -23,6 +23,8 @@ interface Query {
   theaterHallId?: number
   startTime?: dayjs.Dayjs
   endTime?: dayjs.Dayjs
+  subtitleId?: number
+  showTimeTagId?: number
 }
 
 export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
@@ -32,6 +34,8 @@ export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
     'common'
   )
   const [movieData, setMovieData] = useState([])
+  const [languageData, setLanguageData] = useState([])
+  const [showTimeTagData, setShowTimeTagData] = useState([])
   const [cinemaData, setCinemaData] = useState<Cinema[]>([])
   const [theaterHallData, setTheaterHallData] = useState<theaterHall[]>([])
   const [form] = Form.useForm()
@@ -73,6 +77,34 @@ export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
       setTheaterHallData(res.data.list)
     })
   }
+  const getLanguageData = (
+    name: string = '',
+    id: number | undefined = undefined
+  ) => {
+    http({
+      url: 'language/list',
+      method: 'post',
+      data: {
+        name
+      }
+    }).then((res) => {
+      setLanguageData(res.data.list)
+    })
+  }
+  const getShowTimeTagData = (
+    name: string = '',
+    id: number | undefined = undefined
+  ) => {
+    http({
+      url: 'showTimeTag/list',
+      method: 'post',
+      data: {
+        name
+      }
+    }).then((res) => {
+      setShowTimeTagData(res.data.list)
+    })
+  }
   const getCinemaData = (
     name: string = '',
     id: number | undefined = undefined
@@ -99,6 +131,8 @@ export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
     if (props.show && !props.data.id) {
       getMovieData()
       getCinemaData()
+      getLanguageData()
+      getShowTimeTagData()
       console.log(props.data)
     }
 
@@ -116,6 +150,8 @@ export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
       getTheaterHallData(props.data.cinemaId as number)
       getMovieData('', props.data.movieId as number)
       getCinemaData('', props.data.cinemaId as number)
+      getLanguageData('', props.data.subtitleId as number)
+      getShowTimeTagData('', props.data.showTimeTagId as number)
     } else {
       setQuery({})
       form.setFieldsValue({})
@@ -190,6 +226,66 @@ export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
             onSearch={getMovieData}
           >
             {movieData.map((item: any) => {
+              return (
+                <Select.Option value={item.id} key={item.id}>
+                  {item.name}
+                </Select.Option>
+              )
+            })}
+          </Select>
+        </Form.Item>
+        <Form.Item
+          label={t('showTimeModal.form.subtitle.label')}
+          rules={[
+            {
+              required: true,
+              message: t('showTimeModal.form.subtitle.required')
+            }
+          ]}
+          name="subtitleId"
+        >
+          <Select
+            showSearch
+            value={query.subtitleId}
+            onChange={(val) => {
+              setQuery({
+                ...query,
+                subtitleId: val
+              })
+            }}
+            onSearch={getMovieData}
+          >
+            {languageData.map((item: any) => {
+              return (
+                <Select.Option value={item.id} key={item.id}>
+                  {item.name}
+                </Select.Option>
+              )
+            })}
+          </Select>
+        </Form.Item>
+        <Form.Item
+          label={t('showTimeModal.form.showTimeSpec.label')}
+          rules={[
+            {
+              required: true,
+              message: t('showTimeModal.form.showTimeSpec.required')
+            }
+          ]}
+          name="showTimeTagId"
+        >
+          <Select
+            showSearch
+            value={query.showTimeTagId}
+            onChange={(val) => {
+              setQuery({
+                ...query,
+                showTimeTagId: val
+              })
+            }}
+            onSearch={getShowTimeTagData}
+          >
+            {showTimeTagData.map((item: any) => {
               return (
                 <Select.Option value={item.id} key={item.id}>
                   {item.name}
