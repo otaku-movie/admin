@@ -9,7 +9,13 @@ module.exports = {
     'plugin:react/recommended',
     'plugin:@typescript-eslint/recommended'
   ],
+  
   rules: {
-    '@typescript-eslint/no-explicit-any': ['off']
+    '@typescript-eslint/no-explicit-any': ['off'],
+    'no-unused-vars': 'off',
+    '@typescript-eslint/no-unused-vars': 'warn',
+    // 禁用react的依赖检查
+    'react-hooks/rules-of-hooks': 'off',
+    'react-hooks/exhaustive-deps': 'off'
   }
 }

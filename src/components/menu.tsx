@@ -6,7 +6,8 @@ import { permission } from '@/dialog/rolePermission'
 import { useTranslation } from '@/app/i18n/client'
 import { languageType } from '@/config'
 import { processPath } from '@/config/router'
-import { ItemType, MenuItemType } from 'antd/es/menu/hooks/useItems'
+import { ItemType, MenuItemType } from 'antd/es/menu/interface'
+
 
 interface Props {
   data: permission[]

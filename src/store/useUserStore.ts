@@ -52,7 +52,7 @@ export const useUserStore = create<userInfoStore>((set, get) => {
         })
       }
     },
-    async permission(roleId: number) {
+    async permission() {
       const permission = await http({
         url: 'admin/permission/role/permission',
         method: 'get',

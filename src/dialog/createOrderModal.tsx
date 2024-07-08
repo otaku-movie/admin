@@ -34,7 +34,6 @@ export function CreateOrderModal(props: ModalProps) {
     'common'
   )
   const [form] = Form.useForm()
-  const [query, setQuery] = useState<Query>({})
   const [ticketData, setTicketData] = useState([])
   const [data, setData] = useState<any[]>([])
 

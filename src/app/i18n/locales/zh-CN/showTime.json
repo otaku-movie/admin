@@ -2,89 +2,89 @@
   "table": {
     "name": "作品",
     "subtitle": "字幕",
-    "showTimeTag": "上映場次タグ",
-    "startDate": "開始日時",
-    "endDate": "終了日時",
-    "playState": "上映状態",
-    "cinema": "上映映画館",
-    "theaterHall": "上映劇場",
-    "open": "公開",
-    "spec": "上映仕様",
-    "seatSelectionRatio": "座席選択比率",
-    "attendance": "観客数",
+    "showTimeTag": "上映场次标签",
+    "startDate": "开始时间",
+    "endDate": "结束时间",
+    "playState": "上映状态",
+    "cinema": "上映影院",
+    "theaterHall": "上映影厅",
+    "open": "是否公开",
+    "spec": "上映规格",
+    "seatSelectionRatio": "选座比",
+    "attendance": "上座率",
     "action": "操作"
   },
   "query": {
-    "cinema": "映画館",
-    "date": "上映日"
+    "cinema": "影院",
+    "date": "上映日期"
   },
   "message": {
     "remove": {
-      "selectedCount": "現在{{count}}人が座席を選択していますが、削除してもよろしいですか？",
-      "content": "現在の上映場次を削除してもよろしいですか？",
-      "success": "削除に成功しました"
+      "selectedCount": "当前已有{{count}}人选座，是否仍要删除",
+      "content": "是否确认要删除当前场次?",
+      "success": "删除成功"
     }
   },
   "createOrderModal": {
-    "title": "注文確認",
-    "total": "合計",
+    "title": "确认订单",
+    "total": "合计",
     "message": {
       "movieTicketTypeId": {
-        "required": "映画チケットタイプを選択してください"
+        "required": "请选择电影票类型"
       }
     },
     "table": {
       "name": "作品",
-      "spec": "上映仕様",
-      "seat": "座席情報",
-      "area": "エリア名/価格",
-      "price": "価格",
-      "plusPrice": "特別上映の追加料金",
-      "movieTicketType": "映画チケットタイプ"
+      "spec": "上映规格",
+      "seat": "座位信息",
+      "area": "区域名称/价格",
+      "price": "价格",
+      "plusPrice": "特殊上映追加价格",
+      "movieTicketType": "电影票类型"
     },
     "form": {
       "movieTicketType": {
-        "label": "映画チケットタイプ",
-        "required": "映画チケットタイプを選択してください"
+        "label": "电影票类型",
+        "required": "请选择电影票类型"
       }
     }
   },
   "showTimeModal": {
     "title": {
-      "create": "場次を追加",
-      "edit": "場次を編集"
+      "create": "添加场次",
+      "edit": "编辑场次"
     },
     "form": {
       "movie": {
-        "label": "映画タイトル",
-        "required": "映画を選択してください"
+        "label": "电影名称",
+        "required": "请选择电影"
       },
       "open": {
-        "label": "公開するか"
+        "label": "是否公开"
       },
       "cinema": {
-        "required": "映画館を選択してください"
+        "required": "请选择影院"
       },
       "theaterHall": {
-        "label": "上映劇場",
-        "required": "劇場を選択してください"
+        "label": "放映影厅",
+        "required": "请选择影厅"
       },
       "subtitle": {
         "label": "字幕",
-        "required": "字幕を選択してください"
+        "required": "请选择字幕"
       },
-      "showTimeSpec": {
-        "label": "上映場次タグ",
-        "required": "上映場次タグを選択してください"
+      "showTimeTag": {
+        "label": "上映场次标签",
+        "required": "请选择上映场次标签"
       },
       "showTime": {
-        "label": "開始日時",
-        "required": "上映時間を選択してください",
-        "startAfterEnd": "終了日時は開始日時より後でなければなりません"
+        "label": "开始时间",
+        "required": "请选择上映时间",
+        "startAfterEnd": "结束时间必须大于开始时间"
       }
     }
   },
   "seatModal": {
-    "title": "通路を設定する"
+    "title": "设置过道"
   }
 }

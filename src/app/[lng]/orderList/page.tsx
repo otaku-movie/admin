@@ -10,7 +10,6 @@ import {
   Select,
   Modal,
   message,
-  DatePicker,
   Form,
   Flex
 } from 'antd'
@@ -22,9 +21,6 @@ import { Query, QueryItem } from '@/components/query'
 import http from '@/api/index'
 import {
   Cinema,
-  Movie,
-  paginationResponse,
-  response,
   theaterHall
 } from '@/type/api'
 import { useTranslation } from '@/app/i18n/client'

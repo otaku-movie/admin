@@ -1,15 +1,17 @@
 {
   "table": {
     "name": "作品",
+    "subtitle": "字幕",
+    "showTimeTag": "上映場次タグ",
     "startDate": "開始日時",
     "endDate": "終了日時",
     "playState": "上映状態",
     "cinema": "上映映画館",
     "theaterHall": "上映劇場",
-    "open": "公開するか",
+    "open": "公開",
     "spec": "上映仕様",
-    "seatSelectionRatio": "座席選択率",
-    "attendance": "観客動員率",
+    "seatSelectionRatio": "座席選択比率",
+    "attendance": "観客数",
     "action": "操作"
   },
   "query": {
@@ -18,9 +20,9 @@
   },
   "message": {
     "remove": {
-      "selectedCount": "{{count}}人がすでに座席を選択しています。削除してもよろしいですか？",
-      "content": "現在の上映を削除してもよろしいですか？",
-      "success": "削除が成功しました"
+      "selectedCount": "現在{{count}}人が座席を選択していますが、削除してもよろしいですか？",
+      "content": "現在の上映場次を削除してもよろしいですか？",
+      "success": "削除に成功しました"
     }
   },
   "createOrderModal": {
@@ -28,7 +30,7 @@
     "total": "合計",
     "message": {
       "movieTicketTypeId": {
-        "required": "映画チケットタイプは空にできません"
+        "required": "映画チケットタイプを選択してください"
       }
     },
     "table": {
@@ -37,7 +39,7 @@
       "seat": "座席情報",
       "area": "エリア名/価格",
       "price": "価格",
-      "plusPrice": "特別上映追加価格",
+      "plusPrice": "特別上映の追加料金",
       "movieTicketType": "映画チケットタイプ"
     },
     "form": {
@@ -49,12 +51,12 @@
   },
   "showTimeModal": {
     "title": {
-      "create": "上映時間の追加",
-      "edit": "上映時間の編集"
+      "create": "場次を追加",
+      "edit": "場次を編集"
     },
     "form": {
       "movie": {
-        "label": "映画名",
+        "label": "映画タイトル",
         "required": "映画を選択してください"
       },
       "open": {
@@ -67,14 +69,22 @@
         "label": "上映劇場",
         "required": "劇場を選択してください"
       },
+      "subtitle": {
+        "label": "字幕",
+        "required": "字幕を選択してください"
+      },
+      "showTimeSpec": {
+        "label": "上映場次タグ",
+        "required": "上映場次タグを選択してください"
+      },
       "showTime": {
         "label": "開始日時",
-        "required": "上映開始時間を選択してください",
+        "required": "上映時間を選択してください",
         "startAfterEnd": "終了日時は開始日時より後でなければなりません"
       }
     }
   },
   "seatModal": {
-    "titlle": "通路の設定"
+    "title": "通路を設定する"
   }
 }

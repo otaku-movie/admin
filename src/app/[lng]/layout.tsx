@@ -34,7 +34,7 @@ export interface PageProps {
 }
 
 function RootLayout({ children, params: { lng } }: PageProps) {
-  const { Header, Content, Sider } = Layout
+  const { Header, Sider } = Layout
   const pathname = usePathname()
   const userStore = useUserStore()
   // const breadcrumb = useUserStore((state) => state.breadcrumb)
@@ -46,6 +46,7 @@ function RootLayout({ children, params: { lng } }: PageProps) {
     token: { colorBgContainer, borderRadiusLG }
   } = theme.useToken()
 
+  console.log(process.env.NODE_ENV)
   const items: MenuProps['items'] = [
     {
       label: (
@@ -106,7 +107,7 @@ function RootLayout({ children, params: { lng } }: PageProps) {
       // 更新面包屑
       userStore.getBreadcrumb()
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname, userStore.menuPermission])
 
   localStorage.setItem('language', lang)

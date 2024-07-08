@@ -1,6 +1,5 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import i18next from 'i18next'
 import { initReactI18next, useTranslation as useTranslationOrg } from 'react-i18next'
 import { useCookies } from 'react-cookie'

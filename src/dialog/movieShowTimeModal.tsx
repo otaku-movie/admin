@@ -85,7 +85,8 @@ export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
       url: 'language/list',
       method: 'post',
       data: {
-        name
+        name,
+        id
       }
     }).then((res) => {
       setLanguageData(res.data.list)
@@ -99,7 +100,8 @@ export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
       url: 'showTimeTag/list',
       method: 'post',
       data: {
-        name
+        name,
+        id
       }
     }).then((res) => {
       setShowTimeTagData(res.data.list)
