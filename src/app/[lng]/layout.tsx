@@ -102,6 +102,16 @@ function RootLayout({ children, params: { lng } }: PageProps) {
   const lang = pathname.split('/')[1]
 
   useEffect(() => {
+    // if (process.env.MODE !== 'production') {
+    //   const meta = document.createElement('meta')
+    //   meta.setAttribute('http-equiv', 'Content-Security-Policy')
+    //   meta.setAttribute('content', 'upgrade-insecure-requests')
+
+    //   document.head.insertBefore(
+    //     meta,
+    //     document.querySelector('link[rel=icon]') || null
+    //   )
+    // }
     if (userStore.permissionList.length !== 0 && !set.has(str)) {
       // 更新面包屑
       userStore.getBreadcrumb()
@@ -113,6 +123,12 @@ function RootLayout({ children, params: { lng } }: PageProps) {
 
   return (
     <html lang={lng} dir={lng}>
+      <head>
+        <meta
+          httpEquiv="Content-Security-Policy"
+          content="upgrade-insecure-requests"
+        />
+      </head>
       <body>
         <AntdRegistry>
           {/* <NavigationEvents /> */}
