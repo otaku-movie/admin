@@ -2,8 +2,7 @@ import { userInfo, role } from './../type/api'
 import { permission } from '../dialog/rolePermission'
 import { create } from 'zustand'
 import http from '@/api'
-
-import { message } from 'antd'
+import Cookies from 'js-cookie'
 import dayjs from 'dayjs'
 
 interface Query {
@@ -52,12 +51,12 @@ export const useUserStore = create<userInfoStore>((set, get) => {
         })
       }
     },
-    async permission() {
+    async permission(roleId?: number) {
       const permission = await http({
         url: 'admin/permission/role/permission',
         method: 'get',
         params: {
-          id: localStorage.getItem('roleId')
+          id: localStorage.getItem('roleId') || roleId
         }
       })
       if (permission.data.length !== 0) {
@@ -107,9 +106,10 @@ export const useUserStore = create<userInfoStore>((set, get) => {
       if (userRole) {
         localStorage.setItem('roleId', `${first.id}`)
         const result = await get().permission(first.id)
+        Cookies.set('token',  userInfo.data.token, { expires: 30 })
+        Cookies.set('roleId', `${first.id}`, { expires: 30 })
 
         if (!result) {
-          message.info('没有权限')
           return Promise.resolve(false)
         }
   

@@ -35,7 +35,8 @@
     ".next/types/**/*.ts",
     "next.config.mjs",
     "build/types/**/*.ts",
-    "build/prod/types/**/*.ts"
+    "build/prod/types/**/*.ts",
+    "build/test/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"

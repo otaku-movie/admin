@@ -4,7 +4,6 @@ import { AntdRegistry } from '@ant-design/nextjs-registry'
 import React, { useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 import type { MenuProps } from 'antd'
-import Link from 'next/link'
 import {
   ConfigProvider,
   Breadcrumb,

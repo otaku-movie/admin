@@ -28,15 +28,20 @@ export async function middleware(req: NextRequest) {
 
   // 如果路径不受支持且不是 Next.js 内部路径，则重定向到默认语言的路径
   if (!isSupportedPath && !url.pathname.startsWith('/_next')) {
-    return NextResponse.redirect(new URL(`/${lng}${url.pathname}`, req.url))
+    const newURL = `/${lng}${url.pathname}`
+    return NextResponse.redirect(new URL(newURL, req.url))
   }
 
   // 检查是否存在 roleId 和 token
   const roleId = cookies.get('roleId')?.value
   const token = cookies.get('token')?.value
-
+  
+  console.log(url)
   if (!roleId || !token) {
-    return NextResponse.redirect(new URL(`/${lng}/login`, req.url))
+    if (url.pathname === `/${lng}/login`) {
+      return NextResponse.next()
+    }
+    return NextResponse.next()
   }
 
   // try {
