@@ -7,8 +7,8 @@ export const status = {
 
 const API_URL = {
   development: 'http://test-api.otaku-movie.com/api',
-  production: '',
-  test: '',
+  production: 'http://test-api.otaku-movie.com/api',
+  test: 'http://test-api.otaku-movie.com/api',
 }
 
 export const defaultLanguage = 'zh-CN'
