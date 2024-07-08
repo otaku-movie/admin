@@ -6,7 +6,7 @@ export const status = {
 }
 
 const API_URL = {
-  development: 'http://localhost:8080/api',
+  development: 'http://test-api.otaku-movie.com/api',
   production: '',
   test: '',
 }
