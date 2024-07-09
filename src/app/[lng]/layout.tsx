@@ -24,6 +24,7 @@ import { useUserStore } from '@/store/useUserStore'
 import { getUserInfo, listToTree } from '@/utils'
 import { Menu } from '@/components/menu'
 import Cookies from 'js-cookie'
+import { useCommonStore } from '@/store/useCommonStore'
 
 export interface PageProps {
   children: React.ReactNode
@@ -37,6 +38,7 @@ function RootLayout({ children, params: { lng } }: PageProps) {
   const pathname = usePathname()
   const userStore = useUserStore()
   // const breadcrumb = useUserStore((state) => state.breadcrumb)
+  const getDict = useCommonStore((state) => state.getDict)
   const getPermission = useUserStore((state) => state.permission)
   const menu = useUserStore((state) => listToTree(state.menuPermission))
   const { t } = useTranslation(lng, 'common')
@@ -45,7 +47,6 @@ function RootLayout({ children, params: { lng } }: PageProps) {
     token: { colorBgContainer, borderRadiusLG }
   } = theme.useToken()
 
-  console.log(process.env.NODE_ENV)
   const items: MenuProps['items'] = [
     {
       label: (
@@ -102,6 +103,10 @@ function RootLayout({ children, params: { lng } }: PageProps) {
   const lang = pathname.split('/')[1]
 
   useEffect(() => {
+    getDict()
+  }, [])
+  useEffect(() => {
+    console.log(process.env.NODE_ENV)
     // if (process.env.MODE !== 'production') {
     //   const meta = document.createElement('meta')
     //   meta.setAttribute('http-equiv', 'Content-Security-Policy')

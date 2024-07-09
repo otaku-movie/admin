@@ -200,7 +200,7 @@ export function Query(props: QueryProps) {
       setRenderChildren([...collapse()])
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [expand, renderChildren])
+  }, [expand, renderChildren, props.onClear])
 
   return (
     <section
@@ -220,7 +220,7 @@ export function Query(props: QueryProps) {
           form={form}
           name="advanced_search"
           style={formStyle}
-          initialValues={props.initialValues}
+          // initialValues={props.initialValues}
           onFinish={onFinish}
         >
           <Row gutter={row}>{renderChildren}</Row>
@@ -230,16 +230,14 @@ export function Query(props: QueryProps) {
               <Button type="primary" htmlType="submit">
                 {t('query.search')}
               </Button>
-              <Button
+              {/* <Button
                 onClick={() => {
                   form.resetFields()
-                  if (props.initialValues) {
-                    props.onClear?.({ ...props.initialValues })
-                  }
+                  props.onClear?.({ ...props.initialValues })
                 }}
               >
                 {t('query.clear')}
-              </Button>
+              </Button> */}
               {totalSpan > max ? (
                 <a
                   style={{ fontSize: 12 }}

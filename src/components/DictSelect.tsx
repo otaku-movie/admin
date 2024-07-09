@@ -14,18 +14,13 @@ export interface DictProps {
 
 export function DictSelect(props: DictProps) {
   const [code, setCode] = useState<number>()
-  const [dict, setDict] = useState<Record<string, DictItem[]>>({})
-  const getDict = useCommonStore((state) => state.getDict)
+  const dict = useCommonStore(state => state.dict)
 
   useEffect(() => {
     setCode(props.value)
   }, [props.value])
 
   useEffect(() => {
-    getDict(props.code).then((res) => {
-      console.log(res)
-      setDict(res)
-    })
   }, [props.code])
 
   return (

@@ -62,8 +62,6 @@ export default function Page({ params: { lng } }: PageProps) {
     getData()
   }, [])
 
-  useEffect(() => {}, [query, setQuery])
-
   const columns: TableColumnsType<Movie> = [
     {
       title: t('table.name'),
@@ -298,17 +296,19 @@ export default function Page({ params: { lng } }: PageProps) {
         </Row>
         <Query
           model={query}
+          initialValues={{}}
           onSearch={() => {
             console.log(query)
             getData()
           }}
-          onClear={() => {
-            setQuery({})
+          onClear={(obj) => {
+            setQuery(obj)
           }}
         >
           <QueryItem label={t('table.name')}>
             <Input
               value={query.name}
+              allowClear
               onChange={(e) => {
                 query.name = e.target.value
                 setQuery(query)

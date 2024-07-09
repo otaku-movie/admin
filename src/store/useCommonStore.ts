@@ -22,8 +22,7 @@ export interface commonStore {
   levelList: level[]
   staffList: staff[]
   dict: Record<string, DictItem[]>
-  dictSet: Set<string>
-  getDict(code: string): Promise<Record<string, DictItem[]>>
+  getDict(): void
   getCharacterList(query?: CharacterQuery): Promise<character[]>
   getPositionList(query?: PositionListQuery): void
   getStaffList(query?: StaffListQuery): Promise<staff[]>
@@ -37,28 +36,19 @@ export const useCommonStore = create<commonStore>((set, get) => {
     staffList: [],
     levelList: [],
     dict: {},
-    getDict(code: string) {
-      return new Promise((resolve) => {
-        if (!get().dict[code]) {
-          http({
-            url: 'dict/specify',
-            method: 'post',
-            data: { code: [code] }
-          }).then((res) => {
-            const dict =  Object.keys(res.data).reduce((map, current) => {
-              map[current] = res.data[current]
-              return map
-            }, get().dict)
-  
-            set({ 
-              dict
-            })
-  
-            resolve(dict)
-          })
-        } else {
-          resolve(get().dict)
-        }
+    getDict() {
+      http({
+        url: 'dict/specify',
+        method: 'get'
+      }).then((res) => {
+        const dict = Object.keys(res.data).reduce((map, current) => {
+          map[current] = res.data[current]
+          return map
+        }, get().dict)
+
+        set({ 
+          dict
+        })
       })
     },
     getLevelList () {

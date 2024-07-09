@@ -1,6 +1,20 @@
 /** @type {import('next').NextConfig} */
 /** @type {import('next-i18next').UserConfig} */
 const nextConfig = {
+  // i18n: {
+  //   locales: ['zh-CN', 'ja', 'en'],
+  //   defaultLocale: 'ja'
+  // },
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/movie/movieList',
+        // 临时重定向
+        permanent: false
+      }
+    ]
+  },
   eslint: {
     // 构建时忽略eslint错误
     ignoreDuringBuilds: true

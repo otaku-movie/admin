@@ -176,11 +176,11 @@ export default function Page({ params: { lng } }: PageProps) {
           {common('button.add')}
         </Button>
       </Row>
-      <Query>
+      {/* <Query>
         <QueryItem label={t('table.user')} column={1}>
           <Input></Input>
         </QueryItem>
-      </Query>
+      </Query> */}
       <Table
         columns={columns}
         dataSource={data}

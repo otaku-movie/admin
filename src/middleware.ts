@@ -22,7 +22,7 @@ export async function middleware(req: NextRequest) {
   } else if (headers.has('Accept-Language')) {
     lng = acceptLanguage.get(headers.get('Accept-Language')) || lng
   }
-
+  console.log(url)
   // 检查路径是否在支持的语言中
   const isSupportedPath = supportedLanguages.some(lang => url.pathname.startsWith(`/${lang}`))
 
@@ -36,7 +36,7 @@ export async function middleware(req: NextRequest) {
   const roleId = cookies.get('roleId')?.value
   const token = cookies.get('token')?.value
   
-  console.log(url)
+ 
   if (!roleId || !token) {
     if (url.pathname === `/${lng}/login`) {
       return NextResponse.next()
@@ -45,7 +45,7 @@ export async function middleware(req: NextRequest) {
   }
 
   // try {
-    const response = await axios.get('http://localhost:8080/api/admin/permission/role/permission', {
+    const response = await axios.get('http://test-api.otaku-movie.com/api/admin/permission/role/permission', {
       headers: {
         'Accept-Language': lng,
         token
