@@ -25,10 +25,15 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 ## 代办列表
 
-- 数据隔离（影院只能查看自己的影院的信息，和订单以及场次）
 - 搜索完善
 - 座位拖拽选中bug
 - 支付方式统计
+- 邮箱验证
+- 登录拼图验证码
+- 选座的并发处理
+- 订单支付
+- 票房统计
+- loading
 
 > 功能
 

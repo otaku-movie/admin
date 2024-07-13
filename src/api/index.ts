@@ -1,5 +1,3 @@
-
-import { BASE_URL } from './../config/index'
 import axios, { AxiosError, AxiosRequestHeaders, AxiosResponse } from 'axios'
 import { message } from 'antd'
 
@@ -7,7 +5,7 @@ import { toCamelCase } from '../utils'
 import { response } from '@/type/api'
 
 const http = axios.create({
-  baseURL: BASE_URL,
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
   timeout: 3600 * 1000,
   // withCredentials: true
 })
