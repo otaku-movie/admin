@@ -8,6 +8,7 @@ import { user } from '@/type/api'
 import { emailRegExp, passwordRegExp, usernameRegExp } from '@/utils'
 import { Upload } from '@/components/upload/Upload'
 import { md5 } from 'js-md5'
+import { VerifyCode } from '@/components/verifyCode'
 
 interface UserModalProps {
   type: 'create' | 'edit'
@@ -24,12 +25,14 @@ interface Query {
   password?: string
   password2?: string
   email?: string
+  code?: string
 }
 
 export default function UserModal(props: UserModalProps) {
   const { t } = useTranslation(navigator.language as languageType, 'user')
   const [form] = Form.useForm()
   const [query, setQuery] = useState<Query>({})
+  const [token, setToken] = useState('')
 
   useEffect(() => {
     if (props.show) {
@@ -52,7 +55,10 @@ export default function UserModal(props: UserModalProps) {
       maskClosable={false}
       onOk={() => {
         form.validateFields().then(() => {
-          const data = { ...query }
+          const data = {
+            ...query,
+            token
+          }
 
           if (data.password) {
             data.password = md5(query.password as string)
@@ -204,6 +210,39 @@ export default function UserModal(props: UserModalProps) {
               })
             }}
           />
+        </Form.Item>
+        <Form.Item
+          label={t('modal.form.verifyCode.label')}
+          rules={[
+            {
+              required: true,
+              message: t('modal.form.verifyCode.required')
+            },
+            {
+              pattern: /^\d{6}$/,
+              validateTrigger: ['onChange', 'onBlur'],
+              message: t('modal.form.verifyCode.length')
+            }
+          ]}
+          name="code"
+        >
+          <VerifyCode
+            value={query.code ?? ''}
+            query={{
+              email: query.email
+            }}
+            onChange={(val) => {
+              console.log(val)
+              setQuery({
+                ...query,
+                code: val
+              })
+            }}
+            onSuccess={(res) => {
+              console.log(res)
+              setToken(res.data.token)
+            }}
+          ></VerifyCode>
         </Form.Item>
       </Form>
     </Modal>

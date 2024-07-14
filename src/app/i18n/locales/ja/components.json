@@ -17,5 +17,9 @@
   },
   "cropper": {
     "title": "画像のトリミング"
+  },
+  "verifyCode": {
+    "button": "認証コードを送信",
+    "second": "秒"
   }
 }

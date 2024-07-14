@@ -17,5 +17,9 @@
   },
   "cropper": {
     "title": "裁剪图片"
+  },
+  "verifyCode": {
+    "button": "发送验证码",
+    "second": "秒"
   }
 }

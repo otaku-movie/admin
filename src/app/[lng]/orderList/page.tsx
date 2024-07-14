@@ -19,10 +19,7 @@ import { notFoundImage } from '@/config/index'
 
 import { Query, QueryItem } from '@/components/query'
 import http from '@/api/index'
-import {
-  Cinema,
-  theaterHall
-} from '@/type/api'
+import { Cinema, theaterHall } from '@/type/api'
 import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '../layout'
 import { showTotal } from '@/utils/pagination'
@@ -49,7 +46,6 @@ export default function MoviePage({ params: { lng } }: PageProps) {
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
   const [query, setQuery] = useState<Partial<Query>>({
-    orderTime: []
   })
   const { t } = useTranslation(lng, 'order')
   const { t: common } = useTranslation(lng, 'common')
@@ -84,10 +80,8 @@ export default function MoviePage({ params: { lng } }: PageProps) {
         page,
         pageSize: 10,
         ...query,
-        orderTime: [
-          orderDate.start?.format('YYYY-MM-DD HH:mm:ss'),
-          orderDate.end?.format('YYYY-MM-DD HH:mm:ss')
-        ]
+        orderStartTime: orderDate.start?.format('YYYY-MM-DD HH:mm:ss'),
+        orderEndTime: orderDate.end?.format('YYYY-MM-DD HH:mm:ss')
       }
     }).then((res) => {
       setData(res.data.list)

@@ -28,7 +28,7 @@ interface Query {
   email: string
 }
 
-export default function CinemaPage({ params: { lng } }: PageProps) {
+export default function Page({ params: { lng } }: PageProps) {
   const [modal, setModal] = useState({
     type: 'create',
     show: false,

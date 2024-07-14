@@ -183,10 +183,12 @@ export function Upload(props: UploadProps) {
       </AntdUpload>
       <section className="upload-hint">
         <p>
-          {t('upload.hint.supportFormat')}：{ext.join('、')}
+          {t('upload.hint.supportFormat')}
+          {ext.join('、')}
         </p>
         <p>
-          {t('upload.hint.fileSize')}：{getFileSize(fileSize)}
+          {t('upload.hint.fileSize')}
+          {getFileSize(fileSize)}
         </p>
       </section>
       <ImageCropper
