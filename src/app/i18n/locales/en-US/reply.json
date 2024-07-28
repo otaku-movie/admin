@@ -1,0 +1,30 @@
+{
+  "table": {
+    "commentUser": "Comment User",
+    "replyUser": "Reply User",
+    "content": "Reply Content",
+    "time": "Reply Time",
+    "replyCount": "Reply Count",
+    "likeCount": "Like Count",
+    "stepOnCount": "Step On Count",
+    "action": "Action"
+  },
+  "modal": {
+    "title": {
+      "create": "Add Reply",
+      "edit": "Edit Reply"
+    },
+    "form": {
+      "comment": {
+        "label": "Reply Content",
+        "required": "Please enter reply content",
+        "max": "Content cannot exceed 1000 characters"
+      }
+    }
+  },
+  "message": {
+    "remove": {
+      "content": "Are you sure you want to delete the current row?"
+    }
+  }
+}

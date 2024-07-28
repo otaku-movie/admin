@@ -1,0 +1,29 @@
+{
+  "table": {
+    "name": "Movie Ticket Type",
+    "price": "Price",
+    "action": "Action"
+  },
+  "modal": {
+    "title": {
+      "create": "Add Movie Ticket Type",
+      "edit": "Edit Movie Ticket Type"
+    },
+    "form": {
+      "name": {
+        "label": "Movie Ticket Type",
+        "required": "Please enter the movie ticket type"
+      },
+      "price": {
+        "label": "Price",
+        "required": "Please enter the price"
+      }
+    }
+  },
+  "message": {
+    "remove": {
+      "content": "Are you sure you want to delete the current movie ticket type?",
+      "success": "Deleted successfully"
+    }
+  }
+}

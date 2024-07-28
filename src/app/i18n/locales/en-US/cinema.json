@@ -1,0 +1,20 @@
+{
+  "table": {
+    "brandName": "Brand Name",
+    "name": "Cinema Name",
+    "spec": "Specification",
+    "address": "Address",
+    "tel": "Phone",
+    "action": "Action",
+    "description": "Description",
+    "homePage": "Homepage",
+    "theaterCount": "Number of Theaters",
+    "maxSelectSeatCount": "Selectable Seats"
+  },
+  "message": {
+    "remove": {
+      "content": "Are you sure you want to delete the current cinema?",
+      "success": "Delete successful"
+    }
+  }
+}

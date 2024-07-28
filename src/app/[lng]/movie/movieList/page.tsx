@@ -213,18 +213,6 @@ export default function Page({ params: { lng } }: PageProps) {
       render: (_, row) => {
         return (
           <Space direction="vertical" align="center">
-            <Button
-              type="primary"
-              onClick={() => {
-                router.push(
-                  processPath('commentList', {
-                    id: row.id
-                  })
-                )
-              }}
-            >
-              {common('button.commentList')}
-            </Button>
             <CheckPermission code="movie.save">
               <Button
                 type="primary"
@@ -274,6 +262,18 @@ export default function Page({ params: { lng } }: PageProps) {
                 {common('button.remove')}
               </Button>
             </CheckPermission>
+            <Button
+              type="primary"
+              onClick={() => {
+                router.push(
+                  processPath('commentList', {
+                    id: row.id
+                  })
+                )
+              }}
+            >
+              {common('button.commentList')}
+            </Button>
           </Space>
         )
       }

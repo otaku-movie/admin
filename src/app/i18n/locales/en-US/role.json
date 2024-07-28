@@ -1,0 +1,33 @@
+{
+  "table": {
+    "name": "Role Name",
+    "action": "Action"
+  },
+  "modal": {
+    "title": {
+      "create": "Add Role",
+      "edit": "Edit Role"
+    },
+    "form": {
+      "name": {
+        "label": "Role Name",
+        "required": "Please enter role name"
+      }
+    }
+  },
+  "rolePermissionModal": {
+    "title": "Configure Permissions",
+    "table": {
+      "name": "Menu Name",
+      "button": "Button",
+      "show": "Show"
+    }
+  },
+  "message": {
+    "noSelectMenu": "Please select a menu",
+    "remove": {
+      "content": "Are you sure you want to delete the current role? This action cannot be undone.",
+      "success": "Deleted successfully"
+    }
+  }
+}

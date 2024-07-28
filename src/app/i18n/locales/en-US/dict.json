@@ -1,0 +1,35 @@
+{
+  "table": {
+    "name": "Dictionary Name",
+    "code": "Code",
+    "action": "Action"
+  },
+  "message": {
+    "remove": {
+      "content": "Are you sure you want to delete this row? If there are dictionary items, they will also be deleted."
+    }
+  },
+  "dictItemModal": {
+    "title": "Dictionary Details",
+    "message": {
+      "repeat": "Dictionary code cannot be duplicated",
+      "required": "Dictionary items cannot be empty"
+    }
+  },
+  "dictModal": {
+    "title": {
+      "create": "Add",
+      "edit": "Edit"
+    },
+    "form": {
+      "name": {
+        "label": "Dictionary Name",
+        "required": "Please enter dictionary name"
+      },
+      "code": {
+        "label": "Dictionary Code",
+        "required": "Please enter dictionary code"
+      }
+    }
+  }
+}

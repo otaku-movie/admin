@@ -9,8 +9,9 @@ module.exports = {
     'plugin:react/recommended',
     'plugin:@typescript-eslint/recommended'
   ],
-  
+
   rules: {
+    '@typescript-eslint/no-var-requires': 'off',
     '@typescript-eslint/no-explicit-any': ['off'],
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': 'warn',

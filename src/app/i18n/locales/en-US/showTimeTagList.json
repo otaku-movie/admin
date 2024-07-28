@@ -1,0 +1,24 @@
+{
+  "table": {
+    "name": "Show Time Tag Name",
+    "action": "Action"
+  },
+  "modal": {
+    "title": {
+      "create": "Add Show Time Tag",
+      "edit": "Edit Show Time Tag"
+    },
+    "form": {
+      "name": {
+        "label": "Show Time Tag Name",
+        "required": "Please enter the show time tag name"
+      }
+    }
+  },
+  "message": {
+    "remove": {
+      "content": "Are you sure you want to delete the current show time tag?",
+      "success": "Deleted successfully"
+    }
+  }
+}

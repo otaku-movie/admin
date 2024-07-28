@@ -73,7 +73,7 @@
         "label": "字幕",
         "required": "字幕を選択してください"
       },
-      "showTimeSpec": {
+      "showTimeTag": {
         "label": "上映場次タグ",
         "required": "上映場次タグを選択してください"
       },

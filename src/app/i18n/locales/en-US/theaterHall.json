@@ -1,0 +1,98 @@
+{
+  "table": {
+    "name": "Theater Name",
+    "spec": "Specification",
+    "rowCount": "Number of Rows",
+    "columnCount": "Number of Columns",
+    "seatCount": "Number of Seats",
+    "action": "Action"
+  },
+  "areaModal": {
+    "title": "Configure Area",
+    "message": {
+      "max": "The maximum number of areas cannot exceed 5",
+      "required": "The number of selected areas cannot be empty"
+    },
+    "table": {
+      "color": "Color",
+      "action": "Action"
+    },
+    "form": {
+      "name": {
+        "label": "Area Name",
+        "required": "Please enter the area name",
+        "repeat": "The area name cannot be repeated"
+      },
+      "price": {
+        "label": "Price",
+        "required": "Please enter the price"
+      }
+    }
+  },
+  "seatModal": {
+    "title": "Configure Aisle",
+    "seatCount": "Number of Seats",
+    "dropdownItem": {
+      "configCoupleSeat": "Configure Couple Seats",
+      "configArea": "Configure Area (up to 5)",
+      "configWheelChairSeat": "Configure Wheelchair Seats",
+      "show": "Show/Hide Seats",
+      "disabled": "Disable/Enable Seats",
+      "reset": "Reset"
+    },
+    "message": {
+      "required": "Aisle configuration cannot be empty",
+      "repeat": "Aisle duplication",
+      "max": "You can select up to {{max}}"
+    },
+    "form": {
+      "type": {
+        "label": "Aisle Type",
+        "required": "Please select an aisle type",
+        "placeholder": "Please select row or column",
+        "select": {
+          "row": "Row",
+          "column": "Column"
+        }
+      },
+      "start": {
+        "label": "Start Position",
+        "required": "Please enter the start position",
+        "placeholder": "Please enter the start position"
+      }
+    }
+  },
+  "theaterHallModal": {
+    "title": {
+      "create": "Add Theater",
+      "edit": "Edit Theater"
+    },
+    "form": {
+      "name": {
+        "label": "Theater Name",
+        "required": "Please enter the theater name"
+      },
+      "spec": {
+        "label": "Theater Specification",
+        "required": "Please select the theater specification"
+      },
+      "rowCount": {
+        "label": "Number of Rows",
+        "required": "Please enter the number of rows"
+      },
+      "columnCount": {
+        "label": "Number of Columns",
+        "required": "Please enter the number of columns"
+      }
+    }
+  },
+  "message": {
+    "changeSeatCount": {
+      "content": "Are you sure you want to change the number of rows and columns? Changes cannot be undone."
+    },
+    "remove": {
+      "content": "Are you sure you want to delete the current row? This action cannot be undone.",
+      "success": "Deleted successfully"
+    }
+  }
+}

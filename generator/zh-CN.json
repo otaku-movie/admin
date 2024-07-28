@@ -1,0 +1,1206 @@
+{
+  "brandList.json": {
+    "table": {
+      "name": "品牌名称",
+      "action": "操作"
+    },
+    "modal": {
+      "title": {
+        "create": "添加品牌",
+        "edit": "编辑品牌"
+      },
+      "form": {
+        "name": {
+          "label": "品牌名称",
+          "required": "请输入品牌名称"
+        }
+      }
+    },
+    "message": {
+      "remove": {
+        "content": "是否确认要删除当前品牌?",
+        "success": "删除成功"
+      }
+    }
+  },
+  "button.json": {
+    "table": {
+      "name": "页面名称",
+      "button": "按钮",
+      "buttonName": "按钮名称",
+      "buttonCode": "按钮Code",
+      "apiName": "接口名称",
+      "apiCode": "接口 code",
+      "i18nKey": "国际化Key",
+      "action": "操作"
+    },
+    "message": {
+      "remove": {
+        "content": "是否确认要删除当前按钮，删除后不可恢复",
+        "success": "删除成功"
+      }
+    },
+    "modal": {
+      "title": {
+        "create": "添加按钮",
+        "edit": "编辑按钮"
+      },
+      "form": {
+        "menuId": {
+          "label": "所属菜单",
+          "required": "请选择菜单"
+        },
+        "i18nKey": {
+          "label": "国际化key",
+          "required": "请输入国际化key"
+        },
+        "name": {
+          "label": "按钮名称",
+          "required": "请输入按钮名称"
+        },
+        "code": {
+          "label": "按钮 code",
+          "required": "请输入按钮 code"
+        },
+        "apiCode": {
+          "label": "接口 code",
+          "required": "请输入接口 code"
+        }
+      }
+    }
+  },
+  "character.json": {
+    "table": {
+      "cover": "图片",
+      "name": "角色名称",
+      "originalName": "原名",
+      "description": "简介",
+      "movie": "所属电影",
+      "staff": "演员或者声优",
+      "action": "操作"
+    },
+    "modal": {
+      "title": {
+        "create": "添加角色",
+        "edit": "编辑角色"
+      },
+      "form": {
+        "movie": {
+          "label": "电影名称",
+          "required": "请选择电影"
+        },
+        "cover": {
+          "label": "图片",
+          "required": "请上传图片"
+        },
+        "name": {
+          "label": "角色名称",
+          "required": "请输入角色名称"
+        },
+        "originalName": {
+          "label": "原名",
+          "required": "请输入原名"
+        },
+        "description": {
+          "label": "简介",
+          "required": "请输入简介"
+        },
+        "staffId": {
+          "label": "演职人员",
+          "required": "请选择演职人员"
+        }
+      }
+    },
+    "message": {
+      "remove": {
+        "content": "是否确认要删除当前角色，删除后不可恢复",
+        "success": "删除成功"
+      }
+    }
+  },
+  "chart.json": {
+    "top": {
+      "userCount": "用户数",
+      "movieCount": "电影数",
+      "cinemaCount": "影院数",
+      "movieScreeningCount": "今日电影上映场次"
+    },
+    "tab": {
+      "userRegisterCount": "日注册用户",
+      "orderCount": "日订单量",
+      "movieShowTimeCount": "日排片数",
+      "DailyTransactionAmount": "日成交金额"
+    },
+    "registerPlatform": "注册平台",
+    "movieBoxOffice": "票房"
+  },
+  "cinema.json": {
+    "table": {
+      "brandName": "品牌名称",
+      "name": "影院名称",
+      "spec": "规格",
+      "address": "地址",
+      "tel": "电话",
+      "action": "操作",
+      "description": "简介",
+      "homePage": "官网",
+      "theaterCount": "影厅数",
+      "maxSelectSeatCount": "可选座位数"
+    },
+    "message": {
+      "remove": {
+        "content": "是否确认要删除当前影院?",
+        "success": "删除成功"
+      }
+    }
+  },
+  "cinemaDetail.json": {
+    "form": {
+      "brandId": {
+        "label": "品牌名称",
+        "required": "请选择品牌名称"
+      },
+      "name": {
+        "label": "影院名称",
+        "required": "请输入影院名称"
+      },
+      "description": {
+        "label": "影院简介",
+        "required": "请输入影院简介"
+      },
+      "address": {
+        "label": "地址",
+        "required": "请输入地址"
+      },
+      "tel": {
+        "label": "电话",
+        "required": "请输入电话"
+      },
+      "homePage": {
+        "label": "官网",
+        "required": "请输入官网地址"
+      },
+      "maxSelectSeatCount": {
+        "label": "最大可选座位数",
+        "required": "请输入最大可选座位数"
+      },
+      "spec": {
+        "label": "规格",
+        "required": "请选择规格"
+      },
+      "plusPrice": {
+        "required": "请输入特殊上映追加价格"
+      },
+      "save": "保存"
+    },
+    "message": {
+      "required": "规格和特殊上映追加价格不能为空",
+      "repeat": "规格不能重复"
+    }
+  },
+  "comment.json": {
+    "table": {
+      "user": "评论人",
+      "content": "评论内容",
+      "time": "评论时间",
+      "replyCount": "回复数量",
+      "likeCount": "点赞数量",
+      "stepOnCount": "点踩数量",
+      "action": "操作"
+    },
+    "modal": {
+      "title": {
+        "create": "添加评论",
+        "edit": "编辑评论"
+      },
+      "form": {
+        "comment": {
+          "label": "评论内容",
+          "required": "请输入评论内容",
+          "max": "字数不能超过 1000"
+        }
+      }
+    },
+    "message": {
+      "remove": {
+        "content": "是否要删除当前行，删除后无法恢复。"
+      }
+    }
+  },
+  "common.json": {
+    "menu": {
+      "dataChart": "数据图表",
+      "cinema": {
+        "name": "影院管理",
+        "children": {
+          "cinemaList": "影院列表",
+          "cinemaDetail": "影院详情",
+          "theaterHall": "影厅列表",
+          "specList": "规格列表",
+          "ticketType": "电影票类型",
+          "brandList": "品牌列表"
+        }
+      },
+      "movie": {
+        "name": "电影管理",
+        "children": {
+          "movieList": "电影列表",
+          "characterList": "角色列表",
+          "staffList": "演职员列表",
+          "positionList": "职位列表",
+          "levelList": "分级列表",
+          "movieDetail": "电影详情",
+          "commentList": "评论列表",
+          "replyList": "回复列表",
+          "tagList": "标签列表",
+          "languageList": "语言列表"
+        }
+      },
+      "showTime": {
+        "name": "场次管理",
+        "children": {
+          "showTimeList": "电影场次列表",
+          "showTimeTag": "场次标签列表"
+        }
+      },
+      "userList": "用户列表",
+      "dictList": "字典列表",
+      "orderList": "订单列表",
+      "permission": {
+        "name": "权限管理",
+        "children": {
+          "roleList": "角色列表",
+          "menuList": "菜单列表",
+          "buttonList": "按钮列表",
+          "apiList": "接口列表"
+        }
+      }
+    },
+    "message": {
+      "notPermission": "没有权限",
+      "save": "保存成功"
+    },
+    "unit": {
+      "jpy": "日元",
+      "billion": "亿",
+      "million": "万"
+    },
+    "button": {
+      "add": "添加",
+      "edit": "编辑",
+      "dictDetail": "字典详情",
+      "remove": "删除",
+      "save": "保存",
+      "login": "登录",
+      "ticketType": "电影票类型",
+      "theaterHallDetail": "影厅详情",
+      "commentList": "评论列表",
+      "configPermission": "配置权限",
+      "configRole": "配置角色",
+      "seatSelectedDetail": "选座",
+      "configSeat": "配置座位",
+      "saveSeatConfig": "保存座位配置",
+      "saveSelectSeat": "确认选座",
+      "configAisle": "配置过道",
+      "configArea": "配置区域",
+      "cancel": "取消",
+      "order": {
+        "updateOrderState": "修改订单状态",
+        "generateQRcode": "生成取票码"
+      },
+      "comment": {
+        "replyList": "回复列表"
+      },
+      "reply": {
+        "reply": "回复"
+      }
+    },
+    "enum": {
+      "selectSeatState": {
+        "available": "可选座",
+        "locked": "已锁定",
+        "sold": "已售出"
+      },
+      "orderState": {
+        "orderCreated": "订单已创建",
+        "orderSucceed": "订单已完成",
+        "orderFailed": "订单失败",
+        "canceledOrder": "订单已取消",
+        "orderTimeout": "订单超时"
+      },
+      "seatType": {
+        "wheelChair": "轮椅座",
+        "disabled": "已禁用"
+      }
+    },
+    "error": {
+      "403": {
+        "title": "没有访问权限",
+        "button": "回到登录页"
+      }
+    }
+  },
+  "components.json": {
+    "query": {
+      "search": "搜索",
+      "clear": "清空",
+      "collapse": "展开",
+      "collapseClose": "收起"
+    },
+    "upload": {
+      "error": {
+        "noSupportedFormat": "不支持的文件格式，仅支持：{{ext}}",
+        "fileSize": "文件过大，最大大小为：{{size}}"
+      },
+      "hint": {
+        "supportFormat": "支持的文件格式：",
+        "fileSize": "文件大小最大不能超过："
+      }
+    },
+    "cropper": {
+      "title": "裁剪图片"
+    },
+    "verifyCode": {
+      "button": "发送验证码",
+      "second": "秒"
+    }
+  },
+  "dict.json": {
+    "table": {
+      "name": "字典名称",
+      "code": "code",
+      "action": "操作"
+    },
+    "message": {
+      "remove": {
+        "content": "是否要删除当前行，删除时，如果有字典项，也将会一并被删除"
+      }
+    },
+    "dictItemModal": {
+      "title": "字典详情",
+      "message": {
+        "repeat": "字典 code 不能重复",
+        "required": "字典项不能为空"
+      }
+    },
+    "dictModal": {
+      "title": {
+        "create": "添加",
+        "edit": "编辑"
+      },
+      "form": {
+        "name": {
+          "label": "字典名称",
+          "required": "请输入字典名称"
+        },
+        "code": {
+          "label": "字典 code",
+          "required": "请输入字典 code"
+        }
+      }
+    }
+  },
+  "language.json": {
+    "table": {
+      "name": "语言名称",
+      "code": "语言 code",
+      "action": "操作"
+    },
+    "modal": {
+      "title": {
+        "create": "添加语言",
+        "edit": "编辑语言"
+      },
+      "form": {
+        "name": {
+          "label": "语言名称",
+          "required": "请输入语言名称"
+        },
+        "code": {
+          "label": "语言code",
+          "required": "请输入语言code"
+        }
+      }
+    },
+    "message": {
+      "remove": {
+        "content": "是否确认要删除当前语言?",
+        "success": "删除成功"
+      }
+    }
+  },
+  "level.json": {
+    "table": {
+      "name": "名称",
+      "description": "简介",
+      "action": "操作"
+    },
+    "modal": {
+      "title": {
+        "create": "添加",
+        "edit": "编辑"
+      },
+      "form": {
+        "name": {
+          "label": "名称",
+          "required": "请输入名称"
+        },
+        "description": {
+          "label": "简介",
+          "required": "请输入简介"
+        }
+      }
+    },
+    "message": {
+      "remove": {
+        "content": "是否确认要删除当前数据?",
+        "success": "删除成功"
+      }
+    }
+  },
+  "login.json": {
+    "form": {
+      "email": {
+        "label": "邮箱",
+        "required": "请输入邮箱",
+        "error": "邮箱不合法"
+      },
+      "password": {
+        "label": "密码",
+        "required": "请输入密码",
+        "error": "密码不合法，格式为数字、字母，特殊字符为 -_."
+      }
+    }
+  },
+  "menu.json": {
+    "table": {
+      "name": "页面名称",
+      "i18nKey": "国际化key",
+      "routerPath": "路由路径",
+      "routerName": "路由名称",
+      "show": "展示",
+      "action": "操作"
+    },
+    "message": {
+      "remove": {
+        "content": "是否确认要删除当前菜单，删除后不可恢复",
+        "success": "删除成功"
+      }
+    },
+    "modal": {
+      "title": {
+        "create": "添加菜单",
+        "edit": "编辑菜单"
+      },
+      "form": {
+        "i18nKey": {
+          "label": "国际化key",
+          "required": "请输入国际化key"
+        },
+        "name": {
+          "label": "菜单名称",
+          "required": "请输入菜单名称"
+        },
+        "path": {
+          "label": "路由路径",
+          "required": "请输入路由路径"
+        },
+        "pathName": {
+          "label": "路由路径名称",
+          "required": "请输入路由路径名称"
+        },
+        "show": {
+          "label": "展示"
+        },
+        "parentId": {
+          "label": "父级菜单"
+        }
+      }
+    }
+  },
+  "movie.json": {
+    "table": {
+      "name": "作品",
+      "originalName": "原名",
+      "time": "片长",
+      "tags": "标签",
+      "helloMovie": "hello movie",
+      "level": "分级",
+      "cinemaCount": "上映影院数",
+      "theaterCount": "上映场馆数",
+      "commentCount": "评论数",
+      "watchedCount": "已看过",
+      "wantToSeeCount": "想看数",
+      "startDate": "开始日期",
+      "endDate": "结束日期",
+      "status": "上映状态",
+      "action": "操作"
+    },
+    "message": {
+      "remove": {
+        "content": "是否确认删除当前电影?",
+        "success": "删除成功"
+      }
+    }
+  },
+  "movieDetail.json": {
+    "form": {
+      "cover": {
+        "label": "封面",
+        "required": "请上传电影封面"
+      },
+      "name": {
+        "label": "电影名称",
+        "required": "请输入电影名称"
+      },
+      "originalName": {
+        "label": "电影原名",
+        "required": "请输入电影原名"
+      },
+      "time": {
+        "label": "电影时长",
+        "required": "请输入电影时长"
+      },
+      "level": {
+        "label": "电影分级",
+        "required": "请选择分级"
+      },
+      "tag": {
+        "label": "标签",
+        "required": "请选择标签"
+      },
+      "helloMovie": {
+        "label": "Hello Movie（无障碍）",
+        "required": "Hello Movie 不能为空",
+        "notRepeat": "Hello Movie 不能重复"
+      },
+      "spec": {
+        "label": "上映规格",
+        "required": "请选择上映规格"
+      },
+      "description": {
+        "label": "影片简介",
+        "required": "请输入影片简介"
+      },
+      "status": {
+        "label": "上映状态",
+        "required": "请选择上映状态"
+      },
+      "startDate": {
+        "label": "上映开始日期",
+        "required": "请选择开始上映日期"
+      },
+      "endDate": {
+        "label": "上映结束日期",
+        "required": "请选择结束上映日期",
+        "startAfterEnd": "结束日期必须比开始日期大"
+      },
+      "homePage": {
+        "label": "官网",
+        "required": "请输入官网地址"
+      },
+      "staff": {
+        "label": "工作人员"
+      },
+      "character": {
+        "label": "角色"
+      }
+    },
+    "staff": {
+      "select": "选择工作人员",
+      "table": {
+        "position": "职位",
+        "cover": "图片",
+        "name": "名称",
+        "action": "操作"
+      },
+      "button": {
+        "edit": "编辑",
+        "remove": "删除"
+      },
+      "message": {
+        "notRepeat": "该职位已添加"
+      },
+      "modal": {
+        "button": {
+          "addPosition": "添加职位",
+          "addStaff": "添加工作人员"
+        },
+        "form": {
+          "staff": {
+            "label": "工作人员",
+            "required": "请选择工作人员"
+          },
+          "position": {
+            "label": "职位名称",
+            "required": "请选择职位"
+          }
+        }
+      }
+    },
+    "character": {
+      "select": "选择角色",
+      "table": {
+        "cover": "图片",
+        "name": "名称",
+        "staff": "演员或者声优",
+        "action": "操作"
+      },
+      "button": {
+        "edit": "编辑",
+        "remove": "删除"
+      },
+      "message": {
+        "notRepeat": "该角色已添加"
+      },
+      "modal": {
+        "button": {
+          "addCharacter": "添加角色"
+        },
+        "form": {
+          "movie": {
+            "label": "所属电影",
+            "required": "请选择电影"
+          },
+          "character": {
+            "label": "角色",
+            "required": "请选择角色"
+          }
+        }
+      }
+    },
+    "button": {
+      "prev": "上一步",
+      "next": "下一步",
+      "save": "保存",
+      "upload": "上传"
+    }
+  },
+  "movieTagList.json": {
+    "table": {
+      "name": "标签名称",
+      "action": "操作"
+    },
+    "modal": {
+      "title": {
+        "create": "添加标签",
+        "edit": "编辑标签"
+      },
+      "form": {
+        "name": {
+          "label": "标签名称",
+          "required": "请输入标签名称"
+        }
+      }
+    },
+    "message": {
+      "remove": {
+        "content": "是否确认要删除当前标签?",
+        "success": "删除成功"
+      }
+    }
+  },
+  "order.json": {
+    "table": {
+      "name": "作品",
+      "cinemaName": "上映影院",
+      "theaterHallName": "上映影厅",
+      "specName": "上映规格",
+      "showTime": "上映场次",
+      "orderNumber": "订单号",
+      "seatNumber": "座位号",
+      "payMethod": "支付方式",
+      "payTime": "支付时间",
+      "payState": "支付状态",
+      "payTotal": "支付总价",
+      "orderTime": "订单创建时间",
+      "orderState": "订单状态",
+      "orderTotal": "订单总价",
+      "action": "操作"
+    },
+    "search": {
+      "cinema": "上映影院",
+      "theaterHall": "上映影厅",
+      "id": "订单号",
+      "orderTime": "订单时间",
+      "orderState": "订单状态",
+      "payState": "支付状态"
+    },
+    "message": {
+      "remove": {
+        "content": "是否确认删除当前订单？"
+      }
+    },
+    "updateOrderStateModal": {
+      "title": "修改订单状态",
+      "form": {
+        "orderState": {
+          "label": "订单状态",
+          "required": "请选择订单状态"
+        },
+        "payState": {
+          "label": "支付状态",
+          "required": "请选择支付状态"
+        }
+      }
+    },
+    "QRcodeModal": {
+      "title": "二维码"
+    }
+  },
+  "position.json": {
+    "table": {
+      "name": "职位名称",
+      "action": "操作"
+    },
+    "modal": {
+      "title": {
+        "create": "添加职位",
+        "edit": "编辑职位"
+      },
+      "form": {
+        "name": {
+          "label": "职位名称",
+          "required": "请输入职位名称"
+        }
+      }
+    },
+    "message": {
+      "remove": {
+        "content": "是否确认要删除当前职位?",
+        "success": "删除成功"
+      }
+    }
+  },
+  "reply.json": {
+    "table": {
+      "commentUser": "评论人",
+      "replyUser": "回复人",
+      "content": "回复内容",
+      "time": "回复时间",
+      "replyCount": "回复数量",
+      "likeCount": "点赞数量",
+      "stepOnCount": "点踩数量",
+      "action": "操作"
+    },
+    "modal": {
+      "title": {
+        "create": "添加回复",
+        "edit": "编辑回复"
+      },
+      "form": {
+        "comment": {
+          "label": "回复内容",
+          "required": "请输入回复内容",
+          "max": "字数不能超过 1000"
+        }
+      }
+    },
+    "message": {
+      "remove": {
+        "content": "是否要删除当前行?"
+      }
+    }
+  },
+  "role.json": {
+    "table": {
+      "name": "角色名称",
+      "action": "操作"
+    },
+    "modal": {
+      "title": {
+        "create": "添加角色",
+        "edit": "编辑角色"
+      },
+      "form": {
+        "name": {
+          "label": "角色名称",
+          "required": "请输入角色名称"
+        }
+      }
+    },
+    "rolePermissionModal": {
+      "title": "配置权限",
+      "table": {
+        "name": "菜单名称",
+        "button": "按钮",
+        "show": "展示"
+      }
+    },
+    "message": {
+      "noSelectMenu": "请选择菜单",
+      "remove": {
+        "content": "是否确认要删除当前角色，删除后不可恢复",
+        "success": "删除成功"
+      }
+    }
+  },
+  "showTime.json": {
+    "table": {
+      "name": "作品",
+      "subtitle": "字幕",
+      "showTimeTag": "上映场次标签",
+      "startDate": "开始时间",
+      "endDate": "结束时间",
+      "playState": "上映状态",
+      "cinema": "上映影院",
+      "theaterHall": "上映影厅",
+      "open": "是否公开",
+      "spec": "上映规格",
+      "seatSelectionRatio": "选座比",
+      "attendance": "上座率",
+      "action": "操作"
+    },
+    "query": {
+      "cinema": "影院",
+      "date": "上映日期"
+    },
+    "message": {
+      "remove": {
+        "selectedCount": "当前已有{{count}}人选座，是否仍要删除",
+        "content": "是否确认要删除当前场次?",
+        "success": "删除成功"
+      }
+    },
+    "createOrderModal": {
+      "title": "确认订单",
+      "total": "合计",
+      "message": {
+        "movieTicketTypeId": {
+          "required": "请选择电影票类型"
+        }
+      },
+      "table": {
+        "name": "作品",
+        "spec": "上映规格",
+        "seat": "座位信息",
+        "area": "区域名称/价格",
+        "price": "价格",
+        "plusPrice": "特殊上映追加价格",
+        "movieTicketType": "电影票类型"
+      },
+      "form": {
+        "movieTicketType": {
+          "label": "电影票类型",
+          "required": "请选择电影票类型"
+        }
+      }
+    },
+    "showTimeModal": {
+      "title": {
+        "create": "添加场次",
+        "edit": "编辑场次"
+      },
+      "form": {
+        "movie": {
+          "label": "电影名称",
+          "required": "请选择电影"
+        },
+        "open": {
+          "label": "是否公开"
+        },
+        "cinema": {
+          "required": "请选择影院"
+        },
+        "theaterHall": {
+          "label": "放映影厅",
+          "required": "请选择影厅"
+        },
+        "subtitle": {
+          "label": "字幕",
+          "required": "请选择字幕"
+        },
+        "showTimeTag": {
+          "label": "上映场次标签",
+          "required": "请选择上映场次标签"
+        },
+        "showTime": {
+          "label": "开始时间",
+          "required": "请选择上映时间",
+          "startAfterEnd": "结束时间必须大于开始时间"
+        }
+      }
+    },
+    "seatModal": {
+      "title": "设置过道"
+    }
+  },
+  "showTimeTagList.json": {
+    "table": {
+      "name": "上映场次标签名称",
+      "action": "操作"
+    },
+    "modal": {
+      "title": {
+        "create": "添加上映场次标签",
+        "edit": "编辑上映场次标签"
+      },
+      "form": {
+        "name": {
+          "label": "上映场次标签名称",
+          "required": "请输入上映场次标签名称"
+        }
+      }
+    },
+    "message": {
+      "remove": {
+        "content": "是否确认要删除当前上映场次标签?",
+        "success": "删除成功"
+      }
+    }
+  },
+  "spec.json": {
+    "table": {
+      "name": "名称",
+      "description": "简介",
+      "action": "操作"
+    },
+    "modal": {
+      "title": {
+        "create": "添加规格",
+        "edit": "编辑规格"
+      },
+      "form": {
+        "name": {
+          "label": "名称",
+          "required": "请输入名称"
+        },
+        "description": {
+          "label": "简介",
+          "required": "请输入简介"
+        }
+      }
+    },
+    "message": {
+      "remove": {
+        "content": "是否确认要删除当前规格?",
+        "success": "删除成功"
+      }
+    }
+  },
+  "staff.json": {
+    "table": {
+      "cover": "图片",
+      "name": "演职人员名称",
+      "originalName": "原名",
+      "description": "简介",
+      "action": "操作"
+    },
+    "modal": {
+      "title": {
+        "create": "添加演职人员",
+        "edit": "编辑演职人员"
+      },
+      "form": {
+        "cover": {
+          "label": "图片",
+          "required": "请上传图片"
+        },
+        "name": {
+          "label": "演职人员名称",
+          "required": "请输入演职人员名称"
+        },
+        "originalName": {
+          "label": "原名",
+          "required": "请输入原名"
+        },
+        "description": {
+          "label": "简介",
+          "required": "请输入简介"
+        }
+      }
+    },
+    "message": {
+      "remove": {
+        "content": "是否确认要删除当前演职人员?",
+        "success": "删除成功"
+      }
+    }
+  },
+  "theaterHall.json": {
+    "table": {
+      "name": "影厅名称",
+      "spec": "规格",
+      "rowCount": "行数",
+      "columnCount": "列数",
+      "seatCount": "座位数",
+      "action": "操作"
+    },
+    "areaModal": {
+      "title": "配置区域",
+      "message": {
+        "max": "区域数量最大不能超过5个",
+        "required": "区域选择数量不能为空"
+      },
+      "table": {
+        "color": "颜色",
+        "action": "操作"
+      },
+      "form": {
+        "name": {
+          "label": "区域名称",
+          "required": "请输入区域名称",
+          "repeat": "区域名称不能重复"
+        },
+        "price": {
+          "label": "价格",
+          "required": "请输入价格"
+        }
+      }
+    },
+    "seatModal": {
+      "titlle": "配置过道",
+      "seatCount": "座位数",
+      "dropdownItem": {
+        "configCoupleSeat": "配置情侣座",
+        "configArea": "配置区域（最大5个）",
+        "configWheelChairSeat": "配置轮椅座",
+        "show": "显示/隐藏 座位",
+        "disabled": "禁用/启用 座位",
+        "reset": "重置"
+      },
+      "message": {
+        "required": "过道配置不能为空",
+        "repeat": "过道重复",
+        "max": "最多只能选择{{max}}个"
+      },
+      "form": {
+        "type": {
+          "label": "过道类型",
+          "required": "请选择过道类型",
+          "placeholder": "请选择行或者列",
+          "select": {
+            "row": "行",
+            "column": "列"
+          }
+        },
+        "start": {
+          "label": "开始位置",
+          "required": "请输入开始位置",
+          "placeholder": "请输入开始位置"
+        }
+      }
+    },
+    "theaterHallModal": {
+      "title": {
+        "create": "添加影厅",
+        "edit": "编辑影厅"
+      },
+      "form": {
+        "name": {
+          "label": "影厅名称",
+          "required": "请输入影厅名称"
+        },
+        "spec": {
+          "label": "影厅规格",
+          "required": "请选择影厅规格"
+        },
+        "rowCount": {
+          "label": "行数",
+          "required": "请输入行数"
+        },
+        "columnCount": {
+          "label": "列数",
+          "required": "请输入列数"
+        }
+      }
+    },
+    "message": {
+      "changeSeatCount": {
+        "content": "是否确认更改行数和列数，更改后不可恢复"
+      },
+      "remove": {
+        "content": "是否确认要删除当前行，删除后不可恢复",
+        "success": "删除成功"
+      }
+    }
+  },
+  "ticketType.json": {
+    "table": {
+      "name": "电影票类型",
+      "price": "价格",
+      "action": "操作"
+    },
+    "modal": {
+      "title": {
+        "create": "添加电影票类型",
+        "edit": "编辑电影票类型"
+      },
+      "form": {
+        "name": {
+          "label": "电影票类型",
+          "required": "请输入电影票类型"
+        },
+        "price": {
+          "label": "价格",
+          "required": "请输入价格"
+        }
+      }
+    },
+    "message": {
+      "remove": {
+        "content": "是否确认要删除当前电影票类型？",
+        "success": "删除成功"
+      }
+    }
+  },
+  "user.json": {
+    "table": {
+      "cover": "图片",
+      "name": "用户名称",
+      "email": "邮箱",
+      "tel": "电话",
+      "role": "角色",
+      "registerTime": "注册时间",
+      "action": "操作"
+    },
+    "message": {
+      "remove": {
+        "content": "是否确认要删除当前用户?",
+        "success": "删除成功"
+      }
+    },
+    "modal": {
+      "title": {
+        "create": "添加用户",
+        "edit": "编辑用户"
+      },
+      "form": {
+        "cover": {
+          "label": "图片",
+          "required": "请上传图片"
+        },
+        "role": {
+          "label": "角色",
+          "required": "请选择角色"
+        },
+        "username": {
+          "label": "用户名称",
+          "required": "请输入用户名称",
+          "error": "用户名称不合法，格式为数字、字母，特殊字符为 -_."
+        },
+        "email": {
+          "label": "邮箱",
+          "required": "请输入邮箱",
+          "error": "邮箱不合法"
+        },
+        "password": {
+          "label": "密码",
+          "required": "请输入密码",
+          "error": "密码不能为空，长度为6-16位"
+        },
+        "password2": {
+          "label": "重复密码",
+          "required": "请输入重复密码",
+          "error": "重复密码不合法，格式为数字、字母，特殊字符为 -_.",
+          "repeat": "两次输入的密码不一致"
+        },
+        "verifyCode": {
+          "label": "验证码",
+          "required": "请输入验证码",
+          "length": "验证码必须位6位"
+        }
+      }
+    }
+  }
+}

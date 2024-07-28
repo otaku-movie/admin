@@ -1,0 +1,133 @@
+{
+  "form": {
+    "cover": {
+      "label": "Cover",
+      "required": "Please upload the movie cover"
+    },
+    "name": {
+      "label": "Movie Name",
+      "required": "Please enter the movie name"
+    },
+    "originalName": {
+      "label": "Original Movie Name",
+      "required": "Please enter the original movie name"
+    },
+    "time": {
+      "label": "Duration",
+      "required": "Please enter the movie duration"
+    },
+    "level": {
+      "label": "Rating",
+      "required": "Please select the rating"
+    },
+    "tag": {
+      "label": "Tags",
+      "required": "Please select tags"
+    },
+    "helloMovie": {
+      "label": "Hello Movie (Accessible)",
+      "required": "Hello Movie cannot be empty",
+      "notRepeat": "Hello Movie cannot be duplicated"
+    },
+    "spec": {
+      "label": "Release Specification",
+      "required": "Please select the release specification"
+    },
+    "description": {
+      "label": "Description",
+      "required": "Please enter the movie description"
+    },
+    "status": {
+      "label": "Release Status",
+      "required": "Please select the release status"
+    },
+    "startDate": {
+      "label": "Start Date",
+      "required": "Please select the start date"
+    },
+    "endDate": {
+      "label": "End Date",
+      "required": "Please select the end date",
+      "startAfterEnd": "End date must be after the start date"
+    },
+    "homePage": {
+      "label": "Homepage",
+      "required": "Please enter the homepage URL"
+    },
+    "staff": {
+      "label": "Staff"
+    },
+    "character": {
+      "label": "Character"
+    }
+  },
+  "staff": {
+    "select": "Select Staff",
+    "table": {
+      "position": "Position",
+      "cover": "Image",
+      "name": "Name",
+      "action": "Action"
+    },
+    "button": {
+      "edit": "Edit",
+      "remove": "Delete"
+    },
+    "message": {
+      "notRepeat": "This position has already been added"
+    },
+    "modal": {
+      "button": {
+        "addPosition": "Add Position",
+        "addStaff": "Add Staff"
+      },
+      "form": {
+        "staff": {
+          "label": "Staff",
+          "required": "Please select staff"
+        },
+        "position": {
+          "label": "Position Name",
+          "required": "Please select a position"
+        }
+      }
+    }
+  },
+  "character": {
+    "select": "Select Character",
+    "table": {
+      "cover": "Image",
+      "name": "Name",
+      "staff": "Actor or Voice Actor",
+      "action": "Action"
+    },
+    "button": {
+      "edit": "Edit",
+      "remove": "Delete"
+    },
+    "message": {
+      "notRepeat": "This character has already been added"
+    },
+    "modal": {
+      "button": {
+        "addCharacter": "Add Character"
+      },
+      "form": {
+        "movie": {
+          "label": "Movie",
+          "required": "Please select a movie"
+        },
+        "character": {
+          "label": "Character",
+          "required": "Please select a character"
+        }
+      }
+    }
+  },
+  "button": {
+    "prev": "Previous",
+    "next": "Next",
+    "save": "Save",
+    "upload": "Upload"
+  }
+}

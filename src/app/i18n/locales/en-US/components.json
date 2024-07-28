@@ -1,0 +1,25 @@
+{
+  "query": {
+    "search": "Search",
+    "clear": "Clear",
+    "collapse": "Expand",
+    "collapseClose": "Collapse"
+  },
+  "upload": {
+    "error": {
+      "noSupportedFormat": "Unsupported file format, only supports: {{ext}}",
+      "fileSize": "File too large, maximum size is: {{size}}"
+    },
+    "hint": {
+      "supportFormat": "Supported file formats: ",
+      "fileSize": "File size must not exceed: "
+    }
+  },
+  "cropper": {
+    "title": "Crop Image"
+  },
+  "verifyCode": {
+    "button": "Send Verification Code",
+    "second": "seconds"
+  }
+}

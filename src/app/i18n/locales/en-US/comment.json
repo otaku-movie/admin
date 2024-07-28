@@ -1,0 +1,29 @@
+{
+  "table": {
+    "user": "User",
+    "content": "Comment Content",
+    "time": "Comment Time",
+    "replyCount": "Reply Count",
+    "likeCount": "Like Count",
+    "stepOnCount": "Dislike Count",
+    "action": "Action"
+  },
+  "modal": {
+    "title": {
+      "create": "Add Comment",
+      "edit": "Edit Comment"
+    },
+    "form": {
+      "comment": {
+        "label": "Comment Content",
+        "required": "Please enter the comment content",
+        "max": "The number of characters cannot exceed 1000"
+      }
+    }
+  },
+  "message": {
+    "remove": {
+      "content": "Do you want to delete the current row? This action cannot be undone."
+    }
+  }
+}

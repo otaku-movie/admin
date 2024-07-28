@@ -1,0 +1,14 @@
+{
+  "form": {
+    "email": {
+      "label": "Email",
+      "required": "Please enter an email",
+      "error": "Invalid email address"
+    },
+    "password": {
+      "label": "Password",
+      "required": "Please enter a password",
+      "error": "Invalid password, format should include numbers, letters, and special characters: -_."
+    }
+  }
+}

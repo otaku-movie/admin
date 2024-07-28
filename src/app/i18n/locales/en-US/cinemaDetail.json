@@ -1,0 +1,44 @@
+{
+  "form": {
+    "brandId": {
+      "label": "Brand Name",
+      "required": "Please select a brand name"
+    },
+    "name": {
+      "label": "Cinema Name",
+      "required": "Please enter the cinema name"
+    },
+    "description": {
+      "label": "Cinema Description",
+      "required": "Please enter the cinema description"
+    },
+    "address": {
+      "label": "Address",
+      "required": "Please enter the address"
+    },
+    "tel": {
+      "label": "Telephone",
+      "required": "Please enter the telephone number"
+    },
+    "homePage": {
+      "label": "Homepage",
+      "required": "Please enter the homepage URL"
+    },
+    "maxSelectSeatCount": {
+      "label": "Maximum Selectable Seats",
+      "required": "Please enter the maximum number of selectable seats"
+    },
+    "spec": {
+      "label": "Specification",
+      "required": "Please select a specification"
+    },
+    "plusPrice": {
+      "required": "Please enter the additional price for special screenings"
+    },
+    "save": "Save"
+  },
+  "message": {
+    "required": "Specification and additional price for special screenings cannot be empty",
+    "repeat": "Specifications cannot be duplicated"
+  }
+}

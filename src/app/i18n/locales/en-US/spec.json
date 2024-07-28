@@ -1,0 +1,29 @@
+{
+  "table": {
+    "name": "Name",
+    "description": "Description",
+    "action": "Action"
+  },
+  "modal": {
+    "title": {
+      "create": "Add Specification",
+      "edit": "Edit Specification"
+    },
+    "form": {
+      "name": {
+        "label": "Name",
+        "required": "Please enter the name"
+      },
+      "description": {
+        "label": "Description",
+        "required": "Please enter the description"
+      }
+    }
+  },
+  "message": {
+    "remove": {
+      "content": "Are you sure you want to delete the current specification?",
+      "success": "Deleted successfully"
+    }
+  }
+}

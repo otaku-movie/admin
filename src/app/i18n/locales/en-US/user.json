@@ -1,0 +1,59 @@
+{
+  "table": {
+    "cover": "Image",
+    "name": "Username",
+    "email": "Email",
+    "tel": "Phone",
+    "role": "Role",
+    "registerTime": "Registration Time",
+    "action": "Action"
+  },
+  "message": {
+    "remove": {
+      "content": "Are you sure you want to delete the current user?",
+      "success": "Deleted successfully"
+    }
+  },
+  "modal": {
+    "title": {
+      "create": "Add User",
+      "edit": "Edit User"
+    },
+    "form": {
+      "cover": {
+        "label": "Image",
+        "required": "Please upload an image"
+      },
+      "role": {
+        "label": "Role",
+        "required": "Please select a role"
+      },
+      "username": {
+        "label": "Username",
+        "required": "Please enter the username",
+        "error": "Invalid username format. Only letters, numbers, and -_. are allowed"
+      },
+      "email": {
+        "label": "Email",
+        "required": "Please enter an email",
+        "error": "Invalid email format"
+      },
+      "password": {
+        "label": "Password",
+        "required": "Please enter a password",
+        "error": "Password cannot be empty and must be 6-16 characters long"
+      },
+      "password2": {
+        "label": "Confirm Password",
+        "required": "Please enter the password again",
+        "error": "Invalid confirm password format. Only letters, numbers, and -_. are allowed",
+        "repeat": "Passwords do not match"
+      },
+      "verifyCode": {
+        "label": "Verification Code",
+        "required": "Please enter the verification code",
+        "length": "The verification code must be 6 characters long"
+      }
+    }
+  }
+}

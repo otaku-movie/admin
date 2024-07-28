@@ -1,0 +1,46 @@
+{
+  "table": {
+    "name": "Page Name",
+    "i18nKey": "Internationalization Key",
+    "routerPath": "Router Path",
+    "routerName": "Router Name",
+    "show": "Show",
+    "action": "Action"
+  },
+  "message": {
+    "remove": {
+      "content": "Are you sure you want to delete the current menu? This action cannot be undone.",
+      "success": "Deletion successful"
+    }
+  },
+  "modal": {
+    "title": {
+      "create": "Add Menu",
+      "edit": "Edit Menu"
+    },
+    "form": {
+      "i18nKey": {
+        "label": "Internationalization Key",
+        "required": "Please enter the internationalization key"
+      },
+      "name": {
+        "label": "Menu Name",
+        "required": "Please enter the menu name"
+      },
+      "path": {
+        "label": "Router Path",
+        "required": "Please enter the router path"
+      },
+      "pathName": {
+        "label": "Router Path Name",
+        "required": "Please enter the router path name"
+      },
+      "show": {
+        "label": "Show"
+      },
+      "parentId": {
+        "label": "Parent Menu"
+      }
+    }
+  }
+}

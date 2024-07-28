@@ -1,0 +1,49 @@
+{
+  "table": {
+    "cover": "Image",
+    "name": "Role Name",
+    "originalName": "Original Name",
+    "description": "Description",
+    "movie": "Movie",
+    "staff": "Actor or Voice Actor",
+    "action": "Action"
+  },
+  "modal": {
+    "title": {
+      "create": "Add Role",
+      "edit": "Edit Role"
+    },
+    "form": {
+      "movie": {
+        "label": "Movie Name",
+        "required": "Please select a movie"
+      },
+      "cover": {
+        "label": "Image",
+        "required": "Please upload an image"
+      },
+      "name": {
+        "label": "Role Name",
+        "required": "Please enter the role name"
+      },
+      "originalName": {
+        "label": "Original Name",
+        "required": "Please enter the original name"
+      },
+      "description": {
+        "label": "Description",
+        "required": "Please enter the description"
+      },
+      "staffId": {
+        "label": "Cast or Crew",
+        "required": "Please select the cast or crew"
+      }
+    }
+  },
+  "message": {
+    "remove": {
+      "content": "Are you sure you want to delete the current role? This action cannot be undone.",
+      "success": "Successfully deleted"
+    }
+  }
+}

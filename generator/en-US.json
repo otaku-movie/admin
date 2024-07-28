@@ -1,0 +1,896 @@
+{
+  "brandList.json": {
+    "table": {
+      "name": "Brand Name",
+      "action": "Action"
+    },
+    "modal": {
+      "title": {
+        "create": "Add Brand",
+        "edit": "Edit Brand"
+      },
+      "form": {
+        "name": {
+          "label": "Brand Name",
+          "required": "Please enter the brand name"
+        }
+      }
+    },
+    "message": {
+      "remove": {
+        "content": "Are you sure you want to delete the current brand?",
+        "success": "Deleted successfully"
+      }
+    }
+  },
+  "button.json": {
+    "table": {
+      "name": "Page Name",
+      "button": "Button",
+      "buttonName": "Button Name",
+      "buttonCode": "Button Code",
+      "apiName": "API Name",
+      "apiCode": "API Code",
+      "i18nKey": "International Key",
+      "action": "Action"
+    },
+    "message": {
+      "remove": {
+        "content": "Are you sure you want to delete the current button? This action cannot be undone.",
+        "success": "Deleted successfully"
+      }
+    },
+    "modal": {
+      "title": {
+        "create": "Add Button",
+        "edit": "Edit Button"
+      },
+      "form": {
+        "menuId": {
+          "label": "Menu",
+          "required": "Please select a menu"
+        },
+        "i18nKey": {
+          "label": "International Key",
+          "required": "Please enter the international key"
+        },
+        "name": {
+          "label": "Button Name",
+          "required": "Please enter the button name"
+        },
+        "code": {
+          "label": "Button Code",
+          "required": "Please enter the button code"
+        },
+        "apiCode": {
+          "label": "API Code",
+          "required": "Please enter the API code"
+        }
+      }
+    }
+  },
+  "character.json": {
+    "table": {
+      "cover": "Image",
+      "name": "Character Name",
+      "originalName": "Original Name",
+      "description": "Description",
+      "movie": "Movie",
+      "staff": "Actor/Voice Actor",
+      "action": "Action"
+    },
+    "modal": {
+      "title": {
+        "create": "Add Character",
+        "edit": "Edit Character"
+      },
+      "form": {
+        "movie": {
+          "label": "Movie Name",
+          "required": "Please select a movie"
+        },
+        "cover": {
+          "label": "Image",
+          "required": "Please upload an image"
+        },
+        "name": {
+          "label": "Character Name",
+          "required": "Please enter the character name"
+        },
+        "originalName": {
+          "label": "Original Name",
+          "required": "Please enter the original name"
+        },
+        "description": {
+          "label": "Description",
+          "required": "Please enter the description"
+        },
+        "staffId": {
+          "label": "Staff",
+          "required": "Please select a staff"
+        }
+      }
+    },
+    "message": {
+      "remove": {
+        "content": "Are you sure you want to delete the current character? This action cannot be undone.",
+        "success": "Deleted successfully"
+      }
+    }
+  },
+  "chart.json": {
+    "top": {
+      "userCount": "User Count",
+      "movieCount": "Movie Count",
+      "cinemaCount": "Cinema Count",
+      "movieScreeningCount": "Today's Movie Screenings"
+    },
+    "tab": {
+      "userRegisterCount": "Daily Registered Users",
+      "orderCount": "Daily Orders",
+      "movieShowTimeCount": "Daily Showtimes",
+      "DailyTransactionAmount": "Daily Transaction Amount"
+    },
+    "registerPlatform": "Registration Platform",
+    "movieBoxOffice": "Box Office"
+  },
+  "cinema.json": {
+    "table": {
+      "brandName": "Brand Name",
+      "name": "Cinema Name",
+      "spec": "Specification",
+      "address": "Address",
+      "tel": "Phone",
+      "action": "Action",
+      "description": "Description",
+      "homePage": "Official Website",
+      "theaterCount": "Number of Theaters",
+      "maxSelectSeatCount": "Maximum Selectable Seats"
+    },
+    "message": {
+      "remove": {
+        "content": "Are you sure you want to delete the current cinema?",
+        "success": "Deleted successfully"
+      }
+    }
+  },
+  "cinemaDetail.json": {
+    "form": {
+      "brandId": {
+        "label": "Brand Name",
+        "required": "Please select a brand name"
+      },
+      "name": {
+        "label": "Cinema Name",
+        "required": "Please enter the cinema name"
+      },
+      "description": {
+        "label": "Cinema Description",
+        "required": "Please enter the cinema description"
+      },
+      "address": {
+        "label": "Address",
+        "required": "Please enter the address"
+      },
+      "tel": {
+        "label": "Phone",
+        "required": "Please enter the phone number"
+      },
+      "homePage": {
+        "label": "Official Website",
+        "required": "Please enter the official website"
+      },
+      "maxSelectSeatCount": {
+        "label": "Maximum Selectable Seats",
+        "required": "Please enter the maximum selectable seats"
+      },
+      "spec": {
+        "label": "Specification",
+        "required": "Please select a specification"
+      },
+      "plusPrice": {
+        "required": "Please enter the additional price for special screenings"
+      },
+      "save": "Save"
+    },
+    "message": {
+      "required": "Specification and additional price for special screenings cannot be empty",
+      "repeat": "Specification cannot be repeated"
+    }
+  },
+  "comment.json": {
+    "table": {
+      "user": "Reviewer",
+      "content": "Comment Content",
+      "time": "Comment Time",
+      "replyCount": "Reply Count",
+      "likeCount": "Like Count",
+      "stepOnCount": "Dislike Count",
+      "action": "Action"
+    },
+    "modal": {
+      "title": {
+        "create": "Add Comment",
+        "edit": "Edit Comment"
+      },
+      "form": {
+        "comment": {
+          "label": "Comment Content",
+          "required": "Please enter the comment content",
+          "max": "Content cannot exceed 1000 characters"
+        }
+      }
+    },
+    "message": {
+      "remove": {
+        "content": "Are you sure you want to delete the current row? This action cannot be undone."
+      }
+    }
+  },
+  "common.json": {
+    "menu": {
+      "dataChart": "Data Chart",
+      "cinema": {
+        "name": "Cinema Management",
+        "children": {
+          "cinemaList": "Cinema List",
+          "cinemaDetail": "Cinema Details",
+          "theaterHall": "Theater Hall List",
+          "specList": "Specification List",
+          "ticketType": "Movie Ticket Types",
+          "brandList": "Brand List"
+        }
+      },
+      "movie": {
+        "name": "Movie Management",
+        "children": {
+          "movieList": "Movie List",
+          "characterList": "Character List",
+          "staffList": "Staff List",
+          "positionList": "Position List",
+          "levelList": "Level List",
+          "movieDetail": "Movie Details",
+          "commentList": "Comment List",
+          "replyList": "Reply List",
+          "tagList": "Tag List",
+          "languageList": "Language List"
+        }
+      },
+      "showTime": {
+        "name": "Showtime Management",
+        "children": {
+          "showTimeList": "Movie Showtime List",
+          "showTimeTag": "Showtime Tag List"
+        }
+      },
+      "userList": "User List",
+      "dictList": "Dictionary List",
+      "orderList": "Order List",
+      "permission": {
+        "name": "Permission Management",
+        "children": {
+          "roleList": "Role List",
+          "menuList": "Menu List",
+          "buttonList": "Button List",
+          "apiList": "API List"
+        }
+      }
+    },
+    "message": {
+      "notPermission": "No permission",
+      "save": "Saved successfully"
+    },
+    "unit": {
+      "jpy": "Yen",
+      "billion": "Billion",
+      "million": "Million"
+    },
+    "button": {
+      "add": "Add",
+      "edit": "Edit",
+      "dictDetail": "Dictionary Details",
+      "remove": "Delete",
+      "save": "Save",
+      "login": "Login",
+      "ticketType": "Movie Ticket Types",
+      "theaterHallDetail": "Theater Hall Details",
+      "commentList": "Comment List",
+      "configPermission": "Configure Permissions",
+      "configRole": "Configure Roles",
+      "seatSelectedDetail": "Select Seats",
+      "configSeat": "Configure Seats",
+      "saveSeatConfig": "Save Seat Configuration",
+      "saveSelectSeat": "Confirm Seat Selection",
+      "configAisle": "Configure Aisle",
+      "configArea": "Configure Area",
+      "cancel": "Cancel"
+    },
+    "placeholder": {
+      "roleName": "Please enter the role name",
+      "editPassword": "Enter a new password to modify it"
+    },
+    "modal": {
+      "rolePermission": {
+        "title": "Role Permission Configuration"
+      },
+      "roleUser": {
+        "title": "User Role Configuration"
+      }
+    }
+  },
+  "dictList.json": {
+    "table": {
+      "type": "Type",
+      "name": "Name",
+      "value": "Value",
+      "code": "Code",
+      "action": "Action"
+    },
+    "modal": {
+      "title": {
+        "create": "Add Dictionary Entry",
+        "edit": "Edit Dictionary Entry"
+      },
+      "form": {
+        "type": {
+          "label": "Type",
+          "required": "Please enter the type"
+        },
+        "name": {
+          "label": "Name",
+          "required": "Please enter the name"
+        },
+        "code": {
+          "label": "Code",
+          "required": "Please enter the code"
+        },
+        "value": {
+          "label": "Value",
+          "required": "Please enter the value"
+        }
+      }
+    },
+    "message": {
+      "remove": {
+        "content": "Are you sure you want to delete the current dictionary entry?",
+        "success": "Deleted successfully"
+      }
+    }
+  },
+  "language.json": {
+    "table": {
+      "language": "Language",
+      "name": "Language Name",
+      "action": "Action"
+    },
+    "modal": {
+      "title": {
+        "create": "Add Language",
+        "edit": "Edit Language"
+      },
+      "form": {
+        "language": {
+          "label": "Language Code",
+          "required": "Please enter the language code"
+        },
+        "name": {
+          "label": "Language Name",
+          "required": "Please enter the language name"
+        }
+      }
+    },
+    "message": {
+      "remove": {
+        "content": "Are you sure you want to delete the current language? This action cannot be undone.",
+        "success": "Deleted successfully"
+      }
+    }
+  },
+  "level.json": {
+    "table": {
+      "name": "Level Name",
+      "order": "Order",
+      "description": "Description",
+      "action": "Action"
+    },
+    "modal": {
+      "title": {
+        "create": "Add Level",
+        "edit": "Edit Level"
+      },
+      "form": {
+        "name": {
+          "label": "Level Name",
+          "required": "Please enter the level name"
+        },
+        "order": {
+          "label": "Order",
+          "required": "Please enter the order"
+        },
+        "description": {
+          "label": "Description",
+          "required": "Please enter the description"
+        }
+      }
+    },
+    "message": {
+      "remove": {
+        "content": "Are you sure you want to delete the current level?",
+        "success": "Deleted successfully"
+      }
+    }
+  },
+  "menu.json": {
+    "table": {
+      "name": "Menu Name",
+      "code": "Menu Code",
+      "icon": "Icon",
+      "sort": "Sort Order",
+      "action": "Action"
+    },
+    "message": {
+      "remove": {
+        "content": "Are you sure you want to delete the current menu? This action cannot be undone.",
+        "success": "Deleted successfully"
+      }
+    },
+    "modal": {
+      "title": {
+        "create": "Add Menu",
+        "edit": "Edit Menu"
+      },
+      "form": {
+        "name": {
+          "label": "Menu Name",
+          "required": "Please enter the menu name"
+        },
+        "icon": {
+          "label": "Icon",
+          "required": "Please enter the icon"
+        },
+        "sort": {
+          "label": "Sort Order",
+          "required": "Please enter the sort order"
+        }
+      }
+    }
+  },
+  "movie.json": {
+    "table": {
+      "cover": "Cover",
+      "name": "Movie Name",
+      "description": "Movie Description",
+      "releaseTime": "Release Time",
+      "language": "Language",
+      "region": "Region",
+      "length": "Duration",
+      "action": "Action"
+    },
+    "modal": {
+      "title": {
+        "create": "Add Movie",
+        "edit": "Edit Movie"
+      },
+      "form": {
+        "cover": {
+          "label": "Cover",
+          "required": "Please upload a cover image"
+        },
+        "name": {
+          "label": "Movie Name",
+          "required": "Please enter the movie name"
+        },
+        "description": {
+          "label": "Movie Description",
+          "required": "Please enter the movie description"
+        },
+        "regionId": {
+          "label": "Region",
+          "required": "Please select a region"
+        },
+        "releaseTime": {
+          "label": "Release Time",
+          "required": "Please select a release time"
+        },
+        "languageId": {
+          "label": "Language",
+          "required": "Please select a language"
+        },
+        "length": {
+          "label": "Duration",
+          "required": "Please enter the duration"
+        }
+      }
+    },
+    "message": {
+      "remove": {
+        "content": "Are you sure you want to delete the current movie? This action cannot be undone.",
+        "success": "Deleted successfully"
+      }
+    }
+  },
+  "movieDetail.json": {
+    "form": {
+      "cover": {
+        "label": "Cover",
+        "required": "Please upload a cover image"
+      },
+      "name": {
+        "label": "Movie Name",
+        "required": "Please enter the movie name"
+      },
+      "description": {
+        "label": "Movie Description",
+        "required": "Please enter the movie description"
+      },
+      "regionId": {
+        "label": "Region",
+        "required": "Please select a region"
+      },
+      "releaseTime": {
+        "label": "Release Time",
+        "required": "Please select a release time"
+      },
+      "languageId": {
+        "label": "Language",
+        "required": "Please select a language"
+      },
+      "length": {
+        "label": "Duration",
+        "required": "Please enter the duration"
+      },
+      "posters": {
+        "label": "Posters"
+      },
+      "tags": {
+        "label": "Tags"
+      },
+      "actors": {
+        "label": "Actors"
+      },
+      "directors": {
+        "label": "Directors"
+      }
+    }
+  },
+  "movieTags.json": {
+    "table": {
+      "name": "Tag Name",
+      "action": "Action"
+    },
+    "message": {
+      "remove": {
+        "content": "Are you sure you want to delete the current movie tag?",
+        "success": "Deleted successfully"
+      }
+    },
+    "modal": {
+      "title": {
+        "create": "Add Tag",
+        "edit": "Edit Tag"
+      },
+      "form": {
+        "name": {
+          "label": "Tag Name",
+          "required": "Please enter the tag name"
+        }
+      }
+    }
+  },
+  "order.json": {
+    "table": {
+      "user": "User",
+      "amount": "Amount",
+      "orderTime": "Order Time",
+      "payTime": "Payment Time",
+      "ticketCode": "Ticket Code",
+      "status": "Status",
+      "action": "Action"
+    },
+    "message": {
+      "remove": {
+        "content": "Are you sure you want to delete the current order? This action cannot be undone.",
+        "success": "Deleted successfully"
+      }
+    }
+  },
+  "position.json": {
+    "table": {
+      "name": "Position",
+      "action": "Action"
+    },
+    "message": {
+      "remove": {
+        "content": "Are you sure you want to delete the current position?",
+        "success": "Deleted successfully"
+      }
+    },
+    "modal": {
+      "title": {
+        "create": "Add Position",
+        "edit": "Edit Position"
+      },
+      "form": {
+        "name": {
+          "label": "Position Name",
+          "required": "Please enter the position name"
+        }
+      }
+    }
+  },
+  "reply.json": {
+    "table": {
+      "user": "Replier",
+      "comment": "Comment",
+      "content": "Reply Content",
+      "replyTime": "Reply Time",
+      "likeCount": "Like Count",
+      "stepOnCount": "Dislike Count",
+      "action": "Action"
+    },
+    "modal": {
+      "title": {
+        "create": "Add Reply",
+        "edit": "Edit Reply"
+      },
+      "form": {
+        "reply": {
+          "label": "Reply Content",
+          "required": "Please enter the reply content",
+          "max": "Content cannot exceed 1000 characters"
+        }
+      }
+    },
+    "message": {
+      "remove": {
+        "content": "Are you sure you want to delete the current row? This action cannot be undone.",
+        "success": "Deleted successfully"
+      }
+    }
+  },
+  "role.json": {
+    "table": {
+      "name": "Role Name",
+      "description": "Description",
+      "sort": "Sort Order",
+      "status": "Status",
+      "action": "Action"
+    },
+    "message": {
+      "remove": {
+        "content": "Are you sure you want to delete the current role? This action cannot be undone.",
+        "success": "Deleted successfully"
+      }
+    },
+    "placeholder": {
+      "roleName": "Please enter the role name",
+      "editPassword": "Enter a new password to modify it"
+    },
+    "modal": {
+      "rolePermission": {
+        "title": "Role Permission Configuration"
+      },
+      "roleUser": {
+        "title": "User Role Configuration"
+      }
+    }
+  },
+  "rule.json": {
+    "table": {
+      "name": "Rule Name",
+      "code": "Rule Code",
+      "description": "Rule Description",
+      "action": "Action"
+    },
+    "modal": {
+      "title": {
+        "create": "Add Rule",
+        "edit": "Edit Rule"
+      },
+      "form": {
+        "name": {
+          "label": "Rule Name",
+          "required": "Please enter the rule name"
+        },
+        "code": {
+          "label": "Rule Code",
+          "required": "Please enter the rule code"
+        },
+        "description": {
+          "label": "Rule Description",
+          "required": "Please enter the rule description"
+        }
+      }
+    },
+    "message": {
+      "remove": {
+        "content": "Are you sure you want to delete the current rule?",
+        "success": "Deleted successfully"
+      }
+    }
+  },
+  "user.json": {
+    "table": {
+      "avatar": "Avatar",
+      "nickname": "Nickname",
+      "account": "Account",
+      "email": "Email",
+      "phone": "Phone",
+      "gender": "Gender",
+      "birthday": "Birthday",
+      "age": "Age",
+      "address": "Address",
+      "action": "Action"
+    },
+    "modal": {
+      "title": {
+        "create": "Add User",
+        "edit": "Edit User"
+      },
+      "form": {
+        "avatar": {
+          "label": "Avatar",
+          "required": "Please upload an avatar"
+        },
+        "nickname": {
+          "label": "Nickname",
+          "required": "Please enter the nickname"
+        },
+        "account": {
+          "label": "Account",
+          "required": "Please enter the account"
+        },
+        "password": {
+          "label": "Password",
+          "required": "Please enter the password"
+        },
+        "email": {
+          "label": "Email",
+          "required": "Please enter the email"
+        },
+        "phone": {
+          "label": "Phone",
+          "required": "Please enter the phone number"
+        },
+        "gender": {
+          "label": "Gender",
+          "required": "Please select the gender"
+        },
+        "birthday": {
+          "label": "Birthday",
+          "required": "Please select the birthday"
+        },
+        "address": {
+          "label": "Address"
+        }
+      }
+    },
+    "message": {
+      "remove": {
+        "content": "Are you sure you want to delete the current user?",
+        "success": "Deleted successfully"
+      }
+    }
+  },
+  "userGroup.json": {
+    "table": {
+      "name": "Group Name",
+      "description": "Description",
+      "order": "Order",
+      "action": "Action"
+    },
+    "modal": {
+      "title": {
+        "create": "Add Group",
+        "edit": "Edit Group"
+      },
+      "form": {
+        "name": {
+          "label": "Group Name",
+          "required": "Please enter the group name"
+        },
+        "order": {
+          "label": "Order",
+          "required": "Please enter the order"
+        },
+        "description": {
+          "label": "Description",
+          "required": "Please enter the description"
+        }
+      }
+    },
+    "message": {
+      "remove": {
+        "content": "Are you sure you want to delete the current group?",
+        "success": "Deleted successfully"
+      }
+    }
+  },
+  "userLevel.json": {
+    "table": {
+      "name": "Level Name",
+      "description": "Description",
+      "order": "Order",
+      "action": "Action"
+    },
+    "modal": {
+      "title": {
+        "create": "Add Level",
+        "edit": "Edit Level"
+      },
+      "form": {
+        "name": {
+          "label": "Level Name",
+          "required": "Please enter the level name"
+        },
+        "order": {
+          "label": "Order",
+          "required": "Please enter the order"
+        },
+        "description": {
+          "label": "Description",
+          "required": "Please enter the description"
+        }
+      }
+    },
+    "message": {
+      "remove": {
+        "content": "Are you sure you want to delete the current level?",
+        "success": "Deleted successfully"
+      }
+    }
+  },
+  "userTag.json": {
+    "table": {
+      "name": "Tag Name",
+      "action": "Action"
+    },
+    "modal": {
+      "title": {
+        "create": "Add Tag",
+        "edit": "Edit Tag"
+      },
+      "form": {
+        "name": {
+          "label": "Tag Name",
+          "required": "Please enter the tag name"
+        }
+      }
+    },
+    "message": {
+      "remove": {
+        "content": "Are you sure you want to delete the current user tag?",
+        "success": "Deleted successfully"
+      }
+    }
+  },
+  "work.json": {
+    "table": {
+      "name": "Job Name",
+      "order": "Order",
+      "action": "Action"
+    },
+    "modal": {
+      "title": {
+        "create": "Add Job",
+        "edit": "Edit Job"
+      },
+      "form": {
+        "name": {
+          "label": "Job Name",
+          "required": "Please enter the job name"
+        },
+        "order": {
+          "label": "Order",
+          "required": "Please enter the order"
+        }
+      }
+    },
+    "message": {
+      "remove": {
+        "content": "Are you sure you want to delete the current job?",
+        "success": "Deleted successfully"
+      }
+    }
+  }
+}

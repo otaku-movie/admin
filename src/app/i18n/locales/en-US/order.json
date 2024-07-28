@@ -1,0 +1,48 @@
+{
+  "table": {
+    "name": "Title",
+    "cinemaName": "Cinema",
+    "theaterHallName": "Theater Hall",
+    "specName": "Specification",
+    "showTime": "Show Time",
+    "orderNumber": "Order Number",
+    "seatNumber": "Seat Number",
+    "payMethod": "Payment Method",
+    "payTime": "Payment Time",
+    "payState": "Payment Status",
+    "payTotal": "Total Payment",
+    "orderTime": "Order Creation Time",
+    "orderState": "Order Status",
+    "orderTotal": "Order Total",
+    "action": "Action"
+  },
+  "search": {
+    "cinema": "Cinema",
+    "theaterHall": "Theater Hall",
+    "id": "Order Number",
+    "orderTime": "Order Time",
+    "orderState": "Order Status",
+    "payState": "Payment Status"
+  },
+  "message": {
+    "remove": {
+      "content": "Are you sure you want to delete the current order?"
+    }
+  },
+  "updateOrderStateModal": {
+    "title": "Update Order Status",
+    "form": {
+      "orderState": {
+        "label": "Order Status",
+        "required": "Please select the order status"
+      },
+      "payState": {
+        "label": "Payment Status",
+        "required": "Please select the payment status"
+      }
+    }
+  },
+  "QRcodeModal": {
+    "title": "QR Code"
+  }
+}

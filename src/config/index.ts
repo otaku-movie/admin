@@ -10,7 +10,7 @@ export const defaultLanguage = 'zh-CN'
 export const languages = {
   'zh-CN': '简体中文',
   'ja': '日本語',
-  'en': 'English'
+  'en-US': 'English'
 }
 export type languageType = keyof typeof languages
 

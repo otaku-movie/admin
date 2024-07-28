@@ -1,0 +1,29 @@
+{
+  "table": {
+    "name": "Name",
+    "description": "Description",
+    "action": "Action"
+  },
+  "modal": {
+    "title": {
+      "create": "Add",
+      "edit": "Edit"
+    },
+    "form": {
+      "name": {
+        "label": "Name",
+        "required": "Please enter a name"
+      },
+      "description": {
+        "label": "Description",
+        "required": "Please enter a description"
+      }
+    }
+  },
+  "message": {
+    "remove": {
+      "content": "Are you sure you want to delete this data?",
+      "success": "Successfully deleted"
+    }
+  }
+}

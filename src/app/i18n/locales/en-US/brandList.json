@@ -1,0 +1,24 @@
+{
+  "table": {
+    "name": "Brand Name",
+    "action": "Action"
+  },
+  "modal": {
+    "title": {
+      "create": "Add Brand",
+      "edit": "Edit Brand"
+    },
+    "form": {
+      "name": {
+        "label": "Brand Name",
+        "required": "Please enter the brand name"
+      }
+    }
+  },
+  "message": {
+    "remove": {
+      "content": "Are you sure you want to delete the current brand?",
+      "success": "Successfully deleted"
+    }
+  }
+}

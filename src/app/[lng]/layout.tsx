@@ -15,6 +15,8 @@ import {
 } from 'antd'
 import ja from 'antd/locale/ja_JP'
 import zhCN from 'antd/locale/zh_CN'
+import enUS from 'antd/locale/en_US'
+
 import 'dayjs/locale/ja'
 import '@/assets/css/normalize.scss'
 import { languages } from '@/config'
@@ -78,6 +80,7 @@ function RootLayout({ children, params: { lng } }: PageProps) {
     'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg'
 
   const locale = {
+    en: enUS,
     ja,
     'zh-CN': zhCN
   }
@@ -199,7 +202,7 @@ function RootLayout({ children, params: { lng } }: PageProps) {
                   </Space>
                 </Header>
                 <Layout>
-                  <Sider width={200} style={{ background: colorBgContainer }}>
+                  <Sider width={250} style={{ background: colorBgContainer }}>
                     <Menu data={menu}></Menu>
                   </Sider>
                   <Layout

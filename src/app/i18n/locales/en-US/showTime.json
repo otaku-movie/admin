@@ -1,0 +1,90 @@
+{
+  "table": {
+    "name": "Movie",
+    "subtitle": "Subtitle",
+    "showTimeTag": "Show Time Tag",
+    "startDate": "Start Time",
+    "endDate": "End Time",
+    "playState": "Play State",
+    "cinema": "Cinema",
+    "theaterHall": "Theater Hall",
+    "open": "Public",
+    "spec": "Specification",
+    "seatSelectionRatio": "Seat Selection Ratio",
+    "attendance": "Attendance",
+    "action": "Action"
+  },
+  "query": {
+    "cinema": "Cinema",
+    "date": "Show Date"
+  },
+  "message": {
+    "remove": {
+      "selectedCount": "Currently, {{count}} people have selected seats. Do you still want to delete?",
+      "content": "Are you sure you want to delete the current show time?",
+      "success": "Deleted successfully"
+    }
+  },
+  "createOrderModal": {
+    "title": "Confirm Order",
+    "total": "Total",
+    "message": {
+      "movieTicketTypeId": {
+        "required": "Please select the type of movie ticket"
+      }
+    },
+    "table": {
+      "name": "Movie",
+      "spec": "Specification",
+      "seat": "Seat Information",
+      "area": "Area Name/Price",
+      "price": "Price",
+      "plusPrice": "Special Screening Additional Price",
+      "movieTicketType": "Movie Ticket Type"
+    },
+    "form": {
+      "movieTicketType": {
+        "label": "Movie Ticket Type",
+        "required": "Please select the type of movie ticket"
+      }
+    }
+  },
+  "showTimeModal": {
+    "title": {
+      "create": "Add Show Time",
+      "edit": "Edit Show Time"
+    },
+    "form": {
+      "movie": {
+        "label": "Movie Name",
+        "required": "Please select a movie"
+      },
+      "open": {
+        "label": "Public"
+      },
+      "cinema": {
+        "required": "Please select a cinema"
+      },
+      "theaterHall": {
+        "label": "Theater Hall",
+        "required": "Please select a theater hall"
+      },
+      "subtitle": {
+        "label": "Subtitle",
+        "required": "Please select a subtitle"
+      },
+      "showTimeTag": {
+        "label": "Show Time Tag",
+        "required": "Please select a show time tag"
+      },
+      "showTime": {
+        "label": "Start Time",
+        "required": "Please select a show time",
+        "startAfterEnd": "The end time must be later than the start time"
+      }
+    }
+  },
+  "seatModal": {
+    "title": "Set Aisle"
+  }
+}

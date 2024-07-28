@@ -1,0 +1,16 @@
+{
+  "top": {
+    "userCount": "Number of Users",
+    "movieCount": "Number of Movies",
+    "cinemaCount": "Number of Cinemas",
+    "movieScreeningCount": "Number of Movie Screenings Today"
+  },
+  "tab": {
+    "userRegisterCount": "Daily Registered Users",
+    "orderCount": "Daily Orders",
+    "movieShowTimeCount": "Daily Movie Showtimes",
+    "DailyTransactionAmount": "Daily Transaction Amount"
+  },
+  "registerPlatform": "Registration Platform",
+  "movieBoxOffice": "Box Office"
+}

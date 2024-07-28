@@ -1,0 +1,25 @@
+{
+  "table": {
+    "name": "Movie",
+    "originalName": "Original Name",
+    "time": "Duration",
+    "tags": "Tags",
+    "helloMovie": "Accessible",
+    "level": "Rating",
+    "cinemaCount": "Number of Cinemas",
+    "theaterCount": "Number of Theaters",
+    "commentCount": "Number of Comments",
+    "watchedCount": "Watched",
+    "wantToSeeCount": "Want to See",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "status": "Release Status",
+    "action": "Action"
+  },
+  "message": {
+    "remove": {
+      "content": "Are you sure you want to delete the current movie?",
+      "success": "Deletion successful"
+    }
+  }
+}

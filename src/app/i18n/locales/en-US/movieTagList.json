@@ -1,0 +1,24 @@
+{
+  "table": {
+    "name": "Tag Name",
+    "action": "Action"
+  },
+  "modal": {
+    "title": {
+      "create": "Add Tag",
+      "edit": "Edit Tag"
+    },
+    "form": {
+      "name": {
+        "label": "Tag Name",
+        "required": "Please enter the tag name"
+      }
+    }
+  },
+  "message": {
+    "remove": {
+      "content": "Are you sure you want to delete the current tag?",
+      "success": "Deleted successfully"
+    }
+  }
+}

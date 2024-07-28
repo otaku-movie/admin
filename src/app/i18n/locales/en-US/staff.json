@@ -1,0 +1,39 @@
+{
+  "table": {
+    "cover": "Image",
+    "name": "Staff Name",
+    "originalName": "Original Name",
+    "description": "Description",
+    "action": "Action"
+  },
+  "modal": {
+    "title": {
+      "create": "Add Staff",
+      "edit": "Edit Staff"
+    },
+    "form": {
+      "cover": {
+        "label": "Image",
+        "required": "Please upload an image"
+      },
+      "name": {
+        "label": "Staff Name",
+        "required": "Please enter the staff name"
+      },
+      "originalName": {
+        "label": "Original Name",
+        "required": "Please enter the original name"
+      },
+      "description": {
+        "label": "Description",
+        "required": "Please enter the description"
+      }
+    }
+  },
+  "message": {
+    "remove": {
+      "content": "Are you sure you want to delete the current staff?",
+      "success": "Deleted successfully"
+    }
+  }
+}

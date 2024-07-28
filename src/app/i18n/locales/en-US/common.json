@@ -1,0 +1,113 @@
+{
+  "menu": {
+    "dataChart": "Data Chart",
+    "cinema": {
+      "name": "Cinema Management",
+      "children": {
+        "cinemaList": "Cinema List",
+        "cinemaDetail": "Cinema Detail",
+        "theaterHall": "Theater Hall List",
+        "specList": "Spec List",
+        "ticketType": "Ticket Type",
+        "brandList": "Brand List"
+      }
+    },
+    "movie": {
+      "name": "Movie Management",
+      "children": {
+        "movieList": "Movie List",
+        "characterList": "Character List",
+        "staffList": "Staff List",
+        "positionList": "Position List",
+        "levelList": "Level List",
+        "movieDetail": "Movie Detail",
+        "commentList": "Comment List",
+        "replyList": "Reply List",
+        "tagList": "Tag List",
+        "languageList": "Language List"
+      }
+    },
+    "showTime": {
+      "name": "Showtime Management",
+      "children": {
+        "showTimeList": "Showtime List",
+        "showTimeTag": "Showtime Tag List"
+      }
+    },
+    "userList": "User List",
+    "dictList": "Dictionary List",
+    "orderList": "Order List",
+    "permission": {
+      "name": "Permission Management",
+      "children": {
+        "roleList": "Role List",
+        "menuList": "Menu List",
+        "buttonList": "Button List",
+        "apiList": "API List"
+      }
+    }
+  },
+  "message": {
+    "notPermission": "No Permission",
+    "save": "Save Successful"
+  },
+  "unit": {
+    "jpy": "JPY",
+    "billion": "Billion",
+    "million": "Million"
+  },
+  "button": {
+    "add": "Add",
+    "edit": "Edit",
+    "dictDetail": "Dictionary Detail",
+    "remove": "Remove",
+    "save": "Save",
+    "login": "Login",
+    "ticketType": "Ticket Type",
+    "theaterHallDetail": "Theater Hall Detail",
+    "commentList": "Comment List",
+    "configPermission": "Configure Permission",
+    "configRole": "Configure Role",
+    "seatSelectedDetail": "Seat Selection",
+    "configSeat": "Configure Seat",
+    "saveSeatConfig": "Save Seat Configuration",
+    "saveSelectSeat": "Confirm Seat Selection",
+    "configAisle": "Configure Aisle",
+    "configArea": "Configure Area",
+    "cancel": "Cancel",
+    "order": {
+      "updateOrderState": "Update Order Status",
+      "generateQRcode": "Generate QR Code"
+    },
+    "comment": {
+      "replyList": "Reply List"
+    },
+    "reply": {
+      "reply": "Reply"
+    }
+  },
+  "enum": {
+    "selectSeatState": {
+      "available": "Available Seat",
+      "locked": "Locked Seat",
+      "sold": "Sold Seat"
+    },
+    "orderState": {
+      "orderCreated": "Order Created",
+      "orderSucceed": "Order Completed",
+      "orderFailed": "Order Failed",
+      "canceledOrder": "Order Canceled",
+      "orderTimeout": "Order Timeout"
+    },
+    "seatType": {
+      "wheelChair": "Wheelchair Seat",
+      "disabled": "Disabled Seat"
+    }
+  },
+  "error": {
+    "403": {
+      "title": "Access Denied",
+      "button": "Back to Login Page"
+    }
+  }
+}

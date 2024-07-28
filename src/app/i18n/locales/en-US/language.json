@@ -1,0 +1,29 @@
+{
+  "table": {
+    "name": "Language Name",
+    "code": "Language Code",
+    "action": "Action"
+  },
+  "modal": {
+    "title": {
+      "create": "Add Language",
+      "edit": "Edit Language"
+    },
+    "form": {
+      "name": {
+        "label": "Language Name",
+        "required": "Please enter language name"
+      },
+      "code": {
+        "label": "Language Code",
+        "required": "Please enter language code"
+      }
+    }
+  },
+  "message": {
+    "remove": {
+      "content": "Are you sure you want to delete this language?",
+      "success": "Successfully deleted"
+    }
+  }
+}

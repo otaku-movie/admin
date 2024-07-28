@@ -1,0 +1,24 @@
+{
+  "table": {
+    "name": "Position Name",
+    "action": "Action"
+  },
+  "modal": {
+    "title": {
+      "create": "Add Position",
+      "edit": "Edit Position"
+    },
+    "form": {
+      "name": {
+        "label": "Position Name",
+        "required": "Please enter the position name"
+      }
+    }
+  },
+  "message": {
+    "remove": {
+      "content": "Are you sure you want to delete the current position?",
+      "success": "Successfully deleted"
+    }
+  }
+}

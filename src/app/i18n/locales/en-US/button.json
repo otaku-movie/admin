@@ -1,0 +1,46 @@
+{
+  "table": {
+    "name": "Page Name",
+    "button": "Button",
+    "buttonName": "Button Name",
+    "buttonCode": "Button Code",
+    "apiName": "API Name",
+    "apiCode": "API Code",
+    "i18nKey": "Internationalization Key",
+    "action": "Action"
+  },
+  "message": {
+    "remove": {
+      "content": "Are you sure you want to delete the current button? This action cannot be undone.",
+      "success": "Successfully deleted"
+    }
+  },
+  "modal": {
+    "title": {
+      "create": "Add Button",
+      "edit": "Edit Button"
+    },
+    "form": {
+      "menuId": {
+        "label": "Associated Menu",
+        "required": "Please select a menu"
+      },
+      "i18nKey": {
+        "label": "Internationalization Key",
+        "required": "Please enter the internationalization key"
+      },
+      "name": {
+        "label": "Button Name",
+        "required": "Please enter the button name"
+      },
+      "code": {
+        "label": "Button Code",
+        "required": "Please enter the button code"
+      },
+      "apiCode": {
+        "label": "API Code",
+        "required": "Please enter the API code"
+      }
+    }
+  }
+}
