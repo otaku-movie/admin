@@ -32,6 +32,7 @@
     "js-cookie": "^3.0.5",
     "js-md5": "^0.8.3",
     "lodash": "^4.17.21",
+    "my-app": "file:",
     "negotiator": "^0.6.3",
     "next": "14.2.4",
     "next-i18next": "^15.3.0",

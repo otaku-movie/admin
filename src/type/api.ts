@@ -1,13 +1,15 @@
-export interface paginationResponse<T> {
+
+export interface ApiResponse<T = any> {
+  code: number
+  message: string
+  data: T
+}
+
+export type ApiPaginationResponse<T> = ApiResponse<T> & {
   page: number
   total: number
   pageSize: number,
   list: T
-}
-export interface response<T = any> {
-  code: number
-  message: string
-  data: paginationResponse<T> | T
 }
 
 export interface HelloMovie {

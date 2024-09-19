@@ -27,6 +27,7 @@ import { Dict } from '@/components/dict'
 import { processPath } from '@/config/router'
 import { CheckPermission } from '@/components/checkPermission'
 import { showTotal } from '@/utils/pagination'
+import { getMovieList } from '@/api/feat/movie'
 
 interface Query {
   name: string
@@ -35,7 +36,7 @@ interface Query {
 
 export default function Page({ params: { lng } }: PageProps) {
   const router = useRouter()
-  const [data, setData] = useState([])
+  const [data, setData] = useState<Movie[]>([])
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
   const [query, setQuery] = useState<Partial<Query>>({})
@@ -43,18 +44,16 @@ export default function Page({ params: { lng } }: PageProps) {
   const { t: common } = useTranslation(lng, 'common')
 
   const getData = (page = 1) => {
-    http({
-      url: 'movie/list',
-      method: 'post',
-      data: {
-        page,
-        pageSize: 10,
-        ...query
-      }
+    getMovieList({
+      page,
+      pageSize: 10,
+      ...query
     }).then((res) => {
-      setData(res.data.list)
+      const data = res.data
+
+      setData(data.list)
       setPage(page)
-      setTotal(res.data.total)
+      setTotal(data.total)
     })
   }
 

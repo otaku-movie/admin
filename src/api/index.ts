@@ -1,8 +1,8 @@
-import axios, { AxiosError, AxiosRequestHeaders, AxiosResponse } from 'axios'
+import axios, { AxiosError, AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse, InternalAxiosRequestConfig } from 'axios'
 import { message } from 'antd'
 
 import { toCamelCase } from '../utils'
-import { response } from '@/type/api'
+import { ApiResponse } from '@/type/api'
 
 const http = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -20,7 +20,7 @@ const httpStatus = {
 }
 
 // 添加请求拦截器
-http.interceptors.request.use((config: any) => {
+http.interceptors.request.use((config) => {
   // 在发送请求之前做些什么
   const token = localStorage.getItem('token')
   const language = localStorage.getItem('language') ?? 'ja'
@@ -39,31 +39,30 @@ http.interceptors.request.use((config: any) => {
   }
 
   return config
-}, (err: AxiosError<response>) => {
+}, (err: AxiosError) => {
   console.log(err)
   // 对请求错误做些什么
-  Promise.reject(err)
+  return Promise.reject(err)
 })
 
-http.interceptors.response.use((res: AxiosResponse<response>) => {
+http.interceptors.response.use((res: AxiosResponse) => {
   if (res.headers['content-disposition']) {
     return res.data
   }
   // 对响应数据做点什么
   if ((res.status === 200 || res.status === 201) && res.data.code === 200) {
-    return toCamelCase(res.data)
+    return toCamelCase(res.data) as ApiResponse
   } else {
     message.warning(res.data.message)
-    return Promise.reject(res.data)
+    return Promise.reject(new Error(res.data.message))
   }
-}, (err: AxiosError<AxiosResponse<response>>) => {
+}, (err: AxiosError<ApiResponse>) => {
   if (err.response) {
     if (err.response.status === 401) {
       localStorage.removeItem('userInfo')
       localStorage.removeItem('token')
       localStorage.setItem('redirectURL', location.href)
       location.href = `/${document.documentElement.lang}/login`
-
     } else {
       const status = err.response.status as keyof typeof httpStatus
       if (httpStatus[status]) {
@@ -73,10 +72,10 @@ http.interceptors.response.use((res: AxiosResponse<response>) => {
         message.warning(Array.isArray(msg) ? msg.join('、') : msg)
       }
     }
-    return Promise.reject(err.response)
+    return Promise.reject(new Error(err.response.data.message))
   } else {
     console.log('-------')
-    return Promise.reject(err.response)
+    return Promise.reject(new Error('Network Error'))
   }
 })
 
