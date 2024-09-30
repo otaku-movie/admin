@@ -1,15 +1,11 @@
 import React, { useState, useRef, useEffect, useLayoutEffect } from 'react'
-import { Space, Switch, Tag, Dropdown, MenuProps, message } from 'antd'
-import { LeftOutlined, RightOutlined } from '@ant-design/icons'
 import dayjs from 'dayjs'
 import './style.scss'
 import { CinemaScreeing, MovieShowTimeItem } from '@/api/request/cinema'
-import { Dict } from '../dict'
-import { useTranslation } from '@/app/i18n/client'
-import { languageType } from '@/config'
 
 interface TodoListProps {
   data: CinemaScreeing[]
+  render?: (data: MovieShowTimeItem) => React.ReactNode
 }
 
 interface Task {
@@ -26,19 +22,6 @@ export function TodoList(props: TodoListProps) {
   const hourRef = useRef<any>(null)
   const [task, setTask] = useState<Task[]>([])
   const [timelinePositionTop, setTimelinePositionTop] = useState(0)
-  const { t: common } = useTranslation(
-    navigator.language as languageType,
-    'common'
-  )
-  const i18nWeek = [
-    'Sunday',
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday'
-  ]
 
   const baseLeft = 40
   const hourHeight = 100
@@ -128,37 +111,8 @@ export function TodoList(props: TodoListProps) {
     }
   }, [])
 
-  const key = i18nWeek[dayjs().day()]
-
   return (
     <section>
-      <ul className="nav-container">
-        <li>
-          <LeftOutlined />
-        </li>
-        <li>
-          {dayjs().format('YYYY-MM-DD')}（{common(`week.${key}`)}）
-        </li>
-        <li>
-          <RightOutlined />
-        </li>
-      </ul>
-      <ul
-        className="table-header"
-        style={{
-          gridTemplateColumns: `40px repeat(${props.data.length}, 1fr) 40px`
-        }}
-      >
-        <li>
-          <LeftOutlined />
-        </li>
-        {props.data.map((item) => {
-          return <li key={item.id}>{item.name}</li>
-        })}
-        <li>
-          <RightOutlined />
-        </li>
-      </ul>
       <section className="show-list-container">
         <section className="screening-container">
           <table className="hour-container" ref={hourRef}>
@@ -213,76 +167,19 @@ export function TodoList(props: TodoListProps) {
         </section>
         <section className="todo-list-container">
           {task.map((item, index) => {
-            const onClick: MenuProps['onClick'] = ({ key }) => {
-              message.info(`Click on item ${key}`)
-            }
-
-            const items: MenuProps['items'] = [
-              {
-                label: common('button.edit'),
-                key: 'edit'
-              },
-              {
-                label: common('button.remove'),
-                danger: true,
-                key: 'remove'
-              }
-            ]
-
             return (
-              <Dropdown
-                menu={{ items, onClick }}
+              <div
+                className={`todo todo-${index}`}
+                style={{
+                  top: item.position.top,
+                  left: item.position.left,
+                  width: `calc((100% - 100px) / ${props.data.length})`,
+                  height: item.position.height
+                }}
                 key={item.data.id}
-                trigger={['contextMenu']}
               >
-                <div
-                  className={`todo todo-${index}`}
-                  style={{
-                    top: item.position.top,
-                    left: item.position.left,
-                    width: `calc((100% - 100px) / ${props.data.length})`,
-                    height: item.position.height
-                  }}
-                >
-                  <div>
-                    <Tag color="blue">
-                      <Dict
-                        code={item.data.status}
-                        name={'cinemaPlayState'}
-                      ></Dict>
-                    </Tag>
-                    <span className="movie-title">{item.data.movieName}</span>
-                  </div>
-
-                  <ul>
-                    <li>
-                      <span>公开：</span>
-                      <Switch
-                        size="small"
-                        value={item.data.open}
-                        onChange={(val) => {}}
-                      />
-                    </li>
-                    <li>
-                      <span>选座比：</span>
-                      <span>
-                        {item.data.seatCount}/{item.data.selectedSeatCount}{' '}
-                        {item.data.selectedSeatCount ||
-                          0 / item.data.seatCount ||
-                          0}
-                        %
-                      </span>
-                    </li>
-                    <li>
-                      <Space wrap size={5}>
-                        <Tag color="#2db7f5">字幕</Tag>
-                        <Tag color="#2db7f5">最速上映</Tag>
-                        <Tag color="#2db7f5">舞台挨拶</Tag>
-                      </Space>
-                    </li>
-                  </ul>
-                </div>
-              </Dropdown>
+                {props.render?.(item.data)}
+              </div>
             )
           })}
         </section>
