@@ -118,5 +118,8 @@
       "title": "Access Denied",
       "button": "Back to Login Page"
     }
+  },
+  "homePage": {
+    "logout": "logout"
   }
 }

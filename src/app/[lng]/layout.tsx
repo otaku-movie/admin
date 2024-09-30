@@ -11,7 +11,9 @@ import {
   theme,
   Dropdown,
   Space,
-  Avatar
+  Avatar,
+  message,
+  FloatButton
 } from 'antd'
 import ja from 'antd/locale/ja_JP'
 import zhCN from 'antd/locale/zh_CN'
@@ -27,6 +29,7 @@ import { getUserInfo, listToTree } from '@/utils'
 import { Menu } from '@/components/menu'
 import Cookies from 'js-cookie'
 import { useCommonStore } from '@/store/useCommonStore'
+import { useRouter } from 'next/router'
 
 export interface PageProps {
   children: React.ReactNode
@@ -51,28 +54,8 @@ function RootLayout({ children, params: { lng } }: PageProps) {
 
   const items: MenuProps['items'] = [
     {
-      label: (
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://www.antgroup.com"
-        >
-          1st menu item
-        </a>
-      ),
-      key: '0'
-    },
-    {
-      label: (
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://www.aliyun.com"
-        >
-          2nd menu item
-        </a>
-      ),
-      key: '1'
+      label: t('homePage.logout'),
+      key: 'logout'
     }
   ]
 
@@ -104,6 +87,14 @@ function RootLayout({ children, params: { lng } }: PageProps) {
 
   const userInfo = getUserInfo()
   const lang = pathname.split('/')[1]
+
+  const userDropDownMenuClick: MenuProps['onClick'] = ({ key }) => {
+    switch (key) {
+      case 'logout':
+        location.href = `/${lang}/login`
+        break
+    }
+  }
 
   useEffect(() => {
     getDict()
@@ -196,7 +187,10 @@ function RootLayout({ children, params: { lng } }: PageProps) {
                         </span>
                       </Space>
                     </Dropdown>
-                    <Dropdown menu={{ items }} placement="bottom">
+                    <Dropdown
+                      menu={{ items, onClick: userDropDownMenuClick }}
+                      placement="bottom"
+                    >
                       <Avatar src={userInfo.cover || url} />
                     </Dropdown>
                   </Space>
