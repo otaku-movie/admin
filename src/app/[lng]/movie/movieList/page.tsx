@@ -27,7 +27,7 @@ import { Dict } from '@/components/dict'
 import { processPath } from '@/config/router'
 import { CheckPermission } from '@/components/checkPermission'
 import { showTotal } from '@/utils/pagination'
-import { getMovieList } from '@/api/feat/movie'
+import { getMovieList } from '@/api/request/movie'
 
 interface Query {
   name: string

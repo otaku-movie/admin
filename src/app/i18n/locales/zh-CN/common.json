@@ -9,7 +9,8 @@
         "theaterHall": "影厅列表",
         "specList": "规格列表",
         "ticketType": "电影票类型",
-        "brandList": "品牌列表"
+        "brandList": "品牌列表",
+        "screeningManagement": "上映场次管理"
       }
     },
     "movie": {
@@ -56,6 +57,15 @@
     "billion": "亿",
     "million": "万"
   },
+  "week": {
+    "Monday": "一",
+    "Tuesday": "二",
+    "Wednesday": "三",
+    "Thursday": "四",
+    "Friday": "五",
+    "Saturday": "六",
+    "Sunday": "日"
+  },
   "button": {
     "add": "添加",
     "edit": "编辑",
@@ -84,6 +94,9 @@
     },
     "reply": {
       "reply": "回复"
+    },
+    "cinemaList": {
+      "screeningManagement": "上映场次管理"
     }
   },
   "enum": {

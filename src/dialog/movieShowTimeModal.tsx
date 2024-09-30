@@ -11,6 +11,7 @@ interface MovieShowTimeModalProps {
   type: 'create' | 'edit'
   show: boolean
   data: Record<string, unknown>
+  fromScreeningManagement?: boolean
   onConfirm?: () => void
   onCancel?: () => void
 }
@@ -135,7 +136,6 @@ export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
       getCinemaData()
       getLanguageData()
       getShowTimeTagData()
-      console.log(props.data)
     }
 
     if (props.data.id) {
@@ -157,6 +157,13 @@ export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
     } else {
       setQuery({})
       form.setFieldsValue({})
+    }
+    if (props.data.cinemaId) {
+      setQuery({
+        ...props.data
+      })
+      getCinemaData('', props.data.cinemaId as number)
+      getTheaterHallData(props.data.cinemaId as number)
     }
   }, [props.show, props.data])
 
@@ -267,11 +274,11 @@ export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
           </Select>
         </Form.Item>
         <Form.Item
-          label={t('showTimeModal.form.showTimeSpec.label')}
+          label={t('showTimeModal.form.showTimeTag.label')}
           rules={[
             {
               required: true,
-              message: t('showTimeModal.form.showTimeSpec.required')
+              message: t('showTimeModal.form.showTimeTag.required')
             }
           ]}
           name="showTimeTagId"
@@ -320,26 +327,28 @@ export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
           ]}
         >
           <Space>
-            <Select
-              showSearch
-              style={{ width: 250 }}
-              onChange={(val) => {
-                getTheaterHallData(val)
-                setQuery({
-                  ...query,
-                  cinemaId: val,
-                  theaterHallId: undefined
-                })
-              }}
-              value={query.cinemaId}
-              onSearch={getCinemaData}
-            >
-              {cinemaData.map((item) => (
-                <Select.Option value={item.id} key={item.id}>
-                  {item.name}
-                </Select.Option>
-              ))}
-            </Select>
+            {!props.fromScreeningManagement ? (
+              <Select
+                showSearch
+                style={{ width: 250 }}
+                onChange={(val) => {
+                  getTheaterHallData(val)
+                  setQuery({
+                    ...query,
+                    cinemaId: val,
+                    theaterHallId: undefined
+                  })
+                }}
+                value={query.cinemaId}
+                onSearch={getCinemaData}
+              >
+                {cinemaData.map((item) => (
+                  <Select.Option value={item.id} key={item.id}>
+                    {item.name}
+                  </Select.Option>
+                ))}
+              </Select>
+            ) : null}
             <Select
               style={{ width: 200 }}
               value={query.theaterHallId}

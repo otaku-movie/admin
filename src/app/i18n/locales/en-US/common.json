@@ -56,6 +56,15 @@
     "billion": "Billion",
     "million": "Million"
   },
+  "week": {
+    "Monday": "Monday",
+    "Tuesday": "Tuesday",
+    "Wednesday": "Wednesday",
+    "Thursday": "Thursday",
+    "Friday": "Friday",
+    "Saturday": "Saturday",
+    "Sunday": "Sunday"
+  },
   "button": {
     "add": "Add",
     "edit": "Edit",

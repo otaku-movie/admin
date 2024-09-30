@@ -211,6 +211,7 @@ function RootLayout({ children, params: { lng } }: PageProps) {
                       height: 'calc(100vh - 64px)',
                       overflow: 'auto'
                     }}
+                    id="page-container"
                   >
                     <Space direction="vertical" size={20}>
                       <Breadcrumb

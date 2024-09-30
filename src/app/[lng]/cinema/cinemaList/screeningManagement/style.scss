@@ -1,0 +1,13 @@
+.nav-hour {
+  display: flex;
+  background: rgba($color: #000000, $alpha: 0.5);
+  color: white;
+  border-radius: 15px;
+  flex-direction: column;
+  position: absolute;
+  right: 30px;
+  padding: 10px 4px;
+  line-height: 28px;
+  font-size: 16px;
+  text-align: center;
+}

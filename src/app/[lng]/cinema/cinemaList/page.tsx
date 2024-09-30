@@ -21,7 +21,7 @@ import { processPath } from '@/config/router'
 import { CheckPermission } from '@/components/checkPermission'
 import { showTotal } from '@/utils/pagination'
 
-export default function CinemaPage({ params: { lng } }: PageProps) {
+export default function Page({ params: { lng } }: PageProps) {
   const router = useRouter()
 
   const [data, setData] = useState([])
@@ -117,6 +117,21 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
       render: (_, row) => {
         return (
           <Flex gap={10} vertical>
+            <Button
+              type="primary"
+              onClick={() => {
+                router.push(
+                  processPath({
+                    name: 'screeningManagement',
+                    query: {
+                      id: row.id
+                    }
+                  })
+                )
+              }}
+            >
+              {common('button.cinemaList.screeningManagement')}
+            </Button>
             <Button
               type="primary"
               onClick={() => {
