@@ -35,6 +35,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
     },
     show: false
   })
+  const { t } = useTranslation(lng, 'screeningManagment')
   const { t: common } = useTranslation(lng, 'common')
   const [data, setData] = useState<CinemaScreeing[]>([])
   const router = useRouter()
@@ -66,8 +67,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
     <section
       style={{
         display: 'flex',
-        flexDirection: 'column',
-        gap: '30px'
+        flexDirection: 'column'
       }}
     >
       {/* <Query>
@@ -75,39 +75,41 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
           <Input></Input>
         </QueryItem>
       </Query> */}
-      <ul className="nav-container">
-        <li
-          onClick={() => {
-            setDay(day.subtract(1, 'day'))
+      <section className="todo-top">
+        <ul className="nav-container">
+          <li
+            onClick={() => {
+              setDay(day.subtract(1, 'day'))
+            }}
+          >
+            <LeftOutlined />
+          </li>
+          <li>
+            {day.format('YYYY-MM-DD')}（{common(`week.${i18nWeek[day.day()]}`)}
+            ）
+          </li>
+          <li
+            onClick={() => {
+              setDay(day.add(1, 'day'))
+            }}
+          >
+            <RightOutlined />
+          </li>
+        </ul>
+        <ul
+          className="table-header"
+          style={{
+            gridTemplateColumns: `40px repeat(${data.length}, 1fr) 40px`
           }}
         >
-          <LeftOutlined />
-        </li>
-        <li>
-          {day.format('YYYY-MM-DD')}（{common(`week.${i18nWeek[day.day()]}`)}）
-        </li>
-        <li
-          onClick={() => {
-            setDay(day.add(1, 'day'))
-          }}
-        >
-          <RightOutlined />
-        </li>
-      </ul>
-      <ul
-        className="table-header"
-        style={{
-          gridTemplateColumns: `40px repeat(${data.length}, 1fr) 40px`
-        }}
-      >
-        <li>
-        </li>
-        {data.map((item) => {
-          return <li key={item.id}>{item.name}</li>
-        })}
-        <li>
-        </li>
-      </ul>
+          <li></li>
+          {data.map((item) => {
+            return <li key={item.id}>{item.name}</li>
+          })}
+          <li></li>
+        </ul>
+      </section>
+
       <TodoList
         data={data}
         render={(item) => {
@@ -143,7 +145,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
 
                 <ul>
                   <li>
-                    <span>公开：</span>
+                  <span>{t('table.open')}：</span>
                     <Switch
                       size="small"
                       value={item.open}
@@ -151,7 +153,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
                     />
                   </li>
                   <li>
-                    <span>选座比：</span>
+                    <span>{t('table.seatSelectRate')}：</span>
                     <span>
                       {item.seatCount}/{item.selectedSeatCount}{' '}
                       {item.selectedSeatCount || 0 / item.seatCount || 0}%

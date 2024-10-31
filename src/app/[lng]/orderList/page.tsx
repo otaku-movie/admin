@@ -147,7 +147,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
     {
       title: t('table.name'),
       dataIndex: 'name',
-      width: 400,
+      width: 350,
       fixed: 'left',
       render(_: any, row) {
         return (
@@ -180,7 +180,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
     },
     {
       title: t('table.showTime'),
-      width: 220,
+      width: 180,
       render(_, row) {
         return (
           <Space direction="vertical">
@@ -192,7 +192,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
     },
     {
       title: t('table.seatNumber'),
-      width: 300,
+      width: 250,
       render(_, row) {
         return (
           <Space direction="vertical">
@@ -229,7 +229,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
     },
     {
       title: t('table.orderTime'),
-      width: 150,
+      width: 120,
       dataIndex: 'orderTime'
     },
     {
@@ -268,7 +268,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
       key: 'operation',
       fixed: 'right',
       align: 'center',
-      width: 200,
+      width: 160,
       render: (_, row) => {
         return (
           <CheckPermission code="movieOrder.updateOrderState">

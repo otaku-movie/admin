@@ -11,3 +11,31 @@
   font-size: 16px;
   text-align: center;
 }
+.table-header {
+  display: grid;
+  background: black;
+  color: white;
+  z-index: 10;
+
+  li {
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom-width: 0;
+    border-right-width: 0;
+    &:nth-last-of-type(1) {
+      border-right: var(--todo-list-border);
+    }
+  }
+}
+
+.todo-top {
+  padding: 20px 0;
+  position: sticky;
+  top: -21px;
+  left: 0;
+  background: black;
+  color: white;
+  z-index: 100;
+}

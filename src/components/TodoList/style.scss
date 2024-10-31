@@ -15,28 +15,7 @@
   position: relative;
 }
 
-.table-header {
-  display: grid;
-  position: sticky;
-  top: -21px;
-  left: 0;
-  background: black;
-  color: white;
-  z-index: 10;
 
-  li {
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: var(--todo-list-border);
-    border-bottom-width: 0;
-    border-right-width: 0;
-    &:nth-last-of-type(1) {
-      border-right: var(--todo-list-border);
-    }
-  }
-}
 
 .hour-container,
 .table-container {
