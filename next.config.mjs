@@ -9,7 +9,7 @@ const nextConfig = {
     return [
       {
         source: '/',
-        destination: '/movie/movieList',
+        destination: '/ja/movie/movieList',
         // 临时重定向
         permanent: false
       }

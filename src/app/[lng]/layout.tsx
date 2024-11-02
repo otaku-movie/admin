@@ -4,6 +4,8 @@ import { AntdRegistry } from '@ant-design/nextjs-registry'
 import React, { useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 import type { MenuProps } from 'antd'
+import { AppProgressBar as ProgressBar } from 'next-nprogress-bar'
+
 import {
   ConfigProvider,
   Breadcrumb,
@@ -232,6 +234,12 @@ function RootLayout({ children, params: { lng } }: PageProps) {
                         className="main-container"
                       >
                         {children}
+                        <ProgressBar
+                          height="4px"
+                          color="#1677ff"
+                          options={{ showSpinner: true }}
+                          shallowRouting
+                        />
                       </section>
                     </Space>
                   </Layout>
