@@ -77,7 +77,7 @@ export default function Page({ params: { lng } }: PageProps) {
       render: (_, row) => {
         return (
           <Space>
-            <Button
+            {/* <Button
               type="primary"
               onClick={() => {
                 http({
@@ -97,7 +97,7 @@ export default function Page({ params: { lng } }: PageProps) {
               }}
             >
               {common('button.edit')}
-            </Button>
+            </Button> */}
             <Button
               type="primary"
               onClick={() => {
@@ -114,7 +114,7 @@ export default function Page({ params: { lng } }: PageProps) {
             >
               {common('button.comment.replyList')}
             </Button>
-            <CheckPermission code="comment.remove">
+            {/* <CheckPermission code="comment.remove">
               <Button
                 type="primary"
                 danger
@@ -147,7 +147,7 @@ export default function Page({ params: { lng } }: PageProps) {
               >
                 {common('button.remove')}
               </Button>
-            </CheckPermission>
+            </CheckPermission> */}
           </Space>
         )
       }
@@ -163,7 +163,7 @@ export default function Page({ params: { lng } }: PageProps) {
       }}
     >
       <Row justify="end">
-        <Button
+        {/* <Button
           onClick={() => {
             setModal({
               ...modal,
@@ -174,7 +174,7 @@ export default function Page({ params: { lng } }: PageProps) {
           }}
         >
           {common('button.add')}
-        </Button>
+        </Button> */}
       </Row>
       {/* <Query>
         <QueryItem label={t('table.user')} column={1}>

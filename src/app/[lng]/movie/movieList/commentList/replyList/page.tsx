@@ -8,11 +8,13 @@ import http from '@/api'
 import { CheckPermission } from '@/components/checkPermission'
 import { ReplyModal } from '@/dialog/replyModal'
 import { showTotal } from '@/utils/pagination'
+import { useSearchParams } from 'next/navigation'
 
 export default function Page({ params: { lng } }: PageProps) {
   const [data, setData] = useState([])
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
+  const searchParams = useSearchParams()
   const { t } = useTranslation(lng, 'reply')
   const { t: common } = useTranslation(lng, 'common')
   const [modal, setModal] = useState({
@@ -28,7 +30,8 @@ export default function Page({ params: { lng } }: PageProps) {
       method: 'post',
       data: {
         page,
-        pageSize: 10
+        pageSize: 10,
+        commentId: searchParams.get('id')
       }
     }).then((res) => {
       setData(res.data.list)
@@ -61,98 +64,98 @@ export default function Page({ params: { lng } }: PageProps) {
     {
       title: t('table.stepOnCount'),
       dataIndex: 'unlikeCount'
-    },
-    {
-      title: t('table.action'),
-      key: 'operation',
-      fixed: 'right',
-      width: 200,
-      render: (_, row) => {
-        return (
-          <Space>
-            <Button
-              type="primary"
-              onClick={() => {
-                http({
-                  url: 'movie/reply/detail',
-                  method: 'get',
-                  params: {
-                    id: row.id
-                  }
-                }).then((res) => {
-                  setModal({
-                    ...modal,
-                    action: 'comment',
-                    data: res.data,
-                    type: 'edit',
-                    show: true
-                  })
-                })
-              }}
-            >
-              {common('button.edit')}
-            </Button>
-            <Button
-              type="primary"
-              onClick={() => {
-                const parentReplyId =
-                  row.parentReplyId === null
-                    ? `${row.id}`
-                    : `${row.parentReplyId}-${row.id}`
-
-                setModal({
-                  ...modal,
-                  action: 'reply',
-                  data: {
-                    id: row.id,
-                    parentReplyId,
-                    commentUserId: row.commentUserId
-                  },
-                  type: 'edit',
-                  show: true
-                })
-              }}
-            >
-              {common('button.reply.reply')}
-            </Button>
-            <CheckPermission code="reply.remove">
-              <Button
-                type="primary"
-                danger
-                onClick={() => {
-                  Modal.confirm({
-                    title: common('button.remove'),
-                    content: t('message.remove.content'),
-                    onCancel() {
-                      console.log('Cancel')
-                    },
-                    onOk() {
-                      return new Promise((resolve, reject) => {
-                        http({
-                          url: 'movie/reply/remove',
-                          method: 'delete',
-                          params: {
-                            id: row.id
-                          }
-                        })
-                          .then((res) => {
-                            message.success(res.message)
-                            getData()
-                            resolve(true)
-                          })
-                          .catch(reject)
-                      })
-                    }
-                  })
-                }}
-              >
-                {common('button.remove')}
-              </Button>
-            </CheckPermission>
-          </Space>
-        )
-      }
     }
+    // {
+    //   title: t('table.action'),
+    //   key: 'operation',
+    //   fixed: 'right',
+    //   width: 200,
+    //   render: (_, row) => {
+    //     return (
+    //       <Space>
+    //         <Button
+    //           type="primary"
+    //           onClick={() => {
+    //             http({
+    //               url: 'movie/reply/detail',
+    //               method: 'get',
+    //               params: {
+    //                 id: row.id
+    //               }
+    //             }).then((res) => {
+    //               setModal({
+    //                 ...modal,
+    //                 action: 'comment',
+    //                 data: res.data,
+    //                 type: 'edit',
+    //                 show: true
+    //               })
+    //             })
+    //           }}
+    //         >
+    //           {common('button.edit')}
+    //         </Button>
+    //         <Button
+    //           type="primary"
+    //           onClick={() => {
+    //             const parentReplyId =
+    //               row.parentReplyId === null
+    //                 ? `${row.id}`
+    //                 : `${row.parentReplyId}-${row.id}`
+
+    //             setModal({
+    //               ...modal,
+    //               action: 'reply',
+    //               data: {
+    //                 id: row.id,
+    //                 parentReplyId,
+    //                 commentUserId: row.commentUserId
+    //               },
+    //               type: 'edit',
+    //               show: true
+    //             })
+    //           }}
+    //         >
+    //           {common('button.reply.reply')}
+    //         </Button>
+    //         <CheckPermission code="reply.remove">
+    //           <Button
+    //             type="primary"
+    //             danger
+    //             onClick={() => {
+    //               Modal.confirm({
+    //                 title: common('button.remove'),
+    //                 content: t('message.remove.content'),
+    //                 onCancel() {
+    //                   console.log('Cancel')
+    //                 },
+    //                 onOk() {
+    //                   return new Promise((resolve, reject) => {
+    //                     http({
+    //                       url: 'movie/reply/remove',
+    //                       method: 'delete',
+    //                       params: {
+    //                         id: row.id
+    //                       }
+    //                     })
+    //                       .then((res) => {
+    //                         message.success(res.message)
+    //                         getData()
+    //                         resolve(true)
+    //                       })
+    //                       .catch(reject)
+    //                   })
+    //                 }
+    //               })
+    //             }}
+    //           >
+    //             {common('button.remove')}
+    //           </Button>
+    //         </CheckPermission>
+    //       </Space>
+    //     )
+    //   }
+    // }
   ]
 
   return (
@@ -164,7 +167,7 @@ export default function Page({ params: { lng } }: PageProps) {
       }}
     >
       <Row justify="end">
-        <Button
+        {/* <Button
           onClick={() => {
             setModal({
               ...modal,
@@ -176,7 +179,7 @@ export default function Page({ params: { lng } }: PageProps) {
           }}
         >
           {common('button.add')}
-        </Button>
+        </Button> */}
       </Row>
       {/* <Query>
         <QueryItem label={t('table.user')} column={1}>
