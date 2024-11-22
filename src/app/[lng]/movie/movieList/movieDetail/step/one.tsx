@@ -226,10 +226,10 @@ export function One(props: Props) {
         >
           <Upload
             value={data.cover || ''}
-            crop={true}
-            cropperOptions={{
-              aspectRatio: 1006 / 1339
-            }}
+            // crop={true}
+            // cropperOptions={{
+            //   aspectRatio: 1006 / 1339
+            // }}
             onChange={(val) => {
               setData({
                 ...data,
@@ -330,7 +330,6 @@ export function One(props: Props) {
                       })
                     }
                   }).then((res: any) => {
-                    message.success('保存成功')
                     movieStore.setMovie({
                       ...res.data
                     })

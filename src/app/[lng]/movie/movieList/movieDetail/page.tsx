@@ -25,6 +25,7 @@ export default function MovieDetail({ params: { lng } }: PageProps) {
       }).then((res) => {
         movieStore.setMovie({
           ...res.data,
+          tags: res.data.tags?.map((item: SpecItem) => item.id),
           spec: res.data.spec?.map((item: SpecItem) => item.id)
         })
       })
