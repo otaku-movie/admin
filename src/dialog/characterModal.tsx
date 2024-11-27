@@ -116,7 +116,7 @@ export function CharacterModal(props: modalProps) {
         >
           <Upload
             value={query.cover || ''}
-            crop={true}
+            // crop={true}
             cropperOptions={{
               aspectRatio: 160 / 190
             }}

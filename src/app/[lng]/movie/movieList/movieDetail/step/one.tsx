@@ -117,7 +117,7 @@ export function One(props: Props) {
 
         form.setFieldsValue({
           ...movieStore.movie,
-          tags: movieStore.movie.tags?.map((item) => item.id),
+          tags: movieStore.movie.tags,
           startDate: toDayjs('start', movieStore.movie.startDate as string),
           endDate: toDayjs('end', movieStore.movie.endDate as string)
         })
@@ -135,8 +135,7 @@ export function One(props: Props) {
 
       console.log(movieStore.movie)
       setData({
-        ...movieStore.movie,
-        tags: movieStore.movie.tags?.map((item) => item.id) as any
+        ...movieStore.movie
       })
       updateDates()
     }

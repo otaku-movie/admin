@@ -6,6 +6,7 @@ import {
   message,
   Form,
   Table,
+  Image,
   Tag,
   TableColumnsType
 } from 'antd'
@@ -19,6 +20,7 @@ import { useRouter } from 'next/navigation'
 import { processPath } from '@/config/router'
 import { character } from '@/type/api'
 import { useMovieStore } from '@/store/useMovieStore'
+import { notFoundImage } from '@/config'
 
 interface modal<T> {
   columns: TableColumnsType<T>
@@ -119,7 +121,21 @@ export function Two(props: Props) {
     columns: [
       {
         title: t('character.table.cover'),
-        dataIndex: 'cover'
+        dataIndex: 'cover',
+        render(cover) {
+          return (
+            // eslint-disable-next-line jsx-a11y/alt-text
+            <Image
+              width={80}
+              src={cover}
+              fallback={notFoundImage}
+              placeholder={true}
+              style={{
+                borderRadius: ' 4px'
+              }}
+            ></Image>
+          )
+        }
       },
       {
         title: t('character.table.name'),

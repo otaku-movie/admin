@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import { Movie } from '@/type/api'
 
 export type SaveMovieQuery = Partial<
-Omit<Movie, 'spec'> & {
+Omit<Movie, 'spec' | 'tags'> & {
   spec: number[]
   tags: number[]
   startDate: null | string

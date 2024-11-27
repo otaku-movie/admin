@@ -47,23 +47,28 @@ export async function middleware(req: NextRequest) {
     if (!roleId || !token) {
       return NextResponse.redirect(new URL(`/${lng}/login`, req.url))
     }
-    const res = await axios.get(`${API_URL}/admin/permission/role/permission`, {
-      headers: {
-        'Accept-Language': lng,
-        token
-      },
-      params: { id: +roleId }
-    })
-    // 从路径中提取相对路径并检查权限
-    const hasPermission = res.data.data.some(
-      (item: any) => item.path === relativePath
-    )
-
-    if (hasPermission) {
-      return NextResponse.next()
-    } else {
-      console.log(`/${lng}/error/403`)
-      return NextResponse.redirect(new URL(`/${lng}/error/403`, req.url))
+    try {
+      const res = await axios.get(`${API_URL}/admin/permission/role/permission`, {
+        headers: {
+          'Accept-Language': lng,
+          token
+        },
+        params: { id: +roleId }
+      })
+      // 从路径中提取相对路径并检查权限
+      const hasPermission = res.data.data.some(
+        (item: any) => item.path === relativePath
+      )
+  
+      if (hasPermission) {
+        return NextResponse.next()
+      } else {
+        console.log(`/${lng}/error/403`)
+        return NextResponse.redirect(new URL(`/${lng}/error/403`, req.url))
+      }
+    } catch (err) {
+      
     }
+   
   }
 }
