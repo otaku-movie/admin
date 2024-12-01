@@ -139,6 +139,8 @@ export interface SeatItem {
   show: boolean
   disabled: boolean
   wheelChair: boolean
+  rowName?: string
+  seatName?: string
   x: number
   y: number
   z: number

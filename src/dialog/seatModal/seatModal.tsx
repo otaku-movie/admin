@@ -13,7 +13,9 @@ import {
   Space,
   Tag,
   message,
-  Dropdown
+  Dropdown,
+  Tooltip,
+  Spin
 } from 'antd'
 import http from '@/api'
 import { languageType } from '@/config'
@@ -41,6 +43,7 @@ interface ModalProps {
 interface seat {
   type: 'seat' | 'aisle'
   rowAxis?: number
+  rowName?: number
   children: SeatItem[]
 }
 
@@ -65,6 +68,7 @@ export default function SeatModal(props: ModalProps) {
   const [hoverSelected, setHoverSelected] = useState<Set<string>>(new Set())
   const [showDropDown, setShowDropDown] = useState(false)
   const [maxSelectSeatCount, setMaxSelectSeatCount] = useState(0)
+  const [loading, setLoading] = useState(false)
   const dragBoxRef = useRef({
     startX: 0,
     startY: 0,
@@ -99,8 +103,8 @@ export default function SeatModal(props: ModalProps) {
     navigator.language as languageType,
     'common'
   )
-  const size = 50
-  const gap = 10
+  const size = 36
+  const gap = 8
 
   const buildAisle = (arr = data, aisleData = modal.data) => {
     let updatedData = arr
@@ -310,6 +314,7 @@ export default function SeatModal(props: ModalProps) {
 
   const getData = () => {
     const newSelectSeat: SeatItem[] = []
+    setLoading(true)
     http({
       url:
         props.permission === 'configSeat'
@@ -320,63 +325,57 @@ export default function SeatModal(props: ModalProps) {
         theaterHallId: props.data.id,
         movieShowTimeId: props.data.movieShowTimeId
       }
-    }).then((res) => {
-      const result = res.data.seat.map((item: seat) => {
-        return {
-          ...item,
-          type: 'seat',
-          children: item.children.map((children: any) => {
-            if (children.selected) {
-              newSelectSeat.push(children)
-            }
-            if (children.area) {
-              // eslint-disable-next-line
-              area[children.area.name] = new Set([
-                ...(area[children.area.name] || []),
-                `${children.x}-${children.y}`
-              ])
-            }
-
-            return {
-              ...children,
-              type: 'seat'
-            }
-          })
-        }
-      })
-      setSelectedSeat(newSelectSeat)
-      setMaxSelectSeatCount(res.data.maxSelectSeatCount)
-      setModal({
-        ...modal,
-        data: res.data.aisle
-      })
-      setAreaModal({
-        ...areaModal,
-        data: res.data.area
-      })
-
-      const aisle = buildAisle(result, res.data.aisle)
-      setData(aisle)
     })
+      .then((res) => {
+        const result = res.data.seat.map((item: seat) => {
+          return {
+            ...item,
+            type: 'seat',
+            children: item.children.map((children: any) => {
+              if (children.selected) {
+                newSelectSeat.push(children)
+              }
+              if (children.area) {
+                // eslint-disable-next-line
+                area[children.area.name] = new Set([
+                  ...(area[children.area.name] || []),
+                  `${children.x}-${children.y}`
+                ])
+              }
+
+              return {
+                ...children,
+                type: 'seat'
+              }
+            })
+          }
+        })
+        setSelectedSeat(newSelectSeat)
+        setMaxSelectSeatCount(res.data.maxSelectSeatCount)
+        setModal({
+          ...modal,
+          data: res.data.aisle
+        })
+        setAreaModal({
+          ...areaModal,
+          data: res.data.area
+        })
+
+        const aisle = buildAisle(result, res.data.aisle)
+        setData(aisle)
+      })
+      .finally(() => {
+        setLoading(false)
+      })
   }
 
   useEffect(() => {
     if (props.show) {
       getData()
-      // const result = generate2DArray()
-      // const aisle = buildAisle(result)
-      // setData(buildPosition(aisle))
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.show])
-
-  const style = {
-    display: 'grid',
-    gridTemplateColumns: `repeat(${data?.[0]?.children?.length || 0}, ${size}px)`,
-    gridTemplateRows: size + 'px',
-    gap: gap + 'px'
-  }
 
   const seatCount = useMemo(() => {
     return data.reduce((total, current) => {
@@ -719,399 +718,423 @@ export default function SeatModal(props: ModalProps) {
               }}
             ></section>
           </Dropdown>
-          <section className="seat-container">
-            <ul className="selected-seat">
-              {selectedSeat.map((item, index: number) => {
-                return (
-                  <Tag
-                    key={`${item.x}-${item.y}`}
-                    closable
-                    onClose={() => {
-                      if (item.seatPositionGroup) {
-                        const position = new Set(
-                          item.seatPositionGroup.split('-')
-                        )
-
-                        data[item.x].children.forEach((item) => {
-                          const selected = position.has(`${item.x},${item.y}`)
-
-                          if (selected) {
-                            item.selected = false
-                          }
-                        })
-                        const filter = selectedSeat.filter((item) => {
-                          return !position.has(`${item.x},${item.y}`)
-                        })
-                        setSelectedSeat(filter)
-                        setData([...data])
-                      } else {
-                        selectedSeat.splice(index, 1)
-                        const findXAxis = data.findIndex(
-                          (row) => row.rowAxis === item.x
-                        )
-                        const findYAxis = data[findXAxis].children.findIndex(
-                          (children: any) => children.y === item.y
-                        )
-
-                        if (findXAxis !== -1 && findYAxis !== -1) {
-                          data[findXAxis].children[findYAxis].selected = false
-                          setData([...data])
-                        }
-                        setSelectedSeat([...selectedSeat])
-                      }
-                    }}
-                  >
-                    {item.x + 1}排{item.y + 1}座
-                  </Tag>
-                )
-              })}
-            </ul>
-            <section style={{
-              display: 'flex',
-              justifyContent: 'center'
-            }}>
-              <ul className="seat-state">
-                <li>
-                  {/* <span></span> */}
-                  <Image src={wheelChair} width={30} alt="wheel chair"></Image>
-                  <span>{common('enum.seatType.wheelChair')}</span>
-                </li>
-                <li className="seat-disabled">
-                  <span></span>
-                  <span>{common('enum.seatType.disabled')}</span>
-                </li>
-                <li className="seat-available">
-                  <span></span>
-                  <span>{common('enum.selectSeatState.available')}</span>
-                </li>
-                <li className="seat-locked">
-                  <span></span>
-                  <span>{common('enum.selectSeatState.locked')}</span>
-                </li>
-                <li className="seat-sold">
-                  <span></span>
-                  <span>{common('enum.selectSeatState.sold')}</span>
-                </li>
-              </ul>
-              <ul className="seat-area">
-                <li className="seat-available"></li>
-                <li className="seat-locked"></li>
-                <li className="seat-sold"></li>
-                {areaModal.data.map((item, index) => {
-                  return (
-                    <li key={index}>
-                      <span
-                        style={{
-                          display: 'inline-block',
-                          width: '30px',
-                          height: '30px',
-                          borderRadius: '4px',
-                          border: `2px solid ${item.color}`,
-                          boxSizing: 'border-box',
-                          verticalAlign: 'middle',
-                          marginRight: '4px'
-                        }}
-                      ></span>
-                      <span style={{ verticalAlign: 'middle' }}>
-                        {item.name}：{item.price}
-                        {common('unit.jpy')}
-                      </span>
-                    </li>
-                  )
-                })}
-              </ul>
-            </section>
-
-            <section
-              className="section"
+          {loading ? (
+            <div
               style={{
-                gridTemplateColumns: `${size}px 1fr`,
-                gridTemplateRows: size + 'px'
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100%'
               }}
             >
-              <ul
-                className="seat-number-left"
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  gap: gap + 'px',
-                  marginTop: size + gap * 2 + 'px'
-                }}
-              >
-                {data?.map((item, index) => {
+              <Spin></Spin>
+            </div>
+          ) : (
+            <section
+              className="seat-container"
+              style={
+                {
+                  '--seat-size': size + 'px',
+                  '--seat-gap': gap + 'px'
+                } as React.CSSProperties
+              }
+            >
+              <ul className="selected-seat">
+                {selectedSeat.map((item, index: number) => {
                   return (
-                    <li
-                      key={index}
-                      className="seat-row-column"
-                      style={{
-                        width: size + 'px',
-                        height: size + 'px'
+                    <Tag
+                      key={`${item.x}-${item.y}`}
+                      closable
+                      onClose={() => {
+                        if (item.seatPositionGroup) {
+                          const position = new Set(
+                            item.seatPositionGroup.split('-')
+                          )
+
+                          data[item.x].children.forEach((item) => {
+                            const selected = position.has(`${item.x},${item.y}`)
+
+                            if (selected) {
+                              item.selected = false
+                            }
+                          })
+                          const filter = selectedSeat.filter((item) => {
+                            return !position.has(`${item.x},${item.y}`)
+                          })
+                          setSelectedSeat(filter)
+                          setData([...data])
+                        } else {
+                          selectedSeat.splice(index, 1)
+                          const findXAxis = data.findIndex(
+                            (row) => row.rowAxis === item.x
+                          )
+                          const findYAxis = data[findXAxis].children.findIndex(
+                            (children: any) => children.y === item.y
+                          )
+
+                          if (findXAxis !== -1 && findYAxis !== -1) {
+                            data[findXAxis].children[findYAxis].selected = false
+                            setData([...data])
+                          }
+                          setSelectedSeat([...selectedSeat])
+                        }
                       }}
                     >
-                      {item.rowAxis! + 1 ? item.rowAxis : ''}
-                    </li>
+                      {item.x + 1}排{item.y + 1}座
+                    </Tag>
                   )
                 })}
               </ul>
-              <section className="middle">
-                <section
-                  className="seat-number-top"
-                  style={{
-                    ...style,
-                    marginBottom: gap + 'px'
-                  }}
-                >
-                  {data?.[0]?.children?.map((children: any, index: number) => {
+              <section
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  flexDirection: 'column'
+                }}
+              >
+                <ul className="seat-state">
+                  <li>
+                    {/* <span></span> */}
+                    <Image
+                      src={wheelChair}
+                      width={15}
+                      alt="wheel chair"
+                    ></Image>
+                    <span>{common('enum.seatType.wheelChair')}</span>
+                  </li>
+                  <li className="seat-disabled">
+                    <span></span>
+                    <span>{common('enum.seatType.disabled')}</span>
+                  </li>
+                  <li className="seat-available">
+                    <span></span>
+                    <span>{common('enum.selectSeatState.available')}</span>
+                  </li>
+                  <li className="seat-locked">
+                    <span></span>
+                    <span>{common('enum.selectSeatState.locked')}</span>
+                  </li>
+                  <li className="seat-sold">
+                    <span></span>
+                    <span>{common('enum.selectSeatState.sold')}</span>
+                  </li>
+                </ul>
+                <ul className="seat-area">
+                  {areaModal.data.map((item, index) => {
                     return (
-                      <div key={index} className="seat-row-column">
-                        {children.y}
-                      </div>
+                      <li key={index}>
+                        <span
+                          style={{
+                            display: 'inline-block',
+                            width: '20px',
+                            height: '20px',
+                            borderRadius: '4px',
+                            border: `2px solid ${item.color}`,
+                            boxSizing: 'border-box',
+                            verticalAlign: 'middle',
+                            marginRight: '4px'
+                          }}
+                        ></span>
+                        <span style={{ verticalAlign: 'middle' }}>
+                          {item.name}（{item.price}
+                          {common('unit.jpy')}）
+                        </span>
+                      </li>
                     )
                   })}
-                </section>
-                <ul
-                  className="seat"
-                  // style={style}
-                  ref={seatContainerRef}
-                  onClick={(e) => {
-                    const dataset = findDataset(
-                      e.target as HTMLElement,
-                      'rowIndex'
-                    )!.dataset
+                </ul>
+              </section>
 
-                    const singleSelect = (x: number, y: number) => {
-                      if (selectedSeat.length < maxSelectSeatCount) {
-                        data[x].children[y].selected =
-                          !data[x].children[y].selected
+              <section
+                className="section"
+                style={{
+                  gridTemplateColumns: `${size}px 1fr`,
+                  gridTemplateRows: size + 'px'
+                }}
+              >
+                <ul className="seat-number-left">
+                  <li
+                    className="seat-row-column"
+                    style={{
+                      visibility: 'hidden'
+                    }}
+                  ></li>
+                  {data?.map((item, index) => {
+                    return (
+                      <li key={index} className="seat-row-column">
+                        {item.rowName}
+                      </li>
+                    )
+                  })}
+                </ul>
+                <section className="middle">
+                  <section className="seat-number-top">
+                    {data?.[0]?.children?.map(
+                      (children: any, index: number) => {
+                        return (
+                          <div key={index} className="seat-row-column">
+                            {children.y}
+                          </div>
+                        )
+                      }
+                    )}
+                  </section>
+                  <ul
+                    className="seat"
+                    // style={style}
+                    ref={seatContainerRef}
+                    onClick={(e) => {
+                      const dataset = findDataset(
+                        e.target as HTMLElement,
+                        'rowIndex'
+                      )!.dataset
 
-                        if (data[x].children[y].selected) {
-                          selectedSeat.push(data[x].children[y])
-                          setSelectedSeat([...selectedSeat])
+                      const singleSelect = (x: number, y: number) => {
+                        if (selectedSeat.length < maxSelectSeatCount) {
+                          data[x].children[y].selected =
+                            !data[x].children[y].selected
+
+                          if (data[x].children[y].selected) {
+                            selectedSeat.push(data[x].children[y])
+                            setSelectedSeat([...selectedSeat])
+                          } else {
+                            const findIndex = selectedSeat.findIndex((item) => {
+                              return (
+                                item.x === data[x].children[y].x &&
+                                item.y === data[x].children[y].y
+                              )
+                            })
+
+                            if (findIndex !== -1) {
+                              selectedSeat.splice(findIndex, 1)
+                              setSelectedSeat([...selectedSeat])
+                            }
+                          }
+
+                          setData([...data])
                         } else {
+                          // 如果是选过的，在点击就可以取消，否则就提示不能超过最大值
                           const findIndex = selectedSeat.findIndex((item) => {
                             return (
                               item.x === data[x].children[y].x &&
                               item.y === data[x].children[y].y
                             )
                           })
-
                           if (findIndex !== -1) {
                             selectedSeat.splice(findIndex, 1)
+                            data[x].children[y].selected = false
                             setSelectedSeat([...selectedSeat])
+                          } else {
+                            message.warning(
+                              t('seatModal.message.max', {
+                                max: maxSelectSeatCount
+                              })
+                            )
                           }
                         }
+                      }
 
-                        setData([...data])
-                      } else {
-                        // 如果是选过的，在点击就可以取消，否则就提示不能超过最大值
-                        const findIndex = selectedSeat.findIndex((item) => {
-                          return (
-                            item.x === data[x].children[y].x &&
-                            item.y === data[x].children[y].y
-                          )
-                        })
-                        if (findIndex !== -1) {
-                          selectedSeat.splice(findIndex, 1)
-                          data[x].children[y].selected = false
-                          setSelectedSeat([...selectedSeat])
-                        } else {
+                      const doubleSelect = (x: number, y: number) => {
+                        const split =
+                          data[x].children[y].seatPositionGroup?.split('-')
+                        const position = new Set(split)
+
+                        console.log(split, selectedSeat)
+
+                        if (data[x].children[y].selected) {
+                          // 如果选中，就取消
+                          data[x].children.forEach((item) => {
+                            const selected = position.has(`${item.x},${item.y}`)
+
+                            if (selected) {
+                              item.selected = false
+                            }
+                          })
+                          const filter = selectedSeat.filter((item) => {
+                            return !position.has(`${item.x},${item.y}`)
+                          })
+                          setSelectedSeat(filter)
+                          setData([...data])
+                        } else if (
+                          split &&
+                          split.length + selectedSeat.length >
+                            maxSelectSeatCount
+                        ) {
                           message.warning(
                             t('seatModal.message.max', {
                               max: maxSelectSeatCount
                             })
                           )
-                        }
-                      }
-                    }
-
-                    const doubleSelect = (x: number, y: number) => {
-                      const split =
-                        data[x].children[y].seatPositionGroup?.split('-')
-                      const position = new Set(split)
-
-                      console.log(split, selectedSeat)
-
-                      if (data[x].children[y].selected) {
-                        // 如果选中，就取消
-                        data[x].children.forEach((item) => {
-                          const selected = position.has(`${item.x},${item.y}`)
-
-                          if (selected) {
-                            item.selected = false
-                          }
-                        })
-                        const filter = selectedSeat.filter((item) => {
-                          return !position.has(`${item.x},${item.y}`)
-                        })
-                        setSelectedSeat(filter)
-                        setData([...data])
-                      } else if (
-                        split &&
-                        split.length + selectedSeat.length > maxSelectSeatCount
-                      ) {
-                        message.warning(t('seatModal.message.max', { max: 5 }))
-                      } else {
-                        data[x].children.forEach((item) => {
-                          const selected = position.has(`${item.x},${item.y}`)
-                          if (selected) {
-                            item.selected = selected
-                          }
-                        })
-                        const filter = data[x].children.filter((item) => {
-                          return position.has(`${item.x},${item.y}`)
-                        })
-                        const newSelect = [...selectedSeat, ...filter]
-                        setSelectedSeat(newSelect)
-                        setData([...data])
-                        console.log(newSelect)
-                      }
-                    }
-
-                    if (dataset.rowIndex && dataset.columnIndex) {
-                      const x = +dataset.rowIndex
-                      const y = +dataset.columnIndex
-
-                      if (
-                        data[x].children[y].selectSeatState ===
-                          SelectSeatState.sold ||
-                        data[x].children[y].selectSeatState ===
-                          SelectSeatState.locked
-                      ) {
-                        return
-                      }
-
-                      if (!data[x].children[y].disabled) {
-                        if (data[x].children[y].seatPositionGroup) {
-                          doubleSelect(x, y)
                         } else {
-                          singleSelect(x, y)
+                          data[x].children.forEach((item) => {
+                            const selected = position.has(`${item.x},${item.y}`)
+                            if (selected) {
+                              item.selected = selected
+                            }
+                          })
+                          const filter = data[x].children.filter((item) => {
+                            return position.has(`${item.x},${item.y}`)
+                          })
+                          const newSelect = [...selectedSeat, ...filter]
+                          setSelectedSeat(newSelect)
+                          setData([...data])
+                          console.log(newSelect)
                         }
                       }
-                    }
-                  }}
-                >
-                  {data?.map((item, index) => {
-                    let childrenIndex = 0
-                    const gridTemplateColumns = []
 
-                    while (childrenIndex < data?.[0]?.children.length) {
-                      const current = data?.[0]?.children[childrenIndex]
+                      if (dataset.rowIndex && dataset.columnIndex) {
+                        const x = +dataset.rowIndex
+                        const y = +dataset.columnIndex
 
-                      if (current.seatPositionGroup) {
-                        const split = current.seatPositionGroup.split('-')
-                        const w = size * 3 + gap * 3
-                        childrenIndex++
+                        if (
+                          data[x].children[y].selectSeatState ===
+                            SelectSeatState.sold ||
+                          data[x].children[y].selectSeatState ===
+                            SelectSeatState.locked
+                        ) {
+                          return
+                        }
 
-                        gridTemplateColumns.push(w / split.length + 'px')
-                      } else {
-                        childrenIndex++
-                        gridTemplateColumns.push(size + gap + 'px')
-                      }
-                    }
-
-                    return (
-                      <li
-                        key={index}
-                        className="seat-row"
-                        style={{
-                          display: 'grid',
-                          gridTemplateColumns: gridTemplateColumns.join(' '),
-                          gridTemplateRows: size + 'px'
-                        }}
-                      >
-                        {item.children?.map(
-                          (children: any, childrenIndex: number) => {
-                            if (children.type === 'seat') {
-                              const position =
-                                children.seatPositionGroup?.split('-')
-                              const key = `${children.x},${children.y}`
-
-                              return (
-                                <div
-                                  key={childrenIndex}
-                                  className={classNames(
-                                    'seat-row-column',
-                                    children.selected
-                                      ? 'seat-selceted'
-                                      : 'seat-not-selected',
-                                    {
-                                      'seat-locked':
-                                        children.selectSeatState ===
-                                        SelectSeatState.locked,
-                                      'seat-disabled': children.disabled,
-                                      'seat-sold':
-                                        children.selectSeatState ===
-                                        SelectSeatState.sold,
-                                      'seat-area-hover':
-                                        children.area?.hover ||
-                                        children.area?.selected
-                                    }
-                                  )}
-                                  style={{
-                                    boxSizing: 'border-box',
-                                    marginLeft:
-                                      position && position[0] === key
-                                        ? '0px'
-                                        : '-1.5px',
-                                    marginRight:
-                                      position &&
-                                      position.includes(key) &&
-                                      position[position.length - 1] !== key
-                                        ? '0px'
-                                        : gap + 'px',
-                                    visibility: children.show
-                                      ? 'visible'
-                                      : 'hidden',
-                                    ...(children.area?.name
-                                      ? {
-                                          borderColor: children.area.color
-                                        }
-                                      : {})
-                                  }}
-                                  data-row-index={index}
-                                  data-column-index={childrenIndex}
-                                >
-                                  <div>
-                                    {children.wheelChair ? (
-                                      <Image
-                                        src={wheelChair}
-                                        width={40}
-                                        alt="wheel chair"
-                                      ></Image>
-                                    ) : (
-                                      key
-                                    )}
-                                  </div>
-                                </div>
-                              )
-                            } else {
-                              return <div key={childrenIndex}></div>
-                            }
+                        if (!data[x].children[y].disabled) {
+                          if (data[x].children[y].seatPositionGroup) {
+                            doubleSelect(x, y)
+                          } else {
+                            singleSelect(x, y)
                           }
-                        )}
-                      </li>
-                    )
-                  })}
-                </ul>
-                <section
-                  className="seat-number-bottom"
-                  style={{
-                    ...style,
-                    marginBottom: gap + 'px'
-                  }}
-                >
-                  {data[0]?.children?.map((children: any, index: number) => {
-                    return (
-                      <div key={index} className="seat-row-column">
-                        {children.y}
-                      </div>
-                    )
-                  })}
+                        }
+                      }
+                    }}
+                  >
+                    {data?.map((item, index) => {
+                      let childrenIndex = 0
+                      const gridTemplateColumns: string[] = []
+
+                      while (childrenIndex < data?.[index]?.children.length) {
+                        const current = data?.[index]?.children[childrenIndex]
+
+                        if (current.seatPositionGroup) {
+                          const split = current.seatPositionGroup.split('-')
+                          // 1.5为边框大小
+                          const w =
+                            size * split.length +
+                            gap * (split.length - 1) +
+                            -1.5
+                          childrenIndex++
+
+                          gridTemplateColumns.push(w / split.length + 'px')
+                        } else {
+                          childrenIndex++
+                          gridTemplateColumns.push(size + 'px')
+                        }
+                      }
+
+                      return (
+                        <li
+                          key={index}
+                          className="seat-row"
+                          style={{
+                            display: 'flex'
+
+                            // gridTemplateColumns: gridTemplateColumns.join(' '),
+                            // gridTemplateRows: size + 'px'
+                          }}
+                        >
+                          {item.children?.map(
+                            (children: any, seatIndex: number) => {
+                              if (children.type === 'seat') {
+                                const position =
+                                  children.seatPositionGroup?.split('-')
+                                const key = `${children.x},${children.y}`
+
+                                return (
+                                  <Tooltip
+                                    key={children.id}
+                                    placement="topLeft"
+                                    title={children.seatName}
+                                  >
+                                    <div
+                                      className={classNames(
+                                        'seat-row-column',
+                                        children.selected
+                                          ? 'seat-selceted'
+                                          : 'seat-not-selected',
+                                        {
+                                          'seat-locked':
+                                            children.selectSeatState ===
+                                            SelectSeatState.locked,
+                                          'seat-disabled': children.disabled,
+                                          'seat-sold':
+                                            children.selectSeatState ===
+                                            SelectSeatState.sold,
+                                          'seat-area-hover':
+                                            children.area?.hover ||
+                                            children.area?.selected
+                                        }
+                                      )}
+                                      style={{
+                                        width: gridTemplateColumns[seatIndex],
+                                        height: size + 'px',
+                                        marginLeft:
+                                          position && position[0] === key
+                                            ? '0px'
+                                            : '-1.5px',
+                                        marginRight:
+                                          position &&
+                                          position.includes(key) &&
+                                          position[position.length - 1] !== key
+                                            ? '0px'
+                                            : gap + 'px',
+                                        visibility: children.show
+                                          ? 'visible'
+                                          : 'hidden',
+                                        ...(children.area?.name
+                                          ? {
+                                              borderColor: children.area.color
+                                            }
+                                          : {})
+                                      }}
+                                      data-row-index={index}
+                                      data-column-index={childrenIndex}
+                                    >
+                                      <div>
+                                        {children.wheelChair ? (
+                                          <Image
+                                            src={wheelChair}
+                                            width={size - 10}
+                                            alt="wheel chair"
+                                          ></Image>
+                                        ) : (
+                                          children.seatName
+                                        )}
+                                      </div>
+                                    </div>
+                                  </Tooltip>
+                                )
+                              } else {
+                                // 空的座位
+                                return (
+                                  <div
+                                    key={childrenIndex}
+                                    style={{
+                                      width: size + 'px',
+                                      height: size + 'px',
+                                      marginRight: gap + 'px',
+                                      border: '1.5px solid transparent',
+                                      boxSizing: 'border-box'
+                                    }}
+                                  ></div>
+                                )
+                              }
+                            }
+                          )}
+                        </li>
+                      )
+                    })}
+                  </ul>
                 </section>
               </section>
             </section>
-          </section>
+          )}
         </Drawer>
       </ConfigProvider>
       <Modal

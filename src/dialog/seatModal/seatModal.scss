@@ -1,38 +1,28 @@
-$gap: 10px;
+$gap: var(--seat-gap);
 
 .section {
   display: flex;
-  padding: 20px;
+  margin-top: 20px;
   gap: $gap;
   user-select: none;
 
   .seat-row-column {
-    display: grid;
-    align-items: center;
-    justify-content: center;
     border-radius: 4px;
-    box-sizing: border-box;
-    font-size: 14px;
+    font-size: 12px;
     cursor: pointer;
     text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     user-select: none;
+    box-sizing: border-box;
   }
-}
-
-.seat-area {
-  gap: 30px;
-  margin: 10px;
 }
 
 .seat-number-top,
 .seat-number-bottom {
   // grid-area: 'seat-number-top';
   display: flex;
-  box-sizing: border-box;
-}
-
-.seat-number-top {
-  margin-top: $gap;
 }
 
 .seat-number-bottom {
@@ -68,6 +58,13 @@ $gap: 10px;
   position: fixed;
 }
 
+.seat-area {
+  gap: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .seat-area-hover {
   border: 1.5px solid lightgreen !important;
 }
@@ -75,7 +72,7 @@ $gap: 10px;
 .seat-row {
   .seat-not-selected {
     background-color: white;
-    border: 1.5px solid #adadad;
+    border: 1.5px solid #c9c9c9;
   }
   .seat-disabled {
     background: rgb(243 243 243);
@@ -102,7 +99,7 @@ $gap: 10px;
 
 .seat-state {
   display: flex;
-  gap: 30px;
+  gap: 20px;
   margin: 10px;
   justify-content: center;
   img {
@@ -110,11 +107,12 @@ $gap: 10px;
   }
   span:nth-of-type(1) {
     display: inline-block;
-    min-width: 30px;
-    height: 30px;
+    min-width: 20px;
+    height: 20px;
     vertical-align: middle;
     border-radius: 4px;
     margin-right: 4px;
+    box-sizing: border-box;
   }
   .seat-available span:nth-of-type(1) {
     border: 1.5px solid #adadad;
@@ -129,5 +127,28 @@ $gap: 10px;
     background: rgb(243 243 243);
     border: 1.5px solid #d9d9d9;
     cursor: not-allowed !important;
+  }
+}
+
+.seat-number-left,
+.seat-number-top {
+  .seat-row-column {
+    width: var(--seat-size);
+    height: var(--seat-size);
+    // border: 1.5px solid red;
+    box-sizing: border-box;
+  }
+}
+.seat-number-top {
+  .seat-row-column {
+    margin-bottom: var(--seat-gap);
+    margin-right: calc(var(--seat-gap) - 1.5px);
+  }
+}
+
+.seat-number-left {
+  .seat-row-column {
+    margin-bottom: var(--seat-gap);
+    border: 2px solid transparent;
   }
 }

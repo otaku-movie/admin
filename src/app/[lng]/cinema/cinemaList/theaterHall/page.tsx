@@ -79,7 +79,6 @@ export default function Page({ params: { lng } }: PageProps) {
           <Space>
             <CheckPermission code="theaterHall.saveSeatConfig">
               <Button
-                type="primary"
                 onClick={() => {
                   setModal({
                     data: row,
