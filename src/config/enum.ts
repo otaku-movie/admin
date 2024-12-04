@@ -1,8 +1,10 @@
 export enum SelectSeatState {
   available = 1,
-  locked = 2,
-  sold = 3
+  selected = 2,
+  locked = 3,
+  sold = 4
 }
+
 export enum OrderState {
   order_created = 1,
   order_succeed = 2

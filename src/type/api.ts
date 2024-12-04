@@ -130,10 +130,12 @@ export interface Area {
   name?: string
   price?: number
   hover: boolean
+  selected?: boolean
   // selected: boolean
 }
 
 export interface SeatItem {
+  id: number
   type: 'seat' | 'aisle'
   seatPositionGroup: string | null
   show: boolean
@@ -144,7 +146,7 @@ export interface SeatItem {
   x: number
   y: number
   z: number
-  selectSeatState: 1 | 2 | 3
+  selectSeatState: 1 | 2 | 3 | 4
   // 代表 selectSeatState的 1 2， 1为false 2 为true
   selected: boolean
   left?: number

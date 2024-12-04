@@ -332,7 +332,10 @@ export default function SeatModal(props: ModalProps) {
             ...item,
             type: 'seat',
             children: item.children.map((children: any) => {
-              if (children.selected) {
+              if (
+                children.selected &&
+                children.selectSeatState === SelectSeatState.selected
+              ) {
                 newSelectSeat.push(children)
               }
               if (children.area) {
@@ -382,6 +385,30 @@ export default function SeatModal(props: ModalProps) {
       return total + current.children.filter((children) => children.show).length
     }, 0)
   }, [data])
+
+  const getSeatClass = (seat: SeatItem) => {
+    const ClassName = ['seat-row-column', 'seat-not-selected']
+
+    if (seat.disabled) {
+      ClassName.push('seat-disabled')
+    }
+    if (seat.selected && seat.selectSeatState === SelectSeatState.selected) {
+      ClassName.push('seat-selected')
+    } else {
+      if (seat.selectSeatState === SelectSeatState.locked) {
+        ClassName.push('seat-locked')
+      }
+      if (seat.selectSeatState === SelectSeatState.sold) {
+        ClassName.push('seat-sold')
+      }
+    }
+
+    if (seat.area?.hover || seat.area?.selected) {
+      ClassName.push('seat-area-hover')
+    }
+
+    return ClassName.join(' ')
+  }
 
   return (
     <>
@@ -447,7 +474,8 @@ export default function SeatModal(props: ModalProps) {
                         seatPosition: selectedSeat.map((item) => {
                           return {
                             x: item.x,
-                            y: item.y
+                            y: item.y,
+                            seatId: item.id
                           }
                         })
                       }
@@ -780,7 +808,7 @@ export default function SeatModal(props: ModalProps) {
                         }
                       }}
                     >
-                      {item.x + 1}排{item.y + 1}座
+                      {item.seatName}
                     </Tag>
                   )
                 })}
@@ -939,8 +967,6 @@ export default function SeatModal(props: ModalProps) {
                           data[x].children[y].seatPositionGroup?.split('-')
                         const position = new Set(split)
 
-                        console.log(split, selectedSeat)
-
                         if (data[x].children[y].selected) {
                           // 如果选中，就取消
                           data[x].children.forEach((item) => {
@@ -985,18 +1011,19 @@ export default function SeatModal(props: ModalProps) {
                       if (dataset.rowIndex && dataset.columnIndex) {
                         const x = +dataset.rowIndex
                         const y = +dataset.columnIndex
+                        const seat = data[x].children[y]
 
                         if (
-                          data[x].children[y].selectSeatState ===
-                            SelectSeatState.sold ||
-                          data[x].children[y].selectSeatState ===
-                            SelectSeatState.locked
+                          seat.selectSeatState === SelectSeatState.sold ||
+                          seat.selectSeatState === SelectSeatState.locked
                         ) {
-                          return
+                          return t('seatModal.seatUsed', {
+                            max: maxSelectSeatCount
+                          })
                         }
 
-                        if (!data[x].children[y].disabled) {
-                          if (data[x].children[y].seatPositionGroup) {
+                        if (!seat.disabled) {
+                          if (seat.seatPositionGroup) {
                             doubleSelect(x, y)
                           } else {
                             singleSelect(x, y)
@@ -1030,7 +1057,7 @@ export default function SeatModal(props: ModalProps) {
 
                       return (
                         <li
-                          key={index}
+                          key={item.rowAxis}
                           className="seat-row"
                           style={{
                             display: 'flex'
@@ -1040,81 +1067,59 @@ export default function SeatModal(props: ModalProps) {
                           }}
                         >
                           {item.children?.map(
-                            (children: any, seatIndex: number) => {
+                            (children: any, childrenIndex: number) => {
                               if (children.type === 'seat') {
                                 const position =
                                   children.seatPositionGroup?.split('-')
                                 const key = `${children.x},${children.y}`
 
                                 return (
-                                  <Tooltip
+                                  <div
                                     key={children.id}
-                                    placement="topLeft"
-                                    title={children.seatName}
+                                    className={getSeatClass(children)}
+                                    style={{
+                                      width: gridTemplateColumns[childrenIndex],
+                                      height: size + 'px',
+                                      marginLeft:
+                                        position && position[0] === key
+                                          ? '0px'
+                                          : '-1.5px',
+                                      marginRight:
+                                        position &&
+                                        position.includes(key) &&
+                                        position[position.length - 1] !== key
+                                          ? '0px'
+                                          : gap + 'px',
+                                      visibility: children.show
+                                        ? 'visible'
+                                        : 'hidden',
+                                      ...(children.area?.name
+                                        ? {
+                                            borderColor: children.area.color
+                                          }
+                                        : {})
+                                    }}
+                                    data-row-index={index}
+                                    data-column-index={childrenIndex}
                                   >
-                                    <div
-                                      className={classNames(
-                                        'seat-row-column',
-                                        children.selected
-                                          ? 'seat-selceted'
-                                          : 'seat-not-selected',
-                                        {
-                                          'seat-locked':
-                                            children.selectSeatState ===
-                                            SelectSeatState.locked,
-                                          'seat-disabled': children.disabled,
-                                          'seat-sold':
-                                            children.selectSeatState ===
-                                            SelectSeatState.sold,
-                                          'seat-area-hover':
-                                            children.area?.hover ||
-                                            children.area?.selected
-                                        }
+                                    <div>
+                                      {children.wheelChair ? (
+                                        <Image
+                                          src={wheelChair}
+                                          width={size - 10}
+                                          alt="wheel chair"
+                                        ></Image>
+                                      ) : (
+                                        children.seatName
                                       )}
-                                      style={{
-                                        width: gridTemplateColumns[seatIndex],
-                                        height: size + 'px',
-                                        marginLeft:
-                                          position && position[0] === key
-                                            ? '0px'
-                                            : '-1.5px',
-                                        marginRight:
-                                          position &&
-                                          position.includes(key) &&
-                                          position[position.length - 1] !== key
-                                            ? '0px'
-                                            : gap + 'px',
-                                        visibility: children.show
-                                          ? 'visible'
-                                          : 'hidden',
-                                        ...(children.area?.name
-                                          ? {
-                                              borderColor: children.area.color
-                                            }
-                                          : {})
-                                      }}
-                                      data-row-index={index}
-                                      data-column-index={childrenIndex}
-                                    >
-                                      <div>
-                                        {children.wheelChair ? (
-                                          <Image
-                                            src={wheelChair}
-                                            width={size - 10}
-                                            alt="wheel chair"
-                                          ></Image>
-                                        ) : (
-                                          children.seatName
-                                        )}
-                                      </div>
                                     </div>
-                                  </Tooltip>
+                                  </div>
                                 )
                               } else {
                                 // 空的座位
                                 return (
                                   <div
-                                    key={childrenIndex}
+                                    key={`${index},${childrenIndex}`}
                                     style={{
                                       width: size + 'px',
                                       height: size + 'px',

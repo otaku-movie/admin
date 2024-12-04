@@ -83,6 +83,7 @@ $gap: var(--seat-gap);
     background: white;
     border: 1.5px solid #f402e4;
     color: black;
+    cursor: not-allowed !important;
   }
 
   .seat-selceted {
@@ -94,6 +95,7 @@ $gap: var(--seat-gap);
     background-color: white;
     border: 1.5px solid purple;
     color: black;
+    cursor: not-allowed !important;
   }
 }
 

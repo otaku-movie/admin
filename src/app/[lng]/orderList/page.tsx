@@ -45,8 +45,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
   const [data, setData] = useState([])
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
-  const [query, setQuery] = useState<Partial<Query>>({
-  })
+  const [query, setQuery] = useState<Partial<Query>>({})
   const { t } = useTranslation(lng, 'order')
   const { t: common } = useTranslation(lng, 'common')
   const [movieData, setMovieData] = useState([])
@@ -201,13 +200,14 @@ export default function MoviePage({ params: { lng } }: PageProps) {
                 item: {
                   seatX: number
                   seatY: number
+                  seatName: string
                   movieTicketTypeName: string
                 },
                 index: number
               ) => {
                 return (
                   <Tag key={index}>
-                    {item.seatX}排{item.seatY}座（{item.movieTicketTypeName}）
+                    {item.seatName}（{item.movieTicketTypeName}）
                   </Tag>
                 )
               }

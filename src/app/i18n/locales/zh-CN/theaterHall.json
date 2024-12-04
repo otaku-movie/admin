@@ -40,6 +40,7 @@
       "disabled": "禁用/启用 座位",
       "reset": "重置"
     },
+    "seatUsed": "当前座位已被锁定或者已售出",
     "message": {
       "required": "过道配置不能为空",
       "repeat": "过道重复",

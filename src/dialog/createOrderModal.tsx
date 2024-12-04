@@ -186,6 +186,7 @@ export function CreateOrderModal(props: ModalProps) {
                   return {
                     x: item.x,
                     y: item.y,
+                    seatId: item.seatId,
                     movieTicketTypeId: item.movieTicketTypeId
                   }
                 })
@@ -207,6 +208,9 @@ export function CreateOrderModal(props: ModalProps) {
         dataSource={data}
         bordered={true}
         pagination={false}
+        scroll={{
+          y: '60vh'
+        }}
         summary={() => (
           <Table.Summary fixed>
             <Table.Summary.Row>
