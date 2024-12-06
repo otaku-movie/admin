@@ -59,13 +59,13 @@ export function CreateOrderModal(props: ModalProps) {
     },
     {
       title: t('createOrderModal.table.spec'),
-      dataIndex: 'specName'
+      dataIndex: 'specName',
+      width: 100
     },
     {
       title: t('createOrderModal.table.seat'),
-      render(_, row) {
-        return row.x + '排' + row.y + '座'
-      }
+      dataIndex: 'seatName',
+      width: 100
     },
     {
       title: t('createOrderModal.table.area'),
@@ -73,15 +73,18 @@ export function CreateOrderModal(props: ModalProps) {
         if (row.areaName) {
           return `${row.areaName}（${row.areaPrice}${common('unit.jpy')}）`
         }
-      }
+      },
+      width: 100
     },
     {
       title: t('createOrderModal.table.price'),
-      dataIndex: 'price'
+      dataIndex: 'price',
+      width: 100
     },
     {
       title: t('createOrderModal.table.plusPrice'),
-      dataIndex: 'plusPrice'
+      dataIndex: 'plusPrice',
+      width: 100
     },
     {
       title: t('createOrderModal.table.movieTicketType'),
@@ -89,7 +92,7 @@ export function CreateOrderModal(props: ModalProps) {
       render(_, row, index) {
         return (
           <Select
-            style={{ width: '250px' }}
+            style={{ width: '230px' }}
             placeholder={t('createOrderModal.form.movieTicketType.required')}
             value={row.movieTicketTypeId}
             onChange={(val) => {
@@ -129,7 +132,7 @@ export function CreateOrderModal(props: ModalProps) {
 
   const getTicketData = () => {
     http({
-      url: 'movie/ticketType/list',
+      url: 'cinema/ticketType/list',
       method: 'post',
       data: {
         cinemaId: props.data.cinemaId
@@ -146,7 +149,16 @@ export function CreateOrderModal(props: ModalProps) {
         movieShowTimeId: props.data.id
       }
     }).then((res) => {
-      setData(res.data)
+      const data = res.data
+
+      setData(
+        data.seat.map((item: any) => {
+          return {
+            ...data,
+            ...item
+          }
+        })
+      )
     })
   }
 
@@ -209,6 +221,10 @@ export function CreateOrderModal(props: ModalProps) {
         bordered={true}
         pagination={false}
         scroll={{
+          x: columns.reduce(
+            (total, current) => total + (current.width as number),
+            0
+          ),
           y: '60vh'
         }}
         summary={() => (
