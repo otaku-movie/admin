@@ -46,7 +46,7 @@ export function TicketTypeModal(props: modalProps) {
       onOk={() => {
         form.validateFields().then(() => {
           http({
-            url: 'admin/movie/ticketType/save',
+            url: 'admin/cinema/ticketType/save',
             method: 'post',
             data: {
               ...query,
@@ -91,7 +91,6 @@ export function TicketTypeModal(props: modalProps) {
             value={query.price}
             precision={0}
             onChange={(val) => {
-
               setQuery({
                 ...query,
                 price: val as number

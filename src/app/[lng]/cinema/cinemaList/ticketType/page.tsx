@@ -29,7 +29,7 @@ export default function Page({ params: { lng } }: PageProps) {
   const getData = (page = 1) => {
     if (searchParams.get('id')) {
       http({
-        url: 'movie/ticketType/list',
+        url: 'cinema/ticketType/list',
         method: 'post',
         data: {
           cinemaId: +searchParams.get('id')!,
@@ -44,7 +44,7 @@ export default function Page({ params: { lng } }: PageProps) {
 
   useEffect(() => {
     getData()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {}, [query, setQuery])
@@ -70,7 +70,7 @@ export default function Page({ params: { lng } }: PageProps) {
                 type="primary"
                 onClick={() => {
                   http({
-                    url: 'movie/ticketType/detail',
+                    url: 'cinema/ticketType/detail',
                     method: 'get',
                     params: {
                       id: row.id
@@ -102,7 +102,7 @@ export default function Page({ params: { lng } }: PageProps) {
                     onOk() {
                       return new Promise((resolve, reject) => {
                         http({
-                          url: 'admin/movie/ticketType/remove',
+                          url: 'admin/cinema/ticketType/remove',
                           method: 'delete',
                           params: {
                             id: row.id
