@@ -392,7 +392,7 @@ export default function SeatModal(props: ModalProps) {
     if (seat.disabled) {
       ClassName.push('seat-disabled')
     }
-    if (seat.selected && seat.selectSeatState === SelectSeatState.selected) {
+    if (seat.selected || seat.selectSeatState === SelectSeatState.selected) {
       ClassName.push('seat-selected')
     } else {
       if (seat.selectSeatState === SelectSeatState.locked) {
