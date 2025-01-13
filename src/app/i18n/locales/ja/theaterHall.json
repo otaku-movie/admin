@@ -94,5 +94,15 @@
       "content": "この行を削除してもよろしいですか？",
       "success": "削除に成功しました"
     }
+  },
+  "seatNamingRuleModal": {
+    "title": "座席命名ルールを設定",
+    "form": {
+      "template": {
+        "label": "座席命名ルール",
+        "error": "命名ルールの形式が正しくありません",
+        "description": "命名ルールについて：\n\n・<strong>{number}</strong>: 数字を1から順に増加させて配置（例: 1, 2, 3...）\n・<strong>{alphabet}</strong>: 英字A-Zを使用。26文字を超える場合はAA, AB, AC...のように続きます\n・<strong>{columnNumber}</strong>: 現在の行の座席番号を1から順に付与（例: 1, 2, 3...）\n\n例：\n・<strong>{number}-{columnNumber}</strong>: 生成結果は1-1, 1-2, 1-3...\n・<strong>{alphabet}{columnNumber}</strong>: 生成結果はA1, ...， A26, B1, AA1, AB1..."
+      }
+    }
   }
 }

@@ -66,7 +66,7 @@ export default function Page({ params: { lng } }: PageProps) {
       width: 250,
       render(_, row) {
         return (
-          <Space direction="vertical">
+          <Space>
             {row.spec?.map((item: { id: number; name: string }) => {
               return (
                 <Tag
@@ -113,62 +113,16 @@ export default function Page({ params: { lng } }: PageProps) {
       key: 'operation',
       fixed: 'right',
       align: 'center',
-      width: 150,
+      width: 300,
       render: (_, row) => {
         return (
           <Flex gap={10} vertical>
-            <Button
-              type="primary"
-              onClick={() => {
-                router.push(
-                  processPath({
-                    name: 'screeningManagement',
-                    query: {
-                      id: row.id
-                    }
-                  })
-                )
-              }}
-            >
-              {common('button.cinemaList.screeningManagement')}
-            </Button>
-            <Button
-              type="primary"
-              onClick={() => {
-                router.push(
-                  processPath({
-                    name: 'ticketType',
-                    query: {
-                      id: row.id
-                    }
-                  })
-                )
-              }}
-            >
-              {common('button.ticketType')}
-            </Button>
-            <Button
-              type="primary"
-              onClick={() => {
-                router.push(
-                  processPath({
-                    name: 'theaterHall',
-                    query: {
-                      id: row.id
-                    }
-                  })
-                )
-              }}
-            >
-              {common('button.theaterHallDetail')}
-            </Button>
-            <CheckPermission code="cinema.save">
+            <Space>
               <Button
-                type="primary"
                 onClick={() => {
                   router.push(
                     processPath({
-                      name: 'cinemaDetail',
+                      name: 'screeningManagement',
                       query: {
                         id: row.id
                       }
@@ -176,43 +130,91 @@ export default function Page({ params: { lng } }: PageProps) {
                   )
                 }}
               >
-                {common('button.edit')}
+                {common('button.cinemaList.screeningManagement')}
               </Button>
-            </CheckPermission>
-            <CheckPermission code="cinema.remove">
               <Button
-                type="primary"
-                danger
                 onClick={() => {
-                  Modal.confirm({
-                    title: common('button.remove'),
-                    content: t('message.remove.content'),
-                    onCancel() {
-                      console.log('Cancel')
-                    },
-                    onOk() {
-                      return new Promise((resolve, reject) => {
-                        http({
-                          url: 'cinema/remove',
-                          method: 'delete',
-                          params: {
-                            id: row.id
-                          }
-                        })
-                          .then(() => {
-                            message.success(t('message.remove.success'))
-                            getData()
-                            resolve(true)
-                          })
-                          .catch(reject)
-                      })
-                    }
-                  })
+                  router.push(
+                    processPath({
+                      name: 'ticketType',
+                      query: {
+                        id: row.id
+                      }
+                    })
+                  )
                 }}
               >
-                {common('button.remove')}
+                {common('button.ticketType')}
               </Button>
-            </CheckPermission>
+            </Space>
+            <Space>
+              <Button
+                type="primary"
+                onClick={() => {
+                  router.push(
+                    processPath({
+                      name: 'theaterHall',
+                      query: {
+                        id: row.id
+                      }
+                    })
+                  )
+                }}
+              >
+                {common('button.theaterHallDetail')}
+              </Button>
+              <CheckPermission code="cinema.save">
+                <Button
+                  type="primary"
+                  onClick={() => {
+                    router.push(
+                      processPath({
+                        name: 'cinemaDetail',
+                        query: {
+                          id: row.id
+                        }
+                      })
+                    )
+                  }}
+                >
+                  {common('button.edit')}
+                </Button>
+              </CheckPermission>
+              <CheckPermission code="cinema.remove">
+                <Button
+                  type="primary"
+                  danger
+                  onClick={() => {
+                    Modal.confirm({
+                      title: common('button.remove'),
+                      content: t('message.remove.content'),
+                      onCancel() {
+                        console.log('Cancel')
+                      },
+                      onOk() {
+                        return new Promise((resolve, reject) => {
+                          http({
+                            url: 'cinema/remove',
+                            method: 'delete',
+                            params: {
+                              id: row.id
+                            }
+                          })
+                            .then(() => {
+                              message.success(t('message.remove.success'))
+                              getData()
+                              resolve(true)
+                            })
+                            .catch(reject)
+                        })
+                      }
+                    })
+                  }}
+                >
+                  {common('button.remove')}
+                </Button>
+              </CheckPermission>
+            </Space>
           </Flex>
         )
       }

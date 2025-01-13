@@ -95,5 +95,15 @@
       "content": "是否确认要删除当前行，删除后不可恢复",
       "success": "删除成功"
     }
+  },
+  "seatNamingRuleModal": {
+    "title": "配置座位命名规则",
+    "form": {
+      "template": {
+        "label": "座位命名规则",
+        "error": "命名规则格式不正确",
+        "description": "命名规则说明：\n\n・<strong>{number}</strong>：按数字从1开始递增排列，例如1, 2, 3...\n・<strong>{alphabet}</strong>：使用英文字母A-Z，超过26个字母后依次为AA, AB, AC...\n・<strong>{columnNumber}</strong>：表示当前行的座位序号，从1开始，例如1, 2, 3...\n\n示例：\n・<strong>{number}-{columnNumber}</strong>：生成结果为1-1, 1-2, 1-3...\n・<strong>{alphabet}{columnNumber}</strong>：生成结果为A1, ..., A26, B1, AA1, AB1..."
+      }
+    }
   }
 }

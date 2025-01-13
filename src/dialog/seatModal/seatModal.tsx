@@ -15,7 +15,8 @@ import {
   message,
   Dropdown,
   Tooltip,
-  Spin
+  Spin,
+  Input
 } from 'antd'
 import http from '@/api'
 import { languageType } from '@/config'
@@ -27,7 +28,7 @@ import { AreaModal } from './AreaModal'
 import { CheckPermission } from '@/components/checkPermission'
 import * as wheelChair from '@/assets/font/wheelChair.svg'
 import Image from 'next/image'
-import { findDataset } from '@/utils'
+import { findDataset, numberToAlphabet } from '@/utils'
 import { SelectSeatState } from '@/config/enum'
 // import { Draw } from './store'
 
@@ -43,7 +44,7 @@ interface ModalProps {
 interface seat {
   type: 'seat' | 'aisle'
   rowAxis?: number
-  rowName?: number
+  rowName?: string
   children: SeatItem[]
 }
 
@@ -94,6 +95,15 @@ export default function SeatModal(props: ModalProps) {
     show: false,
     data: []
   })
+  const [seatNameModal, setSeatNameModal] = useState<{
+    show: boolean
+    form: [FormInstance]
+    rule: string
+  }>({
+    rule: '',
+    form: Form.useForm(),
+    show: false
+  })
 
   const { t } = useTranslation(
     navigator.language as languageType,
@@ -103,6 +113,7 @@ export default function SeatModal(props: ModalProps) {
     navigator.language as languageType,
     'common'
   )
+
   const size = 36
   const gap = 8
 
@@ -295,7 +306,13 @@ export default function SeatModal(props: ModalProps) {
       setMousedown(false)
     }
   }
-
+  useEffect(() => {
+    setSeatNameModal({
+      ...seatNameModal,
+      rule: props.data.seatNamingRules
+    })
+    seatNameModal.form[0].setFieldValue('rule', props.data.seatNamingRules)
+  }, [props.data])
   useEffect(() => {
     if (props.permission === 'configSeat') {
       window.addEventListener('mousedown', handleMouseDown)
@@ -453,6 +470,18 @@ export default function SeatModal(props: ModalProps) {
                 >
                   {common('button.configArea')}
                 </Button>
+                <Button
+                  type="primary"
+                  onClick={() => {
+                    setSeatNameModal({
+                      // ...areaModal,
+                      ...seatNameModal,
+                      show: true
+                    })
+                  }}
+                >
+                  配置座位命名
+                </Button>
               </Space>
             ) : null
           }
@@ -497,6 +526,7 @@ export default function SeatModal(props: ModalProps) {
                         method: 'post',
                         data: {
                           theaterHallId: props.data.id,
+                          seatNamingRules: seatNameModal.rule,
                           seat: data.reduce((total: SeatItem[], current) => {
                             if (current.type === 'seat') {
                               return total.concat(
@@ -897,15 +927,25 @@ export default function SeatModal(props: ModalProps) {
                 </ul>
                 <section className="middle">
                   <section className="seat-number-top">
-                    {data?.[0]?.children?.map(
-                      (children: any, index: number) => {
-                        return (
-                          <div key={index} className="seat-row-column">
-                            {children.y}
-                          </div>
-                        )
-                      }
-                    )}
+                    {(() => {
+                      let columnIndex = 0 // 用于计数非 'aisle' 类型的列
+                      return data?.[0]?.children?.map(
+                        (children: any, index: number) => {
+                          if (children.type !== 'aisle') {
+                            columnIndex++ // 增加列索引
+                            return (
+                              <div key={index} className="seat-row-column">
+                                {columnIndex}
+                              </div>
+                            )
+                          }
+                          // 返回空列占位符
+                          return (
+                            <div key={index} className="seat-row-column"></div>
+                          )
+                        }
+                      )
+                    })()}
                   </section>
                   <ul
                     className="seat"
@@ -1286,6 +1326,180 @@ export default function SeatModal(props: ModalProps) {
               >
                 {common('button.add')}
               </Button>
+            </Space>
+          </Form.Item>
+        </Form>
+      </Modal>
+      {/* 配置座位命名方式 */}
+      <Modal
+        title={t('seatNamingRuleModal.title')}
+        open={seatNameModal.show}
+        width="550px"
+        onOk={() => {
+          const getContent = /\{([^{}]*)\}/g
+
+          seatNameModal.form[0].validateFields().then(() => {
+            const matches = [...seatNameModal.rule.matchAll(getContent)]
+            const set = new Set(matches?.map((item) => item[1]))
+
+            if (set.has('number')) {
+              let rowIndex = 1
+              let columnIndex = 1
+              const result = data.map((item) => {
+                if (item.type !== 'aisle') {
+                  item.rowName = `${rowIndex}`
+                  item.children.map((children, childrenIndex) => {
+                    if (children.type !== 'aisle') {
+                      if (childrenIndex === 0) {
+                        columnIndex = 1
+                      }
+                      children.rowName = `${rowIndex}`
+                      children.seatName = matches.reduce((str, current) => {
+                        const values = {
+                          number: `${rowIndex}`,
+                          columnNumber: `${columnIndex}`
+                        }
+                        str = str.replace(
+                          current[0],
+                          values[current[1] as keyof typeof values]
+                        )
+                        return str
+                      }, seatNameModal.rule)
+                      columnIndex++
+                    }
+                    return children
+                  })
+                  rowIndex++
+                  return item
+                }
+                return item
+              })
+              setData([...result])
+            }
+
+            if (set.has('alphabet')) {
+              let rowIndex = 1
+              let columnIndex = 1
+              const result = data.map((item) => {
+                if (item.type !== 'aisle') {
+                  item.rowName = numberToAlphabet(rowIndex)
+                  item.children.map((children, childrenIndex) => {
+                    if (children.type !== 'aisle') {
+                      if (childrenIndex === 0) {
+                        columnIndex = 1
+                      }
+                      children.rowName = numberToAlphabet(rowIndex)
+                      children.seatName = matches.reduce((str, current) => {
+                        const values = {
+                          alphabet: numberToAlphabet(rowIndex),
+                          columnNumber: `${columnIndex}`
+                        }
+                        str = str.replace(
+                          current[0],
+                          values[current[1] as keyof typeof values]
+                        )
+                        return str
+                      }, seatNameModal.rule)
+                      columnIndex++
+                    }
+                    return children
+                  })
+                  rowIndex++
+                  return item
+                }
+                return item
+              })
+              setData([...result])
+              console.log(result)
+            }
+
+            setSeatNameModal({
+              ...seatNameModal,
+              show: false
+            })
+          })
+        }}
+        onCancel={() => {
+          setSeatNameModal({
+            ...seatNameModal,
+            show: false
+          })
+        }}
+        maskClosable={false}
+      >
+        <Form
+          name="basic"
+          labelCol={{ span: 6 }}
+          wrapperCol={{ span: 18 }}
+          form={seatNameModal.form[0]}
+        >
+          {/* <Form.Item
+            required={true}
+            name={['type', 'start']}
+            rules={[]}
+            label="命名方式"
+          >
+            <Select
+              placeholder={t('seatModal.form.type.placeholder')}
+              onChange={(val) => {
+                setModal({
+                  ...modal,
+                  data: modal.data
+                })
+              }}
+            >
+              <Select.Option value="row">数字</Select.Option>
+              <Select.Option value="column">英语字母</Select.Option>
+            </Select>
+          </Form.Item> */}
+          <Form.Item
+            required={true}
+            name={'rule'}
+            rules={[
+              {
+                required: true,
+                validateTrigger: ['blur'],
+                validator() {
+                  const reg =
+                    /.*\{number\}.*\{columnNumber\}.*|.*\{alphabet\}.*\{columnNumber\}.*/
+
+                  return reg.test(seatNameModal.rule)
+                    ? Promise.resolve()
+                    : Promise.reject(
+                        new Error(t('seatNamingRuleModal.form.template.error'))
+                      )
+                }
+              }
+            ]}
+            label={t('seatNamingRuleModal.form.template.label')}
+          >
+            <Space direction="vertical" size={10}>
+              <Input
+                placeholder="{alphabet}-{columnNumber}"
+                value={seatNameModal.rule}
+                onChange={(e) => {
+                  setSeatNameModal({
+                    ...seatNameModal,
+                    rule: e.target.value
+                  })
+                  // seatNameModal.form[0].setFieldValue('rule', e.target.value)
+                }}
+              ></Input>
+              <section
+                style={{
+                  color: '#707070',
+                  lineHeight: '20px',
+                  fontSize: '14px'
+                }}
+              >
+                <p
+                  dangerouslySetInnerHTML={{
+                    __html: t(
+                      'seatNamingRuleModal.form.template.description'
+                    ).replace(/\n/g, '<br>')
+                  }}
+                ></p>
+              </section>
             </Space>
           </Form.Item>
         </Form>

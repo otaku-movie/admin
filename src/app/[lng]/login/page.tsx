@@ -105,8 +105,10 @@ export default function Page({ params: { lng } }: PageProps) {
                     if (res) {
                       const redirectURL = localStorage.getItem('redirectURL')
                       if (redirectURL) {
+                        localStorage.setItem('redirectURL', '')
                         location.href = redirectURL
                       } else {
+                        localStorage.setItem('redirectURL', '')
                         router.push(processPath('movieList'))
                       }
                     }

@@ -256,8 +256,8 @@ export default function Page({ params: { lng } }: PageProps) {
               required: true,
               validator() {
                 const every = data.spec.every(
-                  (item: { specId: number; plusPrice: number }) => {
-                    return item.specId && item.plusPrice
+                  (item: { specId: number; plusPrice: string }) => {
+                    return item.specId && /\d+/g.test(item.plusPrice)
                   }
                 )
 
@@ -296,7 +296,7 @@ export default function Page({ params: { lng } }: PageProps) {
                     })}
                   </Select>
                   <InputNumber
-                    min={1}
+                    min={0}
                     value={item.plusPrice}
                     precision={0}
                     placeholder={t('form.plusPrice.required')}

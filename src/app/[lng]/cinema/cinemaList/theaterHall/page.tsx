@@ -65,6 +65,10 @@ export default function Page({ params: { lng } }: PageProps) {
       title: t('table.columnCount'),
       dataIndex: 'columnCount'
     },
+    // {
+    //   title: t('table.spec'),
+    //   dataIndex: 'seatNamingRules'
+    // },
     {
       title: t('table.seatCount'),
       dataIndex: 'seatCount'

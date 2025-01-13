@@ -67,6 +67,16 @@ export function callTree<T extends TreeNode<T>>(
   })
 }
 
+export function numberToAlphabet(num: number): string {
+  let result = ''
+  while (num > 0) {
+    num-- // 将数字调整为从 0 开始的索引
+    const charCode = (num % 26) + 65; // 65 是字母 'A' 的 ASCII 值
+    result = String.fromCharCode(charCode) + result
+    num = Math.floor(num / 26)
+  }
+  return result
+}
 
 export function listToTree<T extends TreeNode<T>>(data: T[]) {
   const arr = data.filter(item => item.parentId === null).map(item => {

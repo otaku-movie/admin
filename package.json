@@ -11,6 +11,9 @@
     "generator": "node ./generator/read.js",
     "write": "node ./generator/write.js"
   },
+  "engines": {
+    "node": ">=20.12.0"
+  },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
   },
