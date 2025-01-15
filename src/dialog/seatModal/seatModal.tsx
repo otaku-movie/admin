@@ -480,7 +480,7 @@ export default function SeatModal(props: ModalProps) {
                     })
                   }}
                 >
-                  配置座位命名
+                  {t('seatNamingRuleModal.title')}
                 </Button>
               </Space>
             ) : null

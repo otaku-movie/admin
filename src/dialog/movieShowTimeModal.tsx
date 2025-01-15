@@ -22,10 +22,11 @@ interface Query {
   cinemaId?: number
   open?: boolean
   theaterHallId?: number
+  specId?: number
   startTime?: dayjs.Dayjs
   endTime?: dayjs.Dayjs
-  subtitleId?: number
-  showTimeTagId?: number
+  subtitleId?: number[]
+  movieShowTimeTagId?: number[]
 }
 
 export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
@@ -35,6 +36,7 @@ export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
     'common'
   )
   const [movieData, setMovieData] = useState([])
+  const [specList, setSpecList] = useState<any[]>([])
   const [languageData, setLanguageData] = useState([])
   const [showTimeTagData, setShowTimeTagData] = useState([])
   const [cinemaData, setCinemaData] = useState<Cinema[]>([])
@@ -125,6 +127,17 @@ export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
       setCinemaData(res.data.list)
     })
   }
+  const getCinemaSpec = (cinemaId: number) => {
+    http({
+      url: 'cinema/spec',
+      method: 'get',
+      params: {
+        cinemaId
+      }
+    }).then((res) => {
+      setSpecList(res.data)
+    })
+  }
 
   useEffect(() => {
     if (props.show) {
@@ -139,32 +152,46 @@ export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
     }
 
     if (props.data.id) {
-      setQuery({
+      const updatedData = {
         ...props.data,
+        movieShowTimeTagId: props.data.movieShowTimeTagsId as number[],
         startTime: dayjs(props.data.startTime as string),
         endTime: dayjs(props.data.endTime as string)
-      })
-      form.setFieldsValue({
-        ...props.data,
-        startTime: dayjs(props.data.startTime as string),
-        endTime: dayjs(props.data.endTime as string)
-      })
+      }
+
+      // 更新查询对象
+      setQuery(updatedData)
+
+      // 更新表单字段值
+      form.setFieldsValue(updatedData)
+
+      // 获取相关数据
       getTheaterHallData(props.data.cinemaId as number)
       getMovieData('', props.data.movieId as number)
       getCinemaData('', props.data.cinemaId as number)
-      getLanguageData('', props.data.subtitleId as number)
-      getShowTimeTagData('', props.data.showTimeTagId as number)
+
+      // 设置其他数据
+      setShowTimeTagData(props.data.movieShowTimeTags as [])
+      setLanguageData(props.data.subtitle as [])
     } else {
+      // 清空查询和表单
       setQuery({})
       form.setFieldsValue({})
     }
+
+    // 如果存在 cinemaId，更新查询对象和获取影院相关数据
     if (props.data.cinemaId) {
-      setQuery({
-        ...props.data
-      })
+      setQuery((prevQuery) => ({
+        ...prevQuery,
+        cinemaId: props.data.cinemaId as number
+      }))
+      getCinemaSpec(props.data.cinemaId as number)
+
       getCinemaData('', props.data.cinemaId as number)
       getTheaterHallData(props.data.cinemaId as number)
     }
+
+    // debugger
   }, [props.show, props.data])
 
   return (
@@ -185,6 +212,7 @@ export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
             method: 'post',
             data: {
               ...query,
+              showTimeTagId: query.movieShowTimeTagId,
               startTime: query.startTime?.format('YYYY-MM-DD HH:mm:ss'),
               endTime: query.endTime?.format('YYYY-MM-DD HH:mm:ss')
             }
@@ -245,17 +273,15 @@ export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
         </Form.Item>
         <Form.Item
           label={t('showTimeModal.form.subtitle.label')}
-          rules={[
-            {
-              required: true,
-              message: t('showTimeModal.form.subtitle.required')
-            }
-          ]}
           name="subtitleId"
         >
           <Select
             showSearch
             value={query.subtitleId}
+            mode="multiple"
+            onFocus={() => {
+              getLanguageData()
+            }}
             onChange={(val) => {
               setQuery({
                 ...query,
@@ -275,21 +301,19 @@ export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
         </Form.Item>
         <Form.Item
           label={t('showTimeModal.form.showTimeTag.label')}
-          rules={[
-            {
-              required: true,
-              message: t('showTimeModal.form.showTimeTag.required')
-            }
-          ]}
-          name="showTimeTagId"
+          name="movieShowTimeTagId"
         >
           <Select
             showSearch
-            value={query.showTimeTagId}
+            mode="multiple"
+            value={query.movieShowTimeTagId}
+            onFocus={() => {
+              getShowTimeTagData()
+            }}
             onChange={(val) => {
               setQuery({
                 ...query,
-                showTimeTagId: val
+                movieShowTimeTagId: val
               })
             }}
             onSearch={getShowTimeTagData}
@@ -333,6 +357,7 @@ export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
                 style={{ width: 250 }}
                 onChange={(val) => {
                   getTheaterHallData(val)
+                  getCinemaSpec(val)
                   setQuery({
                     ...query,
                     cinemaId: val,
@@ -353,10 +378,13 @@ export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
               style={{ width: 200 }}
               value={query.theaterHallId}
               showSearch
+              popupMatchSelectWidth={300}
               onChange={(val) => {
                 setQuery({
                   ...query,
-                  theaterHallId: val
+                  theaterHallId: val,
+                  specId: theaterHallData.find((item) => item.id === val)
+                    ?.cinemaSpecId
                 })
               }}
             >
@@ -365,6 +393,32 @@ export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
                   {item.name}（{item.cinemaSpecName}）
                 </Select.Option>
               ))}
+            </Select>
+          </Space>
+        </Form.Item>
+        <Form.Item
+          label={t('showTimeModal.form.spec.label')}
+          name="cinemaSpecId"
+        >
+          <Space>
+            <Select
+              style={{ width: 200 }}
+              value={query.specId}
+              disabled={!query.cinemaId}
+              onChange={(val) => {
+                setQuery({
+                  ...query,
+                  specId: val
+                })
+              }}
+            >
+              {specList.map((item: any) => {
+                return (
+                  <Select.Option value={item.id} key={item.id}>
+                    {item.name}
+                  </Select.Option>
+                )
+              })}
             </Select>
           </Space>
         </Form.Item>

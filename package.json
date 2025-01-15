@@ -18,6 +18,7 @@
     "**/*": "prettier --write --ignore-unknown"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.5.2",
     "@ant-design/nextjs-registry": "^1.0.0",
     "@formatjs/intl-localematcher": "^0.5.4",
     "@types/js-cookie": "^3.0.6",

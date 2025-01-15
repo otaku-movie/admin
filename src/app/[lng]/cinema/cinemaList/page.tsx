@@ -66,7 +66,7 @@ export default function Page({ params: { lng } }: PageProps) {
       width: 250,
       render(_, row) {
         return (
-          <Space>
+          <Flex wrap gap="small">
             {row.spec?.map((item: { id: number; name: string }) => {
               return (
                 <Tag
@@ -79,7 +79,7 @@ export default function Page({ params: { lng } }: PageProps) {
                 </Tag>
               )
             })}
-          </Space>
+          </Flex>
         )
       }
     },
@@ -113,7 +113,7 @@ export default function Page({ params: { lng } }: PageProps) {
       key: 'operation',
       fixed: 'right',
       align: 'center',
-      width: 300,
+      width: 320,
       render: (_, row) => {
         return (
           <Flex gap={10} vertical>

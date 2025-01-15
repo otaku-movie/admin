@@ -31,6 +31,7 @@ export interface Cinema {
 export interface theaterHall {
   id: number
   name: string
+  cinemaSpecId: number
   cinemaSpecName: string
 }
 

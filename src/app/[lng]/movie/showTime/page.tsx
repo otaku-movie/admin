@@ -145,25 +145,17 @@ export default function MoviePage({ params: { lng } }: PageProps) {
           <Space align="start">
             <Image
               width={120}
-              src={row.movieCover}
+              src={row.moviePoster}
               alt="poster"
               fallback={notFoundImage}
             ></Image>
             <Space direction="vertical">
               <span>{row.movieName}</span>
+              <span></span>
               <section>
-                {row.spec?.map((item: SpecItem) => {
-                  return (
-                    <Tag
-                      key={item.id}
-                      style={{
-                        marginBottom: '10px'
-                      }}
-                    >
-                      {item.name}
-                    </Tag>
-                  )
-                })}
+                <div>{row.cinemaName}</div>
+                <div>{row.theaterHallName}</div>
+                <div>{row.specName}</div>
               </section>
             </Space>
           </Space>
@@ -173,32 +165,33 @@ export default function MoviePage({ params: { lng } }: PageProps) {
     {
       title: t('table.subtitle'),
       width: 100,
-      dataIndex: 'subtitleName'
+      render(_: any, row) {
+        return (
+          <Space direction="vertical">
+            {row.subtitle.map((item: any) => {
+              return <Tag key={item.id}>{item.name}</Tag>
+            })}
+          </Space>
+        )
+      }
     },
     {
       title: t('table.showTimeTag'),
       width: 150,
-      dataIndex: 'showTimeTagName'
-    },
-    {
-      title: t('table.cinema'),
-      width: 200,
-      dataIndex: 'cinemaName'
-    },
-    {
-      title: t('table.theaterHall'),
-      width: 200,
-      dataIndex: 'theaterHallName'
-    },
-    {
-      title: t('table.spec'),
-      width: 200,
-      dataIndex: 'theaterHallSpec'
+      render(_: any, row) {
+        return (
+          <Space direction="vertical">
+            {row.movieShowTimeTags.map((item: any) => {
+              return <Tag key={item.id}>{item.name}</Tag>
+            })}
+          </Space>
+        )
+      }
     },
     {
       title: t('table.open'),
       dataIndex: '',
-      width: 200,
+      width: 100,
       render(_, row) {
         return (
           <Switch
@@ -227,14 +220,14 @@ export default function MoviePage({ params: { lng } }: PageProps) {
     },
     {
       title: t('table.seatSelectionRatio'),
-      width: 200,
+      width: 100,
       render(_, row) {
         return `${row.seatCount}/${row.selectedSeatCount}`
       }
     },
     {
       title: t('table.attendance'),
-      width: 200,
+      width: 100,
       render(_, row) {
         return `${row.selectedSeatCount || 0 / row.seatCount || 0}%`
       }

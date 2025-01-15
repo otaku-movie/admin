@@ -16,6 +16,15 @@ export interface MovieShowTimeItem {
   endTime: string
   // 放映状态
   status: 1 | 2 | 3
+  subtitle?: {
+    id: number
+    name: string
+    code: string
+  }[]
+  movieShowTimeTags?: {
+    id: number
+    name: string
+  }[]
 }
 
 export interface CinemaScreeing {

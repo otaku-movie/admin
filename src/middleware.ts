@@ -19,7 +19,6 @@ export async function middleware(req: NextRequest) {
   const roleId = cookies.get('roleId')?.value
   const token = cookies.get('token')?.value
   const API_URL = process.env.NEXT_PUBLIC_API_URL
-  console.log(url)
 
   // 获取语言设置
   let lng = fallbackLng

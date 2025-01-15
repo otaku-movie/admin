@@ -9,10 +9,19 @@ import {
   Space,
   message,
   Row,
-  MenuProps
+  MenuProps,
+  Popover,
+  Table,
+  Modal
 } from 'antd'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { PlusOutlined, LeftOutlined, RightOutlined } from '@ant-design/icons'
+import {
+  PlusOutlined,
+  LeftOutlined,
+  RightOutlined,
+  DoubleLeftOutlined,
+  DoubleRightOutlined
+} from '@ant-design/icons'
 import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '@/app/[lng]/layout'
 import http from '@/api'
@@ -40,6 +49,8 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
   const [data, setData] = useState<CinemaScreeing[]>([])
   const router = useRouter()
   const [day, setDay] = useState(dayjs())
+  const [renderData, setRenderData] = useState<CinemaScreeing[]>([])
+
   const i18nWeek = [
     'Sunday',
     'Monday',
@@ -56,6 +67,7 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
       date: day.format('YYYY-MM-DD')
     }).then((res) => {
       setData(res.data as unknown as CinemaScreeing[])
+      setRenderData([...(res.data as unknown as CinemaScreeing[])])
     })
   }
 
@@ -68,6 +80,9 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
       style={{
         display: 'flex',
         flexDirection: 'column'
+        // minWidth: data.length * 200 + 80 + 'px',
+        // minWidth: (data.length - 2) * 200 + 80 + 'px',
+        // overflowX: 'auto'
       }}
     >
       {/* <Query>
@@ -76,7 +91,12 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
         </QueryItem>
       </Query> */}
       <section className="todo-top">
-        <ul className="nav-container">
+        <ul
+          className="nav-container"
+          style={{
+            gridTemplateColumns: `40px 1fr 40px`
+          }}
+        >
           <li
             onClick={() => {
               setDay(day.subtract(1, 'day'))
@@ -99,22 +119,116 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
         <ul
           className="table-header"
           style={{
-            gridTemplateColumns: `40px repeat(${data.length}, 1fr) 40px`
+            gridTemplateColumns: `40px repeat(${renderData.length}, 1fr) 40px`
           }}
         >
-          <li></li>
-          {data.map((item) => {
+          <li>
+            {/* <DoubleLeftOutlined
+              style={{
+                color: '#c8c8c8'
+              }}
+              onClick={() => {
+                if (current > 1) {
+                  setCurrent(current - 1)
+                }
+              }}
+            /> */}
+          </li>
+          {renderData.map((item) => {
             return <li key={item.id}>{item.name}</li>
           })}
-          <li></li>
+          <li>
+            {/* <DoubleRightOutlined
+              style={{
+                color: '#929292'
+              }}
+            /> */}
+          </li>
         </ul>
+        {/* <Table
+          columns={[
+            {},
+            ...renderData.map((children) => {
+              return {
+                title: children.name
+              }
+            }),
+            {}
+          ]}
+          dataSource={data}
+          bordered={true}
+          pagination={false}
+        /> */}
       </section>
 
       <TodoList
-        data={data}
+        date={day}
+        data={renderData}
         render={(item) => {
           const onClick: MenuProps['onClick'] = ({ key }) => {
             message.info(`Click on item ${key}`)
+            const remove = () => {
+              return new Promise((resolve, reject) => {
+                http({
+                  url: 'admin/movie_show_time/remove',
+                  method: 'delete',
+                  params: {
+                    id: item.id
+                  }
+                })
+                  .then(() => {
+                    message.success(t('message.remove.success'))
+                    getData()
+                    resolve(true)
+                  })
+                  .catch(reject)
+              })
+            }
+
+            switch (key) {
+              case 'edit':
+                http({
+                  url: 'movie_show_time/detail',
+                  method: 'get',
+                  params: {
+                    id: item.id
+                  }
+                }).then((res) => {
+                  setShowTimeModal({
+                    ...showTimeModal,
+                    data: res.data,
+                    show: true
+                  })
+                })
+                break
+              case 'remove':
+                Modal.confirm({
+                  title: common('button.remove'),
+                  content: t('message.remove.content'),
+                  onCancel() {
+                    console.log('Cancel')
+                  },
+                  onOk() {
+                    if (item.selectedSeatCount !== 0) {
+                      Modal.confirm({
+                        title: common('button.remove'),
+                        content: t('message.remove.selectedCount', {
+                          count: item.selectedSeatCount
+                        }),
+                        onCancel() {
+                          console.log('Cancel')
+                        },
+                        onOk() {
+                          remove()
+                        }
+                      })
+                    } else {
+                      remove()
+                    }
+                  }
+                })
+                break
+            }
           }
 
           const items: MenuProps['items'] = [
@@ -135,39 +249,71 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
               key={item.id}
               trigger={['contextMenu']}
             >
-              <div>
+              <Popover
+                content={() => {
+                  return (
+                    <ul>
+                      <li>
+                        <span>标签：</span>
+                        <Space wrap size={5}>
+                          {item.movieShowTimeTags?.map((sub) => {
+                            return (
+                              <Tag color="#2db7f5" key={sub.id}>
+                                {sub.name}
+                              </Tag>
+                            )
+                          })}
+                        </Space>
+                      </li>
+                    </ul>
+                  )
+                }}
+              >
                 <div>
-                  <Tag color="blue">
-                    <Dict code={item.status} name={'cinemaPlayState'}></Dict>
-                  </Tag>
-                  <span className="movie-title">{item.movieName}</span>
-                </div>
+                  <div>
+                    {dayjs(item.startTime).format('HH:mm:ss')}-{' '}
+                    {dayjs(item.endTime).format('HH:mm:ss')}
+                  </div>
+                  <div>
+                    <Tag color="blue">
+                      <Dict code={item.status} name={'cinemaPlayState'}></Dict>
+                    </Tag>
+                    <span className="movie-title">{item.movieName}</span>
+                  </div>
 
-                <ul>
-                  <li>
-                  <span>{t('table.open')}：</span>
-                    <Switch
-                      size="small"
-                      value={item.open}
-                      onChange={(val) => {}}
-                    />
-                  </li>
-                  <li>
-                    <span>{t('table.seatSelectRate')}：</span>
-                    <span>
-                      {item.seatCount}/{item.selectedSeatCount}{' '}
-                      {item.selectedSeatCount || 0 / item.seatCount || 0}%
-                    </span>
-                  </li>
-                  <li>
-                    <Space wrap size={5}>
-                      <Tag color="#2db7f5">字幕</Tag>
-                      <Tag color="#2db7f5">最速上映</Tag>
-                      <Tag color="#2db7f5">舞台挨拶</Tag>
-                    </Space>
-                  </li>
-                </ul>
-              </div>
+                  <ul>
+                    <li>
+                      <span>{t('table.open')}：</span>
+                      <Switch
+                        size="small"
+                        value={item.open}
+                        onChange={(val) => {}}
+                      />
+                    </li>
+                    <li>
+                      <span>{t('table.seatSelectRate')}：</span>
+                      <span style={{ marginRight: '5px' }}>
+                        {item.selectedSeatCount || 0} /{item.seatCount || 0}
+                      </span>
+                      <span>
+                        {' '}
+                        {(item.selectedSeatCount || 0) / (item.seatCount || 0)}%
+                      </span>
+                    </li>
+                    <li>
+                      <Space wrap size={5}>
+                        {item.subtitle?.map((sub) => {
+                          return (
+                            <Tag color="#2db7f5" key={sub.id}>
+                              {sub.name}
+                            </Tag>
+                          )
+                        })}
+                      </Space>
+                    </li>
+                  </ul>
+                </div>
+              </Popover>
             </Dropdown>
           )
         }}

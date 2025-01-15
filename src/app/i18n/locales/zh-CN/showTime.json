@@ -69,6 +69,10 @@
         "label": "放映影厅",
         "required": "请选择影厅"
       },
+      "spec": {
+        "label": "上映规格",
+        "required": "请选择上映规格"
+      },
       "subtitle": {
         "label": "字幕",
         "required": "请选择字幕"

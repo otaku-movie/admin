@@ -90,6 +90,9 @@
     },
     "comment": {
       "replyList": "返信リスト"
+    },
+    "cinemaList": {
+      "screeningManagement": "映画スケジュール管理"
     }
   },
   "enum": {

@@ -130,7 +130,11 @@ function RootLayout({ children, params: { lng } }: PageProps) {
           content="upgrade-insecure-requests"
         />
       </head>
-      <body>
+      <body
+        style={{
+          minWidth: '1200px'
+        }}
+      >
         <AntdRegistry>
           {/* <NavigationEvents /> */}
           <ConfigProvider locale={locale[lng as keyof typeof locale]}>
