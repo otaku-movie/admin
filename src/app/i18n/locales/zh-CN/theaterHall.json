@@ -30,7 +30,7 @@
     }
   },
   "seatModal": {
-    "titlle": "配置过道",
+    "title": "配置过道",
     "seatCount": "座位数",
     "dropdownItem": {
       "configCoupleSeat": "配置情侣座",

@@ -170,7 +170,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
                 {t('table.theaterHallName')}：{row.theaterHallName}
               </span>
               <span>
-                {t('table.specName')}：{row.theaterHallSpecName}
+                {t('table.specName')}：{row.specName}
               </span>
             </Space>
           </Space>
@@ -198,16 +198,16 @@ export default function MoviePage({ params: { lng } }: PageProps) {
             {row.seat.map(
               (
                 item: {
-                  seatX: number
-                  seatY: number
                   seatName: string
                   movieTicketTypeName: string
+                  areaName: string
                 },
                 index: number
               ) => {
                 return (
                   <Tag key={index}>
-                    {item.seatName}（{item.movieTicketTypeName}）
+                    {item.areaName} {item.seatName}（{item.movieTicketTypeName}
+                    ）
                   </Tag>
                 )
               }
@@ -273,26 +273,6 @@ export default function MoviePage({ params: { lng } }: PageProps) {
         return (
           <CheckPermission code="movieOrder.updateOrderState">
             <Space direction="vertical" align="center">
-              {row.orderState === OrderState.order_created ? (
-                <Button
-                  type="primary"
-                  onClick={() => {
-                    setUpdateOrderStateModal({
-                      ...updateOrderStateModal,
-                      data: {
-                        id: row.id,
-                        orderState: row.orderState,
-                        payState: row.payState
-                      },
-                      show: true
-                    })
-                    updateOrderStateModal.form[0].resetFields()
-                    updateOrderStateModal.form[0].setFieldsValue(row)
-                  }}
-                >
-                  {common('button.order.updateOrderState')}
-                </Button>
-              ) : null}
               {row.orderState === OrderState.order_succeed ? (
                 <Button
                   type="primary"
@@ -373,7 +353,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
               onChange={(e) => {
                 setQuery({
                   ...query,
-                  id: e.target.value
+                  id: e.target.value as any
                 })
               }}
             ></Input>

@@ -70,6 +70,7 @@ $gap: var(--seat-gap);
 }
 
 .seat-row {
+  height: var(--seat-size);
   .seat-not-selected {
     background-color: white;
     border: 1.5px solid #c9c9c9;

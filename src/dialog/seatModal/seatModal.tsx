@@ -1183,7 +1183,7 @@ export default function SeatModal(props: ModalProps) {
         </Drawer>
       </ConfigProvider>
       <Modal
-        title={t('seatModal.titlle')}
+        title={t('seatModal.title')}
         open={modal.show}
         width="550px"
         onOk={() => {
