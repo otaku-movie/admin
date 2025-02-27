@@ -82,7 +82,8 @@ export default function Page({ params: { lng } }: PageProps) {
               fallback={notFoundImage}
               placeholder={true}
               style={{
-                borderRadius: ' 4px'
+                borderRadius: ' 4px',
+                objectFit: 'cover'
               }}
             ></Image>
             <Tag

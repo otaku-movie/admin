@@ -287,7 +287,33 @@ export default function CinemaPage({ params: { lng } }: PageProps) {
                       <Switch
                         size="small"
                         value={item.open}
-                        onChange={(val) => {}}
+                        onChange={(val) => {
+                          console.log(item, val)
+                          item.open = val
+                          setData([...data])
+                          http({
+                            url: 'admin/movie_show_time/save',
+                            method: 'post',
+                            data: {
+                              id: item.id,
+                              open: val,
+                              movieId: item.movieId,
+                              cinemaId: item.cinemaId,
+                              theaterHallId: item.theaterHallId,
+                              showTimeTagId: item.movieShowTimeTagsId,
+                              specId: item.specId,
+                              startTime: dayjs(item.startTime)?.format(
+                                'YYYY-MM-DD HH:mm:ss'
+                              ),
+                              endTime: dayjs(item.endTime)?.format(
+                                'YYYY-MM-DD HH:mm:ss'
+                              )
+                            }
+                          }).then(() => {
+                            message.success(common('message.save'))
+                            getData()
+                          })
+                        }}
                       />
                     </li>
                     <li>

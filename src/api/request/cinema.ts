@@ -12,6 +12,8 @@ export interface MovieShowTimeItem {
   selectedSeatCount: number
   cinemaId: number
   cinemaName: string
+  theaterHallId: number
+  theaterHallName: string
   startTime: string
   endTime: string
   // 放映状态
@@ -25,6 +27,8 @@ export interface MovieShowTimeItem {
     id: number
     name: string
   }[]
+  specId?: number
+  movieShowTimeTagsId: number[]
 }
 
 export interface CinemaScreeing {
