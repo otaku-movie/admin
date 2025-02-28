@@ -32,6 +32,7 @@ import { Menu } from '@/components/menu'
 import Cookies from 'js-cookie'
 import { useCommonStore } from '@/store/useCommonStore'
 import { useRouter } from 'next/router'
+import http from '@/api'
 
 export interface PageProps {
   children: React.ReactNode
@@ -93,7 +94,14 @@ function RootLayout({ children, params: { lng } }: PageProps) {
   const userDropDownMenuClick: MenuProps['onClick'] = ({ key }) => {
     switch (key) {
       case 'logout':
-        location.href = `/${lang}/login`
+        http({
+          url: 'user/logout',
+          method: 'post'
+        }).then(() => {
+          location.href = `/${lang}/login`
+          localStorage.clear()
+        })
+
         break
     }
   }
