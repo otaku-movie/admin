@@ -31,7 +31,6 @@ import Image from 'next/image'
 import { findDataset, numberToAlphabet } from '@/utils'
 import { SelectSeatState } from '@/config/enum'
 // import { Draw } from './store'
-import Selecto from 'react-selecto'
 
 interface ModalProps {
   type: 'create' | 'edit'
@@ -63,13 +62,14 @@ interface ModalState {
 export default function SeatModal(props: ModalProps) {
   const [data, setData] = useState<seat[]>([])
   const [selectedSeat, setSelectedSeat] = useState<SeatItem[]>([])
+  const [mousedown, setMousedown] = useState(false)
   const dragContainerRef = useRef<HTMLElement | null>(null)
   const seatContainerRef = useRef<HTMLElement | null>(null)
   const [dragSelected, setDragSelected] = useState<Set<string>>(new Set())
+  const [hoverSelected, setHoverSelected] = useState<Set<string>>(new Set())
   const [showDropDown, setShowDropDown] = useState(false)
-  const [loading, setLoading] = useState(false)
   const [maxSelectSeatCount, setMaxSelectSeatCount] = useState(0)
-
+  const [loading, setLoading] = useState(false)
   const dragBoxRef = useRef({
     startX: 0,
     startY: 0,
@@ -159,6 +159,153 @@ export default function SeatModal(props: ModalProps) {
     return updatedData
   }
 
+  // 鼠标按下事件处理函数
+  const handleMouseDown = (e: MouseEvent) => {
+    if (seatContainerRef.current) {
+      const rect = seatContainerRef.current.getBoundingClientRect()
+
+      if (e.clientX > rect.left - size / 2 && e.clientY > rect.top - size / 2) {
+        setMousedown(true)
+
+        dragBoxRef.current = {
+          startX: e.clientX,
+          startY: e.clientY,
+          left: e.pageX,
+          top: e.pageY,
+          width: 0,
+          height: 0,
+          rectLeft: rect.left,
+          rectTop: rect.top
+        }
+      }
+    }
+  }
+
+  const handleMouseMove = (e: MouseEvent) => {
+    if (mousedown) {
+      const width = Math.abs(e.pageX - dragBoxRef.current.startX)
+      const height = Math.abs(e.pageY - dragBoxRef.current.startY)
+
+      // 确保处理向上和向左拖拽时的逻辑
+      const newLeft =
+        e.pageX < dragBoxRef.current.startX
+          ? e.pageX
+          : dragBoxRef.current.startX
+      const newTop =
+        e.pageY < dragBoxRef.current.startY
+          ? e.pageY
+          : dragBoxRef.current.startY
+
+      dragBoxRef.current = {
+        ...dragBoxRef.current,
+        left: newLeft,
+        top: newTop,
+        width,
+        height
+      }
+
+      // 获取选中范围
+      if (seatContainerRef.current) {
+        const updatedData = data.map((item, index) => {
+          return {
+            ...item,
+            children: item.children.map((children, childrenIndex) => {
+              if (children.type === 'seat') {
+                const startX = Math.min(dragBoxRef.current.startX, e.clientX)
+                const startY = Math.min(dragBoxRef.current.startY, e.clientY)
+                const endX = startX + dragBoxRef.current.width
+                const endY = startY + dragBoxRef.current.height
+
+                if (!children.left && !children.top) {
+                  const childrenNode =
+                    seatContainerRef.current!.children?.[index]?.children[
+                      childrenIndex
+                    ]
+                  const rect = childrenNode.getBoundingClientRect()
+
+                  children.left = rect.left
+                  children.top = rect.top
+                }
+
+                const hover =
+                  children.left &&
+                  children.left >= startX &&
+                  children.left &&
+                  children.left <= endX &&
+                  children.top &&
+                  children.top >= startY &&
+                  children.top &&
+                  children.top <= endY
+
+                const key = `${children.x}-${children.y}`
+                if (hover) {
+                  hoverSelected.add(key)
+                }
+
+                return {
+                  ...children,
+                  area: {
+                    ...children.area,
+                    hover
+                  }
+                }
+              } else {
+                return children
+              }
+            })
+          }
+        })
+
+        setHoverSelected(hoverSelected)
+        setData(updatedData as any)
+      }
+    }
+  }
+  // 鼠标抬起事件处理函数
+  const handleMouseUp = () => {
+    if (seatContainerRef.current) {
+      if (hoverSelected.size === 0) {
+        dragBoxRef.current = {
+          ...dragBoxRef.current,
+          left: 0,
+          top: 0,
+          width: 0,
+          height: 0
+        }
+        setShowDropDown(false)
+      } else {
+        // setShowDropDown(true)
+        const newDragSelected = new Set<string>(hoverSelected.values())
+        const updatedData = data.map((item) => {
+          return {
+            ...item,
+            children: item.children.map((children) => {
+              const key = `${children.x}-${children.y}`
+
+              return {
+                ...children,
+                area: {
+                  ...children.area,
+                  hover: dragSelected.has(key)
+                  // selected: dragSelected.has(key)
+                }
+              }
+            })
+          }
+        })
+        console.log(hoverSelected)
+
+        setShowDropDown(true)
+        setDragSelected(newDragSelected)
+        setData(updatedData)
+        setHoverSelected(new Set())
+        console.log(newDragSelected)
+      }
+
+      setHoverSelected(new Set())
+      setMousedown(false)
+    }
+  }
   useEffect(() => {
     setSeatNameModal({
       ...seatNameModal,
@@ -166,6 +313,21 @@ export default function SeatModal(props: ModalProps) {
     })
     seatNameModal.form[0].setFieldValue('rule', props.data.seatNamingRules)
   }, [props.data])
+  useEffect(() => {
+    if (props.permission === 'configSeat') {
+      window.addEventListener('mousedown', handleMouseDown)
+      window.addEventListener('mousemove', handleMouseMove)
+      window.addEventListener('mouseup', handleMouseUp)
+    }
+
+    return () => {
+      if (props.permission === 'configSeat') {
+        window.removeEventListener('mousedown', handleMouseDown)
+        window.removeEventListener('mousemove', handleMouseMove)
+        window.removeEventListener('mouseup', handleMouseUp)
+      }
+    }
+  }, [mousedown, data])
 
   const getData = () => {
     const newSelectSeat: SeatItem[] = []
@@ -785,165 +947,130 @@ export default function SeatModal(props: ModalProps) {
                       )
                     })()}
                   </section>
-                  <Selecto
-                    ref={seatContainerRef}
-                    dragContainer={'.seat-container'}
-                    selectableTargets={['.seat .seat-row-column']}
-                    hitRate={100}
-                    selectByClick={true}
-                    selectFromInside={true}
-                    // toggleContinueSelect={true}
-                    ratio={0}
-                    scrollOptions={{
-                      container: document.querySelector('.ant-drawer-body'),
-                      throttleTime: 30,
-                      threshold: 0
-                    }}
-                    onSelect={(e) => {
-                      console.log(e)
-                      e.added.forEach((el) => {
-                        el.classList.add('selecto-selected')
-                      })
-                      e.removed.forEach((el) => {
-                        el.classList.remove('selecto-selected')
-                      })
-                    }}
-                    onScroll={(e) => {
-                      const drawerContainer =
-                        document.querySelector('.ant-drawer-body')
-
-                      if (drawerContainer) {
-                        drawerContainer.scrollBy(
-                          e.direction[0] * 10,
-                          e.direction[1] * 10
-                        )
-                      }
-                    }}
-                  ></Selecto>
                   <ul
                     className="seat"
                     // style={style}
                     ref={seatContainerRef}
-                    // onClick={(e) => {
-                    //   const dataset = findDataset(
-                    //     e.target as HTMLElement,
-                    //     'rowIndex'
-                    //   )!.dataset
+                    onClick={(e) => {
+                      const dataset = findDataset(
+                        e.target as HTMLElement,
+                        'rowIndex'
+                      )!.dataset
 
-                    //   const singleSelect = (x: number, y: number) => {
-                    //     if (selectedSeat.length < maxSelectSeatCount) {
-                    //       data[x].children[y].selected =
-                    //         !data[x].children[y].selected
+                      const singleSelect = (x: number, y: number) => {
+                        if (selectedSeat.length < maxSelectSeatCount) {
+                          data[x].children[y].selected =
+                            !data[x].children[y].selected
 
-                    //       if (data[x].children[y].selected) {
-                    //         selectedSeat.push(data[x].children[y])
-                    //         setSelectedSeat([...selectedSeat])
-                    //       } else {
-                    //         const findIndex = selectedSeat.findIndex((item) => {
-                    //           return (
-                    //             item.x === data[x].children[y].x &&
-                    //             item.y === data[x].children[y].y
-                    //           )
-                    //         })
+                          if (data[x].children[y].selected) {
+                            selectedSeat.push(data[x].children[y])
+                            setSelectedSeat([...selectedSeat])
+                          } else {
+                            const findIndex = selectedSeat.findIndex((item) => {
+                              return (
+                                item.x === data[x].children[y].x &&
+                                item.y === data[x].children[y].y
+                              )
+                            })
 
-                    //         if (findIndex !== -1) {
-                    //           selectedSeat.splice(findIndex, 1)
-                    //           setSelectedSeat([...selectedSeat])
-                    //         }
-                    //       }
+                            if (findIndex !== -1) {
+                              selectedSeat.splice(findIndex, 1)
+                              setSelectedSeat([...selectedSeat])
+                            }
+                          }
 
-                    //       setData([...data])
-                    //     } else {
-                    //       // 如果是选过的，在点击就可以取消，否则就提示不能超过最大值
-                    //       const findIndex = selectedSeat.findIndex((item) => {
-                    //         return (
-                    //           item.x === data[x].children[y].x &&
-                    //           item.y === data[x].children[y].y
-                    //         )
-                    //       })
-                    //       if (findIndex !== -1) {
-                    //         selectedSeat.splice(findIndex, 1)
-                    //         data[x].children[y].selected = false
-                    //         setSelectedSeat([...selectedSeat])
-                    //       } else {
-                    //         message.warning(
-                    //           t('seatModal.message.max', {
-                    //             max: maxSelectSeatCount
-                    //           })
-                    //         )
-                    //       }
-                    //     }
-                    //   }
+                          setData([...data])
+                        } else {
+                          // 如果是选过的，在点击就可以取消，否则就提示不能超过最大值
+                          const findIndex = selectedSeat.findIndex((item) => {
+                            return (
+                              item.x === data[x].children[y].x &&
+                              item.y === data[x].children[y].y
+                            )
+                          })
+                          if (findIndex !== -1) {
+                            selectedSeat.splice(findIndex, 1)
+                            data[x].children[y].selected = false
+                            setSelectedSeat([...selectedSeat])
+                          } else {
+                            message.warning(
+                              t('seatModal.message.max', {
+                                max: maxSelectSeatCount
+                              })
+                            )
+                          }
+                        }
+                      }
 
-                    //   const doubleSelect = (x: number, y: number) => {
-                    //     const split =
-                    //       data[x].children[y].seatPositionGroup?.split('-')
-                    //     const position = new Set(split)
+                      const doubleSelect = (x: number, y: number) => {
+                        const split =
+                          data[x].children[y].seatPositionGroup?.split('-')
+                        const position = new Set(split)
 
-                    //     if (data[x].children[y].selected) {
-                    //       // 如果选中，就取消
-                    //       data[x].children.forEach((item) => {
-                    //         const selected = position.has(`${item.x},${item.y}`)
+                        if (data[x].children[y].selected) {
+                          // 如果选中，就取消
+                          data[x].children.forEach((item) => {
+                            const selected = position.has(`${item.x},${item.y}`)
 
-                    //         if (selected) {
-                    //           item.selected = false
-                    //         }
-                    //       })
-                    //       const filter = selectedSeat.filter((item) => {
-                    //         return !position.has(`${item.x},${item.y}`)
-                    //       })
-                    //       setSelectedSeat(filter)
-                    //       setData([...data])
-                    //     } else if (
-                    //       split &&
-                    //       split.length + selectedSeat.length >
-                    //         maxSelectSeatCount
-                    //     ) {
-                    //       message.warning(
-                    //         t('seatModal.message.max', {
-                    //           max: maxSelectSeatCount
-                    //         })
-                    //       )
-                    //     } else {
-                    //       data[x].children.forEach((item) => {
-                    //         const selected = position.has(`${item.x},${item.y}`)
-                    //         if (selected) {
-                    //           item.selected = selected
-                    //         }
-                    //       })
-                    //       const filter = data[x].children.filter((item) => {
-                    //         return position.has(`${item.x},${item.y}`)
-                    //       })
-                    //       const newSelect = [...selectedSeat, ...filter]
-                    //       setSelectedSeat(newSelect)
-                    //       setData([...data])
-                    //       console.log(newSelect)
-                    //     }
-                    //   }
+                            if (selected) {
+                              item.selected = false
+                            }
+                          })
+                          const filter = selectedSeat.filter((item) => {
+                            return !position.has(`${item.x},${item.y}`)
+                          })
+                          setSelectedSeat(filter)
+                          setData([...data])
+                        } else if (
+                          split &&
+                          split.length + selectedSeat.length >
+                            maxSelectSeatCount
+                        ) {
+                          message.warning(
+                            t('seatModal.message.max', {
+                              max: maxSelectSeatCount
+                            })
+                          )
+                        } else {
+                          data[x].children.forEach((item) => {
+                            const selected = position.has(`${item.x},${item.y}`)
+                            if (selected) {
+                              item.selected = selected
+                            }
+                          })
+                          const filter = data[x].children.filter((item) => {
+                            return position.has(`${item.x},${item.y}`)
+                          })
+                          const newSelect = [...selectedSeat, ...filter]
+                          setSelectedSeat(newSelect)
+                          setData([...data])
+                          console.log(newSelect)
+                        }
+                      }
 
-                    //   if (dataset.rowIndex && dataset.columnIndex) {
-                    //     const x = +dataset.rowIndex
-                    //     const y = +dataset.columnIndex
-                    //     const seat = data[x].children[y]
+                      if (dataset.rowIndex && dataset.columnIndex) {
+                        const x = +dataset.rowIndex
+                        const y = +dataset.columnIndex
+                        const seat = data[x].children[y]
 
-                    //     if (
-                    //       seat.selectSeatState === SelectSeatState.sold ||
-                    //       seat.selectSeatState === SelectSeatState.locked
-                    //     ) {
-                    //       return t('seatModal.seatUsed', {
-                    //         max: maxSelectSeatCount
-                    //       })
-                    //     }
+                        if (
+                          seat.selectSeatState === SelectSeatState.sold ||
+                          seat.selectSeatState === SelectSeatState.locked
+                        ) {
+                          return t('seatModal.seatUsed', {
+                            max: maxSelectSeatCount
+                          })
+                        }
 
-                    //     if (!seat.disabled) {
-                    //       if (seat.seatPositionGroup) {
-                    //         doubleSelect(x, y)
-                    //       } else {
-                    //         singleSelect(x, y)
-                    //       }
-                    //     }
-                    //   }
-                    // }}
+                        if (!seat.disabled) {
+                          if (seat.seatPositionGroup) {
+                            doubleSelect(x, y)
+                          } else {
+                            singleSelect(x, y)
+                          }
+                        }
+                      }
+                    }}
                   >
                     {data?.map((item, index) => {
                       let childrenIndex = 0

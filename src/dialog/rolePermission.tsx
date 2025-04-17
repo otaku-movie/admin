@@ -110,13 +110,13 @@ export function RolePermission(props: modalProps) {
       },
       dataIndex: 'i18nKey'
     },
-    {
-      title: t('rolePermissionModal.table.show'),
-      dataIndex: '',
-      render(_, row) {
-        return <Switch value={row.show} disabled />
-      }
-    },
+    // {
+    //   title: t('rolePermissionModal.table.show'),
+    //   dataIndex: '',
+    //   render(_, row) {
+    //     return <Switch value={row.show} />
+    //   }
+    // },
     {
       title: t('rolePermissionModal.table.button'),
       className: 'button-cell',

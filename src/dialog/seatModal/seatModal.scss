@@ -155,3 +155,8 @@ $gap: var(--seat-gap);
     border: 2px solid transparent;
   }
 }
+
+.selecto-selected {
+  background-color: #4af !important;
+  color: white !important;
+}

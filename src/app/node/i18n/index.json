@@ -1,0 +1,3595 @@
+{
+  "brandList.json": {
+    "table": {
+      "name": {
+        "zhCN": "品牌名称",
+        "ja": "ブランド名",
+        "enUS": "Brand Name"
+      },
+      "action": {
+        "zhCN": "操作",
+        "ja": "操作",
+        "enUS": "Action"
+      }
+    },
+    "modal": {
+      "title": {
+        "create": {
+          "zhCN": "添加品牌",
+          "ja": "ブランドを追加",
+          "enUS": "Add Brand"
+        },
+        "edit": {
+          "zhCN": "编辑品牌",
+          "ja": "ブランドを編集",
+          "enUS": "Edit Brand"
+        }
+      },
+      "form": {
+        "name": {
+          "label": {
+            "zhCN": "品牌名称",
+            "ja": "ブランド名",
+            "enUS": "Brand Name"
+          },
+          "required": {
+            "zhCN": "请输入品牌名称",
+            "ja": "ブランド名を入力してください",
+            "enUS": "Please enter the brand name"
+          }
+        }
+      }
+    },
+    "message": {
+      "remove": {
+        "content": {
+          "zhCN": "是否确认要删除当前品牌?",
+          "ja": "現在のブランドを削除してもよろしいですか?",
+          "enUS": "Are you sure you want to delete the current brand?"
+        },
+        "success": {
+          "zhCN": "删除成功",
+          "ja": "削除成功",
+          "enUS": "Successfully deleted"
+        }
+      }
+    }
+  },
+  "button.json": {
+    "table": {
+      "name": {
+        "zhCN": "页面名称",
+        "ja": "ページ名",
+        "enUS": "Page Name"
+      },
+      "button": {
+        "zhCN": "按钮",
+        "ja": "ボタン",
+        "enUS": "Button"
+      },
+      "buttonName": {
+        "zhCN": "按钮名称",
+        "ja": "ボタン名",
+        "enUS": "Button Name"
+      },
+      "buttonCode": {
+        "zhCN": "按钮Code",
+        "ja": "ボタンコード",
+        "enUS": "Button Code"
+      },
+      "apiName": {
+        "zhCN": "接口名称",
+        "ja": "API名",
+        "enUS": "API Name"
+      },
+      "apiCode": {
+        "zhCN": "接口 code",
+        "ja": "APIコード",
+        "enUS": "API Code"
+      },
+      "i18nKey": {
+        "zhCN": "国际化Key",
+        "ja": "国際化キー",
+        "enUS": "Internationalization Key"
+      },
+      "action": {
+        "zhCN": "操作",
+        "ja": "操作",
+        "enUS": "Action"
+      }
+    },
+    "message": {
+      "remove": {
+        "content": {
+          "zhCN": "是否确认要删除当前按钮，删除后不可恢复",
+          "ja": "現在のボタンを削除してもよろしいですか？削除後は元に戻せません",
+          "enUS": "Are you sure you want to delete the current button? This action cannot be undone."
+        },
+        "success": {
+          "zhCN": "删除成功",
+          "ja": "削除に成功しました",
+          "enUS": "Successfully deleted"
+        }
+      }
+    },
+    "modal": {
+      "title": {
+        "create": {
+          "zhCN": "添加按钮",
+          "ja": "ボタンを追加",
+          "enUS": "Add Button"
+        },
+        "edit": {
+          "zhCN": "编辑按钮",
+          "ja": "ボタンを編集",
+          "enUS": "Edit Button"
+        }
+      },
+      "form": {
+        "menuId": {
+          "label": {
+            "zhCN": "所属菜单",
+            "ja": "所属メニュー",
+            "enUS": "Associated Menu"
+          },
+          "required": {
+            "zhCN": "请选择菜单",
+            "ja": "メニューを選択してください",
+            "enUS": "Please select a menu"
+          }
+        },
+        "i18nKey": {
+          "label": {
+            "zhCN": "国际化key",
+            "ja": "国際化キー",
+            "enUS": "Internationalization Key"
+          },
+          "required": {
+            "zhCN": "请输入国际化key",
+            "ja": "国際化キーを入力してください",
+            "enUS": "Please enter the internationalization key"
+          }
+        },
+        "name": {
+          "label": {
+            "zhCN": "按钮名称",
+            "ja": "ボタン名",
+            "enUS": "Button Name"
+          },
+          "required": {
+            "zhCN": "请输入按钮名称",
+            "ja": "ボタン名を入力してください",
+            "enUS": "Please enter the button name"
+          }
+        },
+        "code": {
+          "label": {
+            "zhCN": "按钮 code",
+            "ja": "ボタンコード",
+            "enUS": "Button Code"
+          },
+          "required": {
+            "zhCN": "请输入按钮 code",
+            "ja": "ボタンコードを入力してください",
+            "enUS": "Please enter the button code"
+          }
+        },
+        "apiCode": {
+          "label": {
+            "zhCN": "接口 code",
+            "ja": "APIコード",
+            "enUS": "API Code"
+          },
+          "required": {
+            "zhCN": "请输入接口 code",
+            "ja": "APIコードを入力してください",
+            "enUS": "Please enter the API code"
+          }
+        }
+      }
+    },
+    "button": {
+      "reply": {
+        "reply": {
+          "ja": "返事",
+          "enUS": "Reply",
+          "zhCN": "回复"
+        }
+      }
+    }
+  },
+  "character.json": {
+    "table": {
+      "cover": {
+        "zhCN": "图片",
+        "ja": "画像",
+        "enUS": "Image"
+      },
+      "name": {
+        "zhCN": "角色名称",
+        "ja": "キャラクター名",
+        "enUS": "Role Name"
+      },
+      "originalName": {
+        "zhCN": "原名",
+        "ja": "原名",
+        "enUS": "Original Name"
+      },
+      "description": {
+        "zhCN": "简介",
+        "ja": "概要",
+        "enUS": "Description"
+      },
+      "movie": {
+        "zhCN": "所属电影",
+        "ja": "所属映画",
+        "enUS": "Movie"
+      },
+      "staff": {
+        "zhCN": "演员或者声优",
+        "ja": "俳優または声優",
+        "enUS": "Actor or Voice Actor"
+      },
+      "action": {
+        "zhCN": "操作",
+        "ja": "操作",
+        "enUS": "Action"
+      }
+    },
+    "modal": {
+      "title": {
+        "create": {
+          "zhCN": "添加角色",
+          "ja": "キャラクターを追加",
+          "enUS": "Add Role"
+        },
+        "edit": {
+          "zhCN": "编辑角色",
+          "ja": "キャラクターを編集",
+          "enUS": "Edit Role"
+        }
+      },
+      "form": {
+        "movie": {
+          "label": {
+            "zhCN": "电影名称",
+            "ja": "映画名",
+            "enUS": "Movie Name"
+          },
+          "required": {
+            "zhCN": "请选择电影",
+            "ja": "映画を選択してください",
+            "enUS": "Please select a movie"
+          }
+        },
+        "cover": {
+          "label": {
+            "zhCN": "图片",
+            "ja": "画像",
+            "enUS": "Image"
+          },
+          "required": {
+            "zhCN": "请上传图片",
+            "ja": "画像をアップロードしてください",
+            "enUS": "Please upload an image"
+          }
+        },
+        "name": {
+          "label": {
+            "zhCN": "角色名称",
+            "ja": "キャラクター名",
+            "enUS": "Role Name"
+          },
+          "required": {
+            "zhCN": "请输入角色名称",
+            "ja": "キャラクター名を入力してください",
+            "enUS": "Please enter the role name"
+          }
+        },
+        "originalName": {
+          "label": {
+            "zhCN": "原名",
+            "ja": "原名",
+            "enUS": "Original Name"
+          },
+          "required": {
+            "zhCN": "请输入原名",
+            "ja": "原名を入力してください",
+            "enUS": "Please enter the original name"
+          }
+        },
+        "description": {
+          "label": {
+            "zhCN": "简介",
+            "ja": "概要",
+            "enUS": "Description"
+          },
+          "required": {
+            "zhCN": "请输入简介",
+            "ja": "概要を入力してください",
+            "enUS": "Please enter the description"
+          }
+        },
+        "staffId": {
+          "label": {
+            "zhCN": "演职人员",
+            "ja": "スタッフ",
+            "enUS": "Cast or Crew"
+          },
+          "required": {
+            "zhCN": "请选择演职人员",
+            "ja": "スタッフを選択してください",
+            "enUS": "Please select the cast or crew"
+          }
+        }
+      }
+    },
+    "message": {
+      "remove": {
+        "content": {
+          "zhCN": "是否确认要删除当前角色，删除后不可恢复",
+          "ja": "現在のキャラクターを削除してもよろしいですか？削除後は元に戻せません",
+          "enUS": "Are you sure you want to delete the current role? This action cannot be undone."
+        },
+        "success": {
+          "zhCN": "删除成功",
+          "ja": "削除に成功しました",
+          "enUS": "Successfully deleted"
+        }
+      }
+    }
+  },
+  "chart.json": {
+    "top": {
+      "userCount": {
+        "zhCN": "用户数",
+        "ja": "ユーザー数",
+        "enUS": "Number of Users"
+      },
+      "movieCount": {
+        "zhCN": "电影数",
+        "ja": "映画数",
+        "enUS": "Number of Movies"
+      },
+      "cinemaCount": {
+        "zhCN": "影院数",
+        "ja": "映画館数",
+        "enUS": "Number of Cinemas"
+      },
+      "movieScreeningCount": {
+        "zhCN": "今日电影上映场次",
+        "ja": "今日の上映回数",
+        "enUS": "Number of Movie Screenings Today"
+      }
+    },
+    "tab": {
+      "userRegisterCount": {
+        "zhCN": "日注册用户",
+        "ja": "日別登録ユーザー数",
+        "enUS": "Daily Registered Users"
+      },
+      "orderCount": {
+        "zhCN": "日订单量",
+        "ja": "日別注文数",
+        "enUS": "Daily Orders"
+      },
+      "movieShowTimeCount": {
+        "zhCN": "日排片数",
+        "ja": "日別上映回数",
+        "enUS": "Daily Movie Showtimes"
+      },
+      "DailyTransactionAmount": {
+        "zhCN": "日成交金额",
+        "ja": "一日の取引額",
+        "enUS": "Daily Transaction Amount"
+      }
+    },
+    "registerPlatform": {
+      "zhCN": "注册平台",
+      "ja": "登録プラットフォーム",
+      "enUS": "Registration Platform"
+    },
+    "movieBoxOffice": {
+      "zhCN": "票房",
+      "ja": "興行収入",
+      "enUS": "Box Office"
+    }
+  },
+  "cinema.json": {
+    "table": {
+      "brandName": {
+        "zhCN": "品牌名称",
+        "ja": "ブランド名",
+        "enUS": "Brand Name"
+      },
+      "name": {
+        "zhCN": "影院名称",
+        "ja": "映画館名",
+        "enUS": "Cinema Name"
+      },
+      "spec": {
+        "zhCN": "规格",
+        "ja": "規格",
+        "enUS": "Specification"
+      },
+      "address": {
+        "zhCN": "地址",
+        "ja": "住所",
+        "enUS": "Address"
+      },
+      "tel": {
+        "zhCN": "电话",
+        "ja": "電話番号",
+        "enUS": "Phone"
+      },
+      "action": {
+        "zhCN": "操作",
+        "ja": "操作",
+        "enUS": "Action"
+      },
+      "description": {
+        "zhCN": "简介",
+        "ja": "概要",
+        "enUS": "Description"
+      },
+      "homePage": {
+        "zhCN": "官网",
+        "ja": "公式サイト",
+        "enUS": "Homepage"
+      },
+      "theaterCount": {
+        "zhCN": "影厅数",
+        "ja": "スクリーン数",
+        "enUS": "Number of Theaters"
+      },
+      "maxSelectSeatCount": {
+        "zhCN": "可选座位数",
+        "ja": "選択可能な座席数",
+        "enUS": "Selectable Seats"
+      }
+    },
+    "message": {
+      "remove": {
+        "content": {
+          "zhCN": "是否确认要删除当前影院?",
+          "ja": "現在の映画館を削除してもよろしいですか？",
+          "enUS": "Are you sure you want to delete the current cinema?"
+        },
+        "success": {
+          "zhCN": "删除成功",
+          "ja": "削除に成功しました",
+          "enUS": "Delete successful"
+        }
+      }
+    }
+  },
+  "cinemaDetail.json": {
+    "form": {
+      "brandId": {
+        "label": {
+          "zhCN": "品牌名称",
+          "ja": "ブランド名",
+          "enUS": "Brand Name"
+        },
+        "required": {
+          "zhCN": "请选择品牌名称",
+          "ja": "ブランド名を入力してください",
+          "enUS": "Please select a brand name"
+        }
+      },
+      "name": {
+        "label": {
+          "zhCN": "影院名称",
+          "ja": "映画館名",
+          "enUS": "Cinema Name"
+        },
+        "required": {
+          "zhCN": "请输入影院名称",
+          "ja": "映画館名を入力してください",
+          "enUS": "Please enter the cinema name"
+        }
+      },
+      "description": {
+        "label": {
+          "zhCN": "影院简介",
+          "ja": "映画館概要",
+          "enUS": "Cinema Description"
+        },
+        "required": {
+          "zhCN": "请输入影院简介",
+          "ja": "映画館概要を入力してください",
+          "enUS": "Please enter the cinema description"
+        }
+      },
+      "address": {
+        "label": {
+          "zhCN": "地址",
+          "ja": "住所",
+          "enUS": "Address"
+        },
+        "required": {
+          "zhCN": "请输入地址",
+          "ja": "住所を入力してください",
+          "enUS": "Please enter the address"
+        }
+      },
+      "tel": {
+        "label": {
+          "zhCN": "电话",
+          "ja": "電話番号",
+          "enUS": "Telephone"
+        },
+        "required": {
+          "zhCN": "请输入电话",
+          "ja": "電話番号を入力してください",
+          "enUS": "Please enter the telephone number"
+        }
+      },
+      "homePage": {
+        "label": {
+          "zhCN": "官网",
+          "ja": "公式サイト",
+          "enUS": "Homepage"
+        },
+        "required": {
+          "zhCN": "请输入官网地址",
+          "ja": "公式サイトのURLを入力してください",
+          "enUS": "Please enter the homepage URL"
+        }
+      },
+      "maxSelectSeatCount": {
+        "label": {
+          "zhCN": "最大可选座位数",
+          "ja": "最大選択可能な座席数",
+          "enUS": "Maximum Selectable Seats"
+        },
+        "required": {
+          "zhCN": "请输入最大可选座位数",
+          "ja": "最大選択可能な座席数を入力してください",
+          "enUS": "Please enter the maximum number of selectable seats"
+        }
+      },
+      "spec": {
+        "label": {
+          "zhCN": "规格",
+          "ja": "規格",
+          "enUS": "Specification"
+        },
+        "required": {
+          "zhCN": "请选择规格",
+          "ja": "規格を選択してください",
+          "enUS": "Please select a specification"
+        }
+      },
+      "plusPrice": {
+        "required": {
+          "zhCN": "请输入特殊上映追加价格",
+          "ja": "特別上映の追加料金を入力してください",
+          "enUS": "Please enter the additional price for special screenings"
+        }
+      },
+      "save": {
+        "zhCN": "保存",
+        "ja": "保存",
+        "enUS": "Save"
+      }
+    },
+    "message": {
+      "required": {
+        "zhCN": "规格和特殊上映追加价格不能为空",
+        "ja": "規格と特別上映の追加料金は必須です",
+        "enUS": "Specification and additional price for special screenings cannot be empty"
+      },
+      "repeat": {
+        "zhCN": "规格不能重复",
+        "ja": "規格は重複できません",
+        "enUS": "Specifications cannot be duplicated"
+      }
+    }
+  },
+  "comment.json": {
+    "table": {
+      "user": {
+        "zhCN": "评论人",
+        "ja": "コメント者",
+        "enUS": "User"
+      },
+      "content": {
+        "zhCN": "评论内容",
+        "ja": "コメント内容",
+        "enUS": "Comment Content"
+      },
+      "time": {
+        "zhCN": "评论时间",
+        "ja": "コメント時間",
+        "enUS": "Comment Time"
+      },
+      "replyCount": {
+        "zhCN": "回复数量",
+        "ja": "返信数",
+        "enUS": "Reply Count"
+      },
+      "likeCount": {
+        "zhCN": "点赞数量",
+        "ja": "いいね数",
+        "enUS": "Like Count"
+      },
+      "stepOnCount": {
+        "zhCN": "点踩数量",
+        "ja": "低評価数",
+        "enUS": "Dislike Count"
+      },
+      "action": {
+        "zhCN": "操作",
+        "ja": "操作",
+        "enUS": "Action"
+      }
+    },
+    "modal": {
+      "title": {
+        "create": {
+          "zhCN": "添加评论",
+          "ja": "コメントを追加",
+          "enUS": "Add Comment"
+        },
+        "edit": {
+          "zhCN": "编辑评论",
+          "ja": "コメントを編集",
+          "enUS": "Edit Comment"
+        }
+      },
+      "form": {
+        "comment": {
+          "label": {
+            "zhCN": "评论内容",
+            "ja": "コメント内容",
+            "enUS": "Comment Content"
+          },
+          "required": {
+            "zhCN": "请输入评论内容",
+            "ja": "コメント内容を入力してください",
+            "enUS": "Please enter the comment content"
+          },
+          "max": {
+            "zhCN": "字数不能超过 1000",
+            "ja": "文字数は1000を超えてはいけません",
+            "enUS": "The number of characters cannot exceed 1000"
+          }
+        }
+      }
+    },
+    "message": {
+      "remove": {
+        "content": {
+          "zhCN": "是否要删除当前行，删除后无法恢复。",
+          "ja": "現在の行を削除しますか？",
+          "enUS": "Do you want to delete the current row? This action cannot be undone."
+        }
+      }
+    }
+  },
+  "common.json": {
+    "menu": {
+      "dataChart": {
+        "zhCN": "数据图表",
+        "ja": "データチャート",
+        "enUS": "Data Chart"
+      },
+      "cinema": {
+        "name": {
+          "zhCN": "影院管理",
+          "ja": "映画館管理",
+          "enUS": "Cinema Management"
+        },
+        "children": {
+          "cinemaList": {
+            "zhCN": "影院列表",
+            "ja": "映画館リスト",
+            "enUS": "Cinema List"
+          },
+          "cinemaDetail": {
+            "zhCN": "影院详情",
+            "ja": "映画館詳細",
+            "enUS": "Cinema Detail"
+          },
+          "theaterHall": {
+            "zhCN": "影厅列表",
+            "ja": "スクリーンリスト",
+            "enUS": "Theater Hall List"
+          },
+          "specList": {
+            "zhCN": "规格列表",
+            "ja": "規格リスト",
+            "enUS": "Spec List"
+          },
+          "ticketType": {
+            "zhCN": "电影票类型",
+            "ja": "チケットタイプ",
+            "enUS": "Ticket Type"
+          },
+          "brandList": {
+            "zhCN": "品牌列表",
+            "ja": "ブランドリスト",
+            "enUS": "Brand List"
+          },
+          "screeningManagement": {
+            "zhCN": "上映场次管理"
+          }
+        }
+      },
+      "movie": {
+        "name": {
+          "zhCN": "电影管理",
+          "ja": "映画管理",
+          "enUS": "Movie Management"
+        },
+        "children": {
+          "movieList": {
+            "zhCN": "电影列表",
+            "ja": "映画リスト",
+            "enUS": "Movie List"
+          },
+          "characterList": {
+            "zhCN": "角色列表",
+            "ja": "キャラクターリスト",
+            "enUS": "Character List"
+          },
+          "staffList": {
+            "zhCN": "演职员列表",
+            "ja": "スタッフリスト",
+            "enUS": "Staff List"
+          },
+          "positionList": {
+            "zhCN": "职位列表",
+            "ja": "ポジションリスト",
+            "enUS": "Position List"
+          },
+          "levelList": {
+            "zhCN": "分级列表",
+            "ja": "レベルリスト",
+            "enUS": "Level List"
+          },
+          "movieDetail": {
+            "zhCN": "电影详情",
+            "ja": "映画詳細",
+            "enUS": "Movie Detail"
+          },
+          "commentList": {
+            "zhCN": "评论列表",
+            "ja": "コメントリスト",
+            "enUS": "Comment List"
+          },
+          "replyList": {
+            "zhCN": "回复列表",
+            "ja": "返信リスト",
+            "enUS": "Reply List"
+          },
+          "tagList": {
+            "zhCN": "标签列表",
+            "ja": "タグリスト",
+            "enUS": "Tag List"
+          },
+          "languageList": {
+            "zhCN": "语言列表",
+            "ja": "言語リスト",
+            "enUS": "Language List"
+          }
+        }
+      },
+      "showTime": {
+        "name": {
+          "zhCN": "场次管理",
+          "ja": "上映スケジュール管理",
+          "enUS": "Showtime Management"
+        },
+        "children": {
+          "showTimeList": {
+            "zhCN": "电影场次列表",
+            "ja": "映画上映スケジュールリスト",
+            "enUS": "Showtime List"
+          },
+          "showTimeTag": {
+            "zhCN": "场次标签列表",
+            "ja": "上映スケジュールタグリスト",
+            "enUS": "Showtime Tag List"
+          }
+        }
+      },
+      "userList": {
+        "zhCN": "用户列表",
+        "ja": "ユーザーリスト",
+        "enUS": "User List"
+      },
+      "dictList": {
+        "zhCN": "字典列表",
+        "ja": "辞書リスト",
+        "enUS": "Dictionary List"
+      },
+      "orderList": {
+        "zhCN": "订单列表",
+        "ja": "注文リスト",
+        "enUS": "Order List"
+      },
+      "permission": {
+        "name": {
+          "zhCN": "权限管理",
+          "ja": "権限管理",
+          "enUS": "Permission Management"
+        },
+        "children": {
+          "roleList": {
+            "zhCN": "角色列表",
+            "ja": "役割リスト",
+            "enUS": "Role List"
+          },
+          "menuList": {
+            "zhCN": "菜单列表",
+            "ja": "メニューリスト",
+            "enUS": "Menu List"
+          },
+          "buttonList": {
+            "zhCN": "按钮列表",
+            "ja": "ボタンリスト",
+            "enUS": "Button List"
+          },
+          "apiList": {
+            "zhCN": "接口列表",
+            "ja": "APIリスト",
+            "enUS": "API List"
+          }
+        }
+      }
+    },
+    "message": {
+      "notPermission": {
+        "zhCN": "没有权限",
+        "ja": "権限がありません",
+        "enUS": "No Permission"
+      },
+      "save": {
+        "zhCN": "保存成功",
+        "ja": "保存成功",
+        "enUS": "Save Successful"
+      }
+    },
+    "unit": {
+      "jpy": {
+        "zhCN": "日元",
+        "ja": "円",
+        "enUS": "JPY"
+      },
+      "billion": {
+        "zhCN": "亿",
+        "ja": "億",
+        "enUS": "Billion"
+      },
+      "million": {
+        "zhCN": "万",
+        "ja": "万",
+        "enUS": "Million"
+      }
+    },
+    "week": {
+      "Monday": {
+        "zhCN": "一",
+        "ja": "月",
+        "enUS": "Monday"
+      },
+      "Tuesday": {
+        "zhCN": "二",
+        "ja": "火",
+        "enUS": "Tuesday"
+      },
+      "Wednesday": {
+        "zhCN": "三",
+        "ja": "水",
+        "enUS": "Wednesday"
+      },
+      "Thursday": {
+        "zhCN": "四",
+        "ja": "木",
+        "enUS": "Thursday"
+      },
+      "Friday": {
+        "zhCN": "五",
+        "ja": "金",
+        "enUS": "Friday"
+      },
+      "Saturday": {
+        "zhCN": "六",
+        "ja": "土",
+        "enUS": "Saturday"
+      },
+      "Sunday": {
+        "zhCN": "日",
+        "ja": "日",
+        "enUS": "Sunday"
+      }
+    },
+    "button": {
+      "add": {
+        "zhCN": "添加",
+        "ja": "追加",
+        "enUS": "Add"
+      },
+      "edit": {
+        "zhCN": "编辑",
+        "ja": "編集",
+        "enUS": "Edit"
+      },
+      "dictDetail": {
+        "zhCN": "字典详情",
+        "ja": "辞書詳細",
+        "enUS": "Dictionary Detail"
+      },
+      "remove": {
+        "zhCN": "删除",
+        "ja": "削除",
+        "enUS": "Remove"
+      },
+      "save": {
+        "zhCN": "保存",
+        "ja": "保存",
+        "enUS": "Save"
+      },
+      "login": {
+        "zhCN": "登录",
+        "ja": "ログイン",
+        "enUS": "Login"
+      },
+      "ticketType": {
+        "zhCN": "电影票类型",
+        "ja": "チケットタイプ",
+        "enUS": "Ticket Type"
+      },
+      "theaterHallDetail": {
+        "zhCN": "影厅详情",
+        "ja": "スクリーン詳細",
+        "enUS": "Theater Hall Detail"
+      },
+      "commentList": {
+        "zhCN": "评论列表",
+        "ja": "コメントリスト",
+        "enUS": "Comment List"
+      },
+      "configPermission": {
+        "zhCN": "配置权限",
+        "ja": "権限を設定",
+        "enUS": "Configure Permission"
+      },
+      "configRole": {
+        "zhCN": "配置角色",
+        "ja": "役割を設定",
+        "enUS": "Configure Role"
+      },
+      "seatSelectedDetail": {
+        "zhCN": "选座",
+        "ja": "座席選択",
+        "enUS": "Seat Selection"
+      },
+      "configSeat": {
+        "zhCN": "配置座位",
+        "ja": "座席を設定",
+        "enUS": "Configure Seat"
+      },
+      "saveSeatConfig": {
+        "zhCN": "保存座位配置",
+        "ja": "座席設定を保存",
+        "enUS": "Save Seat Configuration"
+      },
+      "saveSelectSeat": {
+        "zhCN": "确认选座",
+        "ja": "座席選択を確認",
+        "enUS": "Confirm Seat Selection"
+      },
+      "configAisle": {
+        "zhCN": "配置过道",
+        "ja": "通路を設定",
+        "enUS": "Configure Aisle"
+      },
+      "configArea": {
+        "zhCN": "配置区域",
+        "ja": "エリアを設定",
+        "enUS": "Configure Area"
+      },
+      "cancel": {
+        "zhCN": "取消",
+        "ja": "キャンセル",
+        "enUS": "Cancel"
+      },
+      "order": {
+        "updateOrderState": {
+          "zhCN": "修改订单状态",
+          "ja": "注文状態を変更",
+          "enUS": "Update Order Status"
+        },
+        "generateQRcode": {
+          "zhCN": "生成取票码",
+          "ja": "QRコードを生成",
+          "enUS": "Generate QR Code"
+        }
+      },
+      "comment": {
+        "replyList": {
+          "zhCN": "回复列表",
+          "ja": "返信リスト",
+          "enUS": "Reply List"
+        }
+      },
+      "reply": {
+        "reply": {
+          "zhCN": "回复",
+          "enUS": "Reply"
+        }
+      },
+      "cinemaList": {
+        "screeningManagement": {
+          "zhCN": "上映场次管理",
+          "ja": "映画スケジュール管理"
+        }
+      }
+    },
+    "enum": {
+      "selectSeatState": {
+        "available": {
+          "zhCN": "可选座",
+          "ja": "選択可能",
+          "enUS": "Available Seat"
+        },
+        "locked": {
+          "zhCN": "已锁定",
+          "ja": "ロック済み",
+          "enUS": "Locked Seat"
+        },
+        "sold": {
+          "zhCN": "已售出",
+          "ja": "販売済み",
+          "enUS": "Sold Seat"
+        }
+      },
+      "orderState": {
+        "orderCreated": {
+          "zhCN": "订单已创建",
+          "ja": "注文作成済み",
+          "enUS": "Order Created"
+        },
+        "orderSucceed": {
+          "zhCN": "订单已完成",
+          "ja": "注文完了",
+          "enUS": "Order Completed"
+        },
+        "orderFailed": {
+          "zhCN": "订单失败",
+          "ja": "注文失敗",
+          "enUS": "Order Failed"
+        },
+        "canceledOrder": {
+          "zhCN": "订单已取消",
+          "ja": "注文キャンセル",
+          "enUS": "Order Canceled"
+        },
+        "orderTimeout": {
+          "zhCN": "订单超时",
+          "ja": "注文タイムアウト",
+          "enUS": "Order Timeout"
+        }
+      },
+      "seatType": {
+        "wheelChair": {
+          "zhCN": "轮椅座",
+          "ja": "車椅子席",
+          "enUS": "Wheelchair Seat"
+        },
+        "disabled": {
+          "zhCN": "已禁用",
+          "ja": "無効",
+          "enUS": "Disabled Seat"
+        }
+      }
+    },
+    "error": {
+      "403": {
+        "title": {
+          "zhCN": "没有访问权限",
+          "ja": "権限ありません。",
+          "enUS": "Access Denied"
+        },
+        "button": {
+          "zhCN": "回到登录页",
+          "ja": "ログインへ",
+          "enUS": "Back to Login Page"
+        }
+      }
+    },
+    "homePage": {
+      "logout": {
+        "zhCN": "退出登录",
+        "ja": "ログアウト",
+        "enUS": "logout"
+      }
+    }
+  },
+  "components.json": {
+    "query": {
+      "search": {
+        "zhCN": "搜索",
+        "ja": "検索",
+        "enUS": "Search"
+      },
+      "clear": {
+        "zhCN": "清空",
+        "ja": "クリア",
+        "enUS": "Clear"
+      },
+      "collapse": {
+        "zhCN": "展开",
+        "ja": "折りたたみ",
+        "enUS": "Expand"
+      },
+      "collapseClose": {
+        "zhCN": "收起",
+        "ja": "折りたたみ",
+        "enUS": "Collapse"
+      }
+    },
+    "upload": {
+      "error": {
+        "noSupportedFormat": {
+          "zhCN": "不支持的文件格式，仅支持：{{ext}}",
+          "ja": "サポートされていないフォーマットです。フォーマット{{ext}}",
+          "enUS": "Unsupported file format, only supports: {{ext}}"
+        },
+        "fileSize": {
+          "zhCN": "文件过大，最大大小为：{{size}}",
+          "ja": "ファイルサイズが大きすぎます。最大サイズ：{{size}}",
+          "enUS": "File too large, maximum size is: {{size}}"
+        }
+      },
+      "hint": {
+        "supportFormat": {
+          "zhCN": "支持的文件格式：",
+          "ja": "サポートされているフォーマット：",
+          "enUS": "Supported file formats: "
+        },
+        "fileSize": {
+          "zhCN": "文件大小最大不能超过：",
+          "ja": "ファイルサイズの上限：",
+          "enUS": "File size must not exceed: "
+        }
+      }
+    },
+    "cropper": {
+      "title": {
+        "zhCN": "裁剪图片",
+        "ja": "画像のトリミング",
+        "enUS": "Crop Image"
+      }
+    },
+    "verifyCode": {
+      "button": {
+        "zhCN": "发送验证码",
+        "ja": "認証コードを送信",
+        "enUS": "Send Verification Code"
+      },
+      "second": {
+        "zhCN": "秒",
+        "ja": "秒",
+        "enUS": "seconds"
+      }
+    }
+  },
+  "dict.json": {
+    "table": {
+      "name": {
+        "zhCN": "字典名称",
+        "ja": "辞書名",
+        "enUS": "Dictionary Name"
+      },
+      "code": {
+        "zhCN": "code",
+        "ja": "コード",
+        "enUS": "Code"
+      },
+      "action": {
+        "zhCN": "操作",
+        "ja": "操作",
+        "enUS": "Action"
+      }
+    },
+    "message": {
+      "remove": {
+        "content": {
+          "zhCN": "是否要删除当前行，删除时，如果有字典项，也将会一并被删除",
+          "ja": "現在の行を削除しますか？削除する際に、辞書項目も一緒に削除されます",
+          "enUS": "Are you sure you want to delete this row? If there are dictionary items, they will also be deleted."
+        }
+      }
+    },
+    "dictItemModal": {
+      "title": {
+        "zhCN": "字典详情",
+        "ja": "辞書詳細",
+        "enUS": "Dictionary Details"
+      },
+      "message": {
+        "repeat": {
+          "zhCN": "字典 code 不能重复",
+          "ja": "辞書コードは重複できません",
+          "enUS": "Dictionary code cannot be duplicated"
+        },
+        "required": {
+          "zhCN": "字典项不能为空",
+          "ja": "辞書項目は空にできません",
+          "enUS": "Dictionary items cannot be empty"
+        }
+      }
+    },
+    "dictModal": {
+      "title": {
+        "create": {
+          "zhCN": "添加",
+          "ja": "追加",
+          "enUS": "Add"
+        },
+        "edit": {
+          "zhCN": "编辑",
+          "ja": "編集",
+          "enUS": "Edit"
+        }
+      },
+      "form": {
+        "name": {
+          "label": {
+            "zhCN": "字典名称",
+            "ja": "辞書名",
+            "enUS": "Dictionary Name"
+          },
+          "required": {
+            "zhCN": "请输入字典名称",
+            "ja": "辞書名を入力してください",
+            "enUS": "Please enter dictionary name"
+          }
+        },
+        "code": {
+          "label": {
+            "zhCN": "字典 code",
+            "ja": "辞書コード",
+            "enUS": "Dictionary Code"
+          },
+          "required": {
+            "zhCN": "请输入字典 code",
+            "ja": "辞書コードを入力してください",
+            "enUS": "Please enter dictionary code"
+          }
+        }
+      }
+    }
+  },
+  "language.json": {
+    "table": {
+      "name": {
+        "zhCN": "语言名称",
+        "ja": "言語名",
+        "enUS": "Language Name"
+      },
+      "code": {
+        "zhCN": "语言 code",
+        "ja": "言語コード",
+        "enUS": "Language Code"
+      },
+      "action": {
+        "zhCN": "操作",
+        "ja": "操作",
+        "enUS": "Action"
+      }
+    },
+    "modal": {
+      "title": {
+        "create": {
+          "zhCN": "添加语言",
+          "ja": "言語を追加",
+          "enUS": "Add Language"
+        },
+        "edit": {
+          "zhCN": "编辑语言",
+          "ja": "言語を編集",
+          "enUS": "Edit Language"
+        }
+      },
+      "form": {
+        "name": {
+          "label": {
+            "zhCN": "语言名称",
+            "ja": "言語名",
+            "enUS": "Language Name"
+          },
+          "required": {
+            "zhCN": "请输入语言名称",
+            "ja": "言語名を入力してください",
+            "enUS": "Please enter language name"
+          }
+        },
+        "code": {
+          "label": {
+            "zhCN": "语言code",
+            "ja": "言語コード",
+            "enUS": "Language Code"
+          },
+          "required": {
+            "zhCN": "请输入语言code",
+            "ja": "言語コードを入力してください",
+            "enUS": "Please enter language code"
+          }
+        }
+      }
+    },
+    "message": {
+      "remove": {
+        "content": {
+          "zhCN": "是否确认要删除当前语言?",
+          "ja": "現在の言語を削除してもよろしいですか？",
+          "enUS": "Are you sure you want to delete this language?"
+        },
+        "success": {
+          "zhCN": "删除成功",
+          "ja": "削除成功",
+          "enUS": "Successfully deleted"
+        }
+      }
+    }
+  },
+  "level.json": {
+    "table": {
+      "name": {
+        "zhCN": "名称",
+        "ja": "名称",
+        "enUS": "Name"
+      },
+      "description": {
+        "zhCN": "简介",
+        "ja": "概要",
+        "enUS": "Description"
+      },
+      "action": {
+        "zhCN": "操作",
+        "ja": "操作",
+        "enUS": "Action"
+      }
+    },
+    "modal": {
+      "title": {
+        "create": {
+          "zhCN": "添加",
+          "ja": "追加",
+          "enUS": "Add"
+        },
+        "edit": {
+          "zhCN": "编辑",
+          "ja": "編集",
+          "enUS": "Edit"
+        }
+      },
+      "form": {
+        "name": {
+          "label": {
+            "zhCN": "名称",
+            "ja": "名称",
+            "enUS": "Name"
+          },
+          "required": {
+            "zhCN": "请输入名称",
+            "ja": "名称を入力してください",
+            "enUS": "Please enter a name"
+          }
+        },
+        "description": {
+          "label": {
+            "zhCN": "简介",
+            "ja": "概要",
+            "enUS": "Description"
+          },
+          "required": {
+            "zhCN": "请输入简介",
+            "ja": "概要を入力してください",
+            "enUS": "Please enter a description"
+          }
+        }
+      }
+    },
+    "message": {
+      "remove": {
+        "content": {
+          "zhCN": "是否确认要删除当前数据?",
+          "ja": "現在のデータを削除してもよろしいですか？",
+          "enUS": "Are you sure you want to delete this data?"
+        },
+        "success": {
+          "zhCN": "删除成功",
+          "ja": "削除に成功しました",
+          "enUS": "Successfully deleted"
+        }
+      }
+    }
+  },
+  "login.json": {
+    "form": {
+      "email": {
+        "label": {
+          "zhCN": "邮箱",
+          "ja": "メールアドレス",
+          "enUS": "Email"
+        },
+        "required": {
+          "zhCN": "请输入邮箱",
+          "ja": "メールアドレスを入力してください",
+          "enUS": "Please enter an email"
+        },
+        "error": {
+          "zhCN": "邮箱不合法",
+          "ja": "メールアドレスが無効です",
+          "enUS": "Invalid email address"
+        }
+      },
+      "password": {
+        "label": {
+          "zhCN": "密码",
+          "ja": "パスワード",
+          "enUS": "Password"
+        },
+        "required": {
+          "zhCN": "请输入密码",
+          "ja": "パスワードを入力してください",
+          "enUS": "Please enter a password"
+        },
+        "error": {
+          "zhCN": "密码不合法，格式为数字、字母，特殊字符为 -_.",
+          "ja": "パスワードが無効です。形式は数字、文字、特殊文字は -_. です",
+          "enUS": "Invalid password, format should include numbers, letters, and special characters: -_."
+        }
+      }
+    }
+  },
+  "menu.json": {
+    "table": {
+      "name": {
+        "zhCN": "页面名称",
+        "ja": "ページ名称",
+        "enUS": "Page Name"
+      },
+      "i18nKey": {
+        "zhCN": "国际化key",
+        "ja": "国際化キー",
+        "enUS": "Internationalization Key"
+      },
+      "routerPath": {
+        "zhCN": "路由路径",
+        "ja": "ルーティングパス",
+        "enUS": "Router Path"
+      },
+      "routerName": {
+        "zhCN": "路由名称",
+        "ja": "ルーティング名",
+        "enUS": "Router Name"
+      },
+      "show": {
+        "zhCN": "展示",
+        "ja": "表示",
+        "enUS": "Show"
+      },
+      "action": {
+        "zhCN": "操作",
+        "ja": "操作",
+        "enUS": "Action"
+      }
+    },
+    "message": {
+      "remove": {
+        "content": {
+          "zhCN": "是否确认要删除当前菜单，删除后不可恢复",
+          "ja": "現在のメニューを削除してもよろしいですか？",
+          "enUS": "Are you sure you want to delete the current menu? This action cannot be undone."
+        },
+        "success": {
+          "zhCN": "删除成功",
+          "ja": "削除に成功しました",
+          "enUS": "Deletion successful"
+        }
+      }
+    },
+    "modal": {
+      "title": {
+        "create": {
+          "zhCN": "添加菜单",
+          "ja": "メニューを追加",
+          "enUS": "Add Menu"
+        },
+        "edit": {
+          "zhCN": "编辑菜单",
+          "ja": "メニューを編集",
+          "enUS": "Edit Menu"
+        }
+      },
+      "form": {
+        "i18nKey": {
+          "label": {
+            "zhCN": "国际化key",
+            "ja": "国際化キー",
+            "enUS": "Internationalization Key"
+          },
+          "required": {
+            "zhCN": "请输入国际化key",
+            "ja": "国際化キーを入力してください",
+            "enUS": "Please enter the internationalization key"
+          }
+        },
+        "name": {
+          "label": {
+            "zhCN": "菜单名称",
+            "ja": "メニュー名称",
+            "enUS": "Menu Name"
+          },
+          "required": {
+            "zhCN": "请输入菜单名称",
+            "ja": "メニュー名称を入力してください",
+            "enUS": "Please enter the menu name"
+          }
+        },
+        "path": {
+          "label": {
+            "zhCN": "路由路径",
+            "ja": "ルーティングパス",
+            "enUS": "Router Path"
+          },
+          "required": {
+            "zhCN": "请输入路由路径",
+            "ja": "ルーティングパスを入力してください",
+            "enUS": "Please enter the router path"
+          }
+        },
+        "pathName": {
+          "label": {
+            "zhCN": "路由路径名称",
+            "ja": "ルーティングパス名",
+            "enUS": "Router Path Name"
+          },
+          "required": {
+            "zhCN": "请输入路由路径名称",
+            "ja": "ルーティングパス名を入力してください",
+            "enUS": "Please enter the router path name"
+          }
+        },
+        "show": {
+          "label": {
+            "zhCN": "展示",
+            "ja": "表示",
+            "enUS": "Show"
+          }
+        },
+        "parentId": {
+          "label": {
+            "zhCN": "父级菜单",
+            "ja": "親メニュー",
+            "enUS": "Parent Menu"
+          }
+        }
+      }
+    }
+  },
+  "movie.json": {
+    "table": {
+      "name": {
+        "zhCN": "作品",
+        "ja": "作品",
+        "enUS": "Movie"
+      },
+      "originalName": {
+        "zhCN": "原名",
+        "ja": "原題",
+        "enUS": "Original Name"
+      },
+      "time": {
+        "zhCN": "片长",
+        "ja": "上映時間",
+        "enUS": "Duration"
+      },
+      "tags": {
+        "zhCN": "标签",
+        "ja": "タグ",
+        "enUS": "Tags"
+      },
+      "helloMovie": {
+        "zhCN": "无障碍",
+        "ja": "hello movie",
+        "enUS": "Accessible"
+      },
+      "level": {
+        "zhCN": "分级",
+        "ja": "レベル",
+        "enUS": "Rating"
+      },
+      "cinemaCount": {
+        "zhCN": "上映影院数",
+        "ja": "上映映画館数",
+        "enUS": "Number of Cinemas"
+      },
+      "theaterCount": {
+        "zhCN": "上映场馆数",
+        "ja": "上映劇場数",
+        "enUS": "Number of Theaters"
+      },
+      "commentCount": {
+        "zhCN": "评论数",
+        "ja": "コメント数",
+        "enUS": "Number of Comments"
+      },
+      "watchedCount": {
+        "zhCN": "已看过",
+        "ja": "視聴済み",
+        "enUS": "Watched"
+      },
+      "wantToSeeCount": {
+        "zhCN": "想看数",
+        "ja": "見たい数",
+        "enUS": "Want to See"
+      },
+      "startDate": {
+        "zhCN": "开始日期",
+        "ja": "開始日",
+        "enUS": "Start Date"
+      },
+      "endDate": {
+        "zhCN": "结束日期",
+        "ja": "終了日",
+        "enUS": "End Date"
+      },
+      "status": {
+        "zhCN": "上映状态",
+        "ja": "上映ステータス",
+        "enUS": "Release Status"
+      },
+      "action": {
+        "zhCN": "操作",
+        "ja": "操作",
+        "enUS": "Action"
+      }
+    },
+    "message": {
+      "remove": {
+        "content": {
+          "zhCN": "是否确认删除当前电影?",
+          "ja": "現在の映画を削除しますか？",
+          "enUS": "Are you sure you want to delete the current movie?"
+        },
+        "success": {
+          "zhCN": "删除成功",
+          "ja": "削除に成功しました",
+          "enUS": "Deletion successful"
+        }
+      }
+    }
+  },
+  "movieDetail.json": {
+    "form": {
+      "cover": {
+        "label": {
+          "zhCN": "封面",
+          "ja": "カバー",
+          "enUS": "Cover"
+        },
+        "required": {
+          "zhCN": "请上传电影封面",
+          "ja": "映画のカバーをアップロードしてください",
+          "enUS": "Please upload the movie cover"
+        }
+      },
+      "name": {
+        "label": {
+          "zhCN": "电影名称",
+          "ja": "映画の名前",
+          "enUS": "Movie Name"
+        },
+        "required": {
+          "zhCN": "请输入电影名称",
+          "ja": "映画の名前を入力してください",
+          "enUS": "Please enter the movie name"
+        }
+      },
+      "originalName": {
+        "label": {
+          "zhCN": "电影原名",
+          "ja": "映画の原題",
+          "enUS": "Original Movie Name"
+        },
+        "required": {
+          "zhCN": "请输入电影原名",
+          "ja": "映画の原題を入力してください",
+          "enUS": "Please enter the original movie name"
+        }
+      },
+      "time": {
+        "label": {
+          "zhCN": "电影时长",
+          "ja": "映画の長さ",
+          "enUS": "Duration"
+        },
+        "required": {
+          "zhCN": "请输入电影时长",
+          "ja": "映画の長さを入力してください",
+          "enUS": "Please enter the movie duration"
+        }
+      },
+      "level": {
+        "label": {
+          "zhCN": "电影分级",
+          "ja": "映画のレベル",
+          "enUS": "Rating"
+        },
+        "required": {
+          "zhCN": "请选择分级",
+          "ja": "レベルを選択してください",
+          "enUS": "Please select the rating"
+        }
+      },
+      "tag": {
+        "label": {
+          "zhCN": "标签",
+          "ja": "タグ",
+          "enUS": "Tags"
+        },
+        "required": {
+          "zhCN": "请选择标签",
+          "ja": "タグを選択してください",
+          "enUS": "Please select tags"
+        }
+      },
+      "helloMovie": {
+        "label": {
+          "zhCN": "Hello Movie（无障碍）",
+          "ja": "hello movie（バリアフリー）",
+          "enUS": "Hello Movie (Accessible)"
+        },
+        "required": {
+          "zhCN": "Hello Movie 不能为空",
+          "ja": "hello movieは必須です",
+          "enUS": "Hello Movie cannot be empty"
+        },
+        "notRepeat": {
+          "zhCN": "Hello Movie 不能重复",
+          "ja": "hello movieは重複できません",
+          "enUS": "Hello Movie cannot be duplicated"
+        }
+      },
+      "spec": {
+        "label": {
+          "zhCN": "上映规格",
+          "ja": "上映仕様",
+          "enUS": "Release Specification"
+        },
+        "required": {
+          "zhCN": "请选择上映规格",
+          "ja": "上映仕様を選択してください",
+          "enUS": "Please select the release specification"
+        }
+      },
+      "description": {
+        "label": {
+          "zhCN": "影片简介",
+          "ja": "映画の説明",
+          "enUS": "Description"
+        },
+        "required": {
+          "zhCN": "请输入影片简介",
+          "ja": "映画の説明を入力してください",
+          "enUS": "Please enter the movie description"
+        }
+      },
+      "status": {
+        "label": {
+          "zhCN": "上映状态",
+          "ja": "上映状態",
+          "enUS": "Release Status"
+        },
+        "required": {
+          "zhCN": "请选择上映状态",
+          "ja": "上映状態を選択してください",
+          "enUS": "Please select the release status"
+        }
+      },
+      "startDate": {
+        "label": {
+          "zhCN": "上映开始日期",
+          "ja": "上映開始日",
+          "enUS": "Start Date"
+        },
+        "required": {
+          "zhCN": "请选择开始上映日期",
+          "ja": "上映開始日を選択してください",
+          "enUS": "Please select the start date"
+        }
+      },
+      "endDate": {
+        "label": {
+          "zhCN": "上映结束日期",
+          "ja": "上映終了日",
+          "enUS": "End Date"
+        },
+        "required": {
+          "zhCN": "请选择结束上映日期",
+          "ja": "上映終了日を選択してください",
+          "enUS": "Please select the end date"
+        },
+        "startAfterEnd": {
+          "zhCN": "结束日期必须比开始日期大",
+          "ja": "終了日は開始日より後でなければなりません",
+          "enUS": "End date must be after the start date"
+        }
+      },
+      "homePage": {
+        "label": {
+          "zhCN": "官网",
+          "ja": "公式サイト",
+          "enUS": "Homepage"
+        },
+        "required": {
+          "zhCN": "请输入官网地址",
+          "ja": "公式サイトのアドレスを入力してください",
+          "enUS": "Please enter the homepage URL"
+        }
+      },
+      "staff": {
+        "label": {
+          "zhCN": "工作人员",
+          "ja": "スタッフ",
+          "enUS": "Staff"
+        }
+      },
+      "character": {
+        "label": {
+          "zhCN": "角色",
+          "ja": "キャラクター",
+          "enUS": "Character"
+        }
+      }
+    },
+    "staff": {
+      "select": {
+        "zhCN": "选择工作人员",
+        "ja": "スタッフを選択",
+        "enUS": "Select Staff"
+      },
+      "table": {
+        "position": {
+          "zhCN": "职位",
+          "ja": "ポジション",
+          "enUS": "Position"
+        },
+        "cover": {
+          "zhCN": "图片",
+          "ja": "画像",
+          "enUS": "Image"
+        },
+        "name": {
+          "zhCN": "名称",
+          "ja": "名前",
+          "enUS": "Name"
+        },
+        "action": {
+          "zhCN": "操作",
+          "ja": "操作",
+          "enUS": "Action"
+        }
+      },
+      "button": {
+        "edit": {
+          "zhCN": "编辑",
+          "ja": "編集",
+          "enUS": "Edit"
+        },
+        "remove": {
+          "zhCN": "删除",
+          "ja": "削除",
+          "enUS": "Delete"
+        }
+      },
+      "message": {
+        "notRepeat": {
+          "zhCN": "该职位已添加",
+          "ja": "このポジションは既に追加されています",
+          "enUS": "This position has already been added"
+        }
+      },
+      "modal": {
+        "button": {
+          "addPosition": {
+            "zhCN": "添加职位",
+            "ja": "ポジションを追加",
+            "enUS": "Add Position"
+          },
+          "addStaff": {
+            "zhCN": "添加工作人员",
+            "ja": "スタッフを追加",
+            "enUS": "Add Staff"
+          }
+        },
+        "form": {
+          "staff": {
+            "label": {
+              "zhCN": "工作人员",
+              "ja": "スタッフ",
+              "enUS": "Staff"
+            },
+            "required": {
+              "zhCN": "请选择工作人员",
+              "ja": "スタッフを選択してください",
+              "enUS": "Please select staff"
+            }
+          },
+          "position": {
+            "label": {
+              "zhCN": "职位名称",
+              "ja": "ポジション名",
+              "enUS": "Position Name"
+            },
+            "required": {
+              "zhCN": "请选择职位",
+              "ja": "ポジションを選択してください",
+              "enUS": "Please select a position"
+            }
+          }
+        }
+      }
+    },
+    "character": {
+      "select": {
+        "zhCN": "选择角色",
+        "ja": "キャラクターを選択",
+        "enUS": "Select Character"
+      },
+      "table": {
+        "cover": {
+          "zhCN": "图片",
+          "ja": "画像",
+          "enUS": "Image"
+        },
+        "name": {
+          "zhCN": "名称",
+          "ja": "名前",
+          "enUS": "Name"
+        },
+        "staff": {
+          "zhCN": "演员或者声优",
+          "ja": "俳優または声優",
+          "enUS": "Actor or Voice Actor"
+        },
+        "action": {
+          "zhCN": "操作",
+          "ja": "操作",
+          "enUS": "Action"
+        }
+      },
+      "button": {
+        "edit": {
+          "zhCN": "编辑",
+          "ja": "編集",
+          "enUS": "Edit"
+        },
+        "remove": {
+          "zhCN": "删除",
+          "ja": "削除",
+          "enUS": "Delete"
+        }
+      },
+      "message": {
+        "notRepeat": {
+          "zhCN": "该角色已添加",
+          "ja": "このキャラクターは既に追加されています",
+          "enUS": "This character has already been added"
+        }
+      },
+      "modal": {
+        "button": {
+          "addCharacter": {
+            "zhCN": "添加角色",
+            "ja": "キャラクターを追加",
+            "enUS": "Add Character"
+          }
+        },
+        "form": {
+          "movie": {
+            "label": {
+              "zhCN": "所属电影",
+              "ja": "所属映画",
+              "enUS": "Movie"
+            },
+            "required": {
+              "zhCN": "请选择电影",
+              "ja": "映画を選択してください",
+              "enUS": "Please select a movie"
+            }
+          },
+          "character": {
+            "label": {
+              "zhCN": "角色",
+              "ja": "キャラクター",
+              "enUS": "Character"
+            },
+            "required": {
+              "zhCN": "请选择角色",
+              "ja": "キャラクターを選択してください",
+              "enUS": "Please select a character"
+            }
+          }
+        }
+      }
+    },
+    "button": {
+      "prev": {
+        "zhCN": "上一步",
+        "ja": "前のステップ",
+        "enUS": "Previous"
+      },
+      "next": {
+        "zhCN": "下一步",
+        "ja": "次のステップ",
+        "enUS": "Next"
+      },
+      "save": {
+        "zhCN": "保存",
+        "ja": "保存",
+        "enUS": "Save"
+      },
+      "upload": {
+        "zhCN": "上传",
+        "ja": "アップロード",
+        "enUS": "Upload"
+      }
+    }
+  },
+  "movieTagList.json": {
+    "table": {
+      "name": {
+        "zhCN": "标签名称",
+        "ja": "タグ名",
+        "enUS": "Tag Name"
+      },
+      "action": {
+        "zhCN": "操作",
+        "ja": "操作",
+        "enUS": "Action"
+      }
+    },
+    "modal": {
+      "title": {
+        "create": {
+          "zhCN": "添加标签",
+          "ja": "タグを追加",
+          "enUS": "Add Tag"
+        },
+        "edit": {
+          "zhCN": "编辑标签",
+          "ja": "タグを編集",
+          "enUS": "Edit Tag"
+        }
+      },
+      "form": {
+        "name": {
+          "label": {
+            "zhCN": "标签名称",
+            "ja": "タグ名",
+            "enUS": "Tag Name"
+          },
+          "required": {
+            "zhCN": "请输入标签名称",
+            "ja": "タグ名を入力してください",
+            "enUS": "Please enter the tag name"
+          }
+        }
+      }
+    },
+    "message": {
+      "remove": {
+        "content": {
+          "zhCN": "是否确认要删除当前标签?",
+          "ja": "現在のタグを削除してもよろしいですか？",
+          "enUS": "Are you sure you want to delete the current tag?"
+        },
+        "success": {
+          "zhCN": "删除成功",
+          "ja": "削除成功",
+          "enUS": "Deleted successfully"
+        }
+      }
+    }
+  },
+  "order.json": {
+    "table": {
+      "name": {
+        "zhCN": "作品",
+        "ja": "作品",
+        "enUS": "Title"
+      },
+      "cinemaName": {
+        "zhCN": "上映影院",
+        "ja": "上映映画館",
+        "enUS": "Cinema"
+      },
+      "theaterHallName": {
+        "zhCN": "上映影厅",
+        "ja": "上映劇場",
+        "enUS": "Theater Hall"
+      },
+      "specName": {
+        "zhCN": "上映规格",
+        "ja": "上映仕様",
+        "enUS": "Specification"
+      },
+      "showTime": {
+        "zhCN": "上映场次",
+        "ja": "上映時間",
+        "enUS": "Show Time"
+      },
+      "orderNumber": {
+        "zhCN": "订单号",
+        "ja": "注文番号",
+        "enUS": "Order Number"
+      },
+      "seatNumber": {
+        "zhCN": "座位号",
+        "ja": "座席番号",
+        "enUS": "Seat Number"
+      },
+      "payMethod": {
+        "zhCN": "支付方式",
+        "ja": "支払い方法",
+        "enUS": "Payment Method"
+      },
+      "payTime": {
+        "zhCN": "支付时间",
+        "ja": "支払い時間",
+        "enUS": "Payment Time"
+      },
+      "payState": {
+        "zhCN": "支付状态",
+        "ja": "支払い状態",
+        "enUS": "Payment Status"
+      },
+      "payTotal": {
+        "zhCN": "支付总价",
+        "ja": "支払い総額",
+        "enUS": "Total Payment"
+      },
+      "orderTime": {
+        "zhCN": "订单创建时间",
+        "ja": "注文作成時間",
+        "enUS": "Order Creation Time"
+      },
+      "orderState": {
+        "zhCN": "订单状态",
+        "ja": "注文状態",
+        "enUS": "Order Status"
+      },
+      "orderTotal": {
+        "zhCN": "订单总价",
+        "ja": "注文総額",
+        "enUS": "Order Total"
+      },
+      "action": {
+        "zhCN": "操作",
+        "ja": "操作",
+        "enUS": "Action"
+      }
+    },
+    "search": {
+      "cinema": {
+        "zhCN": "上映影院",
+        "ja": "上映映画館",
+        "enUS": "Cinema"
+      },
+      "theaterHall": {
+        "zhCN": "上映影厅",
+        "ja": "上映劇場",
+        "enUS": "Theater Hall"
+      },
+      "id": {
+        "zhCN": "订单号",
+        "ja": "注文番号",
+        "enUS": "Order Number"
+      },
+      "orderTime": {
+        "zhCN": "订单时间",
+        "ja": "注文時間",
+        "enUS": "Order Time"
+      },
+      "orderState": {
+        "zhCN": "订单状态",
+        "ja": "注文状態",
+        "enUS": "Order Status"
+      },
+      "payState": {
+        "zhCN": "支付状态",
+        "ja": "支払い状態",
+        "enUS": "Payment Status"
+      }
+    },
+    "message": {
+      "remove": {
+        "content": {
+          "zhCN": "是否确认删除当前订单？",
+          "ja": "現在の注文を削除してもよろしいですか？",
+          "enUS": "Are you sure you want to delete the current order?"
+        }
+      }
+    },
+    "updateOrderStateModal": {
+      "title": {
+        "zhCN": "修改订单状态",
+        "ja": "注文状態の変更",
+        "enUS": "Update Order Status"
+      },
+      "form": {
+        "orderState": {
+          "label": {
+            "zhCN": "订单状态",
+            "ja": "注文状態",
+            "enUS": "Order Status"
+          },
+          "required": {
+            "zhCN": "请选择订单状态",
+            "ja": "注文状態を選択してください",
+            "enUS": "Please select the order status"
+          }
+        },
+        "payState": {
+          "label": {
+            "zhCN": "支付状态",
+            "ja": "支払い状態",
+            "enUS": "Payment Status"
+          },
+          "required": {
+            "zhCN": "请选择支付状态",
+            "ja": "支払い状態を選択してください",
+            "enUS": "Please select the payment status"
+          }
+        }
+      }
+    },
+    "QRcodeModal": {
+      "title": {
+        "zhCN": "二维码",
+        "ja": "二次元コード",
+        "enUS": "QR Code"
+      }
+    }
+  },
+  "position.json": {
+    "table": {
+      "name": {
+        "zhCN": "职位名称",
+        "ja": "役職名",
+        "enUS": "Position Name"
+      },
+      "action": {
+        "zhCN": "操作",
+        "ja": "操作",
+        "enUS": "Action"
+      }
+    },
+    "modal": {
+      "title": {
+        "create": {
+          "zhCN": "添加职位",
+          "ja": "役職の追加",
+          "enUS": "Add Position"
+        },
+        "edit": {
+          "zhCN": "编辑职位",
+          "ja": "役職の編集",
+          "enUS": "Edit Position"
+        }
+      },
+      "form": {
+        "name": {
+          "label": {
+            "zhCN": "职位名称",
+            "ja": "役職名",
+            "enUS": "Position Name"
+          },
+          "required": {
+            "zhCN": "请输入职位名称",
+            "ja": "役職名を入力してください",
+            "enUS": "Please enter the position name"
+          }
+        }
+      }
+    },
+    "message": {
+      "remove": {
+        "content": {
+          "zhCN": "是否确认要删除当前职位?",
+          "ja": "現在の役職を削除してもよろしいですか？",
+          "enUS": "Are you sure you want to delete the current position?"
+        },
+        "success": {
+          "zhCN": "删除成功",
+          "ja": "削除が成功しました",
+          "enUS": "Successfully deleted"
+        }
+      }
+    }
+  },
+  "reply.json": {
+    "table": {
+      "commentUser": {
+        "zhCN": "评论人",
+        "ja": "コメント者",
+        "enUS": "Comment User"
+      },
+      "replyUser": {
+        "zhCN": "回复人",
+        "ja": "返信者",
+        "enUS": "Reply User"
+      },
+      "content": {
+        "zhCN": "回复内容",
+        "ja": "返信内容",
+        "enUS": "Reply Content"
+      },
+      "time": {
+        "zhCN": "回复时间",
+        "ja": "返信時間",
+        "enUS": "Reply Time"
+      },
+      "replyCount": {
+        "zhCN": "回复数量",
+        "ja": "返信数",
+        "enUS": "Reply Count"
+      },
+      "likeCount": {
+        "zhCN": "点赞数量",
+        "ja": "いいね数",
+        "enUS": "Like Count"
+      },
+      "stepOnCount": {
+        "zhCN": "点踩数量",
+        "ja": "嫌い数",
+        "enUS": "Step On Count"
+      },
+      "action": {
+        "zhCN": "操作",
+        "ja": "操作",
+        "enUS": "Action"
+      }
+    },
+    "modal": {
+      "title": {
+        "create": {
+          "zhCN": "添加回复",
+          "ja": "返信の追加",
+          "enUS": "Add Reply"
+        },
+        "edit": {
+          "zhCN": "编辑回复",
+          "ja": "返信の編集",
+          "enUS": "Edit Reply"
+        }
+      },
+      "form": {
+        "comment": {
+          "label": {
+            "zhCN": "回复内容",
+            "ja": "返信内容",
+            "enUS": "Reply Content"
+          },
+          "required": {
+            "zhCN": "请输入回复内容",
+            "ja": "返信内容を入力してください",
+            "enUS": "Please enter reply content"
+          },
+          "max": {
+            "zhCN": "字数不能超过 1000",
+            "ja": "文字数は1000以内にしてください",
+            "enUS": "Content cannot exceed 1000 characters"
+          }
+        }
+      }
+    },
+    "message": {
+      "remove": {
+        "content": {
+          "zhCN": "是否要删除当前行?",
+          "ja": "現在の行を削除してもよろしいですか？",
+          "enUS": "Are you sure you want to delete the current row?"
+        },
+        "success": {
+          "ja": "削除が成功しました"
+        }
+      }
+    }
+  },
+  "role.json": {
+    "table": {
+      "name": {
+        "zhCN": "角色名称",
+        "ja": "ロール名",
+        "enUS": "Role Name"
+      },
+      "action": {
+        "zhCN": "操作",
+        "ja": "操作",
+        "enUS": "Action"
+      }
+    },
+    "modal": {
+      "title": {
+        "create": {
+          "zhCN": "添加角色",
+          "ja": "ロールの追加",
+          "enUS": "Add Role"
+        },
+        "edit": {
+          "zhCN": "编辑角色",
+          "ja": "ロールの編集",
+          "enUS": "Edit Role"
+        }
+      },
+      "form": {
+        "name": {
+          "label": {
+            "zhCN": "角色名称",
+            "ja": "ロール名",
+            "enUS": "Role Name"
+          },
+          "required": {
+            "zhCN": "请输入角色名称",
+            "ja": "ロール名を入力してください",
+            "enUS": "Please enter role name"
+          }
+        }
+      }
+    },
+    "rolePermissionModal": {
+      "title": {
+        "zhCN": "配置权限",
+        "ja": "権限の設定",
+        "enUS": "Configure Permissions"
+      },
+      "table": {
+        "name": {
+          "zhCN": "菜单名称",
+          "ja": "メニュー名",
+          "enUS": "Menu Name"
+        },
+        "button": {
+          "zhCN": "按钮",
+          "ja": "ボタン",
+          "enUS": "Button"
+        },
+        "show": {
+          "zhCN": "展示",
+          "ja": "表示",
+          "enUS": "Show"
+        }
+      }
+    },
+    "message": {
+      "noSelectMenu": {
+        "zhCN": "请选择菜单",
+        "ja": "メニューを選択してください",
+        "enUS": "Please select a menu"
+      },
+      "remove": {
+        "content": {
+          "zhCN": "是否确认要删除当前角色，删除后不可恢复",
+          "ja": "現在のロールを削除してもよろしいですか？",
+          "enUS": "Are you sure you want to delete the current role? This action cannot be undone."
+        },
+        "success": {
+          "zhCN": "删除成功",
+          "ja": "削除が成功しました",
+          "enUS": "Deleted successfully"
+        }
+      }
+    }
+  },
+  "screeningManagment.json": {
+    "table": {
+      "seatSelectRate": {
+        "zhCN": "座位选择比例",
+        "ja": "座席選択比率"
+      },
+      "open": {
+        "zhCN": "公开",
+        "ja": "公開"
+      }
+    }
+  },
+  "showTime.json": {
+    "table": {
+      "name": {
+        "zhCN": "作品",
+        "ja": "作品",
+        "enUS": "Movie"
+      },
+      "subtitle": {
+        "zhCN": "字幕",
+        "ja": "字幕",
+        "enUS": "Subtitle"
+      },
+      "showTimeTag": {
+        "zhCN": "上映场次标签",
+        "ja": "上映場次タグ",
+        "enUS": "Show Time Tag"
+      },
+      "startDate": {
+        "zhCN": "开始时间",
+        "ja": "開始日時",
+        "enUS": "Start Time"
+      },
+      "endDate": {
+        "zhCN": "结束时间",
+        "ja": "終了日時",
+        "enUS": "End Time"
+      },
+      "playState": {
+        "zhCN": "上映状态",
+        "ja": "上映状態",
+        "enUS": "Play State"
+      },
+      "cinema": {
+        "zhCN": "上映影院",
+        "ja": "上映映画館",
+        "enUS": "Cinema"
+      },
+      "theaterHall": {
+        "zhCN": "上映影厅",
+        "ja": "上映劇場",
+        "enUS": "Theater Hall"
+      },
+      "open": {
+        "zhCN": "是否公开",
+        "ja": "公開",
+        "enUS": "Public"
+      },
+      "spec": {
+        "zhCN": "上映规格",
+        "ja": "上映仕様",
+        "enUS": "Specification"
+      },
+      "seatSelectionRatio": {
+        "zhCN": "选座比",
+        "ja": "座席選択比率",
+        "enUS": "Seat Selection Ratio"
+      },
+      "attendance": {
+        "zhCN": "上座率",
+        "ja": "観客数",
+        "enUS": "Attendance"
+      },
+      "action": {
+        "zhCN": "操作",
+        "ja": "操作",
+        "enUS": "Action"
+      }
+    },
+    "query": {
+      "cinema": {
+        "zhCN": "影院",
+        "ja": "映画館",
+        "enUS": "Cinema"
+      },
+      "date": {
+        "zhCN": "上映日期",
+        "ja": "上映日",
+        "enUS": "Show Date"
+      }
+    },
+    "message": {
+      "remove": {
+        "selectedCount": {
+          "zhCN": "当前已有{{count}}人选座，是否仍要删除",
+          "ja": "現在{{count}}人が座席を選択していますが、削除してもよろしいですか？",
+          "enUS": "Currently, {{count}} people have selected seats. Do you still want to delete?"
+        },
+        "content": {
+          "zhCN": "是否确认要删除当前场次?",
+          "ja": "現在の上映場次を削除してもよろしいですか？",
+          "enUS": "Are you sure you want to delete the current show time?"
+        },
+        "success": {
+          "zhCN": "删除成功",
+          "ja": "削除に成功しました",
+          "enUS": "Deleted successfully"
+        }
+      }
+    },
+    "createOrderModal": {
+      "title": {
+        "zhCN": "确认订单",
+        "ja": "注文確認",
+        "enUS": "Confirm Order"
+      },
+      "total": {
+        "zhCN": "合计",
+        "ja": "合計",
+        "enUS": "Total"
+      },
+      "message": {
+        "movieTicketTypeId": {
+          "required": {
+            "zhCN": "请选择电影票类型",
+            "ja": "映画チケットタイプを選択してください",
+            "enUS": "Please select the type of movie ticket"
+          }
+        }
+      },
+      "table": {
+        "name": {
+          "zhCN": "作品",
+          "ja": "作品",
+          "enUS": "Movie"
+        },
+        "spec": {
+          "zhCN": "上映规格",
+          "ja": "上映仕様",
+          "enUS": "Specification"
+        },
+        "seat": {
+          "zhCN": "座位信息",
+          "ja": "座席情報",
+          "enUS": "Seat Information"
+        },
+        "area": {
+          "zhCN": "区域名称/价格",
+          "ja": "エリア名/価格",
+          "enUS": "Area Name/Price"
+        },
+        "price": {
+          "zhCN": "价格",
+          "ja": "価格",
+          "enUS": "Price"
+        },
+        "plusPrice": {
+          "zhCN": "特殊上映追加价格",
+          "ja": "特別上映の追加料金",
+          "enUS": "Special Screening Additional Price"
+        },
+        "movieTicketType": {
+          "zhCN": "电影票类型",
+          "ja": "映画チケットタイプ",
+          "enUS": "Movie Ticket Type"
+        }
+      },
+      "form": {
+        "movieTicketType": {
+          "label": {
+            "zhCN": "电影票类型",
+            "ja": "映画チケットタイプ",
+            "enUS": "Movie Ticket Type"
+          },
+          "required": {
+            "zhCN": "请选择电影票类型",
+            "ja": "映画チケットタイプを選択してください",
+            "enUS": "Please select the type of movie ticket"
+          }
+        }
+      }
+    },
+    "showTimeModal": {
+      "title": {
+        "create": {
+          "zhCN": "添加场次",
+          "ja": "場次を追加",
+          "enUS": "Add Show Time"
+        },
+        "edit": {
+          "zhCN": "编辑场次",
+          "ja": "場次を編集",
+          "enUS": "Edit Show Time"
+        }
+      },
+      "form": {
+        "movie": {
+          "label": {
+            "zhCN": "电影名称",
+            "ja": "映画タイトル",
+            "enUS": "Movie Name"
+          },
+          "required": {
+            "zhCN": "请选择电影",
+            "ja": "映画を選択してください",
+            "enUS": "Please select a movie"
+          }
+        },
+        "open": {
+          "label": {
+            "zhCN": "是否公开",
+            "ja": "公開するか",
+            "enUS": "Public"
+          }
+        },
+        "cinema": {
+          "required": {
+            "zhCN": "请选择影院",
+            "ja": "映画館を選択してください",
+            "enUS": "Please select a cinema"
+          }
+        },
+        "theaterHall": {
+          "label": {
+            "zhCN": "放映影厅",
+            "ja": "上映劇場",
+            "enUS": "Theater Hall"
+          },
+          "required": {
+            "zhCN": "请选择影厅",
+            "ja": "劇場を選択してください",
+            "enUS": "Please select a theater hall"
+          }
+        },
+        "spec": {
+          "label": {
+            "zhCN": "上映规格"
+          },
+          "required": {
+            "zhCN": "请选择上映规格"
+          }
+        },
+        "subtitle": {
+          "label": {
+            "zhCN": "字幕",
+            "ja": "字幕",
+            "enUS": "Subtitle"
+          },
+          "required": {
+            "zhCN": "请选择字幕",
+            "ja": "字幕を選択してください",
+            "enUS": "Please select a subtitle"
+          }
+        },
+        "showTimeTag": {
+          "label": {
+            "zhCN": "上映场次标签",
+            "ja": "上映場次タグ",
+            "enUS": "Show Time Tag"
+          },
+          "required": {
+            "zhCN": "请选择上映场次标签",
+            "ja": "上映場次タグを選択してください",
+            "enUS": "Please select a show time tag"
+          }
+        },
+        "showTime": {
+          "label": {
+            "zhCN": "开始时间",
+            "ja": "開始日時",
+            "enUS": "Start Time"
+          },
+          "required": {
+            "zhCN": "请选择上映时间",
+            "ja": "上映時間を選択してください",
+            "enUS": "Please select a show time"
+          },
+          "startAfterEnd": {
+            "zhCN": "结束时间必须大于开始时间",
+            "ja": "終了日時は開始日時より後でなければなりません",
+            "enUS": "The end time must be later than the start time"
+          }
+        }
+      }
+    },
+    "seatModal": {
+      "title": {
+        "zhCN": "设置过道",
+        "ja": "通路を設定する",
+        "enUS": "Set Aisle"
+      }
+    }
+  },
+  "showTimeTagList.json": {
+    "table": {
+      "name": {
+        "zhCN": "上映场次标签名称",
+        "ja": "上映スケジュールタグ名",
+        "enUS": "Show Time Tag Name"
+      },
+      "action": {
+        "zhCN": "操作",
+        "ja": "操作",
+        "enUS": "Action"
+      }
+    },
+    "modal": {
+      "title": {
+        "create": {
+          "zhCN": "添加上映场次标签",
+          "ja": "上映スケジュールタグを追加",
+          "enUS": "Add Show Time Tag"
+        },
+        "edit": {
+          "zhCN": "编辑上映场次标签",
+          "ja": "上映スケジュールタグを編集",
+          "enUS": "Edit Show Time Tag"
+        }
+      },
+      "form": {
+        "name": {
+          "label": {
+            "zhCN": "上映场次标签名称",
+            "ja": "上映スケジュールタグ名",
+            "enUS": "Show Time Tag Name"
+          },
+          "required": {
+            "zhCN": "请输入上映场次标签名称",
+            "ja": "上映スケジュールタグ名を入力してください",
+            "enUS": "Please enter the show time tag name"
+          }
+        }
+      }
+    },
+    "message": {
+      "remove": {
+        "content": {
+          "zhCN": "是否确认要删除当前上映场次标签?",
+          "ja": "現在の上映スケジュールタグを削除してもよろしいですか？",
+          "enUS": "Are you sure you want to delete the current show time tag?"
+        },
+        "success": {
+          "zhCN": "删除成功",
+          "ja": "削除成功",
+          "enUS": "Deleted successfully"
+        }
+      }
+    }
+  },
+  "spec.json": {
+    "table": {
+      "name": {
+        "zhCN": "名称",
+        "ja": "名称",
+        "enUS": "Name"
+      },
+      "description": {
+        "zhCN": "简介",
+        "ja": "概要",
+        "enUS": "Description"
+      },
+      "action": {
+        "zhCN": "操作",
+        "ja": "操作",
+        "enUS": "Action"
+      }
+    },
+    "modal": {
+      "title": {
+        "create": {
+          "zhCN": "添加规格",
+          "ja": "規格の追加",
+          "enUS": "Add Specification"
+        },
+        "edit": {
+          "zhCN": "编辑规格",
+          "ja": "規格の編集",
+          "enUS": "Edit Specification"
+        }
+      },
+      "form": {
+        "name": {
+          "label": {
+            "zhCN": "名称",
+            "ja": "名称",
+            "enUS": "Name"
+          },
+          "required": {
+            "zhCN": "请输入名称",
+            "ja": "名称を入力してください",
+            "enUS": "Please enter the name"
+          }
+        },
+        "description": {
+          "label": {
+            "zhCN": "简介",
+            "ja": "概要",
+            "enUS": "Description"
+          },
+          "required": {
+            "zhCN": "请输入简介",
+            "ja": "概要を入力してください",
+            "enUS": "Please enter the description"
+          }
+        }
+      }
+    },
+    "message": {
+      "remove": {
+        "content": {
+          "zhCN": "是否确认要删除当前规格?",
+          "ja": "現在の規格を削除してもよろしいですか？",
+          "enUS": "Are you sure you want to delete the current specification?"
+        },
+        "success": {
+          "zhCN": "删除成功",
+          "ja": "削除が成功しました",
+          "enUS": "Deleted successfully"
+        }
+      }
+    }
+  },
+  "staff.json": {
+    "table": {
+      "cover": {
+        "zhCN": "图片",
+        "ja": "画像",
+        "enUS": "Image"
+      },
+      "name": {
+        "zhCN": "演职人员名称",
+        "ja": "演技者名",
+        "enUS": "Staff Name"
+      },
+      "originalName": {
+        "zhCN": "原名",
+        "ja": "原名",
+        "enUS": "Original Name"
+      },
+      "description": {
+        "zhCN": "简介",
+        "ja": "概要",
+        "enUS": "Description"
+      },
+      "action": {
+        "zhCN": "操作",
+        "ja": "操作",
+        "enUS": "Action"
+      }
+    },
+    "modal": {
+      "title": {
+        "create": {
+          "zhCN": "添加演职人员",
+          "ja": "演技者の追加",
+          "enUS": "Add Staff"
+        },
+        "edit": {
+          "zhCN": "编辑演职人员",
+          "ja": "演技者の編集",
+          "enUS": "Edit Staff"
+        }
+      },
+      "form": {
+        "cover": {
+          "label": {
+            "zhCN": "图片",
+            "ja": "画像",
+            "enUS": "Image"
+          },
+          "required": {
+            "zhCN": "请上传图片",
+            "ja": "画像をアップロードしてください",
+            "enUS": "Please upload an image"
+          }
+        },
+        "name": {
+          "label": {
+            "zhCN": "演职人员名称",
+            "ja": "演技者名",
+            "enUS": "Staff Name"
+          },
+          "required": {
+            "zhCN": "请输入演职人员名称",
+            "ja": "演技者名を入力してください",
+            "enUS": "Please enter the staff name"
+          }
+        },
+        "originalName": {
+          "label": {
+            "zhCN": "原名",
+            "ja": "原名",
+            "enUS": "Original Name"
+          },
+          "required": {
+            "zhCN": "请输入原名",
+            "ja": "原名を入力してください",
+            "enUS": "Please enter the original name"
+          }
+        },
+        "description": {
+          "label": {
+            "zhCN": "简介",
+            "ja": "概要",
+            "enUS": "Description"
+          },
+          "required": {
+            "zhCN": "请输入简介",
+            "ja": "概要を入力してください",
+            "enUS": "Please enter the description"
+          }
+        }
+      }
+    },
+    "message": {
+      "remove": {
+        "content": {
+          "zhCN": "是否确认要删除当前演职人员?",
+          "ja": "現在の演技者を削除してもよろしいですか？",
+          "enUS": "Are you sure you want to delete the current staff?"
+        },
+        "success": {
+          "zhCN": "删除成功",
+          "ja": "削除が成功しました",
+          "enUS": "Deleted successfully"
+        }
+      }
+    }
+  },
+  "theaterHall.json": {
+    "table": {
+      "name": {
+        "zhCN": "影厅名称",
+        "ja": "シアター名",
+        "enUS": "Theater Name"
+      },
+      "spec": {
+        "zhCN": "规格",
+        "ja": "仕様",
+        "enUS": "Specification"
+      },
+      "rowCount": {
+        "zhCN": "行数",
+        "ja": "行数",
+        "enUS": "Number of Rows"
+      },
+      "columnCount": {
+        "zhCN": "列数",
+        "ja": "列数",
+        "enUS": "Number of Columns"
+      },
+      "seatCount": {
+        "zhCN": "座位数",
+        "ja": "座席数",
+        "enUS": "Number of Seats"
+      },
+      "action": {
+        "zhCN": "操作",
+        "ja": "操作",
+        "enUS": "Action"
+      }
+    },
+    "areaModal": {
+      "title": {
+        "zhCN": "配置区域",
+        "ja": "エリアの設定",
+        "enUS": "Configure Area"
+      },
+      "message": {
+        "max": {
+          "zhCN": "区域数量最大不能超过5个",
+          "ja": "エリアの数は最大で5つまでです",
+          "enUS": "The maximum number of areas cannot exceed 5"
+        },
+        "required": {
+          "zhCN": "区域选择数量不能为空",
+          "ja": "エリアの選択数は必須です",
+          "enUS": "The number of selected areas cannot be empty"
+        }
+      },
+      "table": {
+        "color": {
+          "zhCN": "颜色",
+          "ja": "カラー",
+          "enUS": "Color"
+        },
+        "action": {
+          "zhCN": "操作",
+          "ja": "操作",
+          "enUS": "Action"
+        }
+      },
+      "form": {
+        "name": {
+          "label": {
+            "zhCN": "区域名称",
+            "ja": "エリア名",
+            "enUS": "Area Name"
+          },
+          "required": {
+            "zhCN": "请输入区域名称",
+            "ja": "エリア名を入力してください",
+            "enUS": "Please enter the area name"
+          },
+          "repeat": {
+            "zhCN": "区域名称不能重复",
+            "ja": "エリア名は重複できません",
+            "enUS": "The area name cannot be repeated"
+          }
+        },
+        "price": {
+          "label": {
+            "zhCN": "价格",
+            "ja": "価格",
+            "enUS": "Price"
+          },
+          "required": {
+            "zhCN": "请输入价格",
+            "ja": "価格を入力してください",
+            "enUS": "Please enter the price"
+          }
+        }
+      }
+    },
+    "seatModal": {
+      "title": {
+        "zhCN": "配置过道",
+        "ja": "通路の設定",
+        "enUS": "Configure Aisle"
+      },
+      "seatCount": {
+        "zhCN": "座位数",
+        "ja": "座席数",
+        "enUS": "Number of Seats"
+      },
+      "dropdownItem": {
+        "configCoupleSeat": {
+          "zhCN": "配置情侣座",
+          "ja": "カップル席の設定",
+          "enUS": "Configure Couple Seats"
+        },
+        "configArea": {
+          "zhCN": "配置区域（最大5个）",
+          "ja": "エリアの設定（最大5つ）",
+          "enUS": "Configure Area (up to 5)"
+        },
+        "configWheelChairSeat": {
+          "zhCN": "配置轮椅座",
+          "ja": "車椅子席の設定",
+          "enUS": "Configure Wheelchair Seats"
+        },
+        "show": {
+          "zhCN": "显示/隐藏 座位",
+          "ja": "座席の表示/非表示",
+          "enUS": "Show/Hide Seats"
+        },
+        "disabled": {
+          "zhCN": "禁用/启用 座位",
+          "ja": "座席の無効化/有効化",
+          "enUS": "Disable/Enable Seats"
+        },
+        "reset": {
+          "zhCN": "重置",
+          "ja": "リセット",
+          "enUS": "Reset"
+        }
+      },
+      "seatUsed": {
+        "zhCN": "当前座位已被锁定或者已售出"
+      },
+      "message": {
+        "required": {
+          "zhCN": "过道配置不能为空",
+          "ja": "通路の設定は必須です",
+          "enUS": "Aisle configuration cannot be empty"
+        },
+        "repeat": {
+          "zhCN": "过道重复",
+          "ja": "通路が重複しています",
+          "enUS": "Aisle duplication"
+        },
+        "max": {
+          "zhCN": "最多只能选择{{max}}个",
+          "ja": "最大で{{max}}個まで選択できます",
+          "enUS": "You can select up to {{max}}"
+        }
+      },
+      "form": {
+        "type": {
+          "label": {
+            "zhCN": "过道类型",
+            "ja": "通路の種類",
+            "enUS": "Aisle Type"
+          },
+          "required": {
+            "zhCN": "请选择过道类型",
+            "ja": "通路の種類を選択してください",
+            "enUS": "Please select an aisle type"
+          },
+          "placeholder": {
+            "zhCN": "请选择行或者列",
+            "ja": "行または列を選択してください",
+            "enUS": "Please select row or column"
+          },
+          "select": {
+            "row": {
+              "zhCN": "行",
+              "ja": "行",
+              "enUS": "Row"
+            },
+            "column": {
+              "zhCN": "列",
+              "ja": "列",
+              "enUS": "Column"
+            }
+          }
+        },
+        "start": {
+          "label": {
+            "zhCN": "开始位置",
+            "ja": "開始位置",
+            "enUS": "Start Position"
+          },
+          "required": {
+            "zhCN": "请输入开始位置",
+            "ja": "開始位置を入力してください",
+            "enUS": "Please enter the start position"
+          },
+          "placeholder": {
+            "zhCN": "请输入开始位置",
+            "ja": "開始位置を入力してください",
+            "enUS": "Please enter the start position"
+          }
+        }
+      }
+    },
+    "theaterHallModal": {
+      "title": {
+        "create": {
+          "zhCN": "添加影厅",
+          "ja": "シアターの追加",
+          "enUS": "Add Theater"
+        },
+        "edit": {
+          "zhCN": "编辑影厅",
+          "ja": "シアターの編集",
+          "enUS": "Edit Theater"
+        }
+      },
+      "form": {
+        "name": {
+          "label": {
+            "zhCN": "影厅名称",
+            "ja": "シアター名",
+            "enUS": "Theater Name"
+          },
+          "required": {
+            "zhCN": "请输入影厅名称",
+            "ja": "シアター名を入力してください",
+            "enUS": "Please enter the theater name"
+          }
+        },
+        "spec": {
+          "label": {
+            "zhCN": "影厅规格",
+            "ja": "シアターの仕様",
+            "enUS": "Theater Specification"
+          },
+          "required": {
+            "zhCN": "请选择影厅规格",
+            "ja": "シアターの仕様を選択してください",
+            "enUS": "Please select the theater specification"
+          }
+        },
+        "rowCount": {
+          "label": {
+            "zhCN": "行数",
+            "ja": "行数",
+            "enUS": "Number of Rows"
+          },
+          "required": {
+            "zhCN": "请输入行数",
+            "ja": "行数を入力してください",
+            "enUS": "Please enter the number of rows"
+          }
+        },
+        "columnCount": {
+          "label": {
+            "zhCN": "列数",
+            "ja": "列数",
+            "enUS": "Number of Columns"
+          },
+          "required": {
+            "zhCN": "请输入列数",
+            "ja": "列数を入力してください",
+            "enUS": "Please enter the number of columns"
+          }
+        }
+      }
+    },
+    "message": {
+      "changeSeatCount": {
+        "content": {
+          "zhCN": "是否确认更改行数和列数，更改后不可恢复",
+          "ja": "行数と列数を変更しても元には戻せませんが、変更しますか？",
+          "enUS": "Are you sure you want to change the number of rows and columns? Changes cannot be undone."
+        }
+      },
+      "remove": {
+        "content": {
+          "zhCN": "是否确认要删除当前行，删除后不可恢复",
+          "ja": "この行を削除してもよろしいですか？",
+          "enUS": "Are you sure you want to delete the current row? This action cannot be undone."
+        },
+        "success": {
+          "zhCN": "删除成功",
+          "ja": "削除に成功しました",
+          "enUS": "Deleted successfully"
+        }
+      }
+    },
+    "seatNamingRuleModal": {
+      "title": {
+        "zhCN": "配置座位命名规则",
+        "ja": "座席命名ルールを設定"
+      },
+      "form": {
+        "template": {
+          "label": {
+            "zhCN": "座位命名规则",
+            "ja": "座席命名ルール"
+          },
+          "error": {
+            "zhCN": "命名规则格式不正确",
+            "ja": "命名ルールの形式が正しくありません"
+          },
+          "description": {
+            "zhCN": "命名规则说明：\n\n・<strong>{number}</strong>：按数字从1开始递增排列，例如1, 2, 3...\n・<strong>{alphabet}</strong>：使用英文字母A-Z，超过26个字母后依次为AA, AB, AC...\n・<strong>{columnNumber}</strong>：表示当前行的座位序号，从1开始，例如1, 2, 3...\n\n示例：\n・<strong>{number}-{columnNumber}</strong>：生成结果为1-1, 1-2, 1-3...\n・<strong>{alphabet}{columnNumber}</strong>：生成结果为A1, ..., A26, B1, AA1, AB1...",
+            "ja": "命名ルールについて：\n\n・<strong>{number}</strong>: 数字を1から順に増加させて配置（例: 1, 2, 3...）\n・<strong>{alphabet}</strong>: 英字A-Zを使用。26文字を超える場合はAA, AB, AC...のように続きます\n・<strong>{columnNumber}</strong>: 現在の行の座席番号を1から順に付与（例: 1, 2, 3...）\n\n例：\n・<strong>{number}-{columnNumber}</strong>: 生成結果は1-1, 1-2, 1-3...\n・<strong>{alphabet}{columnNumber}</strong>: 生成結果はA1, ...， A26, B1, AA1, AB1..."
+          }
+        }
+      }
+    }
+  },
+  "ticketType.json": {
+    "table": {
+      "name": {
+        "zhCN": "电影票类型",
+        "ja": "映画チケットタイプ",
+        "enUS": "Movie Ticket Type"
+      },
+      "price": {
+        "zhCN": "价格",
+        "ja": "価格",
+        "enUS": "Price"
+      },
+      "action": {
+        "zhCN": "操作",
+        "ja": "操作",
+        "enUS": "Action"
+      }
+    },
+    "modal": {
+      "title": {
+        "create": {
+          "zhCN": "添加电影票类型",
+          "ja": "映画チケットタイプの追加",
+          "enUS": "Add Movie Ticket Type"
+        },
+        "edit": {
+          "zhCN": "编辑电影票类型",
+          "ja": "映画チケットタイプの編集",
+          "enUS": "Edit Movie Ticket Type"
+        }
+      },
+      "form": {
+        "name": {
+          "label": {
+            "zhCN": "电影票类型",
+            "ja": "映画チケットタイプ",
+            "enUS": "Movie Ticket Type"
+          },
+          "required": {
+            "zhCN": "请输入电影票类型",
+            "ja": "映画チケットタイプを入力してください",
+            "enUS": "Please enter the movie ticket type"
+          }
+        },
+        "price": {
+          "label": {
+            "zhCN": "价格",
+            "ja": "価格",
+            "enUS": "Price"
+          },
+          "required": {
+            "zhCN": "请输入价格",
+            "ja": "価格を入力してください",
+            "enUS": "Please enter the price"
+          }
+        }
+      }
+    },
+    "message": {
+      "remove": {
+        "content": {
+          "zhCN": "是否确认要删除当前电影票类型？",
+          "ja": "この映画チケットタイプを削除してもよろしいですか？",
+          "enUS": "Are you sure you want to delete the current movie ticket type?"
+        },
+        "success": {
+          "zhCN": "删除成功",
+          "ja": "削除に成功しました",
+          "enUS": "Deleted successfully"
+        }
+      }
+    }
+  },
+  "user.json": {
+    "table": {
+      "cover": {
+        "zhCN": "图片",
+        "ja": "画像",
+        "enUS": "Image"
+      },
+      "name": {
+        "zhCN": "用户名称",
+        "ja": "ユーザー名",
+        "enUS": "Username"
+      },
+      "email": {
+        "zhCN": "邮箱",
+        "ja": "メールアドレス",
+        "enUS": "Email"
+      },
+      "tel": {
+        "zhCN": "电话",
+        "ja": "電話番号",
+        "enUS": "Phone"
+      },
+      "role": {
+        "zhCN": "角色",
+        "ja": "役割",
+        "enUS": "Role"
+      },
+      "registerTime": {
+        "zhCN": "注册时间",
+        "ja": "登録時間",
+        "enUS": "Registration Time"
+      },
+      "action": {
+        "zhCN": "操作",
+        "ja": "操作",
+        "enUS": "Action"
+      }
+    },
+    "message": {
+      "remove": {
+        "content": {
+          "zhCN": "是否确认要删除当前用户?",
+          "ja": "このユーザーを削除してもよろしいですか？",
+          "enUS": "Are you sure you want to delete the current user?"
+        },
+        "success": {
+          "zhCN": "删除成功",
+          "ja": "削除に成功しました",
+          "enUS": "Deleted successfully"
+        }
+      }
+    },
+    "modal": {
+      "title": {
+        "create": {
+          "zhCN": "添加用户",
+          "ja": "ユーザーの追加",
+          "enUS": "Add User"
+        },
+        "edit": {
+          "zhCN": "编辑用户",
+          "ja": "ユーザーの編集",
+          "enUS": "Edit User"
+        }
+      },
+      "form": {
+        "cover": {
+          "label": {
+            "zhCN": "图片",
+            "ja": "画像",
+            "enUS": "Image"
+          },
+          "required": {
+            "zhCN": "请上传图片",
+            "ja": "画像をアップロードしてください",
+            "enUS": "Please upload an image"
+          }
+        },
+        "role": {
+          "label": {
+            "zhCN": "角色",
+            "ja": "役割",
+            "enUS": "Role"
+          },
+          "required": {
+            "zhCN": "请选择角色",
+            "ja": "役割を選択してください",
+            "enUS": "Please select a role"
+          }
+        },
+        "username": {
+          "label": {
+            "zhCN": "用户名称",
+            "ja": "ユーザー名",
+            "enUS": "Username"
+          },
+          "required": {
+            "zhCN": "请输入用户名称",
+            "ja": "ユーザー名を入力してください",
+            "enUS": "Please enter the username"
+          },
+          "error": {
+            "zhCN": "用户名称不合法，格式为数字、字母，特殊字符为 -_.",
+            "ja": "ユーザー名が無効です。数字、アルファベット、特殊文字 -_. が使用できます。",
+            "enUS": "Invalid username format. Only letters, numbers, and -_. are allowed"
+          }
+        },
+        "email": {
+          "label": {
+            "zhCN": "邮箱",
+            "ja": "メールアドレス",
+            "enUS": "Email"
+          },
+          "required": {
+            "zhCN": "请输入邮箱",
+            "ja": "メールアドレスを入力してください",
+            "enUS": "Please enter an email"
+          },
+          "error": {
+            "zhCN": "邮箱不合法",
+            "ja": "無効なメールアドレスです",
+            "enUS": "Invalid email format"
+          }
+        },
+        "password": {
+          "label": {
+            "zhCN": "密码",
+            "ja": "パスワード",
+            "enUS": "Password"
+          },
+          "required": {
+            "zhCN": "请输入密码",
+            "ja": "パスワードを入力してください",
+            "enUS": "Please enter a password"
+          },
+          "error": {
+            "zhCN": "密码不能为空，长度为6-16位",
+            "ja": "パスワードは必須で、6〜16文字の長さが必要です",
+            "enUS": "Password cannot be empty and must be 6-16 characters long"
+          }
+        },
+        "password2": {
+          "label": {
+            "zhCN": "重复密码",
+            "ja": "パスワード確認",
+            "enUS": "Confirm Password"
+          },
+          "required": {
+            "zhCN": "请输入重复密码",
+            "ja": "パスワードを再入力してください",
+            "enUS": "Please enter the password again"
+          },
+          "error": {
+            "zhCN": "重复密码不合法，格式为数字、字母，特殊字符为 -_.",
+            "ja": "パスワード確認が無効です。数字、アルファベット、特殊文字 -_. が使用できます。",
+            "enUS": "Invalid confirm password format. Only letters, numbers, and -_. are allowed"
+          },
+          "repeat": {
+            "zhCN": "两次输入的密码不一致",
+            "ja": "2回入力したパスワードが一致しません",
+            "enUS": "Passwords do not match"
+          }
+        },
+        "verifyCode": {
+          "label": {
+            "zhCN": "验证码",
+            "ja": "認証コード",
+            "enUS": "Verification Code"
+          },
+          "required": {
+            "zhCN": "请输入验证码",
+            "ja": "認証コードを入力してください",
+            "enUS": "Please enter the verification code"
+          },
+          "length": {
+            "zhCN": "验证码必须位6位",
+            "ja": "認証コードは6桁でなければなりません",
+            "enUS": "The verification code must be 6 characters long"
+          }
+        }
+      }
+    }
+  }
+}

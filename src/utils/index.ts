@@ -5,7 +5,8 @@ export const passwordRegExp = /^[A-Za-z0-9_\-.]{6,16}$/
 export const usernameRegExp = /^[A-Za-z0-9_\-.]{6,16}$/
 
 export const getUserInfo = () => {
-  const userInfo = localStorage.getItem('userInfo')
+  if (typeof window === 'undefined') return {}
+  const userInfo = localStorage?.getItem('userInfo')
 
   try {
     return userInfo ? JSON.parse(userInfo) : {}

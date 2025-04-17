@@ -128,7 +128,9 @@ function RootLayout({ children, params: { lng } }: PageProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname, userStore.menuPermission])
 
-  localStorage.setItem('language', lang)
+  if (typeof window !== 'undefined') {
+    localStorage.setItem('language', lang)
+  }
 
   return (
     <html lang={lng} dir={lng}>

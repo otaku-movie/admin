@@ -70,7 +70,24 @@ export default function MoviePage({ params: { lng } }: PageProps) {
       dataIndex: '',
       width: 100,
       render(_, row) {
-        return <Switch value={row.show} disabled />
+        return (
+          <Switch
+            value={row.show}
+            onChange={(val) => {
+              http({
+                url: 'admin/permission/menu/save',
+                method: 'post',
+                data: {
+                  ...row,
+                  show: val
+                }
+              }).then((res) => {
+                getData()
+                message.success(t(res.message))
+              })
+            }}
+          />
+        )
       }
     },
     {
