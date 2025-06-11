@@ -16,6 +16,7 @@
     "movie": {
       "name": "电影管理",
       "children": {
+        "reReleaseList": "重映列表",
         "movieList": "电影列表",
         "characterList": "角色列表",
         "staffList": "演职员列表",

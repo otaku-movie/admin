@@ -28,7 +28,7 @@ import { processPath } from '@/config/router'
 import { CheckPermission } from '@/components/checkPermission'
 import { showTotal } from '@/utils/pagination'
 import { getMovieList } from '@/api/request/movie'
-
+import { ReReleaseModal } from '@/dialog/reReleaseModal'
 interface Query {
   name: string
   status: number
@@ -42,18 +42,24 @@ export default function Page({ params: { lng } }: PageProps) {
   const [query, setQuery] = useState<Partial<Query>>({})
   const { t } = useTranslation(lng, 'movie')
   const { t: common } = useTranslation(lng, 'common')
+  const [modal, setModal] = useState({
+    show: false,
+    data: {}
+  })
 
   const getData = (page = 1) => {
-    getMovieList({
-      page,
-      pageSize: 10,
-      ...query
+    http({
+      url: '/movie/reRelease/list',
+      method: 'post',
+      data: {
+        page,
+        pageSize: 10,
+        ...query
+      }
     }).then((res) => {
-      const data = res.data
-
-      setData(data.list)
+      setData(res.data?.list ?? [])
       setPage(page)
-      setTotal(data.total)
+      setTotal(res.data.total)
     })
   }
 
@@ -98,107 +104,10 @@ export default function Page({ params: { lng } }: PageProps) {
             </Tag>
             <Space direction="vertical">
               <span>{row.name}</span>
-              <section>
-                {row.spec.map((item) => {
-                  return (
-                    <Tag
-                      key={item.id}
-                      style={{
-                        marginBottom: '10px'
-                      }}
-                    >
-                      {item.name}
-                    </Tag>
-                  )
-                })}
-              </section>
             </Space>
           </Space>
         )
       }
-    },
-    {
-      title: t('table.originalName'),
-      width: 200,
-      dataIndex: 'originalName'
-    },
-    {
-      title: t('table.tags'),
-      width: 100,
-      dataIndex: 'tags',
-      render(_, row) {
-        return (
-          <Space direction="vertical">
-            {row.tags.map((item) => {
-              return <Tag key={item.id}>{item.name}</Tag>
-            })}
-          </Space>
-        )
-      }
-    },
-    {
-      title: t('table.helloMovie'),
-      width: 250,
-      dataIndex: 'helloMovie',
-      render(_, row) {
-        return (
-          <Space direction="vertical">
-            {row.helloMovie.map((item) => {
-              return (
-                <div key={item.code}>
-                  <Dict
-                    code={item.code}
-                    name="helloMovie"
-                    key={item.code}
-                    style={{ marginRight: '10px' }}
-                  ></Dict>
-                  <span>{item.date}</span>
-                </div>
-              )
-            })}
-          </Space>
-        )
-      }
-    },
-    {
-      title: t('table.time'),
-      dataIndex: 'time',
-      width: 100,
-      render(text: number) {
-        if (text) {
-          return (
-            <span>
-              {text}
-              {common('unit.minute')}
-            </span>
-          )
-        }
-      }
-    },
-    {
-      title: t('table.cinemaCount'),
-      width: 150,
-      dataIndex: 'cinemaCount'
-    },
-    {
-      title: t('table.theaterCount'),
-      width: 150,
-      dataIndex: 'theaterCount'
-    },
-    {
-      title: t('table.commentCount'),
-      width: 150,
-      dataIndex: 'commentCount'
-    },
-    {
-      title: t('table.watchedCount'),
-      width: 150,
-      dataIndex: 'watchedCount'
-    },
-    {
-      title: t('table.wantToSeeCount'),
-      width: 150,
-      dataIndex: 'wantToSeeCount'
     },
     {
       title: t('table.startDate'),
@@ -210,14 +119,14 @@ export default function Page({ params: { lng } }: PageProps) {
       width: 150,
       dataIndex: 'endDate'
     },
-    {
-      title: t('table.status'),
-      width: 150,
-      dataIndex: '',
-      render(_, row) {
-        return <Dict code={row.status} name={'releaseStatus'}></Dict>
-      }
-    },
+    // {
+    //   title: t('table.status'),
+    //   width: 150,
+    //   dataIndex: '',
+    //   render(_, row) {
+    //     return <Dict code={row.status} name={'releaseStatus'}></Dict>
+    //   }
+    // },
     {
       title: t('table.action'),
       key: 'operation',
@@ -225,8 +134,8 @@ export default function Page({ params: { lng } }: PageProps) {
       width: 150,
       render: (_, row) => {
         return (
-          <Space direction="vertical" align="center">
-            <CheckPermission code="movie.save">
+          <Space align="center">
+            {/* <CheckPermission code="movie.save">
               <Button
                 type="primary"
                 onClick={() => {
@@ -239,54 +148,42 @@ export default function Page({ params: { lng } }: PageProps) {
               >
                 {common('button.edit')}
               </Button>
-            </CheckPermission>
+            </CheckPermission> */}
 
-            <CheckPermission code="movie.remove">
-              <Button
-                type="primary"
-                danger
-                onClick={() => {
-                  Modal.confirm({
-                    title: common('button.remove'),
-                    content: t('message.remove.content'),
-                    onCancel() {
-                      console.log('Cancel')
-                    },
-                    onOk() {
-                      return new Promise((resolve, reject) => {
-                        http({
-                          url: 'movie/remove',
-                          method: 'delete',
-                          params: {
-                            id: row.id
-                          }
-                        })
-                          .then(() => {
-                            message.success(t('message.remove.success'))
-                            getData()
-                            resolve(true)
-                          })
-                          .catch(reject)
-                      })
-                    }
-                  })
-                }}
-              >
-                {common('button.remove')}
-              </Button>
-            </CheckPermission>
+            {/* <CheckPermission code="movie.remove"> */}
             <Button
               type="primary"
+              danger
               onClick={() => {
-                router.push(
-                  processPath('commentList', {
-                    id: row.id
-                  })
-                )
+                Modal.confirm({
+                  title: common('button.remove'),
+                  content: t('message.remove.content'),
+                  onCancel() {
+                    console.log('Cancel')
+                  },
+                  onOk() {
+                    return new Promise((resolve, reject) => {
+                      http({
+                        url: 'movie/reRelease/remove',
+                        method: 'delete',
+                        params: {
+                          id: row.id
+                        }
+                      })
+                        .then(() => {
+                          message.success(t('message.remove.success'))
+                          getData()
+                          resolve(true)
+                        })
+                        .catch(reject)
+                    })
+                  }
+                })
               }}
             >
-              {common('button.commentList')}
+              {common('button.remove')}
             </Button>
+            {/* </CheckPermission> */}
           </Space>
         )
       }
@@ -300,7 +197,10 @@ export default function Page({ params: { lng } }: PageProps) {
           <CheckPermission code="movie.save">
             <Button
               onClick={() => {
-                router.push(processPath(`movieDetail`))
+                setModal({
+                  show: true,
+                  data: {}
+                })
               }}
             >
               {common('button.add')}
@@ -373,6 +273,24 @@ export default function Page({ params: { lng } }: PageProps) {
           }}
         />
       </Flex>
+      <ReReleaseModal
+        show={modal.show}
+        data={modal.data}
+        onCancel={() => {
+          setModal({
+            ...modal,
+            show: false
+          })
+        }}
+        onConfirm={() => {
+          setModal({
+            ...modal,
+            show: false
+          })
+          getData()
+        }}
+        type={'create'}
+      ></ReReleaseModal>
     </section>
   )
 }

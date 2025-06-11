@@ -1,47 +1,51 @@
 'use client'
 import React, { useState, useEffect } from 'react'
+import { useTranslation } from '@/app/i18n/client'
 import {
-  Table,
-  Button,
-  Space,
-  Row,
-  Input,
+  Switch,
+  Modal,
   Image,
+  Table,
+  type TableColumnsType,
+  message,
+  Space,
   Tag,
   Select,
-  Modal,
-  message,
+  Input,
   Flex
 } from 'antd'
-
-import type { TableColumnsType } from 'antd'
-import { status, notFoundImage } from '@/config/index'
-import { useRouter } from 'next/navigation'
-
-import { Query, QueryItem } from '@/components/query'
-import http from '@/api/index'
-import { Movie } from '@/type/api'
-import { useTranslation } from '@/app/i18n/client'
-import { PageProps } from '../../layout'
+import http from '@/api'
+import { languageType, notFoundImage } from '@/config'
 import { Dict } from '@/components/dict'
-import { processPath } from '@/config/router'
-import { CheckPermission } from '@/components/checkPermission'
-import { showTotal } from '@/utils/pagination'
 import { getMovieList } from '@/api/request/movie'
+import page from '@/app/[lng]/dataChart/page'
+import { Query, QueryItem } from '@/components/query'
+import { showTotal } from '@/utils/pagination'
+import { Movie } from '@/type/api'
+
+interface modalProps {
+  show?: boolean
+  data: Record<string, any>
+  onConfirm?: (selectedMovie: Movie) => void
+  onCancel?: () => void
+}
 
 interface Query {
   name: string
   status: number
 }
 
-export default function Page({ params: { lng } }: PageProps) {
-  const router = useRouter()
-  const [data, setData] = useState<Movie[]>([])
+export function MovieModal(props: modalProps) {
+  const [data, setData] = useState<any[]>([])
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
+  const { t } = useTranslation(navigator.language as languageType, 'movie')
   const [query, setQuery] = useState<Partial<Query>>({})
-  const { t } = useTranslation(lng, 'movie')
-  const { t: common } = useTranslation(lng, 'common')
+  const { t: common } = useTranslation(
+    navigator.language as languageType,
+    'common'
+  )
+  const [selectedMovie, setSelectedMovie] = useState<any>({})
 
   const getData = (page = 1) => {
     getMovieList({
@@ -137,30 +141,6 @@ export default function Page({ params: { lng } }: PageProps) {
       }
     },
     {
-      title: t('table.helloMovie'),
-      width: 250,
-      dataIndex: 'helloMovie',
-      render(_, row) {
-        return (
-          <Space direction="vertical">
-            {row.helloMovie.map((item) => {
-              return (
-                <div key={item.code}>
-                  <Dict
-                    code={item.code}
-                    name="helloMovie"
-                    key={item.code}
-                    style={{ marginRight: '10px' }}
-                  ></Dict>
-                  <span>{item.date}</span>
-                </div>
-              )
-            })}
-          </Space>
-        )
-      }
-    },
-    {
       title: t('table.time'),
       dataIndex: 'time',
       width: 100,
@@ -175,31 +155,7 @@ export default function Page({ params: { lng } }: PageProps) {
         }
       }
     },
-    {
-      title: t('table.cinemaCount'),
-      width: 150,
-      dataIndex: 'cinemaCount'
-    },
-    {
-      title: t('table.theaterCount'),
-      width: 150,
-      dataIndex: 'theaterCount'
-    },
-    {
-      title: t('table.commentCount'),
-      width: 150,
-      dataIndex: 'commentCount'
-    },
-    {
-      title: t('table.watchedCount'),
-      width: 150,
-      dataIndex: 'watchedCount'
-    },
-    {
-      title: t('table.wantToSeeCount'),
-      width: 150,
-      dataIndex: 'wantToSeeCount'
-    },
+
     {
       title: t('table.startDate'),
       width: 150,
@@ -209,104 +165,21 @@ export default function Page({ params: { lng } }: PageProps) {
       title: t('table.endDate'),
       width: 150,
       dataIndex: 'endDate'
-    },
-    {
-      title: t('table.status'),
-      width: 150,
-      dataIndex: '',
-      render(_, row) {
-        return <Dict code={row.status} name={'releaseStatus'}></Dict>
-      }
-    },
-    {
-      title: t('table.action'),
-      key: 'operation',
-      fixed: 'right',
-      width: 150,
-      render: (_, row) => {
-        return (
-          <Space direction="vertical" align="center">
-            <CheckPermission code="movie.save">
-              <Button
-                type="primary"
-                onClick={() => {
-                  router.push(
-                    processPath('movieDetail', {
-                      id: row.id
-                    })
-                  )
-                }}
-              >
-                {common('button.edit')}
-              </Button>
-            </CheckPermission>
-
-            <CheckPermission code="movie.remove">
-              <Button
-                type="primary"
-                danger
-                onClick={() => {
-                  Modal.confirm({
-                    title: common('button.remove'),
-                    content: t('message.remove.content'),
-                    onCancel() {
-                      console.log('Cancel')
-                    },
-                    onOk() {
-                      return new Promise((resolve, reject) => {
-                        http({
-                          url: 'movie/remove',
-                          method: 'delete',
-                          params: {
-                            id: row.id
-                          }
-                        })
-                          .then(() => {
-                            message.success(t('message.remove.success'))
-                            getData()
-                            resolve(true)
-                          })
-                          .catch(reject)
-                      })
-                    }
-                  })
-                }}
-              >
-                {common('button.remove')}
-              </Button>
-            </CheckPermission>
-            <Button
-              type="primary"
-              onClick={() => {
-                router.push(
-                  processPath('commentList', {
-                    id: row.id
-                  })
-                )
-              }}
-            >
-              {common('button.commentList')}
-            </Button>
-          </Space>
-        )
-      }
     }
   ]
 
   return (
-    <section>
+    <Modal
+      title={t('movieModal.title')}
+      open={props.show}
+      maskClosable={false}
+      width={'80%'}
+      onOk={() => {
+        props?.onConfirm?.(selectedMovie)
+      }}
+      onCancel={props?.onCancel}
+    >
       <Flex vertical gap={30}>
-        <Row justify="end">
-          <CheckPermission code="movie.save">
-            <Button
-              onClick={() => {
-                router.push(processPath(`movieDetail`))
-              }}
-            >
-              {common('button.add')}
-            </Button>
-          </CheckPermission>
-        </Row>
         <Query
           model={query}
           initialValues={{}}
@@ -360,7 +233,17 @@ export default function Page({ params: { lng } }: PageProps) {
               0
             )
           }}
+          rowKey={"id"}
           sticky={{ offsetHeader: -20 }}
+          rowSelection={{
+            type: 'radio',
+            onChange (selectedKeys, selectedRows) {
+              console.log(selectedKeys, selectedRows)
+              setSelectedMovie({
+                ...selectedRows[0]
+              })
+            }
+          }}
           pagination={{
             pageSize: 10,
             current: page,
@@ -373,6 +256,6 @@ export default function Page({ params: { lng } }: PageProps) {
           }}
         />
       </Flex>
-    </section>
+    </Modal>
   )
 }

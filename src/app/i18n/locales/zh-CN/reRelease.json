@@ -1,0 +1,31 @@
+{
+  "table": {
+    "name": "作品",
+    "endDate": "结束日期",
+    "status": "上映状态",
+    "action": "操作"
+  },
+  "message": {
+    "remove": {
+      "content": "是否确认删除当前电影?",
+      "success": "删除成功"
+    }
+  },
+  "modal": {
+    "title": {
+      "create": "添加重映",
+      "edit": "编辑重映"
+    },
+    "form": {
+      "movie": {
+        "label": "电影名称",
+        "required": "请选择电影"
+      },
+      "showTime": {
+        "label": "开始时间",
+        "required": "请选择上映时间",
+        "startAfterEnd": "结束时间必须大于开始时间"
+      }
+    }
+  }
+}

@@ -15,6 +15,7 @@
     "movie": {
       "name": "映画管理",
       "children": {
+        "reReleaseList": "再上映リスト",
         "movieList": "映画リスト",
         "characterList": "キャラクターリスト",
         "staffList": "スタッフリスト",
@@ -63,7 +64,8 @@
   "unit": {
     "jpy": "円",
     "billion": "億",
-    "million": "万"
+    "million": "万",
+    "minute": "分"
   },
   "button": {
     "add": "追加",

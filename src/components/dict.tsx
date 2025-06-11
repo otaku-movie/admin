@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react'
 export interface DictProps {
   code: number
   name: string
+  style?: React.CSSProperties
 }
 
 export function Dict(props: DictProps) {
@@ -24,5 +25,5 @@ export function Dict(props: DictProps) {
   //   })
   // }, [props.name])
 
-  return <span>{name}</span>
+  return <span style={props.style}>{name}</span>
 }

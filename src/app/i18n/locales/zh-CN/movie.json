@@ -21,5 +21,8 @@
       "content": "是否确认删除当前电影?",
       "success": "删除成功"
     }
+  },
+  "movieModal": {
+    "title": "选择电影"
   }
 }
