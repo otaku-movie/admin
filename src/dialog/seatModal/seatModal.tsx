@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useEffect, useRef, useMemo } from 'react'
+import React, { useState, useEffect, useRef, useMemo, MouseEventHandler } from 'react'
 import { useTranslation } from '@/app/i18n/client'
 import {
   Button,
@@ -64,7 +64,7 @@ export default function SeatModal(props: ModalProps) {
   const [data, setData] = useState<seat[]>([])
   const [selectedSeat, setSelectedSeat] = useState<SeatItem[]>([])
   const dragContainerRef = useRef<HTMLElement | null>(null)
-  const seatContainerRef = useRef<HTMLElement | null>(null)
+  const seatContainerRef = useRef<Selecto | null>(null)
   const [dragSelected, setDragSelected] = useState<Set<string>>(new Set())
   const [showDropDown, setShowDropDown] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -264,6 +264,291 @@ export default function SeatModal(props: ModalProps) {
 
     return ClassName.join(' ')
   }
+  const seatSelect = (e: React.MouseEvent<HTMLUListElement>) => {
+    // setShowDropDown(false)
+    const target = e.target as HTMLElement
+    // 安全查找带有 data-row-index 的祖先元素
+    // eslint-disabled-next-line @typescript-eslint/no-non-null-assertion
+    const datasetElement = target.closest(
+      '[data-seat-name]'
+    ) as HTMLElement | null
+
+    if (!datasetElement) return
+
+    const findSeatXYByName = (seatName: string): [number, number] => {
+      for (let i = 0; i < data.length; i++) {
+        const j = data[i].children.findIndex((s) => s.seatName === seatName)
+        if (j !== -1) return [i, j]
+      }
+
+      return [-1, -1]
+    }
+
+    const { rowIndex, columnIndex } = datasetElement.dataset
+
+    if (!rowIndex || !columnIndex) return
+
+    const [x, y] = findSeatXYByName(datasetElement.dataset.seatName as string)
+    const seat = data[x]?.children[y]
+
+    if (!seat || seat.disabled) return
+
+    if (
+      seat.selectSeatState === SelectSeatState.sold ||
+      seat.selectSeatState === SelectSeatState.locked
+    ) {
+      message.warning(t('seatModal.seatUsed', { max: maxSelectSeatCount }))
+      return
+    }
+
+    // ✅ 单人座选中/取消
+    const singleSelect = () => {
+      const newData = [...data]
+      const seatItem = newData[x].children[y]
+      seatItem.selected = !seatItem.selected
+
+      let newSelected = [...selectedSeat]
+
+      if (seatItem.selected) {
+        if (newSelected.length >= maxSelectSeatCount) {
+          message.warning(
+            t('seatModal.message.max', { max: maxSelectSeatCount })
+          )
+          seatItem.selected = false
+          return
+        }
+        newSelected.push(seatItem)
+      } else {
+        newSelected = newSelected.filter(
+          (item) => !(item.x === seatItem.x && item.y === seatItem.y)
+        )
+      }
+
+      setData(newData)
+      setSelectedSeat(newSelected)
+    }
+
+    // ✅ 情侣座选中/取消
+    const doubleSelect = () => {
+      const group = seat.seatPositionGroup?.split('-') || []
+      const positionSet = new Set(group)
+
+      const groupSeats = data[x].children.filter((item) =>
+        positionSet.has(`${item.x},${item.y}`)
+      )
+
+      if (seat.selected) {
+        // 取消
+        const newData = [...data]
+        groupSeats.forEach((item) => (item.selected = false))
+        const newSelected = selectedSeat.filter(
+          (item) => !positionSet.has(`${item.x},${item.y}`)
+        )
+        setData(newData)
+        setSelectedSeat(newSelected)
+      } else {
+        // 选中前先判断是否超出上限
+        if (groupSeats.length + selectedSeat.length > maxSelectSeatCount) {
+          message.warning(
+            t('seatModal.message.max', { max: maxSelectSeatCount })
+          )
+          return
+        }
+
+        const newData = [...data]
+        groupSeats.forEach((item) => (item.selected = true))
+        const newSelected = [...selectedSeat, ...groupSeats]
+        setData(newData)
+        setSelectedSeat(newSelected)
+      }
+    }
+
+    // ✅ 根据是否是情侣座决定调用哪个函数
+    if (props.permission === 'selctSeat') {
+      if (seat.seatPositionGroup) {
+        doubleSelect()
+      } else {
+        singleSelect()
+      }
+    }
+  }
+
+  type SeatActionKey =
+    | 'configArea'
+    | 'configCoupleSeat'
+    | 'configWheelChairSeat'
+    | 'displaySeat'
+    | 'disabledSeat'
+    | 'reset'
+
+  const seatAction = (key: SeatActionKey) => {
+    const action = {
+      configArea() {
+        setShowDropDown(false)
+        setAreaModal({
+          ...areaModal,
+          show: true
+        })
+      },
+      configCoupleSeat() {
+        // 情侣座
+        if (dragSelected.size > 1) {
+          const position: string[][] = []
+          for (const item of dragSelected.keys()) {
+            position.push(item.split('-') as unknown as string[])
+          }
+
+          const every = position.every((item) => {
+            return position[0][0] === item[0]
+          })
+
+          if (every) {
+            setData(
+              data.map((item) => {
+                return {
+                  ...item,
+                  children: item.children.map((children) => {
+                    const key = `${children.x}-${children.y}`
+
+                    if (dragSelected.has(key)) {
+                      return {
+                        ...children,
+                        seatPositionGroup: position.join('-')
+                      }
+                    } else {
+                      return children
+                    }
+                  })
+                }
+              })
+            )
+          }
+        }
+      },
+      configWheelChairSeat() {
+        // 轮椅座
+        setData(
+          data.map((item) => {
+            return {
+              ...item,
+              children: item.children.map((children) => {
+                const key = `${children.x}-${children.y}`
+
+                if (dragSelected.has(key)) {
+                  return {
+                    ...children,
+                    wheelChair: true
+                  }
+                } else {
+                  return children
+                }
+              })
+            }
+          })
+        )
+      },
+      displaySeat() {
+        // 是否显示
+        setData(
+          data.map((item) => {
+            return {
+              ...item,
+              children: item.children.map((children) => {
+                const key = `${children.x}-${children.y}`
+
+                if (dragSelected.has(key)) {
+                  if (children.area?.name && area[children.area?.name]) {
+                    area[children.area.name].delete(key)
+                  }
+
+                  return {
+                    ...children,
+                    show: !children.show,
+                    area: {
+                      hover: false,
+                      selected: false
+                    }
+                  }
+                } else {
+                  return children
+                }
+              })
+            }
+          })
+        )
+        setArea(area)
+      },
+      disabledSeat() {
+        // 5 是否禁用
+        setData(
+          data.map((item) => {
+            return {
+              ...item,
+              children: item.children.map((children) => {
+                const key = `${children.x}-${children.y}`
+
+                if (dragSelected.has(key)) {
+                  console.log(children)
+                  if (children.area?.name && area[children.area.name!]) {
+                    area[children.area.name].delete(key)
+                  }
+
+                  return {
+                    ...children,
+                    disabled: !children.disabled,
+                    area: {
+                      hover: false,
+                      selected: false
+                    }
+                  }
+                } else {
+                  return children
+                }
+              })
+            }
+          })
+        )
+        setArea(area)
+      },
+      reset() {
+        setData(
+          data.map((item) => {
+            return {
+              ...item,
+              children: item.children.map((children) => {
+                const key = `${children.x}-${children.y}`
+
+                if (dragSelected.has(key)) {
+                  console.log(children)
+                  if (children.area?.name && area?.[children.area.name]) {
+                    area?.[children.area?.name].delete(key)
+                  }
+
+                  return {
+                    ...children,
+                    show: true,
+                    disabled: false,
+                    wheelChair: false,
+                    seatPositionGroup: null,
+                    area: {
+                      hover: false,
+                      selected: false
+                    }
+                  }
+                } else {
+                  return children
+                }
+              })
+            }
+          })
+        )
+        setArea(area)
+      }
+    }
+
+    action[key]()
+    setShowDropDown(false)
+  }
 
   return (
     <>
@@ -400,204 +685,32 @@ export default function SeatModal(props: ModalProps) {
             menu={{
               onClick({ key }) {
                 console.log(dragSelected)
-                switch (key) {
-                  case '1':
-                    setShowDropDown(false)
-                    setAreaModal({
-                      ...areaModal,
-                      show: true
-                    })
-                    break
-                  case '2':
-                    // 情侣座
-                    if (dragSelected.size > 1) {
-                      const position: string[][] = []
-                      for (const item of dragSelected.keys()) {
-                        position.push(item.split('-') as unknown as string[])
-                      }
-
-                      const every = position.every((item) => {
-                        return position[0][0] === item[0]
-                      })
-
-                      if (every) {
-                        setData(
-                          data.map((item) => {
-                            return {
-                              ...item,
-                              children: item.children.map((children) => {
-                                const key = `${children.x}-${children.y}`
-
-                                if (dragSelected.has(key)) {
-                                  return {
-                                    ...children,
-                                    seatPositionGroup: position.join('-')
-                                  }
-                                } else {
-                                  return children
-                                }
-                              })
-                            }
-                          })
-                        )
-                      }
-                    }
-
-                    break
-                  case '3':
-                    // 轮椅座
-                    setData(
-                      data.map((item) => {
-                        return {
-                          ...item,
-                          children: item.children.map((children) => {
-                            const key = `${children.x}-${children.y}`
-
-                            if (dragSelected.has(key)) {
-                              return {
-                                ...children,
-                                wheelChair: true
-                              }
-                            } else {
-                              return children
-                            }
-                          })
-                        }
-                      })
-                    )
-                    break
-                  case '4':
-                    // 是否显示
-                    setData(
-                      data.map((item) => {
-                        return {
-                          ...item,
-                          children: item.children.map((children) => {
-                            const key = `${children.x}-${children.y}`
-
-                            if (dragSelected.has(key)) {
-                              if (
-                                children.area?.name &&
-                                area[children.area?.name]
-                              ) {
-                                area[children.area.name].delete(key)
-                              }
-
-                              return {
-                                ...children,
-                                show: !children.show,
-                                area: {
-                                  hover: false,
-                                  selected: false
-                                }
-                              }
-                            } else {
-                              return children
-                            }
-                          })
-                        }
-                      })
-                    )
-                    setArea(area)
-                    break
-                  case '5':
-                    // 5 是否禁用
-                    setData(
-                      data.map((item) => {
-                        return {
-                          ...item,
-                          children: item.children.map((children) => {
-                            const key = `${children.x}-${children.y}`
-
-                            if (dragSelected.has(key)) {
-                              console.log(children)
-                              if (
-                                children.area?.name &&
-                                area[children.area.name!]
-                              ) {
-                                area[children.area.name].delete(key)
-                              }
-
-                              return {
-                                ...children,
-                                disabled: !children.disabled,
-                                area: {
-                                  hover: false,
-                                  selected: false
-                                }
-                              }
-                            } else {
-                              return children
-                            }
-                          })
-                        }
-                      })
-                    )
-                    setArea(area)
-                    break
-                  case '6':
-                    setData(
-                      data.map((item) => {
-                        return {
-                          ...item,
-                          children: item.children.map((children) => {
-                            const key = `${children.x}-${children.y}`
-
-                            if (dragSelected.has(key)) {
-                              console.log(children)
-                              if (
-                                children.area?.name &&
-                                area?.[children.area.name]
-                              ) {
-                                area?.[children.area?.name].delete(key)
-                              }
-
-                              return {
-                                ...children,
-                                show: true,
-                                disabled: false,
-                                wheelChair: false,
-                                seatPositionGroup: null,
-                                area: {
-                                  hover: false,
-                                  selected: false
-                                }
-                              }
-                            } else {
-                              return children
-                            }
-                          })
-                        }
-                      })
-                    )
-                    setArea(area)
-                    break
-                }
+                seatAction(key as SeatActionKey)
               },
               items: [
                 {
                   label: t('seatModal.dropdownItem.configArea'),
-                  key: '1'
+                  key: 'configArea'
                 },
                 {
                   label: t('seatModal.dropdownItem.configCoupleSeat'),
-                  key: '2'
+                  key: 'configCoupleSeat'
                 },
                 {
                   label: t('seatModal.dropdownItem.configWheelChairSeat'),
-                  key: '3'
+                  key: 'configWheelChairSeat'
                 },
                 {
                   label: t('seatModal.dropdownItem.show'),
-                  key: '4'
+                  key: 'displaySeat'
                 },
                 {
                   label: t('seatModal.dropdownItem.disabled'),
-                  key: '5'
+                  key: 'disabledSeat'
                 },
                 {
                   label: t('seatModal.dropdownItem.reset'),
-                  key: '6'
+                  key: 'reset'
                 }
               ]
             }}
@@ -607,10 +720,11 @@ export default function SeatModal(props: ModalProps) {
               ref={dragContainerRef}
               className="drag-container"
               style={{
+                position: 'fixed',
+                zIndex: 100,
                 width: dragBoxRef.current.width + 'px',
-                height: dragBoxRef.current.height + 'px',
-                top: dragBoxRef.current.top + 'px',
-                left: dragBoxRef.current.left + 'px'
+                left: dragBoxRef.current.rectLeft + 'px',
+                top: dragBoxRef.current.rectTop + 'px'
               }}
             ></section>
           </Dropdown>
@@ -628,6 +742,7 @@ export default function SeatModal(props: ModalProps) {
           ) : (
             <section
               className="seat-container"
+              ref={dragContainerRef}
               style={
                 {
                   '--seat-size': size + 'px',
@@ -790,23 +905,64 @@ export default function SeatModal(props: ModalProps) {
                     dragContainer={'.seat-container'}
                     selectableTargets={['.seat .seat-row-column']}
                     hitRate={100}
-                    selectByClick={true}
+                    selectByClick={false}
                     selectFromInside={true}
                     // toggleContinueSelect={true}
                     ratio={0}
                     scrollOptions={{
-                      container: document.querySelector('.ant-drawer-body'),
+                      container: document.querySelector(
+                        '.ant-drawer-body'
+                      ) as HTMLElement,
                       throttleTime: 30,
                       threshold: 0
                     }}
+                    onSelectStart={() => {
+                      const selectSelectionArea = document.querySelector(
+                        '.selecto-selection'
+                      ) as HTMLElement
+                      selectSelectionArea.style.width = '0px'
+                      selectSelectionArea.style.height = '0px'
+                      selectSelectionArea.style.visibility = 'visible'
+                      setShowDropDown(false)
+                    }}
                     onSelect={(e) => {
-                      console.log(e)
                       e.added.forEach((el) => {
                         el.classList.add('selecto-selected')
                       })
                       e.removed.forEach((el) => {
                         el.classList.remove('selecto-selected')
                       })
+                    }}
+                    onSelectEnd={(e) => {
+                      const selectSelectionArea = document.querySelector(
+                        '.selecto-selection'
+                      ) as HTMLElement
+
+                      selectSelectionArea.style.visibility = 'hidden'
+                      selectSelectionArea.style.display = 'block'
+
+                      const rect = selectSelectionArea?.getBoundingClientRect()
+
+                      dragBoxRef.current.rectLeft = rect.left
+                      dragBoxRef.current.rectTop = rect.bottom
+                      dragBoxRef.current.width = rect.width
+
+                      if (e.selected.length !== 0) {
+                        setShowDropDown(true)
+                        const selected = new Set(
+                          e.selected.map((item) => {
+                            const dataset = findDataset(
+                              item as HTMLElement,
+                              'rowIndex'
+                            )!.dataset
+
+                            return `${dataset.rowIndex}-${dataset.columnIndex}`
+                          })
+                        )
+                        setDragSelected(selected)
+                      }
+
+                      console.log(showDropDown)
                     }}
                     onScroll={(e) => {
                       const drawerContainer =
@@ -823,127 +979,7 @@ export default function SeatModal(props: ModalProps) {
                   <ul
                     className="seat"
                     // style={style}
-                    ref={seatContainerRef}
-                    // onClick={(e) => {
-                    //   const dataset = findDataset(
-                    //     e.target as HTMLElement,
-                    //     'rowIndex'
-                    //   )!.dataset
-
-                    //   const singleSelect = (x: number, y: number) => {
-                    //     if (selectedSeat.length < maxSelectSeatCount) {
-                    //       data[x].children[y].selected =
-                    //         !data[x].children[y].selected
-
-                    //       if (data[x].children[y].selected) {
-                    //         selectedSeat.push(data[x].children[y])
-                    //         setSelectedSeat([...selectedSeat])
-                    //       } else {
-                    //         const findIndex = selectedSeat.findIndex((item) => {
-                    //           return (
-                    //             item.x === data[x].children[y].x &&
-                    //             item.y === data[x].children[y].y
-                    //           )
-                    //         })
-
-                    //         if (findIndex !== -1) {
-                    //           selectedSeat.splice(findIndex, 1)
-                    //           setSelectedSeat([...selectedSeat])
-                    //         }
-                    //       }
-
-                    //       setData([...data])
-                    //     } else {
-                    //       // 如果是选过的，在点击就可以取消，否则就提示不能超过最大值
-                    //       const findIndex = selectedSeat.findIndex((item) => {
-                    //         return (
-                    //           item.x === data[x].children[y].x &&
-                    //           item.y === data[x].children[y].y
-                    //         )
-                    //       })
-                    //       if (findIndex !== -1) {
-                    //         selectedSeat.splice(findIndex, 1)
-                    //         data[x].children[y].selected = false
-                    //         setSelectedSeat([...selectedSeat])
-                    //       } else {
-                    //         message.warning(
-                    //           t('seatModal.message.max', {
-                    //             max: maxSelectSeatCount
-                    //           })
-                    //         )
-                    //       }
-                    //     }
-                    //   }
-
-                    //   const doubleSelect = (x: number, y: number) => {
-                    //     const split =
-                    //       data[x].children[y].seatPositionGroup?.split('-')
-                    //     const position = new Set(split)
-
-                    //     if (data[x].children[y].selected) {
-                    //       // 如果选中，就取消
-                    //       data[x].children.forEach((item) => {
-                    //         const selected = position.has(`${item.x},${item.y}`)
-
-                    //         if (selected) {
-                    //           item.selected = false
-                    //         }
-                    //       })
-                    //       const filter = selectedSeat.filter((item) => {
-                    //         return !position.has(`${item.x},${item.y}`)
-                    //       })
-                    //       setSelectedSeat(filter)
-                    //       setData([...data])
-                    //     } else if (
-                    //       split &&
-                    //       split.length + selectedSeat.length >
-                    //         maxSelectSeatCount
-                    //     ) {
-                    //       message.warning(
-                    //         t('seatModal.message.max', {
-                    //           max: maxSelectSeatCount
-                    //         })
-                    //       )
-                    //     } else {
-                    //       data[x].children.forEach((item) => {
-                    //         const selected = position.has(`${item.x},${item.y}`)
-                    //         if (selected) {
-                    //           item.selected = selected
-                    //         }
-                    //       })
-                    //       const filter = data[x].children.filter((item) => {
-                    //         return position.has(`${item.x},${item.y}`)
-                    //       })
-                    //       const newSelect = [...selectedSeat, ...filter]
-                    //       setSelectedSeat(newSelect)
-                    //       setData([...data])
-                    //       console.log(newSelect)
-                    //     }
-                    //   }
-
-                    //   if (dataset.rowIndex && dataset.columnIndex) {
-                    //     const x = +dataset.rowIndex
-                    //     const y = +dataset.columnIndex
-                    //     const seat = data[x].children[y]
-
-                    //     if (
-                    //       seat.selectSeatState === SelectSeatState.sold ||
-                    //       seat.selectSeatState === SelectSeatState.locked
-                    //     ) {
-                    //       return t('seatModal.seatUsed', {
-                    //         max: maxSelectSeatCount
-                    //       })
-                    //     }
-
-                    //     if (!seat.disabled) {
-                    //       if (seat.seatPositionGroup) {
-                    //         doubleSelect(x, y)
-                    //       } else {
-                    //         singleSelect(x, y)
-                    //       }
-                    //     }
-                    //   }
-                    // }}
+                    onClick={seatSelect}
                   >
                     {data?.map((item, index) => {
                       let childrenIndex = 0
@@ -1012,8 +1048,9 @@ export default function SeatModal(props: ModalProps) {
                                           }
                                         : {})
                                     }}
-                                    data-row-index={index}
-                                    data-column-index={childrenIndex}
+                                    data-seat-name={children.seatName}
+                                    data-row-index={children.x}
+                                    data-column-index={children.y}
                                   >
                                     <div>
                                       {children.wheelChair ? (
