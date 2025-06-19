@@ -9,7 +9,13 @@
     "lint": "next lint  --fix . --ext .js,.jsx,.ts,.tsx",
     "prepare": "husky install",
     "generator": "node ./generator/read.js",
-    "write": "node ./generator/write.js"
+    "write": "node ./generator/write.js",
+    "commit": "cz"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
   },
   "engines": {
     "node": ">=20.12.0"
@@ -52,6 +58,8 @@
     "zustand": "^4.5.4"
   },
   "devDependencies": {
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
     "@types/lodash": "^4.17.6",
     "@types/node": "20.12.4",
     "@types/react": "18.2.74",
