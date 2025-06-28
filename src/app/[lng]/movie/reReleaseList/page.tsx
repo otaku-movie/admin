@@ -29,6 +29,8 @@ import { CheckPermission } from '@/components/checkPermission'
 import { showTotal } from '@/utils/pagination'
 import { getMovieList } from '@/api/request/movie'
 import { ReReleaseModal } from '@/dialog/reReleaseModal'
+import { CustomAntImage } from '@/components/CustomAntImage'
+
 interface Query {
   name: string
   status: number
@@ -81,7 +83,7 @@ export default function Page({ params: { lng } }: PageProps) {
               position: 'relative'
             }}
           >
-            <Image
+            <CustomAntImage
               width={120}
               src={row.cover}
               alt="poster"
@@ -91,7 +93,7 @@ export default function Page({ params: { lng } }: PageProps) {
                 borderRadius: ' 4px',
                 objectFit: 'cover'
               }}
-            ></Image>
+            ></CustomAntImage>
             <Tag
               style={{
                 position: 'absolute',

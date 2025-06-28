@@ -6,7 +6,6 @@ import {
   Space,
   Row,
   Input,
-  Image,
   Tag,
   Select,
   Modal,
@@ -28,13 +27,14 @@ import { processPath } from '@/config/router'
 import { CheckPermission } from '@/components/checkPermission'
 import { showTotal } from '@/utils/pagination'
 import { getMovieList } from '@/api/request/movie'
+import { CustomAntImage } from '@/components/CustomAntImage'
 
 interface Query {
   name: string
   status: number
 }
 
-export default function Page({ params: { lng } }: PageProps) {
+export default function Page({ params: { lng } }: Readonly<PageProps>) {
   const router = useRouter()
   const [data, setData] = useState<Movie[]>([])
   const [page, setPage] = useState(1)
@@ -75,7 +75,7 @@ export default function Page({ params: { lng } }: PageProps) {
               position: 'relative'
             }}
           >
-            <Image
+            <CustomAntImage
               width={120}
               src={row.cover}
               alt="poster"
@@ -85,7 +85,7 @@ export default function Page({ params: { lng } }: PageProps) {
                 borderRadius: ' 4px',
                 objectFit: 'cover'
               }}
-            ></Image>
+            ></CustomAntImage>
             <Tag
               style={{
                 position: 'absolute',

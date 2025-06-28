@@ -4,7 +4,6 @@ import {
   Table,
   Button,
   Space,
-  Image,
   Tag,
   Input,
   Select,
@@ -28,6 +27,7 @@ import { DictSelect } from '@/components/DictSelect'
 import { Dict } from '@/components/dict'
 import { OrderState } from '@/config/enum'
 import { RangePicker, dateValue } from '@/components/rangePicker'
+import { CustomAntImage } from '@/components/CustomAntImage'
 
 interface Query {
   id: number
@@ -151,7 +151,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
       render(_: any, row) {
         return (
           <Space align="start">
-            <Image
+            <CustomAntImage
               width={100}
               src={row.moviePoster}
               alt="poster"
@@ -160,7 +160,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
               style={{
                 borderRadius: ' 4px'
               }}
-            ></Image>
+            ></CustomAntImage>
             <Space direction="vertical">
               <span>{row.movieName}</span>
               <span>
@@ -581,7 +581,11 @@ export default function MoviePage({ params: { lng } }: PageProps) {
         }}
       >
         <Flex justify="center">
-          <Image src={QRcodeModal.data} preview={false} alt="qrCode"></Image>
+          <CustomAntImage
+            src={QRcodeModal.data}
+            preview={false}
+            alt="qrCode"
+          ></CustomAntImage>
         </Flex>
       </Modal>
     </section>

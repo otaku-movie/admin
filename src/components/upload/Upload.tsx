@@ -8,6 +8,7 @@ import './style.scss'
 import http from '@/api'
 import { getFileSize } from '@/utils'
 import { useTranslation } from '@/app/i18n/client'
+import { CustomAntImage } from '@/components/CustomAntImage'
 
 type FileType = Parameters<GetProp<AntdUploadProps, 'beforeUpload'>>[0]
 
@@ -203,7 +204,7 @@ export function Upload(props: UploadProps) {
         }}
       ></ImageCropper>
       {previewImage && (
-        <Image
+        <CustomAntImage
           wrapperStyle={{ display: 'none' }}
           alt="image"
           preview={{

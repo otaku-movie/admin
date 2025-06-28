@@ -13,6 +13,7 @@ import {
 } from 'antd'
 import http from '@/api'
 import { languageType, notFoundImage } from '@/config'
+import { CustomAntImage } from '@/components/CustomAntImage'
 
 interface ModalProps {
   type: 'create' | 'edit'
@@ -46,12 +47,12 @@ export function CreateOrderModal(props: ModalProps) {
       render(_: any, row) {
         return (
           <Space align="start">
-            <Image
+            <CustomAntImage
               width={80}
               src={row.moviePoster}
               alt="poster"
               fallback={notFoundImage}
-            ></Image>
+            ></CustomAntImage>
             <span>{row.movieName}</span>
           </Space>
         )

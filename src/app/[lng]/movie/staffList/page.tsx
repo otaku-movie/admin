@@ -10,6 +10,8 @@ import { StaffModal } from '@/dialog/staffModal'
 import { CheckPermission } from '@/components/checkPermission'
 import { showTotal } from '@/utils/pagination'
 import { notFoundImage } from '@/config'
+import { CustomAntImage } from '@/components/CustomAntImage'
+
 
 interface Query {
   name: string
@@ -56,7 +58,7 @@ export default function Page({ params: { lng } }: PageProps) {
       dataIndex: 'cover',
       render(image) {
         return (
-          <Image
+          <CustomAntImage
             width={120}
             src={image}
             alt="poster"
@@ -64,7 +66,7 @@ export default function Page({ params: { lng } }: PageProps) {
             style={{
               borderRadius: ' 4px'
             }}
-          ></Image>
+          ></CustomAntImage>
         )
       }
     },

@@ -22,6 +22,7 @@ import page from '@/app/[lng]/dataChart/page'
 import { Query, QueryItem } from '@/components/query'
 import { showTotal } from '@/utils/pagination'
 import { Movie } from '@/type/api'
+import { CustomAntImage } from '@/components/CustomAntImage'
 
 interface modalProps {
   show?: boolean
@@ -79,7 +80,7 @@ export function MovieModal(props: modalProps) {
               position: 'relative'
             }}
           >
-            <Image
+            <CustomAntImage
               width={120}
               src={row.cover}
               alt="poster"
@@ -89,7 +90,7 @@ export function MovieModal(props: modalProps) {
                 borderRadius: ' 4px',
                 objectFit: 'cover'
               }}
-            ></Image>
+            ></CustomAntImage>
             <Tag
               style={{
                 position: 'absolute',
@@ -233,11 +234,11 @@ export function MovieModal(props: modalProps) {
               0
             )
           }}
-          rowKey={"id"}
+          rowKey={'id'}
           sticky={{ offsetHeader: -20 }}
           rowSelection={{
             type: 'radio',
-            onChange (selectedKeys, selectedRows) {
+            onChange(selectedKeys, selectedRows) {
               console.log(selectedKeys, selectedRows)
               setSelectedMovie({
                 ...selectedRows[0]

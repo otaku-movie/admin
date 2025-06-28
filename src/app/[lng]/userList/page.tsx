@@ -22,6 +22,7 @@ import { CheckPermission } from '@/components/checkPermission'
 import { role } from '@/type/api'
 import { showTotal } from '@/utils/pagination'
 import { notFoundImage } from '@/config'
+import { CustomAntImage } from '@/components/CustomAntImage'
 
 interface Query {
   name: string
@@ -72,7 +73,7 @@ export default function Page({ params: { lng } }: PageProps) {
       dataIndex: 'cover',
       render(image) {
         return (
-          <Image
+          <CustomAntImage
             width={60}
             src={image}
             alt="poster"
@@ -80,7 +81,7 @@ export default function Page({ params: { lng } }: PageProps) {
             style={{
               borderRadius: ' 4px'
             }}
-          ></Image>
+          ></CustomAntImage>
         )
       }
     },

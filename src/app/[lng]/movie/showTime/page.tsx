@@ -30,6 +30,7 @@ import { CheckPermission } from '@/components/checkPermission'
 import { PageProps } from '../../layout'
 import { showTotal } from '@/utils/pagination'
 import { CreateOrderModal } from '@/dialog/createOrderModal'
+import { CustomAntImage } from '@/components/CustomAntImage'
 
 interface Query {
   movieId: number
@@ -143,12 +144,12 @@ export default function MoviePage({ params: { lng } }: PageProps) {
       render(_: any, row) {
         return (
           <Space align="start">
-            <Image
+            <CustomAntImage
               width={120}
               src={row.moviePoster}
               alt="poster"
               fallback={notFoundImage}
-            ></Image>
+            ></CustomAntImage>
             <Space direction="vertical">
               <span>{row.movieName}</span>
               <span></span>

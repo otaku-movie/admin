@@ -21,6 +21,7 @@ import { processPath } from '@/config/router'
 import { character } from '@/type/api'
 import { useMovieStore } from '@/store/useMovieStore'
 import { notFoundImage } from '@/config'
+import { CustomAntImage } from '@/components/CustomAntImage'
 
 interface modal<T> {
   columns: TableColumnsType<T>
@@ -125,7 +126,7 @@ export function Two(props: Props) {
         render(cover) {
           return (
             // eslint-disable-next-line jsx-a11y/alt-text
-            <Image
+            <CustomAntImage
               width={80}
               src={cover}
               fallback={notFoundImage}
@@ -133,7 +134,7 @@ export function Two(props: Props) {
               style={{
                 borderRadius: ' 4px'
               }}
-            ></Image>
+            ></CustomAntImage>
           )
         }
       },
