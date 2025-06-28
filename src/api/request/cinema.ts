@@ -49,3 +49,17 @@ export function getCinemaScreeningList (query: GetCinemaScreeningQuery) {
     params: query
   })
 }
+
+export interface AddressTreeListResponse {
+  id: number
+  name: string
+  nameKana?: string
+  children?: AddressTreeListResponse[]
+}
+
+export function getAddressTreeList () {
+  return http<ApiResponse<AddressTreeListResponse[]>>({
+    url: '/areas/tree',
+    method: 'get'
+  })
+}

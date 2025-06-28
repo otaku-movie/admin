@@ -14,7 +14,10 @@
     },
     "address": {
       "label": "地址",
-      "required": "请输入地址"
+      "required": "请输入详细地址"
+    },
+    "areaId": {
+      "required": "请选择地区"
     },
     "tel": {
       "label": "电话",

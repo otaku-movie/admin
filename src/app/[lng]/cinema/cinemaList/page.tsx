@@ -52,13 +52,13 @@ export default function Page({ params: { lng } }: PageProps) {
   const columns: TableColumnsType = [
     {
       title: t('table.name'),
-      width: 250,
+      width: 150,
       fixed: 'left',
       dataIndex: 'name'
     },
     {
       title: t('table.brandName'),
-      width: 150,
+      width: 100,
       dataIndex: 'brandName'
     },
     {
@@ -91,7 +91,7 @@ export default function Page({ params: { lng } }: PageProps) {
     {
       title: t('table.address'),
       width: 300,
-      dataIndex: 'address'
+      dataIndex: 'fullAddress'
     },
     {
       title: t('table.tel'),
@@ -101,7 +101,18 @@ export default function Page({ params: { lng } }: PageProps) {
     {
       title: t('table.homePage'),
       width: 300,
-      dataIndex: 'homePage'
+      render(_, row) {
+        return (
+          <a
+            href={row.homePage}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: 'blue' }}
+          >
+            {row.homePage}
+          </a>
+        )
+      }
     },
     {
       width: 200,

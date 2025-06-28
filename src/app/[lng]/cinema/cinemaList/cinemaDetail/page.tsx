@@ -1,6 +1,15 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import { Button, Form, Input, InputNumber, Select, Space } from 'antd'
+import {
+  Button,
+  Cascader,
+  Flex,
+  Form,
+  Input,
+  InputNumber,
+  Select,
+  Space
+} from 'antd'
 import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '@/app/[lng]/layout'
 import { Cinema } from '@/type/api'
@@ -8,6 +17,10 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import http from '@/api'
 import { CheckPermission } from '@/components/checkPermission'
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
+import {
+  AddressTreeListResponse,
+  getAddressTreeList
+} from '@/api/request/cinema'
 
 export default function Page({ params: { lng } }: PageProps) {
   const { t } = useTranslation(lng, 'cinemaDetail')
@@ -17,6 +30,12 @@ export default function Page({ params: { lng } }: PageProps) {
     spec: []
   })
   const [specList, setSpecList] = useState<any[]>([])
+  const [addressTreeList, setAddressTreeList] = useState<
+    AddressTreeListResponse[]
+  >([])
+  const [addressSelectedOptions, setAddressSelectedOptions] = useState<
+    AddressTreeListResponse[]
+  >([])
   const [brandList, setBrandList] = useState<any[]>([])
   const [form] = Form.useForm()
   const router = useRouter()
@@ -39,6 +58,11 @@ export default function Page({ params: { lng } }: PageProps) {
       setBrandList(res.data?.list)
     })
   }
+  const getAddress = () => {
+    getAddressTreeList().then((res) => {
+      setAddressTreeList(res.data as unknown as AddressTreeListResponse[])
+    })
+  }
 
   const getData = () => {
     if (searchParams.has('id')) {
@@ -52,26 +76,23 @@ export default function Page({ params: { lng } }: PageProps) {
         if (res.data.brandId) {
           getBrandData('', res.data.brandId)
         }
-        form.setFieldsValue({
+
+        const parsedData = {
           ...res.data,
+          areaId: [
+            res.data.regionId,
+            res.data.prefectureId,
+            res.data.cityId
+          ].filter(Boolean),
           spec:
-            res.data.spec.map((item: { id: number }) => {
-              return {
-                ...item,
-                specId: item.id
-              }
-            }) || []
-        })
-        setData({
-          ...res.data,
-          spec:
-            res.data.spec.map((item: { id: number }) => {
-              return {
-                ...item,
-                specId: item.id
-              }
-            }) || []
-        })
+            res.data.spec?.map((item: { id: number }) => ({
+              ...item,
+              specId: item.id
+            })) ?? []
+        }
+
+        form.setFieldsValue(parsedData)
+        setData(parsedData)
       })
     }
   }
@@ -92,6 +113,7 @@ export default function Page({ params: { lng } }: PageProps) {
     getBrandData()
     getData()
     getSpecData()
+    getAddress()
   }, [])
 
   return (
@@ -109,7 +131,7 @@ export default function Page({ params: { lng } }: PageProps) {
         }}
         form={form}
         variant="filled"
-        style={{ maxWidth: 600 }}
+        style={{ maxWidth: 800 }}
       >
         <Form.Item
           label={t('form.brandId.label')}
@@ -167,20 +189,30 @@ export default function Page({ params: { lng } }: PageProps) {
             }}
           ></Input.TextArea>
         </Form.Item>
-        <Form.Item
-          label={t('form.address.label')}
-          rules={[{ required: true, message: t('form.address.required') }]}
-          name="address"
-        >
-          <Input
-            value={data.address}
-            onChange={(e) => {
-              data.address = e.target.value
-              setData({
-                ...data
-              })
-            }}
-          ></Input>
+        <Form.Item label={t('form.address.label')} required>
+          <Flex gap={10}>
+            <Form.Item
+              name="areaId"
+              noStyle
+              rules={[{ required: true, message: t('form.areaId.required') }]}
+            >
+              <Cascader
+                fieldNames={{ label: 'name', value: 'id' }}
+                options={addressTreeList}
+                placeholder="Please select"
+                onChange={(value, selectedOptions) =>
+                  setAddressSelectedOptions(selectedOptions)
+                }
+              />
+            </Form.Item>
+            <Form.Item
+              name="address"
+              noStyle
+              rules={[{ required: true, message: t('form.address.required') }]}
+            >
+              <Input placeholder="详细地址" />
+            </Form.Item>
+          </Flex>
         </Form.Item>
         <Form.Item
           label={t('form.tel.label')}
@@ -352,11 +384,26 @@ export default function Page({ params: { lng } }: PageProps) {
               type="primary"
               htmlType="submit"
               onClick={() => {
-                console.log(data)
+                const fullAddress =
+                  addressSelectedOptions
+                    .slice(1)
+                    .map((item) => item.name)
+                    .join('') + data.address
+                console.log(fullAddress)
+                // return
+                const [regionId = null, prefectureId = null, cityId = null] =
+                  form.getFieldValue('areaId') || []
+
                 http({
                   url: 'admin/cinema/save',
                   method: 'post',
-                  data
+                  data: {
+                    ...data,
+                    regionId,
+                    prefectureId,
+                    cityId,
+                    fullAddress
+                  }
                 }).then(() => {
                   router.back()
                 })
