@@ -16,6 +16,9 @@
       "label": "Address",
       "required": "Please enter the address"
     },
+    "areaId": {
+      "required": "Please select an area"
+    },
     "tel": {
       "label": "Telephone",
       "required": "Please enter the telephone number"

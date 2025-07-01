@@ -1,0 +1,16 @@
+# 顶层 EditorConfig 文件
+root = true
+
+# 所有文件默认规则
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 2
+
+# 针对 JSON 文件
+[*.json]
+indent_style = space
+indent_size = 2

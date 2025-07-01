@@ -1,4 +1,31 @@
 {
+  "enum": {
+    "selectSeatState": {
+      "available": "Available Seat",
+      "locked": "Locked Seat",
+      "sold": "Sold Seat"
+    },
+    "orderState": {
+      "orderCreated": "Order Created",
+      "orderSucceed": "Order Completed",
+      "orderFailed": "Order Failed",
+      "canceledOrder": "Order Canceled",
+      "orderTimeout": "Order Timeout"
+    },
+    "seatType": {
+      "wheelChair": "Wheelchair Seat",
+      "disabled": "Disabled Seat"
+    }
+  },
+  "error": {
+    "403": {
+      "title": "Access Denied",
+      "button": "Back to Login Page"
+    }
+  },
+  "homePage": {
+    "logout": "logout"
+  },
   "menu": {
     "dataChart": "Data Chart",
     "cinema": {
@@ -9,12 +36,14 @@
         "theaterHall": "Theater Hall List",
         "specList": "Spec List",
         "ticketType": "Ticket Type",
-        "brandList": "Brand List"
+        "brandList": "Brand List",
+        "screeningManagement": "Screening Management"
       }
     },
     "movie": {
       "name": "Movie Management",
       "children": {
+        "reReleaseList": "Re-release List",
         "movieList": "Movie List",
         "characterList": "Character List",
         "staffList": "Staff List",
@@ -54,7 +83,8 @@
   "unit": {
     "jpy": "JPY",
     "billion": "Billion",
-    "million": "Million"
+    "million": "Million",
+    "minute": "Minute"
   },
   "week": {
     "Monday": "Monday",
@@ -91,35 +121,9 @@
     "comment": {
       "replyList": "Reply List"
     },
-    "reply": {
-      "reply": "Reply"
+    "reply": "Reply",
+    "cinemaList": {
+      "screeningManagement": "Screening Management"
     }
-  },
-  "enum": {
-    "selectSeatState": {
-      "available": "Available Seat",
-      "locked": "Locked Seat",
-      "sold": "Sold Seat"
-    },
-    "orderState": {
-      "orderCreated": "Order Created",
-      "orderSucceed": "Order Completed",
-      "orderFailed": "Order Failed",
-      "canceledOrder": "Order Canceled",
-      "orderTimeout": "Order Timeout"
-    },
-    "seatType": {
-      "wheelChair": "Wheelchair Seat",
-      "disabled": "Disabled Seat"
-    }
-  },
-  "error": {
-    "403": {
-      "title": "Access Denied",
-      "button": "Back to Login Page"
-    }
-  },
-  "homePage": {
-    "logout": "logout"
   }
 }

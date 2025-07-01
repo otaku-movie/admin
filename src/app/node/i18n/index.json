@@ -192,8 +192,8 @@
       "reply": {
         "reply": {
           "ja": "返事",
-          "enUS": "Reply",
-          "zhCN": "回复"
+          "zhCN": "回复",
+          "enUS": "Reply"
         }
       }
     }
@@ -508,9 +508,16 @@
           "enUS": "Address"
         },
         "required": {
-          "zhCN": "请输入地址",
+          "zhCN": "请输入详细地址",
           "ja": "住所を入力してください",
           "enUS": "Please enter the address"
+        }
+      },
+      "areaId": {
+        "required": {
+          "zhCN": "请选择地区",
+          "ja": "地域を選択してください",
+          "enUS": "Please select an area"
         }
       },
       "tel": {
@@ -669,6 +676,85 @@
     }
   },
   "common.json": {
+    "enum": {
+      "selectSeatState": {
+        "available": {
+          "zhCN": "可选座",
+          "ja": "選択可能",
+          "enUS": "Available Seat"
+        },
+        "locked": {
+          "zhCN": "已锁定",
+          "ja": "ロック済み",
+          "enUS": "Locked Seat"
+        },
+        "sold": {
+          "zhCN": "已售出",
+          "ja": "販売済み",
+          "enUS": "Sold Seat"
+        }
+      },
+      "orderState": {
+        "orderCreated": {
+          "zhCN": "订单已创建",
+          "ja": "注文作成済み",
+          "enUS": "Order Created"
+        },
+        "orderSucceed": {
+          "zhCN": "订单已完成",
+          "ja": "注文完了",
+          "enUS": "Order Completed"
+        },
+        "orderFailed": {
+          "zhCN": "订单失败",
+          "ja": "注文失敗",
+          "enUS": "Order Failed"
+        },
+        "canceledOrder": {
+          "zhCN": "订单已取消",
+          "ja": "注文キャンセル",
+          "enUS": "Order Canceled"
+        },
+        "orderTimeout": {
+          "zhCN": "订单超时",
+          "ja": "注文タイムアウト",
+          "enUS": "Order Timeout"
+        }
+      },
+      "seatType": {
+        "wheelChair": {
+          "zhCN": "轮椅座",
+          "ja": "車椅子席",
+          "enUS": "Wheelchair Seat"
+        },
+        "disabled": {
+          "zhCN": "已禁用",
+          "ja": "無効",
+          "enUS": "Disabled Seat"
+        }
+      }
+    },
+    "error": {
+      "403": {
+        "title": {
+          "zhCN": "没有访问权限",
+          "ja": "権限ありません。",
+          "enUS": "Access Denied"
+        },
+        "button": {
+          "zhCN": "回到登录页",
+          "ja": "ログインへ",
+          "enUS": "Back to Login Page"
+        }
+      }
+    },
+    "homePage": {
+      "logout": {
+        "zhCN": "退出登录",
+        "ja": "ログアウト",
+        "enUS": "logout"
+      }
+    },
     "menu": {
       "dataChart": {
         "zhCN": "数据图表",
@@ -713,7 +799,9 @@
             "enUS": "Brand List"
           },
           "screeningManagement": {
-            "zhCN": "上映场次管理"
+            "zhCN": "上映场次管理",
+            "ja": "上映スケジュール管理",
+            "enUS": "Screening Management"
           }
         }
       },
@@ -724,6 +812,11 @@
           "enUS": "Movie Management"
         },
         "children": {
+          "reReleaseList": {
+            "zhCN": "重映列表",
+            "ja": "再上映リスト",
+            "enUS": "Re-release List"
+          },
           "movieList": {
             "zhCN": "电影列表",
             "ja": "映画リスト",
@@ -867,6 +960,11 @@
         "zhCN": "万",
         "ja": "万",
         "enUS": "Million"
+      },
+      "minute": {
+        "ja": "分",
+        "zhCN": "分钟",
+        "enUS": "Minute"
       }
     },
     "week": {
@@ -1017,95 +1115,16 @@
         }
       },
       "reply": {
-        "reply": {
-          "zhCN": "回复",
-          "enUS": "Reply"
-        }
+        "zhCN": "回复",
+        "enUS": "Reply",
+        "ja": "返信"
       },
       "cinemaList": {
         "screeningManagement": {
           "zhCN": "上映场次管理",
-          "ja": "映画スケジュール管理"
+          "ja": "上映スケジュール管理",
+          "enUS": "Screening Management"
         }
-      }
-    },
-    "enum": {
-      "selectSeatState": {
-        "available": {
-          "zhCN": "可选座",
-          "ja": "選択可能",
-          "enUS": "Available Seat"
-        },
-        "locked": {
-          "zhCN": "已锁定",
-          "ja": "ロック済み",
-          "enUS": "Locked Seat"
-        },
-        "sold": {
-          "zhCN": "已售出",
-          "ja": "販売済み",
-          "enUS": "Sold Seat"
-        }
-      },
-      "orderState": {
-        "orderCreated": {
-          "zhCN": "订单已创建",
-          "ja": "注文作成済み",
-          "enUS": "Order Created"
-        },
-        "orderSucceed": {
-          "zhCN": "订单已完成",
-          "ja": "注文完了",
-          "enUS": "Order Completed"
-        },
-        "orderFailed": {
-          "zhCN": "订单失败",
-          "ja": "注文失敗",
-          "enUS": "Order Failed"
-        },
-        "canceledOrder": {
-          "zhCN": "订单已取消",
-          "ja": "注文キャンセル",
-          "enUS": "Order Canceled"
-        },
-        "orderTimeout": {
-          "zhCN": "订单超时",
-          "ja": "注文タイムアウト",
-          "enUS": "Order Timeout"
-        }
-      },
-      "seatType": {
-        "wheelChair": {
-          "zhCN": "轮椅座",
-          "ja": "車椅子席",
-          "enUS": "Wheelchair Seat"
-        },
-        "disabled": {
-          "zhCN": "已禁用",
-          "ja": "無効",
-          "enUS": "Disabled Seat"
-        }
-      }
-    },
-    "error": {
-      "403": {
-        "title": {
-          "zhCN": "没有访问权限",
-          "ja": "権限ありません。",
-          "enUS": "Access Denied"
-        },
-        "button": {
-          "zhCN": "回到登录页",
-          "ja": "ログインへ",
-          "enUS": "Back to Login Page"
-        }
-      }
-    },
-    "homePage": {
-      "logout": {
-        "zhCN": "退出登录",
-        "ja": "ログアウト",
-        "enUS": "logout"
       }
     }
   },
@@ -1665,6 +1684,13 @@
           "ja": "削除に成功しました",
           "enUS": "Deletion successful"
         }
+      }
+    },
+    "movieModal": {
+      "title": {
+        "zhCN": "选择电影",
+        "ja": "映画を選択",
+        "enUS": "Select Movie"
       }
     }
   },
@@ -2401,7 +2427,92 @@
           "enUS": "Are you sure you want to delete the current row?"
         },
         "success": {
-          "ja": "削除が成功しました"
+          "ja": "削除が成功しました",
+          "zhCN": "删除成功",
+          "enUS": "Delete successful"
+        }
+      }
+    }
+  },
+  "reRelease.json": {
+    "table": {
+      "name": {
+        "zhCN": "作品",
+        "ja": "作品",
+        "enUS": "Work"
+      },
+      "endDate": {
+        "zhCN": "结束日期",
+        "ja": "終了日",
+        "enUS": "End Date"
+      },
+      "status": {
+        "zhCN": "上映状态",
+        "ja": "上映状況",
+        "enUS": "Screening Status"
+      },
+      "action": {
+        "zhCN": "操作",
+        "ja": "操作",
+        "enUS": "Action"
+      }
+    },
+    "message": {
+      "remove": {
+        "content": {
+          "zhCN": "是否确认删除当前电影?",
+          "ja": "現在の映画を削除してもよろしいですか？",
+          "enUS": "Are you sure you want to delete the current movie?"
+        },
+        "success": {
+          "zhCN": "删除成功",
+          "ja": "削除が成功しました",
+          "enUS": "Deleted successfully"
+        }
+      }
+    },
+    "modal": {
+      "title": {
+        "create": {
+          "zhCN": "添加重映",
+          "ja": "再上映を追加",
+          "enUS": "Add Re-release"
+        },
+        "edit": {
+          "zhCN": "编辑重映",
+          "ja": "再上映を編集",
+          "enUS": "Edit Re-release"
+        }
+      },
+      "form": {
+        "movie": {
+          "label": {
+            "zhCN": "电影名称",
+            "ja": "映画名",
+            "enUS": "Movie Name"
+          },
+          "required": {
+            "zhCN": "请选择电影",
+            "ja": "映画を選択してください",
+            "enUS": "Please select a movie"
+          }
+        },
+        "showTime": {
+          "label": {
+            "zhCN": "开始时间",
+            "ja": "開始時間",
+            "enUS": "Start Time"
+          },
+          "required": {
+            "zhCN": "请选择上映时间",
+            "ja": "上映時間を選択してください",
+            "enUS": "Please select screening time"
+          },
+          "startAfterEnd": {
+            "zhCN": "结束时间必须大于开始时间",
+            "ja": "終了時間は開始時間より後でなければなりません",
+            "enUS": "End time must be later than start time"
+          }
         }
       }
     }
@@ -2495,11 +2606,13 @@
     "table": {
       "seatSelectRate": {
         "zhCN": "座位选择比例",
-        "ja": "座席選択比率"
+        "ja": "座席選択比率",
+        "enUS": "Seat Selection Rate"
       },
       "open": {
         "zhCN": "公开",
-        "ja": "公開"
+        "ja": "公開",
+        "enUS": "Public"
       }
     }
   },
@@ -2728,10 +2841,14 @@
         },
         "spec": {
           "label": {
-            "zhCN": "上映规格"
+            "zhCN": "上映规格",
+            "ja": "上映仕様",
+            "enUS": "Screening Specification"
           },
           "required": {
-            "zhCN": "请选择上映规格"
+            "zhCN": "请选择上映规格",
+            "ja": "上映仕様を選択してください",
+            "enUS": "Please select the screening specification"
           }
         },
         "subtitle": {
@@ -3160,7 +3277,9 @@
         }
       },
       "seatUsed": {
-        "zhCN": "当前座位已被锁定或者已售出"
+        "zhCN": "当前座位已被锁定或者已售出",
+        "ja": "現在の座席はロックされているか、すでに販売されています",
+        "enUS": "The current seat is locked or has been sold"
       },
       "message": {
         "required": {
@@ -3316,21 +3435,25 @@
     "seatNamingRuleModal": {
       "title": {
         "zhCN": "配置座位命名规则",
-        "ja": "座席命名ルールを設定"
+        "ja": "座席命名ルールを設定",
+        "enUS": "Configure Seat Naming Rules"
       },
       "form": {
         "template": {
           "label": {
             "zhCN": "座位命名规则",
-            "ja": "座席命名ルール"
+            "ja": "座席命名ルール",
+            "enUS": "Seat Naming Rules"
           },
           "error": {
             "zhCN": "命名规则格式不正确",
-            "ja": "命名ルールの形式が正しくありません"
+            "ja": "命名ルールの形式が正しくありません",
+            "enUS": "Invalid naming rule format"
           },
           "description": {
             "zhCN": "命名规则说明：\n\n・<strong>{number}</strong>：按数字从1开始递增排列，例如1, 2, 3...\n・<strong>{alphabet}</strong>：使用英文字母A-Z，超过26个字母后依次为AA, AB, AC...\n・<strong>{columnNumber}</strong>：表示当前行的座位序号，从1开始，例如1, 2, 3...\n\n示例：\n・<strong>{number}-{columnNumber}</strong>：生成结果为1-1, 1-2, 1-3...\n・<strong>{alphabet}{columnNumber}</strong>：生成结果为A1, ..., A26, B1, AA1, AB1...",
-            "ja": "命名ルールについて：\n\n・<strong>{number}</strong>: 数字を1から順に増加させて配置（例: 1, 2, 3...）\n・<strong>{alphabet}</strong>: 英字A-Zを使用。26文字を超える場合はAA, AB, AC...のように続きます\n・<strong>{columnNumber}</strong>: 現在の行の座席番号を1から順に付与（例: 1, 2, 3...）\n\n例：\n・<strong>{number}-{columnNumber}</strong>: 生成結果は1-1, 1-2, 1-3...\n・<strong>{alphabet}{columnNumber}</strong>: 生成結果はA1, ...， A26, B1, AA1, AB1..."
+            "ja": "命名ルールについて：\n\n・<strong>{number}</strong>: 数字を1から順に増加させて配置（例: 1, 2, 3...）\n・<strong>{alphabet}</strong>: 英字A-Zを使用。26文字を超える場合はAA, AB, AC...のように続きます\n・<strong>{columnNumber}</strong>: 現在の行の座席番号を1から順に付与（例: 1, 2, 3...）\n\n例：\n・<strong>{number}-{columnNumber}</strong>: 生成結果は1-1, 1-2, 1-3...\n・<strong>{alphabet}{columnNumber}</strong>: 生成結果はA1, ...， A26, B1, AA1, AB1...",
+            "enUS": "Description of naming rules:\n\n・<strong>{number}</strong>: Numbers incrementing from 1, e.g., 1, 2, 3...\n・<strong>{alphabet}</strong>: Letters A-Z, after 26 letters continue as AA, AB, AC...\n・<strong>{columnNumber}</strong>: Seat number in the current row, starting from 1, e.g., 1, 2, 3...\n\nExamples:\n・<strong>{number}-{columnNumber}</strong>: Results like 1-1, 1-2, 1-3...\n・<strong>{alphabet}{columnNumber}</strong>: Results like A1, ..., A26, B1, AA1, AB1..."
           }
         }
       }

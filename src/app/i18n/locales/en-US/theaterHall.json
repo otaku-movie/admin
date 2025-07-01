@@ -40,6 +40,7 @@
       "disabled": "Disable/Enable Seats",
       "reset": "Reset"
     },
+    "seatUsed": "The current seat is locked or has been sold",
     "message": {
       "required": "Aisle configuration cannot be empty",
       "repeat": "Aisle duplication",
@@ -93,6 +94,16 @@
     "remove": {
       "content": "Are you sure you want to delete the current row? This action cannot be undone.",
       "success": "Deleted successfully"
+    }
+  },
+  "seatNamingRuleModal": {
+    "title": "Configure Seat Naming Rules",
+    "form": {
+      "template": {
+        "label": "Seat Naming Rules",
+        "error": "Invalid naming rule format",
+        "description": "Description of naming rules:\n\n・<strong>{number}</strong>: Numbers incrementing from 1, e.g., 1, 2, 3...\n・<strong>{alphabet}</strong>: Letters A-Z, after 26 letters continue as AA, AB, AC...\n・<strong>{columnNumber}</strong>: Seat number in the current row, starting from 1, e.g., 1, 2, 3...\n\nExamples:\n・<strong>{number}-{columnNumber}</strong>: Results like 1-1, 1-2, 1-3...\n・<strong>{alphabet}{columnNumber}</strong>: Results like A1, ..., A26, B1, AA1, AB1..."
+      }
     }
   }
 }

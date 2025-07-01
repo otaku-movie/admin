@@ -24,7 +24,8 @@
   },
   "message": {
     "remove": {
-      "content": "Are you sure you want to delete the current row?"
+      "content": "Are you sure you want to delete the current row?",
+      "success": "Delete successful"
     }
   }
 }

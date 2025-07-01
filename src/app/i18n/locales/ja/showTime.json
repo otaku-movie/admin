@@ -69,6 +69,10 @@
         "label": "上映劇場",
         "required": "劇場を選択してください"
       },
+      "spec": {
+        "label": "上映仕様",
+        "required": "上映仕様を選択してください"
+      },
       "subtitle": {
         "label": "字幕",
         "required": "字幕を選択してください"

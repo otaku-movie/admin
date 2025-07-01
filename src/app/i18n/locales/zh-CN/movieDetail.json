@@ -54,7 +54,6 @@
       "label": "官网",
       "required": "请输入官网地址"
     },
-
     "staff": {
       "label": "工作人员"
     },

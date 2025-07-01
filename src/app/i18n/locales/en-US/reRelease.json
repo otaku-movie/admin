@@ -1,0 +1,31 @@
+{
+  "table": {
+    "name": "Work",
+    "endDate": "End Date",
+    "status": "Screening Status",
+    "action": "Action"
+  },
+  "message": {
+    "remove": {
+      "content": "Are you sure you want to delete the current movie?",
+      "success": "Deleted successfully"
+    }
+  },
+  "modal": {
+    "title": {
+      "create": "Add Re-release",
+      "edit": "Edit Re-release"
+    },
+    "form": {
+      "movie": {
+        "label": "Movie Name",
+        "required": "Please select a movie"
+      },
+      "showTime": {
+        "label": "Start Time",
+        "required": "Please select screening time",
+        "startAfterEnd": "End time must be later than start time"
+      }
+    }
+  }
+}

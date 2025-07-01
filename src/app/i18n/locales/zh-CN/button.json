@@ -42,5 +42,10 @@
         "required": "请输入接口 code"
       }
     }
+  },
+  "button": {
+    "reply": {
+      "reply": "回复"
+    }
   }
 }

@@ -16,6 +16,9 @@
       "label": "住所",
       "required": "住所を入力してください"
     },
+    "areaId": {
+      "required": "地域を選択してください"
+    },
     "tel": {
       "label": "電話番号",
       "required": "電話番号を入力してください"

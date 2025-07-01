@@ -1,4 +1,31 @@
 {
+  "enum": {
+    "selectSeatState": {
+      "available": "選択可能",
+      "locked": "ロック済み",
+      "sold": "販売済み"
+    },
+    "orderState": {
+      "orderCreated": "注文作成済み",
+      "orderSucceed": "注文完了",
+      "orderFailed": "注文失敗",
+      "canceledOrder": "注文キャンセル",
+      "orderTimeout": "注文タイムアウト"
+    },
+    "seatType": {
+      "wheelChair": "車椅子席",
+      "disabled": "無効"
+    }
+  },
+  "error": {
+    "403": {
+      "title": "権限ありません。",
+      "button": "ログインへ"
+    }
+  },
+  "homePage": {
+    "logout": "ログアウト"
+  },
   "menu": {
     "dataChart": "データチャート",
     "cinema": {
@@ -9,7 +36,8 @@
         "theaterHall": "スクリーンリスト",
         "specList": "規格リスト",
         "ticketType": "チケットタイプ",
-        "brandList": "ブランドリスト"
+        "brandList": "ブランドリスト",
+        "screeningManagement": "上映スケジュール管理"
       }
     },
     "movie": {
@@ -52,6 +80,12 @@
     "notPermission": "権限がありません",
     "save": "保存成功"
   },
+  "unit": {
+    "jpy": "円",
+    "billion": "億",
+    "million": "万",
+    "minute": "分"
+  },
   "week": {
     "Monday": "月",
     "Tuesday": "火",
@@ -60,12 +94,6 @@
     "Friday": "金",
     "Saturday": "土",
     "Sunday": "日"
-  },
-  "unit": {
-    "jpy": "円",
-    "billion": "億",
-    "million": "万",
-    "minute": "分"
   },
   "button": {
     "add": "追加",
@@ -93,35 +121,9 @@
     "comment": {
       "replyList": "返信リスト"
     },
+    "reply": "返信",
     "cinemaList": {
-      "screeningManagement": "映画スケジュール管理"
+      "screeningManagement": "上映スケジュール管理"
     }
-  },
-  "enum": {
-    "selectSeatState": {
-      "available": "選択可能",
-      "locked": "ロック済み",
-      "sold": "販売済み"
-    },
-    "seatType": {
-      "wheelChair": "車椅子席",
-      "disabled": "無効"
-    },
-    "orderState": {
-      "orderCreated": "注文作成済み",
-      "orderSucceed": "注文完了",
-      "orderFailed": "注文失敗",
-      "canceledOrder": "注文キャンセル",
-      "orderTimeout": "注文タイムアウト"
-    }
-  },
-  "error": {
-    "403": {
-      "button": "ログインへ",
-      "title": "権限ありません。"
-    }
-  },
-  "homePage": {
-    "logout": "ログアウト"
   }
 }

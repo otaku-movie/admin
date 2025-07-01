@@ -42,5 +42,10 @@
         "required": "Please enter the API code"
       }
     }
+  },
+  "button": {
+    "reply": {
+      "reply": "Reply"
+    }
   }
 }

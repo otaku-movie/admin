@@ -1,0 +1,31 @@
+{
+  "table": {
+    "name": "作品",
+    "endDate": "終了日",
+    "status": "上映状況",
+    "action": "操作"
+  },
+  "message": {
+    "remove": {
+      "content": "現在の映画を削除してもよろしいですか？",
+      "success": "削除が成功しました"
+    }
+  },
+  "modal": {
+    "title": {
+      "create": "再上映を追加",
+      "edit": "再上映を編集"
+    },
+    "form": {
+      "movie": {
+        "label": "映画名",
+        "required": "映画を選択してください"
+      },
+      "showTime": {
+        "label": "開始時間",
+        "required": "上映時間を選択してください",
+        "startAfterEnd": "終了時間は開始時間より後でなければなりません"
+      }
+    }
+  }
+}

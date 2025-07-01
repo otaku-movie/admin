@@ -24,7 +24,8 @@
   },
   "message": {
     "remove": {
-      "content": "是否要删除当前行?"
+      "content": "是否要删除当前行?",
+      "success": "删除成功"
     }
   }
 }

@@ -21,5 +21,8 @@
       "content": "Are you sure you want to delete the current movie?",
       "success": "Deletion successful"
     }
+  },
+  "movieModal": {
+    "title": "Select Movie"
   }
 }

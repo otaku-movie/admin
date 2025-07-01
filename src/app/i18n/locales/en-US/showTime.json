@@ -69,6 +69,10 @@
         "label": "Theater Hall",
         "required": "Please select a theater hall"
       },
+      "spec": {
+        "label": "Screening Specification",
+        "required": "Please select the screening specification"
+      },
       "subtitle": {
         "label": "Subtitle",
         "required": "Please select a subtitle"

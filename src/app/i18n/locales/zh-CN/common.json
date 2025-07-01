@@ -1,4 +1,31 @@
 {
+  "enum": {
+    "selectSeatState": {
+      "available": "可选座",
+      "locked": "已锁定",
+      "sold": "已售出"
+    },
+    "orderState": {
+      "orderCreated": "订单已创建",
+      "orderSucceed": "订单已完成",
+      "orderFailed": "订单失败",
+      "canceledOrder": "订单已取消",
+      "orderTimeout": "订单超时"
+    },
+    "seatType": {
+      "wheelChair": "轮椅座",
+      "disabled": "已禁用"
+    }
+  },
+  "error": {
+    "403": {
+      "title": "没有访问权限",
+      "button": "回到登录页"
+    }
+  },
+  "homePage": {
+    "logout": "退出登录"
+  },
   "menu": {
     "dataChart": "数据图表",
     "cinema": {
@@ -56,7 +83,8 @@
   "unit": {
     "jpy": "日元",
     "billion": "亿",
-    "million": "万"
+    "million": "万",
+    "minute": "分钟"
   },
   "week": {
     "Monday": "一",
@@ -93,38 +121,9 @@
     "comment": {
       "replyList": "回复列表"
     },
-    "reply": {
-      "reply": "回复"
-    },
+    "reply": "回复",
     "cinemaList": {
       "screeningManagement": "上映场次管理"
     }
-  },
-  "enum": {
-    "selectSeatState": {
-      "available": "可选座",
-      "locked": "已锁定",
-      "sold": "已售出"
-    },
-    "orderState": {
-      "orderCreated": "订单已创建",
-      "orderSucceed": "订单已完成",
-      "orderFailed": "订单失败",
-      "canceledOrder": "订单已取消",
-      "orderTimeout": "订单超时"
-    },
-    "seatType": {
-      "wheelChair": "轮椅座",
-      "disabled": "已禁用"
-    }
-  },
-  "error": {
-    "403": {
-      "title": "没有访问权限",
-      "button": "回到登录页"
-    }
-  },
-  "homePage": {
-    "logout": "退出登录"
   }
 }

@@ -20,14 +20,14 @@
       "label": "映画のレベル",
       "required": "レベルを選択してください"
     },
+    "tag": {
+      "label": "タグ",
+      "required": "タグを選択してください"
+    },
     "helloMovie": {
       "label": "hello movie（バリアフリー）",
       "required": "hello movieは必須です",
       "notRepeat": "hello movieは重複できません"
-    },
-    "tag": {
-      "label": "タグ",
-      "required": "タグを選択してください"
     },
     "spec": {
       "label": "上映仕様",
