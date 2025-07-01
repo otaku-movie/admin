@@ -110,19 +110,19 @@ function RootLayout({ children, params: { lng } }: PageProps) {
     getDict()
   }, [])
 
-  useEffect(() => {
-    console.log(process.env.NODE_ENV)
-    if (process.env.MODE === 'production') {
-      const meta = document.createElement('meta')
-      meta.setAttribute('http-equiv', 'Content-Security-Policy')
-      meta.setAttribute('content', 'upgrade-insecure-requests')
+  // useEffect(() => {
+  console.log(process.env.NODE_ENV)
+  if (process.env.MODE === 'production') {
+    const meta = document.createElement('meta')
+    meta.setAttribute('http-equiv', 'Content-Security-Policy')
+    meta.setAttribute('content', 'upgrade-insecure-requests')
 
-      document.head.insertBefore(
-        meta,
-        document.querySelector('link[rel=icon]') || null
-      )
-    }
-  }, [])
+    document.head.insertBefore(
+      meta,
+      document.querySelector('link[rel=icon]') || null
+    )
+  }
+  // }, [])
 
   useEffect(() => {
     if (userStore.permissionList.length !== 0 && !set.has(str)) {
