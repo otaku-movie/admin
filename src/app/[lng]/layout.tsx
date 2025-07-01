@@ -135,10 +135,10 @@ function RootLayout({ children, params: { lng } }: PageProps) {
   return (
     <html lang={lng} dir={lng}>
       <head>
-        <meta
+        {/* <meta
           httpEquiv="Content-Security-Policy"
           content="upgrade-insecure-requests"
-        />
+        /> */}
       </head>
       <body
         style={{
