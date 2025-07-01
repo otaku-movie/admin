@@ -139,6 +139,7 @@ function RootLayout({ children, params: { lng } }: PageProps) {
   return (
     <html lang={lng} dir={lng}>
       <head>
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
         {/* <meta
           httpEquiv="Content-Security-Policy"
           content="upgrade-insecure-requests"
