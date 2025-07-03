@@ -63,7 +63,7 @@ export function callTree<T extends TreeNode<T>>(
     if (Array.isArray(item.children)) {
       callTree(item.children as T[], fn, item, depth + 1)
     }
-    
+
     return item
   })
 }
@@ -137,8 +137,8 @@ export function setCheckedStatus (nodes: any[], selectedIds: number[]): void {
       }
     })
   }
-  
-  
+
+
   updateCheckedStatus(nodes)
 
   // Step 2: Update the halfChecked and parent checked status recursively
@@ -167,22 +167,22 @@ export function setCheckedStatus (nodes: any[], selectedIds: number[]): void {
 
 export const matchFormat = (dateString: string) => {
   const formats = [
-    { 
+    {
       type: 'date',
-      regex: /^\d{4}-\d{2}-\d{2}$/, 
+      regex: /^\d{4}-\d{2}-\d{2}$/,
       format: 'YYYY-MM-DD'
     },
-    { 
+    {
       type: 'month',
-      regex: /^\d{4}-\d{2}$/, 
-      format: 'YYYY-MM' 
+      regex: /^\d{4}-\d{2}$/,
+      format: 'YYYY-MM'
     },
-    { 
+    {
       type: 'year',
-      regex: /^\d{4}$/, 
-      format: 'YYYY' 
+      regex: /^\d{4}$/,
+      format: 'YYYY'
     },
-    { 
+    {
       type: 'quarter',
       regex: /^\d{4}-Q[1-4]$/,
       format: 'YYYY-[Q]Q'
@@ -222,7 +222,7 @@ export const getFileSize = (fileSize: number): string => {
 export const findDataset = (element: HTMLElement, key: string): HTMLElement | null => {
   if (element === null) return null
   if (element.dataset[key]) return element
-  
+
   return findDataset(element.parentElement as HTMLElement, key)
 }
 
@@ -232,7 +232,7 @@ type Units = {
 }[]
 
 export function formatNumber(
-  num: number, 
+  num: number,
     units: Units
   ): string {
   for (let i = 0; i < units.length; i++) {
@@ -243,4 +243,11 @@ export function formatNumber(
   }
   // 低于最小单位的数字，格式化为xxx,xxx
   return num ? num.toLocaleString() : '0'
+}
+
+export const getURL = (url: string) => {
+  if (!url) return ''
+  const IMAGE_URL = process.env.NEXT_PUBLIC_IMAGE_URL
+
+  return url.startsWith('http') ? `${url}` : `${IMAGE_URL}${url}`
 }

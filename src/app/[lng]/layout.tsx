@@ -27,7 +27,7 @@ import { languages } from '@/config'
 import { useTranslation } from '@/app/i18n/client'
 import { processPath } from '@/config/router'
 import { useUserStore } from '@/store/useUserStore'
-import { getUserInfo, listToTree } from '@/utils'
+import { getURL, getUserInfo, listToTree } from '@/utils'
 import { Menu } from '@/components/menu'
 import Cookies from 'js-cookie'
 import { useCommonStore } from '@/store/useCommonStore'
@@ -197,8 +197,16 @@ function RootLayout({ children, params: { lng } }: PageProps) {
                             color: 'white'
                           }}
                         >
-                          {languages[lng as keyof typeof languages]}
+                          {languages[lng]}
                         </span>
+                      </Space>
+                    </Dropdown>
+                    <Dropdown
+                      menu={{ items, onClick: userDropDownMenuClick }}
+                      placement="bottom"
+                    >
+                      <Space>
+                        <Avatar src={getURL(userInfo.cover || url)} />
                         <span
                           style={{
                             color: 'white'
@@ -207,12 +215,6 @@ function RootLayout({ children, params: { lng } }: PageProps) {
                           {userInfo.name}
                         </span>
                       </Space>
-                    </Dropdown>
-                    <Dropdown
-                      menu={{ items, onClick: userDropDownMenuClick }}
-                      placement="bottom"
-                    >
-                      <Avatar src={userInfo.cover || url} />
                     </Dropdown>
                   </Space>
                 </Header>

@@ -1,17 +1,15 @@
 import { Image, ImageProps } from 'antd'
+
+import { getURL } from '@/utils'
 import { notFoundImage } from '@/config/index'
 import React from 'react'
 
 export interface CustomAntImageProps extends ImageProps {}
 
-export const IMAGE_URL = process.env.NEXT_PUBLIC_IMAGE_URL
 
 export function CustomAntImage(props: CustomAntImageProps) {
-  const url = props.src?.startsWith('http')
-    ? `${props.src}`
-    : `${IMAGE_URL}${props.src}`
+  const url = getURL(props.src as string)
 
-  console.log('CustomAntImage', url, props.src)
   return (
     // eslint-disable-next-line jsx-a11y/alt-text
     <Image
