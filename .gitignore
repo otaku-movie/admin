@@ -10,6 +10,9 @@ src/app/node/node_modules
 # testing
 /coverage
 
+/.CodeCounter
+/.VSCodeCounter
+
 # next.js
 /.next/
 /out/
