@@ -1,0 +1,9 @@
+{
+  "table": {
+    "version": "版本",
+    "platform": "平台",
+    "changeLog": "更新日志",
+    "createTime": "上架时间",
+    "action": "操作"
+  }
+}

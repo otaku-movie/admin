@@ -1,0 +1,9 @@
+{
+  "table": {
+    "version": "Version",
+    "platform": "Platform",
+    "changeLog": "Change Log",
+    "createTime": "",
+    "action": "Action"
+  }
+}

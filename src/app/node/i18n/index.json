@@ -756,6 +756,11 @@
       }
     },
     "menu": {
+      "appVersionList": {
+        "zhCN": "应用版本管理",
+        "ja": "アプリバージョン管理",
+        "enUS": "App version Management"
+      },
       "dataChart": {
         "zhCN": "数据图表",
         "ja": "データチャート",
@@ -3712,6 +3717,35 @@
             "enUS": "The verification code must be 6 characters long"
           }
         }
+      }
+    }
+  },
+  "appVersionList.json": {
+    "table": {
+      "version": {
+        "zhCN": "版本",
+        "ja": "バージョン",
+        "enUS": "Version"
+      },
+      "platform": {
+        "zhCN": "平台",
+        "ja": "プラットフォーム",
+        "enUS": "Platform"
+      },
+      "changeLog": {
+        "zhCN": "更新日志",
+        "ja": "",
+        "enUS": "Change Log"
+      },
+      "createTime": {
+        "zhCN": "上架时间",
+        "ja": "",
+        "enUS": ""
+      },
+      "action": {
+        "zhCN": "操作",
+        "ja": "操作",
+        "enUS": "Action"
       }
     }
   }

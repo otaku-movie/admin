@@ -27,6 +27,7 @@
     "logout": "logout"
   },
   "menu": {
+    "appVersionList": "App version Management",
     "dataChart": "Data Chart",
     "cinema": {
       "name": "Cinema Management",
