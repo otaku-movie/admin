@@ -9,7 +9,8 @@ import {
   Row,
   InputNumber,
   message,
-  TableColumnsType
+  TableColumnsType,
+  ColorPicker
 } from 'antd'
 import { useTranslation } from '@/app/i18n/client'
 import { languageType } from '@/config'
@@ -19,6 +20,8 @@ interface Query {
   name?: string
   color?: string
   price?: number
+  hover: boolean
+  selected?: boolean
 }
 
 interface Result {
@@ -28,9 +31,10 @@ interface Result {
 
 interface modalProps {
   show?: boolean
-  data: Record<string, any>[]
+  data: Query[]
   onConfirm?: (result: Result) => void
   onCancel?: () => void
+  hasSelectedSeats?: boolean
 }
 
 interface ModalState {
@@ -41,7 +45,10 @@ interface ModalState {
 
 export function AreaModal(props: modalProps) {
   const [form] = Form.useForm()
-  const [query, setQuery] = useState<Query>({})
+  const [query, setQuery] = useState<Query>({
+    hover: false,
+    selected: false
+  })
   const [data, setData] = useState<Query[]>(props.data)
   const { t } = useTranslation(
     navigator.language as languageType,
@@ -56,15 +63,23 @@ export function AreaModal(props: modalProps) {
     index: undefined,
     show: false
   })
-  const [areaColor, setAreaColor] = useState([
-    'red',
-    'orange',
-    'purple',
-    'green',
-    'yellow'
-  ])
   const [selectedRows, setSelectedRows] = useState<Query[]>([])
-  const [colorIndex, setColorIndex] = useState(0)
+
+  // 预设颜色选项
+  const presetColors = [
+    '#ff4d4f', // 红色
+    '#fa8c16', // 橙色
+    '#faad14', // 黄色
+    '#52c41a', // 绿色
+    '#1890ff', // 蓝色
+    '#722ed1', // 紫色
+    '#eb2f96', // 粉色
+    '#13c2c2', // 青色
+    '#8c8c8c', // 灰色
+    '#f5222d', // 深红色
+    '#fa541c', // 深橙色
+    '#a0d911' // 浅绿色
+  ]
 
   const columns: TableColumnsType<Query> = [
     {
@@ -73,7 +88,21 @@ export function AreaModal(props: modalProps) {
     },
     {
       title: t('areaModal.table.color'),
-      dataIndex: 'color'
+      dataIndex: 'color',
+      render: (color: string) => (
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div
+            style={{
+              width: '20px',
+              height: '20px',
+              backgroundColor: color,
+              border: '1px solid #d9d9d9',
+              borderRadius: '4px'
+            }}
+          />
+          <span>{color}</span>
+        </div>
+      )
     },
     {
       title: t('areaModal.form.price.label'),
@@ -89,7 +118,11 @@ export function AreaModal(props: modalProps) {
             <Button
               type="primary"
               onClick={() => {
-                setQuery({ ...row })
+                setQuery({
+                  ...row,
+                  hover: row.hover || false,
+                  selected: row.selected || false
+                })
                 form.setFieldsValue({ ...row })
                 setModal({
                   type: 'edit',
@@ -120,12 +153,14 @@ export function AreaModal(props: modalProps) {
   useEffect(() => {
     if (props.data) {
       setData([...props.data])
-      setColorIndex(props.data.length)
     }
   }, [props.data])
   useEffect(() => {
     if (modal.show && modal.type === 'create') {
-      setQuery({})
+      setQuery({
+        hover: false,
+        selected: false
+      })
       form.resetFields()
     }
   }, [modal.show, modal.type, form])
@@ -159,7 +194,10 @@ export function AreaModal(props: modalProps) {
           <Row justify="end">
             <Button
               onClick={() => {
-                setQuery({})
+                setQuery({
+                  hover: false,
+                  selected: false
+                })
                 form.setFieldsValue({})
                 setModal({
                   ...modal,
@@ -171,22 +209,47 @@ export function AreaModal(props: modalProps) {
               {common('button.add')}
             </Button>
           </Row>
-          <Table
-            rowSelection={{
-              type: 'radio',
-              selectedRowKeys: selectedRows.map((item) => item.name as string),
-              onChange: (
-                selectedRowKeys: React.Key[],
-                selectedRows: Query[]
-              ) => {
-                setSelectedRows(selectedRows)
-              }
-            }}
-            rowKey={'name'}
-            columns={columns}
-            dataSource={data}
-            pagination={false}
-          />
+          {props.hasSelectedSeats ? (
+            <Table
+              rowSelection={{
+                type: 'radio',
+                selectedRowKeys: selectedRows.map(
+                  (item) => item.name as string
+                ),
+                onChange: (
+                  selectedRowKeys: React.Key[],
+                  selectedRows: Query[]
+                ) => {
+                  setSelectedRows(selectedRows)
+                }
+              }}
+              rowKey={'name'}
+              columns={columns}
+              dataSource={data}
+              pagination={false}
+            />
+          ) : (
+            <div>
+              <div
+                style={{
+                  padding: '16px',
+                  backgroundColor: '#f6ffed',
+                  border: '1px solid #b7eb8f',
+                  borderRadius: '6px',
+                  marginBottom: '16px',
+                  color: '#52c41a'
+                }}
+              >
+                {t('areaModal.message.noSeatsSelected')}
+              </div>
+              <Table
+                rowKey={'name'}
+                columns={columns}
+                dataSource={data}
+                pagination={false}
+              />
+            </div>
+          )}
         </section>
       </Modal>
       <Modal
@@ -196,14 +259,23 @@ export function AreaModal(props: modalProps) {
         onOk={() => {
           form.validateFields().then(() => {
             if (data.length < 5) {
-              data.push({
-                ...query,
-                id: data.length,
-                color: areaColor[colorIndex]
-              })
-              setColorIndex(colorIndex + 1)
+              if (modal.type === 'create') {
+                data.push({
+                  ...query,
+                  id: data.length,
+                  hover: false,
+                  selected: false
+                })
+              } else {
+                // 编辑模式
+                data[modal.index!] = {
+                  ...query,
+                  id: data[modal.index!].id,
+                  hover: data[modal.index!].hover,
+                  selected: data[modal.index!].selected
+                }
+              }
 
-              setAreaColor(areaColor)
               setData([...data])
               setModal({
                 ...modal,
@@ -280,6 +352,33 @@ export function AreaModal(props: modalProps) {
             />
           </Form.Item>
           <Form.Item
+            label={t('areaModal.form.color.label')}
+            name={'color'}
+            rules={[
+              {
+                required: true,
+                message: t('areaModal.form.color.required')
+              }
+            ]}
+          >
+            <ColorPicker
+              value={query.color}
+              onChange={(color) => {
+                setQuery({
+                  ...query,
+                  color: color.toHexString()
+                })
+              }}
+              showText
+              presets={[
+                {
+                  label: t('areaModal.form.color.presets'),
+                  colors: presetColors
+                }
+              ]}
+            />
+          </Form.Item>
+          <Form.Item
             label={t('areaModal.form.price.label')}
             name={'price'}
             rules={[
@@ -290,7 +389,7 @@ export function AreaModal(props: modalProps) {
             ]}
           >
             <InputNumber
-              min={1}
+              min={0}
               value={query.price}
               precision={0}
               placeholder={t('areaModal.form.price.required')}

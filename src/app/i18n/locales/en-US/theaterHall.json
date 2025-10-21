@@ -11,7 +11,8 @@
     "title": "Configure Area",
     "message": {
       "max": "The maximum number of areas cannot exceed 5",
-      "required": "The number of selected areas cannot be empty"
+      "required": "The number of selected areas cannot be empty",
+      "noSeatsSelected": "Please select seats first, then configure areas"
     },
     "table": {
       "color": "Color",
@@ -22,6 +23,11 @@
         "label": "Area Name",
         "required": "Please enter the area name",
         "repeat": "The area name cannot be repeated"
+      },
+      "color": {
+        "label": "Color",
+        "required": "Please select a color",
+        "presets": "Preset Colors"
       },
       "price": {
         "label": "Price",
@@ -44,6 +50,7 @@
     "message": {
       "required": "Aisle configuration cannot be empty",
       "repeat": "Aisle duplication",
+      "range": "Aisle position is out of valid range",
       "max": "You can select up to {{max}}"
     },
     "form": {

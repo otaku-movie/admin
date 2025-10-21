@@ -27,6 +27,7 @@
     "logout": "退出登录"
   },
   "menu": {
+    "appVersionList": "应用版本管理",
     "dataChart": "数据图表",
     "cinema": {
       "name": "影院管理",

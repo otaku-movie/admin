@@ -260,6 +260,7 @@ export default function Page({ params: { lng } }: PageProps) {
         columns={columns}
         dataSource={data}
         bordered={true}
+        sticky={{ offsetHeader: -20 }}
         scroll={{
           x: columns.reduce(
             (total, current) => total + (current.width as number),

@@ -11,7 +11,8 @@
     "title": "配置区域",
     "message": {
       "max": "区域数量最大不能超过5个",
-      "required": "区域选择数量不能为空"
+      "required": "区域选择数量不能为空",
+      "noSeatsSelected": "请先选择座位，然后再配置区域"
     },
     "table": {
       "color": "颜色",
@@ -22,6 +23,11 @@
         "label": "区域名称",
         "required": "请输入区域名称",
         "repeat": "区域名称不能重复"
+      },
+      "color": {
+        "label": "颜色",
+        "required": "请选择颜色",
+        "presets": "预设颜色"
       },
       "price": {
         "label": "价格",
@@ -44,6 +50,7 @@
     "message": {
       "required": "过道配置不能为空",
       "repeat": "过道重复",
+      "range": "过道位置超出有效范围",
       "max": "最多只能选择{{max}}个"
     },
     "form": {

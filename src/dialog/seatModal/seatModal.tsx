@@ -1,5 +1,11 @@
 'use client'
-import React, { useState, useEffect, useRef, useMemo, MouseEventHandler } from 'react'
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useMemo,
+  MouseEventHandler
+} from 'react'
 import { useTranslation } from '@/app/i18n/client'
 import {
   Button,
@@ -90,7 +96,7 @@ export default function SeatModal(props: ModalProps) {
 
   const [areaModal, setAreaModal] = useState<{
     show: boolean
-    data: Required<Area>[]
+    data: Area[]
   }>({
     show: false,
     data: []
@@ -116,6 +122,19 @@ export default function SeatModal(props: ModalProps) {
 
   const size = 36
   const gap = 8
+
+  // 生成字母选项的函数
+  const generateLetterOptions = (count: number) => {
+    const options = []
+    for (let i = 1; i <= count; i++) {
+      const letter = numberToAlphabet(i)
+      options.push({
+        value: i,
+        label: letter
+      })
+    }
+    return options
+  }
 
   const buildAisle = (arr = data, aisleData = modal.data) => {
     let updatedData = arr
@@ -305,23 +324,25 @@ export default function SeatModal(props: ModalProps) {
     const singleSelect = () => {
       const newData = [...data]
       const seatItem = newData[x].children[y]
-      seatItem.selected = !seatItem.selected
 
       let newSelected = [...selectedSeat]
 
       if (seatItem.selected) {
+        // 取消选择
+        seatItem.selected = false
+        newSelected = newSelected.filter(
+          (item) => !(item.x === seatItem.x && item.y === seatItem.y)
+        )
+      } else {
+        // 选择座位
         if (newSelected.length >= maxSelectSeatCount) {
           message.warning(
             t('seatModal.message.max', { max: maxSelectSeatCount })
           )
-          seatItem.selected = false
           return
         }
+        seatItem.selected = true
         newSelected.push(seatItem)
-      } else {
-        newSelected = newSelected.filter(
-          (item) => !(item.x === seatItem.x && item.y === seatItem.y)
-        )
       }
 
       setData(newData)
@@ -337,17 +358,17 @@ export default function SeatModal(props: ModalProps) {
         positionSet.has(`${item.x},${item.y}`)
       )
 
+      const newData = [...data]
+      let newSelected = [...selectedSeat]
+
       if (seat.selected) {
-        // 取消
-        const newData = [...data]
+        // 取消情侣座
         groupSeats.forEach((item) => (item.selected = false))
-        const newSelected = selectedSeat.filter(
+        newSelected = newSelected.filter(
           (item) => !positionSet.has(`${item.x},${item.y}`)
         )
-        setData(newData)
-        setSelectedSeat(newSelected)
       } else {
-        // 选中前先判断是否超出上限
+        // 选中情侣座前先判断是否超出上限
         if (groupSeats.length + selectedSeat.length > maxSelectSeatCount) {
           message.warning(
             t('seatModal.message.max', { max: maxSelectSeatCount })
@@ -355,12 +376,13 @@ export default function SeatModal(props: ModalProps) {
           return
         }
 
-        const newData = [...data]
+        // 选中情侣座
         groupSeats.forEach((item) => (item.selected = true))
-        const newSelected = [...selectedSeat, ...groupSeats]
-        setData(newData)
-        setSelectedSeat(newSelected)
+        newSelected = [...selectedSeat, ...groupSeats]
       }
+
+      setData(newData)
+      setSelectedSeat(newSelected)
     }
 
     // ✅ 根据是否是情侣座决定调用哪个函数
@@ -663,7 +685,7 @@ export default function SeatModal(props: ModalProps) {
                           area: areaModal.data.map((item) => {
                             return {
                               ...item,
-                              seat: [...area[item.name]]
+                              seat: item.name ? [...area[item.name]] : []
                             }
                           }),
                           aisle: modal.data
@@ -1139,6 +1161,40 @@ export default function SeatModal(props: ModalProps) {
               {
                 required: true,
                 validator() {
+                  // 检查行类型过道的范围
+                  const rowAisles = modal.data.filter(
+                    (item) => item.type === 'row'
+                  )
+                  const invalidRows = rowAisles.filter(
+                    (item) =>
+                      !item.start ||
+                      item.start < 1 ||
+                      item.start > props.data.rowCount
+                  )
+
+                  // 检查列类型过道的范围
+                  const columnAisles = modal.data.filter(
+                    (item) => item.type === 'column'
+                  )
+                  const invalidColumns = columnAisles.filter(
+                    (item) =>
+                      !item.start ||
+                      item.start < 1 ||
+                      item.start > props.data.columnCount
+                  )
+
+                  if (invalidRows.length > 0 || invalidColumns.length > 0) {
+                    return Promise.reject(
+                      new Error(t('seatModal.message.range'))
+                    )
+                  }
+
+                  return Promise.resolve()
+                }
+              },
+              {
+                required: true,
+                validator() {
                   const row = modal.data.filter((item) => item.type === 'row')
                   const column = modal.data.filter(
                     (item) => item.type === 'column'
@@ -1186,24 +1242,53 @@ export default function SeatModal(props: ModalProps) {
                         {t('seatModal.form.type.select.column')}
                       </Select.Option>
                     </Select>
-                    <InputNumber
-                      min={1}
-                      max={props.data.columnCount}
-                      value={item.start}
-                      precision={0}
-                      placeholder={t('seatModal.form.start.placeholder')}
-                      style={{
-                        width: '150px'
-                      }}
-                      onChange={(val) => {
-                        modal.data[index].start = val
+                    {item.type === 'row' ? (
+                      <Select
+                        value={item.start}
+                        style={{
+                          width: '150px'
+                        }}
+                        placeholder={t('seatModal.form.start.placeholder')}
+                        onChange={(val) => {
+                          modal.data[index].start = val
 
-                        setModal({
-                          ...modal,
-                          data: modal.data
-                        })
-                      }}
-                    />
+                          setModal({
+                            ...modal,
+                            data: modal.data
+                          })
+                        }}
+                      >
+                        {generateLetterOptions(props.data.rowCount).map(
+                          (option) => (
+                            <Select.Option
+                              key={option.value}
+                              value={option.value}
+                            >
+                              {option.label}
+                            </Select.Option>
+                          )
+                        )}
+                      </Select>
+                    ) : (
+                      <InputNumber
+                        min={1}
+                        max={props.data.columnCount}
+                        value={item.start}
+                        precision={0}
+                        placeholder={t('seatModal.form.start.placeholder')}
+                        style={{
+                          width: '150px'
+                        }}
+                        onChange={(val) => {
+                          modal.data[index].start = val
+
+                          setModal({
+                            ...modal,
+                            data: modal.data
+                          })
+                        }}
+                      />
+                    )}
                     <MinusCircleOutlined
                       onClick={() => {
                         modal.data.splice(index, 1)
@@ -1417,6 +1502,7 @@ export default function SeatModal(props: ModalProps) {
       <AreaModal
         show={areaModal.show}
         data={areaModal.data}
+        hasSelectedSeats={dragSelected.size > 0}
         onCancel={() => {
           setAreaModal({
             ...areaModal,

@@ -27,6 +27,7 @@
     "logout": "ログアウト"
   },
   "menu": {
+    "appVersionList": "アプリバージョン管理",
     "dataChart": "データチャート",
     "cinema": {
       "name": "映画館管理",

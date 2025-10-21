@@ -166,8 +166,8 @@ export function Query(props: QueryProps) {
     const arr = []
     let init = 0
 
-    for (let i = 0; i < children.length; i++) {
-      const node = children[i]
+    for (const element of children) {
+      const node = element
       const span = ((node.props?.column || 1) * row) / column
       const newNode = React.cloneElement(node, {
         show: init < max
