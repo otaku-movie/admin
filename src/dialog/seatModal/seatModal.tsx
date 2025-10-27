@@ -170,7 +170,7 @@ export default function SeatModal(props: ModalProps) {
             type: 'aisle',
             children: []
           }
-          updatedData.splice(findIndex + 1, 0, newRow)
+          updatedData.splice(findIndex, 0, newRow)
         }
       }
     })
