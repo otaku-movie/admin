@@ -1,11 +1,22 @@
 'use client'
 import React, { useState, useEffect } from 'react'
 import { useTranslation } from '@/app/i18n/client'
-import { Form, Modal, Select, Space, DatePicker, message, Switch } from 'antd'
+import {
+  Form,
+  Modal,
+  Select,
+  Space,
+  DatePicker,
+  message,
+  Switch,
+  Input,
+  Button
+} from 'antd'
 import http from '@/api'
 import { languageType } from '@/config'
 import dayjs from 'dayjs'
 import { Cinema, theaterHall } from '@/type/api'
+import { MovieModal } from './movieModal'
 
 interface MovieShowTimeModalProps {
   type: 'create' | 'edit'
@@ -35,7 +46,7 @@ export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
     navigator.language as languageType,
     'common'
   )
-  const [movieData, setMovieData] = useState([])
+  const [movieData, setMovieData] = useState<any[]>([])
   const [specList, setSpecList] = useState<any[]>([])
   const [languageData, setLanguageData] = useState([])
   const [showTimeTagData, setShowTimeTagData] = useState([])
@@ -46,6 +57,9 @@ export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
   const [query, setQuery] = useState<Query>({
     startTime: undefined,
     endTime: undefined
+  })
+  const [movieModal, setMovieModal] = useState({
+    show: false
   })
 
   const getMovieData = (
@@ -236,40 +250,38 @@ export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
         <Form.Item
           label={t('showTimeModal.form.movie.label')}
           rules={[
-            { required: true, message: t('showTimeModal.form.movie.required') }
+            {
+              required: true,
+              message: t('showTimeModal.form.movie.required'),
+              validator(_, value) {
+                if (!query.movieId) {
+                  return Promise.reject(
+                    new Error(t('showTimeModal.form.movie.required'))
+                  )
+                }
+                return Promise.resolve()
+              }
+            }
           ]}
           name="movieId"
         >
-          <Select
-            showSearch
-            value={query.movieId}
-            onChange={(val) => {
-              setQuery({
-                ...query,
-                movieId: val
-              })
-              http({
-                url: 'movie/detail',
-                method: 'get',
-                params: {
-                  id: val
-                }
-              }).then((res) => {
-                if (res.data.time) {
-                  setTime(res.data.time)
-                }
-              })
-            }}
-            onSearch={getMovieData}
-          >
-            {movieData.map((item: any) => {
-              return (
-                <Select.Option value={item.id} key={item.id}>
-                  {item.name}
-                </Select.Option>
-              )
-            })}
-          </Select>
+          <Space>
+            <Input
+              value={
+                movieData.find((item: any) => item.id === query.movieId)
+                  ?.name || ''
+              }
+              readOnly
+              placeholder={t('showTimeModal.form.movie.placeholder')}
+              style={{ width: 200 }}
+            />
+            <Button
+              type="primary"
+              onClick={() => setMovieModal({ show: true })}
+            >
+              {common('button.select')}
+            </Button>
+          </Space>
         </Form.Item>
         <Form.Item
           label={t('showTimeModal.form.subtitle.label')}
@@ -476,6 +488,9 @@ export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
                 format: 'HH:mm'
               }}
               format="YYYY-MM-DD HH:mm:ss"
+              disabledDate={(current) => {
+                return current && current.isBefore(dayjs(), 'day')
+              }}
               onChange={(val) => {
                 setQuery({
                   ...query,
@@ -490,6 +505,43 @@ export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
                 format: 'HH:mm'
               }}
               format="YYYY-MM-DD HH:mm:ss"
+              disabledDate={(current) => {
+                if (!query.startTime) return true
+                return (
+                  current &&
+                  current.isBefore(query.startTime.add(1, 'minute'), 'day')
+                )
+              }}
+              disabledTime={(current) => {
+                if (!current || !query.startTime) return {}
+
+                // 如果是同一天，需要禁用开始时间之前的时间
+                if (current.isSame(query.startTime, 'day')) {
+                  const startHour = query.startTime.hour()
+                  const startMinute = query.startTime.minute()
+
+                  return {
+                    disabledHours: () => {
+                      const hours = []
+                      for (let i = 0; i < startHour; i++) {
+                        hours.push(i)
+                      }
+                      return hours
+                    },
+                    disabledMinutes: (selectedHour) => {
+                      if (selectedHour === startHour) {
+                        const minutes = []
+                        for (let i = 0; i <= startMinute; i++) {
+                          minutes.push(i)
+                        }
+                        return minutes
+                      }
+                      return []
+                    }
+                  }
+                }
+                return {}
+              }}
               onChange={(val) => {
                 setQuery({
                   ...query,
@@ -500,6 +552,35 @@ export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
           </Space>
         </Form.Item>
       </Form>
+      <MovieModal
+        show={movieModal.show}
+        data={{}}
+        onCancel={() => {
+          setMovieModal({ show: false })
+        }}
+        onConfirm={(movie) => {
+          setQuery({
+            ...query,
+            movieId: movie.id
+          })
+          form.setFieldValue('movieId', movie.id)
+
+          // 获取电影时长
+          http({
+            url: 'movie/detail',
+            method: 'get',
+            params: {
+              id: movie.id
+            }
+          }).then((res) => {
+            if (res.data.time) {
+              setTime(res.data.time)
+            }
+          })
+
+          setMovieModal({ show: false })
+        }}
+      />
     </Modal>
   )
 }

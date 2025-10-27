@@ -57,7 +57,8 @@
     "form": {
       "movie": {
         "label": "Movie Name",
-        "required": "Please select a movie"
+        "required": "Please select a movie",
+        "placeholder": "Please select a movie"
       },
       "open": {
         "label": "Public"

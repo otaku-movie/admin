@@ -115,6 +115,7 @@
     "configAisle": "通路を設定",
     "configArea": "エリアを設定",
     "cancel": "キャンセル",
+    "select": "選択",
     "order": {
       "updateOrderState": "注文状態を変更",
       "generateQRcode": "QRコードを生成"

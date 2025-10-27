@@ -57,7 +57,8 @@
     "form": {
       "movie": {
         "label": "映画タイトル",
-        "required": "映画を選択してください"
+        "required": "映画を選択してください",
+        "placeholder": "映画を選択してください"
       },
       "open": {
         "label": "公開するか"

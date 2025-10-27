@@ -115,6 +115,7 @@
     "configAisle": "Configure Aisle",
     "configArea": "Configure Area",
     "cancel": "Cancel",
+    "select": "Select",
     "order": {
       "updateOrderState": "Update Order Status",
       "generateQRcode": "Generate QR Code"

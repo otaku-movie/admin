@@ -175,6 +175,7 @@ export function MovieModal(props: modalProps) {
       open={props.show}
       maskClosable={false}
       width={'80%'}
+      style={{ top: 40 }}
       onOk={() => {
         props?.onConfirm?.(selectedMovie)
       }}
@@ -232,7 +233,8 @@ export function MovieModal(props: modalProps) {
             x: columns.reduce(
               (total, current) => total + (current.width as number),
               0
-            )
+            ),
+            y: 'calc(100vh - 450px)'
           }}
           rowKey={'id'}
           sticky={{ offsetHeader: -20 }}

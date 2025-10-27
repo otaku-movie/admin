@@ -57,7 +57,8 @@
     "form": {
       "movie": {
         "label": "电影名称",
-        "required": "请选择电影"
+        "required": "请选择电影",
+        "placeholder": "请选择电影"
       },
       "open": {
         "label": "是否公开"

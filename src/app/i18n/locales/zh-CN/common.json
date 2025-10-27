@@ -115,6 +115,7 @@
     "configAisle": "配置过道",
     "configArea": "配置区域",
     "cancel": "取消",
+    "select": "选择",
     "order": {
       "updateOrderState": "修改订单状态",
       "generateQRcode": "生成取票码"
