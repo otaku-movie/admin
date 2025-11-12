@@ -67,6 +67,8 @@ export interface Movie {
   spec: SpecItem[]
   tags: Tag[]
   helloMovie: HelloMovie[]
+  startDate?: string
+  endDate?: string
 }
 
 export interface user {

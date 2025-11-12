@@ -1,0 +1,220 @@
+{
+  "title": "Presale Management",
+  "description": "Manage presale ticket pricing, quantities, eligible films, and usage rules.",
+  "syncNotice": "Changes take effect immediately after saving. Please double-check for conflicts.",
+  "empty": "No presale tickets yet. Click “Add” to create one.",
+  "tabs": {
+    "presale": "Presale Tickets"
+  },
+  "presale": {
+    "description": "Presale tickets cover standard screenings. IMAX / Dolby and other premium formats may require an additional fee.",
+    "table": {
+      "product": "Presale Ticket",
+      "salePeriod": "Sale Period",
+      "usageWindow": "Usage Window",
+      "deliveryType": "Delivery Method",
+      "specifications": "Product Specifications",
+      "quantity": "Quantity",
+      "perUserLimit": "Per User Limit",
+      "movies": "Linked Films",
+      "benefits": "Benefits",
+      "bonus": "Purchase Bonus",
+      "bonusDelivery": "Bonus Delivery",
+      "pickupNotes": "Pickup Notes",
+      "description": "Description",
+      "remark": "Remarks",
+      "status": {
+        "selling": "On Sale",
+        "upcoming": "Coming Soon",
+        "ended": "Sale Ended"
+      }
+    },
+    "specifications": {
+      "range": {
+        "all": "All customers",
+        "min": "{age}+ years",
+        "max": "Up to {age} years",
+        "between": "{min}-{max} years",
+        "stock": "Stock {stock}"
+      },
+      "audience": {
+        "general": "Adult",
+        "junior": "Junior",
+        "student": "Student",
+        "child": "Child",
+        "senior": "Senior",
+        "pair": "Pair Ticket"
+      }
+    },
+    "type": {
+      "presale": "Presale Ticket"
+    },
+    "deliveryType": {
+      "virtual": "Digital (MoviTicket Online)",
+      "physical": "Card (MoviTicket Card)"
+    },
+    "mubitikeType": {
+      "online": "MoviTicket Online",
+      "card": "MoviTicket Card",
+      "combo": "Bundle / Combo"
+    },
+    "bonusType": {
+      "digital": "Digital Bonus",
+      "physical": "Physical Bonus",
+      "voucher": "Voucher / Ticket"
+    },
+    "discountMode": {
+      "fixed": "Fixed Amount",
+      "percentage": "Percentage"
+    },
+    "form": {
+      "section": {
+        "basic": "Basic Information",
+        "sales": "Sales Settings",
+        "specifications": "Ticket Lineup",
+        "usage": "Usage Window",
+        "bonus": "Purchase Bonus"
+      },
+      "code": {
+        "label": "Redeem Code",
+        "required": "Please enter the redeem code",
+        "generated": "Automatically generated after saving"
+      },
+      "title": {
+        "label": "Listing Title",
+        "placeholder": "e.g. MoviTicket Online – Opening Week",
+        "required": "Please enter the listing title",
+        "fallback": "MoviTicket Presale"
+      },
+      "mubitikeType": {
+        "label": "MoviTicket Format",
+        "required": "Please select the MoviTicket format"
+      },
+      "movie": {
+        "label": "Linked Film",
+        "placeholder": "Select a film",
+        "required": "Please select a film"
+      },
+      "cover": {
+        "label": "Cover",
+        "required": "Please upload a cover image",
+        "upload": "Upload Cover"
+      },
+      "type": {
+        "label": "Type"
+      },
+      "deliveryType": {
+        "label": "Default Delivery Method"
+      },
+      "discountMode": {
+        "label": "Discount Mode"
+      },
+      "price": {
+        "label": "Reference Price",
+        "required": "Please enter the reference price"
+      },
+      "quantity": {
+        "label": "Total Allocation",
+        "required": "Please enter the total allocation"
+      },
+      "amount": {
+        "label": "Value / Percentage",
+        "required": "Please enter the value or percentage",
+        "percentageLimit": "Percentage must be between 0 and 100"
+      },
+      "specifications": {
+        "label": "Product specs",
+        "groupLabel": "Spec name",
+        "groupPlaceholder": "e.g. Adult / Student",
+        "audienceType": "Audience segment",
+        "audiencePlaceholder": "Select the primary audience (optional)",
+        "audience": {
+          "general": "Adult",
+          "junior": "Junior",
+          "student": "Student",
+          "child": "Child",
+          "senior": "Senior",
+          "pair": "Pair Ticket"
+        },
+        "min": "Minimum age",
+        "minPlaceholder": "e.g. 13",
+        "max": "Maximum age",
+        "maxPlaceholder": "e.g. 17",
+        "price": "Price",
+        "pricePlaceholder": "Enter price",
+        "stock": "Stock",
+        "stockPlaceholder": "Enter stock (optional)",
+        "deliveryType": "Delivery method",
+        "deliveryPlaceholder": "Select delivery method",
+        "deliveryRequired": "Select a delivery method",
+        "add": "Add specification",
+        "required": "Please add at least one specification",
+        "priceRequired": "Enter the price for this specification",
+        "rangeError": "Maximum age must be greater than or equal to minimum age"
+      },
+      "benefits": {
+        "label": "Benefits",
+        "placeholder": "e.g. Exclusive merchandise, bonus points",
+        "required": "Please enter the benefit detail",
+        "add": "Add Benefit"
+      },
+      "launchTime": {
+        "label": "Sale Start",
+        "required": "Please select the sale start time"
+      },
+      "endTime": {
+        "label": "Sale End",
+        "required": "Please select the sale end time",
+        "afterLaunch": "Sale end must be after the sale start"
+      },
+      "usageStart": {
+        "label": "Usage Start",
+        "required": "Please select the usage start time"
+      },
+      "usageEnd": {
+        "label": "Usage End",
+        "required": "Please select the usage end time",
+        "afterStart": "Usage end must be after the usage start"
+      },
+      "bonusTitle": {
+        "label": "Bonus title",
+        "placeholder": "e.g. Limited edition card sleeve"
+      },
+      "bonusType": {
+        "label": "Bonus type"
+      },
+      "bonusDelivery": {
+        "label": "Bonus delivery method"
+      },
+      "bonusDescription": {
+        "label": "Bonus description",
+        "placeholder": "Describe how and when the bonus is provided"
+      },
+      "pickupNotes": {
+        "label": "Pickup / exchange notes",
+        "placeholder": "e.g. Present the QR code at the theater counter"
+      },
+      "extraFee": {
+        "label": "Premium Surcharge",
+        "placeholder": "e.g. IMAX / Dolby surcharge"
+      },
+      "perUserLimit": {
+        "label": "Per User Limit",
+        "required": "Please enter the limit per user"
+      },
+      "description": {
+        "label": "Description",
+        "placeholder": "Enter a short description"
+      },
+      "remark": {
+        "label": "Internal notes"
+      }
+    },
+    "message": {
+      "saveSuccess": "Presale ticket saved",
+      "deleteConfirm": "Delete this presale ticket?",
+      "deleteSuccess": "Presale ticket removed"
+    }
+  }
+}
+

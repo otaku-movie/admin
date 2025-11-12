@@ -38,7 +38,9 @@
         "specList": "规格列表",
         "ticketType": "电影票类型",
         "brandList": "品牌列表",
-        "screeningManagement": "上映场次管理"
+        "screeningManagement": "上映场次管理",
+        "promotion": "促销设置",
+        "promotionDetail": "促销详情"
       }
     },
     "movie": {
@@ -64,6 +66,13 @@
         "showTimeTag": "场次标签列表"
       }
     },
+    "pricingStrategy": {
+      "name": "预售票管理",
+      "children": {
+        "presale": "预售票",
+        "presaleDetail": "预售票详情"
+      }
+    },
     "userList": "用户列表",
     "dictList": "字典列表",
     "orderList": "订单列表",
@@ -85,7 +94,8 @@
     "jpy": "日元",
     "billion": "亿",
     "million": "万",
-    "minute": "分钟"
+    "minute": "分钟",
+    "day": "日"
   },
   "week": {
     "Monday": "一",
@@ -95,6 +105,9 @@
     "Friday": "五",
     "Saturday": "六",
     "Sunday": "日"
+  },
+  "table": {
+    "action": "操作"
   },
   "button": {
     "add": "添加",
@@ -116,6 +129,7 @@
     "configArea": "配置区域",
     "cancel": "取消",
     "select": "选择",
+    "promotion": "促销设置",
     "order": {
       "updateOrderState": "修改订单状态",
       "generateQRcode": "生成取票码"

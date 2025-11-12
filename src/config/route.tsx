@@ -24,12 +24,32 @@ export const route = [
     name: 'theaterHall'
   },
   {
+    path: '/cinema/cinemaList/promotion',
+    name: 'promotion'
+  },
+  {
+    path: '/cinema/cinemaList/promotion/promotionDetail',
+    name: 'promotionDetail'
+  },
+  {
     path: '/dict',
     name: 'dict'
   },
   {
     path: '/showTime',
     name: 'showTime'
+  },
+  {
+    path: '/pricingStrategy',
+    name: 'pricingStrategy'
+  },
+  {
+    path: '/pricingStrategy/coupon',
+    name: 'pricingStrategyCoupon'
+  },
+  {
+    path: '/pricingStrategy/coupon/presaleDetail',
+    name: 'presaleDetail'
   },
   {
     path: '/orderList',

@@ -1,0 +1,219 @@
+{
+  "title": "预售票管理",
+  "description": "配置预售票的售价、数量、适用影片与使用限制。",
+  "syncNotice": "保存后立即生效，请确认设置无冲突。",
+  "empty": "暂无预售票，请点击“添加”创建。",
+  "tabs": {
+    "presale": "预售票"
+  },
+  "presale": {
+    "description": "预售票可用于标准制式场次，IMAX / Dolby 等特殊制式需补差。",
+    "table": {
+      "product": "预售票",
+      "salePeriod": "发售期间",
+      "usageWindow": "使用期限",
+      "deliveryType": "发放方式",
+      "specifications": "商品规格",
+      "quantity": "发放数量",
+      "perUserLimit": "单人限购",
+      "movies": "关联影片",
+      "benefits": "特典",
+      "bonus": "购票特典",
+      "bonusDelivery": "特典发放方式",
+      "pickupNotes": "取票 / 兑换说明",
+      "description": "描述",
+      "remark": "备注",
+      "status": {
+        "selling": "发售中",
+        "upcoming": "即将开售",
+        "ended": "已结束"
+      }
+    },
+    "specifications": {
+      "range": {
+        "all": "不限条件",
+        "min": "{age}岁及以上",
+        "max": "{age}岁及以下",
+        "between": "{min}-{max}岁",
+        "stock": "库存 {stock}"
+      },
+      "audience": {
+        "general": "成人",
+        "junior": "青少年",
+        "student": "学生",
+        "child": "儿童",
+        "senior": "银发",
+        "pair": "双人票"
+      }
+    },
+    "type": {
+      "presale": "预售票"
+    },
+    "deliveryType": {
+      "virtual": "ムビチケ在线券",
+      "physical": "ムビチケ卡券"
+    },
+    "mubitikeType": {
+      "online": "ムビチケ在线券",
+      "card": "ムビチケ卡券",
+      "combo": "组合 / 套票"
+    },
+    "bonusType": {
+      "digital": "数字特典",
+      "physical": "实物特典",
+      "voucher": "兑换券 / 凭证"
+    },
+    "discountMode": {
+      "fixed": "固定金额",
+      "percentage": "折扣比例"
+    },
+    "form": {
+      "section": {
+        "basic": "基础信息",
+        "sales": "发售设置",
+        "specifications": "票种规格",
+        "usage": "使用期限",
+        "bonus": "购票特典"
+      },
+      "code": {
+        "label": "兑换码",
+        "required": "请输入兑换码",
+        "generated": "保存后由系统生成"
+      },
+      "title": {
+        "label": "商品标题",
+        "placeholder": "例：ムビチケ在线券・首映限定",
+        "required": "请输入商品标题",
+        "fallback": "ムビチケ预售票"
+      },
+      "mubitikeType": {
+        "label": "ムビチケ形式",
+        "required": "请选择ムビチケ形式"
+      },
+      "movie": {
+        "label": "适用影片",
+        "placeholder": "请选择适用的影片",
+        "required": "请选择适用的影片"
+      },
+      "cover": {
+        "label": "封面",
+        "required": "请上传封面",
+        "upload": "上传封面"
+      },
+      "type": {
+        "label": "类型"
+      },
+      "deliveryType": {
+        "label": "默认发放方式"
+      },
+      "discountMode": {
+        "label": "优惠方式"
+      },
+      "price": {
+        "label": "参考售价",
+        "required": "请输入参考售价"
+      },
+      "quantity": {
+        "label": "发放数量",
+        "required": "请输入发放数量"
+      },
+      "amount": {
+        "label": "面值 / 折扣",
+        "required": "请输入金额或折扣",
+        "percentageLimit": "折扣需在 0-100 之间"
+      },
+      "specifications": {
+        "label": "商品规格设置",
+        "groupLabel": "规格名称",
+        "groupPlaceholder": "例如 成人 / 学生",
+        "audienceType": "适用人群",
+        "audiencePlaceholder": "可选择对应人群（可选）",
+        "audience": {
+          "general": "成人",
+          "junior": "青少年",
+          "student": "学生",
+          "child": "儿童",
+          "senior": "银发",
+          "pair": "双人票"
+        },
+        "min": "最小年龄",
+        "minPlaceholder": "例：13",
+        "max": "最大年龄",
+        "maxPlaceholder": "例：17",
+        "price": "售价",
+        "pricePlaceholder": "请输入价格",
+        "stock": "库存",
+        "stockPlaceholder": "请输入库存（可选）",
+        "deliveryType": "发放方式",
+        "deliveryPlaceholder": "请选择发放方式",
+        "deliveryRequired": "请选择发放方式",
+        "add": "添加规格",
+        "required": "请至少添加一个规格",
+        "priceRequired": "请输入售价",
+        "rangeError": "最大年龄需大于或等于最小年龄"
+      },
+      "benefits": {
+        "label": "特典内容",
+        "placeholder": "例：加赠周边或积分",
+        "required": "请输入特典内容",
+        "add": "添加特典"
+      },
+      "launchTime": {
+        "label": "开始发售时间",
+        "required": "请选择开始发售时间"
+      },
+      "endTime": {
+        "label": "结束时间",
+        "required": "请选择结束时间",
+        "afterLaunch": "结束时间需晚于开始发售时间"
+      },
+      "usageStart": {
+        "label": "使用开始时间",
+        "required": "请选择使用开始时间"
+      },
+      "usageEnd": {
+        "label": "使用截止时间",
+        "required": "请选择使用截止时间",
+        "afterStart": "使用截止时间需晚于开始时间"
+      },
+      "bonusTitle": {
+        "label": "特典标题",
+        "placeholder": "例：限定版票夹"
+      },
+      "bonusType": {
+        "label": "特典类型"
+      },
+      "bonusDelivery": {
+        "label": "特典发放方式"
+      },
+      "bonusDescription": {
+        "label": "特典说明",
+        "placeholder": "描述特典的领取方式与发放时间"
+      },
+      "pickupNotes": {
+        "label": "取票 / 兑换说明",
+        "placeholder": "例：请于影院前台出示二维码领取"
+      },
+      "extraFee": {
+        "label": "特殊制式补差",
+        "placeholder": "例如 IMAX / Dolby 需补差"
+      },
+      "perUserLimit": {
+        "label": "单人限购",
+        "required": "请输入单人限购数量"
+      },
+      "description": {
+        "label": "描述",
+        "placeholder": "请输入预售票说明"
+      },
+      "remark": {
+        "label": "内部备注"
+      }
+    },
+    "message": {
+      "saveSuccess": "预售票已保存",
+      "deleteConfirm": "确定要删除该预售票吗？",
+      "deleteSuccess": "预售票已删除"
+    }
+  }
+}

@@ -38,7 +38,9 @@
         "specList": "Spec List",
         "ticketType": "Ticket Type",
         "brandList": "Brand List",
-        "screeningManagement": "Screening Management"
+        "screeningManagement": "Screening Management",
+        "promotion": "Promotion",
+        "promotionDetail": "Promotion Detail"
       }
     },
     "movie": {
@@ -62,6 +64,16 @@
       "children": {
         "showTimeList": "Showtime List",
         "showTimeTag": "Showtime Tag List"
+      }
+    },
+    "pricingStrategy": {
+      "name": "Presale Management",
+      "children": {
+        "overview": "Overview",
+        "official": "Official / Single Screening",
+        "date": "Specific Date",
+        "weekly": "Weekly Pricing",
+        "presale": "Presale Tickets"
       }
     },
     "userList": "User List",
@@ -96,6 +108,9 @@
     "Saturday": "Saturday",
     "Sunday": "Sunday"
   },
+  "table": {
+    "action": "Action"
+  },
   "button": {
     "add": "Add",
     "edit": "Edit",
@@ -116,6 +131,7 @@
     "configArea": "Configure Area",
     "cancel": "Cancel",
     "select": "Select",
+    "promotion": "Promotion",
     "order": {
       "updateOrderState": "Update Order Status",
       "generateQRcode": "Generate QR Code"

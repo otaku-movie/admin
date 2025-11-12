@@ -38,7 +38,9 @@
         "specList": "規格リスト",
         "ticketType": "チケットタイプ",
         "brandList": "ブランドリスト",
-        "screeningManagement": "上映スケジュール管理"
+        "screeningManagement": "上映スケジュール管理",
+        "promotion": "プロモーション設定",
+        "promotionDetail": "プロモーション詳細"
       }
     },
     "movie": {
@@ -62,6 +64,13 @@
       "children": {
         "showTimeList": "映画上映スケジュールリスト",
         "showTimeTag": "上映スケジュールタグリスト"
+      }
+    },
+    "pricingStrategy": {
+      "name": "前売券管理",
+      "children": {
+        "presaleDetail": "前売券詳細",
+        "presale": "前売券"
       }
     },
     "userList": "ユーザーリスト",
@@ -96,6 +105,9 @@
     "Saturday": "土",
     "Sunday": "日"
   },
+  "table": {
+    "action": "操作"
+  },
   "button": {
     "add": "追加",
     "edit": "編集",
@@ -116,6 +128,7 @@
     "configArea": "エリアを設定",
     "cancel": "キャンセル",
     "select": "選択",
+    "promotion": "プロモーション設定",
     "order": {
       "updateOrderState": "注文状態を変更",
       "generateQRcode": "QRコードを生成"
