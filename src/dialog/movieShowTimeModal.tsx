@@ -10,7 +10,8 @@ import {
   message,
   Switch,
   Input,
-  Button
+  Button,
+  InputNumber
 } from 'antd'
 import http from '@/api'
 import { languageType } from '@/config'
@@ -38,6 +39,7 @@ interface Query {
   endTime?: dayjs.Dayjs
   subtitleId?: number[]
   movieShowTimeTagId?: number[]
+  price?: number
 }
 
 export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
@@ -228,7 +230,8 @@ export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
               ...query,
               showTimeTagId: query.movieShowTimeTagId,
               startTime: query.startTime?.format('YYYY-MM-DD HH:mm:ss'),
-              endTime: query.endTime?.format('YYYY-MM-DD HH:mm:ss')
+              endTime: query.endTime?.format('YYYY-MM-DD HH:mm:ss'),
+              price: query.price
             }
           }).then(() => {
             message.success(common('message.save'))
@@ -443,6 +446,23 @@ export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
                 open: val
               })
             }}
+          />
+        </Form.Item>
+        <Form.Item label={t('showTimeModal.form.price.label')} name="price">
+          <InputNumber
+            style={{ width: 200 }}
+            min={0}
+            precision={0}
+            step={100}
+            value={query.price}
+            placeholder={t('showTimeModal.form.price.placeholder')}
+            onChange={(val) => {
+              setQuery({
+                ...query,
+                price: val ?? undefined
+              })
+            }}
+            addonAfter={common('unit.jpy')}
           />
         </Form.Item>
 

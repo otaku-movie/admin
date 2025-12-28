@@ -31,6 +31,7 @@ export function TodoList(props: TodoListProps) {
 
   const baseLeft = 40
   const hourHeight = 100
+  const minColumnWidth = 200 // 每列的最小宽度
 
   const draw = (data: CinemaScreeing[]) => {
     const list = data.map((item, index) => {
@@ -80,13 +81,21 @@ export function TodoList(props: TodoListProps) {
             }
           }
 
+          // 计算列宽：如果表格单元格存在，使用实际宽度，否则使用最小宽度
+          // 注意：tableCellRef 会指向最后一个 td，但由于所有列宽度相同，可以使用第一个
+          let columnWidth = minColumnWidth
+          if (tableCellRef.current) {
+            // 获取第一个 td 的宽度（所有列宽度相同）
+            const firstTd = tableCellRef.current.closest('tbody')?.querySelector('td')
+            columnWidth = firstTd?.offsetWidth || tableCellRef.current.offsetWidth || minColumnWidth
+          }
+          
           return {
             data: children,
             differentDay: endDateUnix - startDateUnix > 86400,
             position: {
               top: 2 + hourHeight * hour + (minute / 60) * hourHeight + 'px',
-              left:
-                2 + tableCellRef.current!.offsetWidth * index + baseLeft + 'px',
+              left: 2 + columnWidth * index + baseLeft + 'px',
               height: height() + 'px'
             }
           }
@@ -200,7 +209,12 @@ export function TodoList(props: TodoListProps) {
   // }, [])
 
   const renderDifferentDayTask = () => {
-    const width = tableCellRef.current?.offsetWidth
+    // 获取列宽
+    let columnWidth = minColumnWidth
+    if (tableCellRef.current) {
+      const firstTd = tableCellRef.current.closest('tbody')?.querySelector('td')
+      columnWidth = firstTd?.offsetWidth || tableCellRef.current.offsetWidth || minColumnWidth
+    }
     const result = getDifferentDayTask(props.data).reduce((total, current) => {
       const endDate = dayjs(current.endTime).format('YYYY-MM-DD')
 
@@ -218,8 +232,7 @@ export function TodoList(props: TodoListProps) {
             ? minuteHeight
             : hourDifferent * hourHeight + minuteHeight - 6
 
-        const left = width * current.arrayIndex
-        console.log(width, current.arrayIndex)
+        const left = columnWidth * current.arrayIndex
         return total.concat({
           data: current,
           differentDay: true,
@@ -281,7 +294,10 @@ export function TodoList(props: TodoListProps) {
           </table>
           <table
             className="table-container"
-            // style={{ width: 200 * props.data.length + 'px' }}
+            style={{
+              minWidth: `${Math.max(props.data.length * 200, 100)}px`,
+              width: '100%'
+            }}
           >
             <tbody>
               {Array(24 * 2)
@@ -327,7 +343,13 @@ export function TodoList(props: TodoListProps) {
                 style={{
                   top: item.position.top,
                   left: item.position.left,
-                  width: `calc((100% - 100px) / ${props.data.length})`,
+                  width: (() => {
+                    if (tableCellRef.current) {
+                      const firstTd = tableCellRef.current.closest('tbody')?.querySelector('td')
+                      return `${firstTd?.offsetWidth || tableCellRef.current.offsetWidth || minColumnWidth}px`
+                    }
+                    return `${minColumnWidth}px`
+                  })(),
                   height: item.position.height,
                   backgroundColor: item.differentDay ? 'antiquewhite' : '#eee'
                 }}

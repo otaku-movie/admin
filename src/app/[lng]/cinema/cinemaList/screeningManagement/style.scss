@@ -53,13 +53,50 @@
     border-left: var(--todo-list-border);
     border-right: var(--todo-list-border);
   }
+
+  // DatePicker 样式优化
+  :global(.ant-picker) {
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    padding: 0 !important;
+
+    &:hover {
+      border: none !important;
+      box-shadow: none !important;
+      background: rgba(0, 0, 0, 0.04) !important;
+      border-radius: 4px;
+    }
+
+    &:focus,
+    &.ant-picker-focused {
+      border: none !important;
+      box-shadow: none !important;
+      background: rgba(0, 0, 0, 0.04) !important;
+    }
+
+    input {
+      text-align: center;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      padding: 0 0 0 8px !important;
+    }
+
+    .ant-picker-prefix {
+      margin-right: 4px;
+      color: #1677ff;
+    }
+  }
 }
 .todo-top {
   position: sticky;
   top: -21px;
   left: 0;
+  right: 0;
   background-color: white;
   z-index: 100;
+  width: 100%;
 }
 .show-list-container {
   margin-top: -1px;

@@ -15,6 +15,7 @@
   display: grid;
   grid-template-columns: 40px 1fr 40px;
   position: relative;
+  min-width: 100%;
 }
 
 .hour-container,
@@ -24,7 +25,6 @@
 
   th,
   td {
-    width: 120px;
     height: 50px;
     border: var(--todo-list-border);
     text-align: center;
@@ -32,10 +32,20 @@
 }
 
 .hour-container {
-  width: 100%;
+  width: 40px;
   th,
   td {
+    width: 40px;
+    min-width: 40px;
     border-right-width: 0px;
+  }
+}
+
+.table-container {
+  th,
+  td {
+    min-width: 200px;
+    width: 200px;
   }
 }
 .right-table {
@@ -47,6 +57,8 @@
 
 .show-list-container {
   position: relative;
+  min-width: 100%;
+
   .todo {
     height: 180px;
     // border: 2px solid red;
@@ -58,6 +70,7 @@
     padding: 10px;
     // font-size: 14px;
     line-height: 22px;
+    min-width: 200px;
     // display: flex;
     // flex-direction: column;
     // justify-content: space-between;
