@@ -82,10 +82,19 @@
         "label": "Show Time Tag",
         "required": "Please select a show time tag"
       },
+      "price": {
+        "label": "Show Price",
+        "placeholder": "Enter show price (optional)"
+      },
       "showTime": {
         "label": "Start Time",
         "required": "Please select a show time",
         "startAfterEnd": "The end time must be later than the start time"
+      },
+      "promotion": {
+        "label": "Promotion Strategy",
+        "placeholder": "Please select a promotion strategy (optional)",
+        "matchedRule": "Matched Rule"
       }
     }
   },

@@ -15,8 +15,16 @@ export function Dict(props: DictProps) {
 
   useEffect(() => {
     const find = dict?.[props.name]?.find((item) => item.code === props.code)
-    setName(find?.name || '')
-  }, [props.code])
+    if (find?.name) {
+      setName(find.name)
+    } else if (dict && Object.keys(dict).length > 0) {
+      // 字典数据已加载但找不到对应值，显示 code 作为 fallback
+      setName(String(props.code))
+    } else {
+      // 字典数据还未加载
+      setName('')
+    }
+  }, [props.code, props.name, dict])
 
   // useEffect(() => {
   //   getDict(props.name).then((dict) => {

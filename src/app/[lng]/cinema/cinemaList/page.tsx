@@ -124,11 +124,11 @@ export default function Page({ params: { lng } }: PageProps) {
       key: 'operation',
       fixed: 'right',
       align: 'center',
-      width: 320,
+      width: 360,
       render: (_, row) => {
         return (
-          <Flex gap={10} vertical>
-            <Space>
+          <Space direction="vertical" size={8} style={{ width: '100%' }}>
+            <Space wrap>
               <Button
                 onClick={() => {
                   router.push(
@@ -147,6 +147,21 @@ export default function Page({ params: { lng } }: PageProps) {
                 onClick={() => {
                   router.push(
                     processPath({
+                      name: 'promotion',
+                      query: {
+                        cinemaId: row.id,
+                        cinemaName: encodeURIComponent(row.name)
+                      }
+                    })
+                  )
+                }}
+              >
+                {common('button.promotion')}
+              </Button>
+              <Button
+                onClick={() => {
+                  router.push(
+                    processPath({
                       name: 'ticketType',
                       query: {
                         id: row.id
@@ -158,7 +173,7 @@ export default function Page({ params: { lng } }: PageProps) {
                 {common('button.ticketType')}
               </Button>
             </Space>
-            <Space>
+            <Space wrap>
               <Button
                 type="primary"
                 onClick={() => {
@@ -226,7 +241,7 @@ export default function Page({ params: { lng } }: PageProps) {
                 </Button>
               </CheckPermission>
             </Space>
-          </Flex>
+          </Space>
         )
       }
     }

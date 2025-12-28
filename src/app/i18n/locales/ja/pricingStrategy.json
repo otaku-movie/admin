@@ -1,0 +1,375 @@
+{
+  "title": "前売券管理",
+  "description": "前売券の販売価格・数量・対象作品・利用制限を管理します。",
+  "syncNotice": "保存直後に反映されます。設定内容に矛盾がないかご確認ください。",
+  "empty": "登録された前売券がありません。「追加」をクリックして作成してください。",
+  "tabs": {
+    "presale": "前売券"
+  },
+  "presale": {
+    "description": "前売券は通常上映の料金を相殺し、IMAX・Dolby など特殊フォーマットでは差額を徴収します。",
+    "table": {
+      "product": "ムビチケ商品",
+      "salePeriod": "販売期間",
+      "usageWindow": "利用期間",
+      "deliveryType": "引き渡し方法",
+      "specifications": "商品仕様",
+      "quantity": "販売枚数",
+      "perUserLimit": "お一人様上限",
+      "movies": "対象作品",
+      "benefits": "付帯特典",
+      "bonus": "購入特典",
+      "bonusDelivery": "特典受け取り方法",
+      "pickupNotes": "引き換え案内",
+      "description": "説明",
+      "remark": "備考",
+      "galleryCount": "合計 {count} 枚",
+      "galleryMore": "+{count} 枚",
+      "skuColumns": {
+        "name": "仕様",
+        "untitled": "未設定",
+        "price": "価格",
+        "stock": "在庫",
+        "points": "ポイント",
+        "shipDays": "発送目安",
+        "image": "画像"
+      },
+      "status": {
+        "selling": "販売中",
+        "upcoming": "販売予定",
+        "ended": "販売終了"
+      }
+    },
+    "specifications": {
+      "audience": {
+        "general": "一般",
+        "junior": "ジュニア",
+        "student": "学生",
+        "child": "小人",
+        "senior": "シニア",
+        "pair": "ペア券"
+      },
+      "sku": "SKU {sku}",
+      "points": "{points} pt",
+      "shipDays": "発送目安 {days} 日",
+      "stock": "在庫 {stock}"
+    },
+    "type": {
+      "presale": "前売券"
+    },
+    "deliveryType": {
+      "virtual": "ムビチケオンライン券",
+      "physical": "ムビチケカード券"
+    },
+    "mubitikeType": {
+      "online": "ムビチケオンライン券",
+      "card": "ムビチケカード券",
+      "combo": "セット / コンボ"
+    },
+    "bonusType": {
+      "digital": "デジタル特典",
+      "physical": "物理特典",
+      "voucher": "バウチャー / 交換券"
+    },
+    "discountMode": {
+      "fixed": "定額",
+      "percentage": "割合"
+    },
+    "form": {
+      "section": {
+        "media": "メディア素材",
+        "basic": "基本情報",
+        "sales": "販売設定",
+        "specifications": "券種ラインアップ",
+        "usage": "利用期間",
+        "bonus": "購入特典"
+      },
+      "code": {
+        "label": "引換コード",
+        "required": "引換コードを入力してください",
+        "generated": "保存後にシステムで自動生成"
+      },
+      "title": {
+        "label": "商品タイトル",
+        "placeholder": "例：ムビチケオンライン券｜公開初日限定",
+        "required": "商品タイトルを入力してください",
+        "fallback": "ムビチケ前売券"
+      },
+      "mubitikeType": {
+        "label": "ムビチケ種別",
+        "required": "ムビチケ種別を選択してください"
+      },
+      "movie": {
+        "label": "対象作品",
+        "placeholder": "対象作品を選択してください",
+        "required": "作品を選択してください"
+      },
+      "cover": {
+        "label": "カバー画像",
+        "required": "カバー画像をアップロードしてください",
+        "upload": "カバーをアップロード"
+      },
+      "gallery": {
+        "label": "ギャラリー画像",
+        "upload": "画像をアップロード",
+        "required": "少なくとも1枚の画像をアップロードしてください"
+      },
+      "type": {
+        "label": "種別"
+      },
+      "deliveryType": {
+        "label": "デフォルト配布方式"
+      },
+      "discountMode": {
+        "label": "割引方式"
+      },
+      "price": {
+        "label": "参考価格",
+        "required": "参考価格を入力してください"
+      },
+      "quantity": {
+        "label": "販売枚数",
+        "required": "販売枚数を入力してください"
+      },
+      "amount": {
+        "label": "金額 / 割合",
+        "required": "金額または割合を入力してください",
+        "percentageLimit": "割合は 0〜100 の間で指定してください"
+      },
+      "specifications": {
+        "label": "商品仕様の設定",
+        "groupLabel": "仕様名",
+        "groupPlaceholder": "例：大人 / 学生",
+        "untitled": "SKU {index}",
+        "skuCode": "SKUコード",
+        "skuPlaceholder": "例：ONLINE-ADULT",
+        "ticketType": "券種形式",
+        "ticketTypePlaceholder": "券種形式を選択してください",
+        "ticketTypeRequired": "券種形式を選択してください",
+        "audienceType": "対象区分",
+        "audiencePlaceholder": "該当する区分を選択（任意）",
+        "audience": {
+          "general": "一般",
+          "junior": "ジュニア",
+          "student": "学生",
+          "child": "小人",
+          "senior": "シニア",
+          "pair": "ペア券"
+        },
+        "price": "価格",
+        "pricePlaceholder": "価格を入力してください",
+        "stock": "在庫",
+        "stockPlaceholder": "在庫を入力（任意）",
+        "deliveryType": "配布方式",
+        "deliveryPlaceholder": "配布方式を選択してください",
+        "deliveryRequired": "配布方式を選択してください",
+        "points": "付与ポイント",
+        "pointsPlaceholder": "ポイント数を入力（任意）",
+        "shipDays": "発送目安（日数）",
+        "shipDaysPlaceholder": "日数を入力（任意）",
+        "image": "SKU画像URL",
+        "imagePlaceholder": "画像URLを貼り付け（任意）",
+        "add": "仕様を追加",
+        "required": "少なくとも1つの仕様を追加してください",
+        "priceRequired": "価格を入力してください"
+      },
+      "benefits": {
+        "label": "特典内容",
+        "placeholder": "例：限定グッズやポイント進呈など",
+        "required": "特典内容を入力してください",
+        "add": "特典を追加"
+      },
+      "launchTime": {
+        "label": "販売開始時間",
+        "required": "販売開始時間を選択してください"
+      },
+      "endTime": {
+        "label": "販売終了時間",
+        "required": "販売終了時間を選択してください",
+        "afterLaunch": "販売終了時間は開始時間より後に設定してください"
+      },
+      "usageStart": {
+        "label": "利用開始時間",
+        "required": "利用開始時間を選択してください"
+      },
+      "usageEnd": {
+        "label": "利用終了時間",
+        "required": "利用終了時間を選択してください",
+        "afterStart": "利用終了時間は開始時間より後に設定してください"
+      },
+      "bonusTitle": {
+        "label": "特典タイトル",
+        "placeholder": "例：限定ビジュアル台紙"
+      },
+      "bonusType": {
+        "label": "特典種別"
+      },
+      "bonusDelivery": {
+        "label": "特典受け取り方法"
+      },
+      "bonusDescription": {
+        "label": "特典説明",
+        "placeholder": "特典の受け取り方法や配布時期を記載してください"
+      },
+      "pickupNotes": {
+        "label": "引き換え案内",
+        "placeholder": "例：劇場窓口でQRコードをご提示ください"
+      },
+      "extraFee": {
+        "label": "特殊フォーマット差額",
+        "placeholder": "例：IMAX / Dolby の差額"
+      },
+      "perUserLimit": {
+        "label": "お一人様上限",
+        "required": "お一人様上限を入力してください"
+      },
+      "description": {
+        "label": "説明",
+        "placeholder": "前売券の説明を入力してください"
+      },
+      "remark": {
+        "label": "内部メモ"
+      }
+    },
+    "message": {
+      "saveSuccess": "前売券を保存しました",
+      "deleteConfirm": "この前売券を削除しますか？",
+      "deleteSuccess": "前売券を削除しました"
+    }
+  },
+  "promotion": {
+    "title": "プロモーション管理",
+    "table": {
+      "name": "活動名",
+      "monthlyRules": "月次ルール",
+      "weeklyRules": "週次ルール",
+      "specificRules": "特定日ルール",
+      "timePeriodRules": "時間帯ルール",
+      "updatedAt": "更新日時",
+      "remark": "備考",
+      "remarkEmpty": "未設定"
+    },
+    "serviceDay": {
+      "monthly": {
+        "title": "月次ルール",
+        "name": "ルール名",
+        "day": "日",
+        "price": "価格",
+        "namePlaceholder": "ルール名を入力してください",
+        "dayPlaceholder": "日を入力してください（1-31）",
+        "description": "毎月固定日に適用されるプロモーションルール",
+        "add": "月次ルールを追加"
+      },
+      "weekly": {
+        "title": "週次ルール",
+        "name": "ルール名",
+        "weekday": "曜日",
+        "price": "価格",
+        "namePlaceholder": "ルール名を入力してください",
+        "weekdayPlaceholder": "曜日を選択してください",
+        "description": "毎週固定曜日に適用されるプロモーションルール",
+        "add": "週次ルールを追加"
+      },
+      "specific": {
+        "title": "特定日ルール",
+        "name": "ルール名",
+        "date": "日付",
+        "price": "価格",
+        "namePlaceholder": "ルール名を入力してください",
+        "datePlaceholder": "日付を選択してください",
+        "description": "指定した日付に適用されるプロモーションルール",
+        "add": "特定日ルールを追加"
+      },
+      "timePeriod": {
+        "title": "時間帯ルール",
+        "name": "ルール名",
+        "scope": "適用範囲",
+        "schedule": "適用日",
+        "startTime": "開始時間",
+        "endTime": "終了時間",
+        "price": "価格",
+        "remark": "備考",
+        "weekday": "曜日",
+        "date": "日付",
+        "namePlaceholder": "ルール名を入力してください",
+        "schedulePlaceholder": "日付を選択してください",
+        "remarkPlaceholder": "備考を入力してください（任意）",
+        "description": "指定した時間帯に適用されるプロモーションルール",
+        "add": "時間帯ルールを追加",
+        "scopeOptions": {
+          "daily": "毎日",
+          "weekday": "平日",
+          "weekend": "週末",
+          "weekdaySpecific": "指定平日",
+          "specific": "指定日"
+        }
+      },
+      "unit": {
+        "daySuffix": "日"
+      },
+      "weekdays": {
+        "monday": "月曜日",
+        "tuesday": "火曜日",
+        "wednesday": "水曜日",
+        "thursday": "木曜日",
+        "friday": "金曜日",
+        "saturday": "土曜日",
+        "sunday": "日曜日"
+      },
+      "action": {
+        "configure": "設定"
+      },
+      "validation": {
+        "nameRequired": "ルール名を入力してください",
+        "dayRequired": "日を入力してください",
+        "weekdayRequired": "曜日を選択してください",
+        "dateRequired": "日付を選択してください",
+        "priceRequired": "価格を入力してください",
+        "scopeRequired": "適用範囲を選択してください",
+        "timeRangeRequired": "時間帯を選択してください",
+        "pairDiscountRange": "ペア割引は 0-100 の間で指定してください"
+      },
+      "remark": {
+        "label": "備考",
+        "placeholder": "備考を入力してください（任意）"
+      },
+      "eventRule": {
+        "title": "活動ルール",
+        "description": "活動ルールと割引情報を設定",
+        "activityName": "活動名",
+        "activityNamePlaceholder": "活動名を入力してください",
+        "scope": "適用範囲",
+        "discountPercent": "割引率",
+        "discountHint": "割引範囲：0-100",
+        "ageLimit": "年齢制限",
+        "add": "活動ルールを追加",
+        "addMonthly": "月次ルールを追加",
+        "addWeekly": "週次ルールを追加",
+        "addDaily": "日次ルールを追加",
+        "addSpecific": "特定日ルールを追加",
+        "section": {
+          "monthly": "月次ルール",
+          "weekly": "週次ルール",
+          "daily": "日次ルール",
+          "specific": "特定日ルール"
+        },
+        "summary": {
+          "title": "ルール要約",
+          "monthly": "月次ルール",
+          "weekly": "週次ルール",
+          "daily": "日次ルール",
+          "specific": "特定日ルール",
+          "daySuffix": "日"
+        },
+        "deleteConfirm": "このルールを削除しますか？"
+      },
+      "message": {
+        "saveSuccess": "プロモーションを保存しました"
+      }
+    },
+    "message": {
+      "deleteConfirm": "このプロモーションを削除しますか？",
+      "deleteSuccess": "プロモーションを削除しました"
+    }
+  }
+}

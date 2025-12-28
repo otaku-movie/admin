@@ -82,10 +82,19 @@
         "label": "上映场次标签",
         "required": "请选择上映场次标签"
       },
+      "price": {
+        "label": "场次价格",
+        "placeholder": "请输入场次价格（可选）"
+      },
       "showTime": {
         "label": "开始时间",
         "required": "请选择上映时间",
         "startAfterEnd": "结束时间必须大于开始时间"
+      },
+      "promotion": {
+        "label": "优惠策略",
+        "placeholder": "请选择优惠策略（可选）",
+        "matchedRule": "匹配的规则"
       }
     }
   },

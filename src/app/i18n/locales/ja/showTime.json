@@ -82,10 +82,19 @@
         "label": "上映場次タグ",
         "required": "上映場次タグを選択してください"
       },
+      "price": {
+        "label": "場次価格",
+        "placeholder": "場次価格を入力してください（オプション）"
+      },
       "showTime": {
         "label": "開始日時",
         "required": "上映時間を選択してください",
         "startAfterEnd": "終了日時は開始日時より後でなければなりません"
+      },
+      "promotion": {
+        "label": "プロモーション戦略",
+        "placeholder": "プロモーション戦略を選択してください（オプション）",
+        "matchedRule": "マッチしたルール"
       }
     }
   },
