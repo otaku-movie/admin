@@ -23,6 +23,17 @@
       "pickupNotes": "Pickup Notes",
       "description": "Description",
       "remark": "Remarks",
+      "galleryCount": "{count} images",
+      "galleryMore": "+{count} more",
+      "skuColumns": {
+        "name": "SKU",
+        "untitled": "Untitled",
+        "price": "Price",
+        "stock": "Stock",
+        "points": "Points",
+        "shipDays": "Fulfillment",
+        "image": "Image"
+      },
       "status": {
         "selling": "On Sale",
         "upcoming": "Coming Soon",
@@ -30,13 +41,6 @@
       }
     },
     "specifications": {
-      "range": {
-        "all": "All customers",
-        "min": "{age}+ years",
-        "max": "Up to {age} years",
-        "between": "{min}-{max} years",
-        "stock": "Stock {stock}"
-      },
       "audience": {
         "general": "Adult",
         "junior": "Junior",
@@ -44,7 +48,11 @@
         "child": "Child",
         "senior": "Senior",
         "pair": "Pair Ticket"
-      }
+      },
+      "sku": "SKU {sku}",
+      "points": "{points} pt",
+      "shipDays": "Ships in {days} days",
+      "stock": "Stock {stock}"
     },
     "type": {
       "presale": "Presale Ticket"
@@ -69,6 +77,7 @@
     },
     "form": {
       "section": {
+        "media": "Media Assets",
         "basic": "Basic Information",
         "sales": "Sales Settings",
         "specifications": "Ticket Lineup",
@@ -100,6 +109,11 @@
         "required": "Please upload a cover image",
         "upload": "Upload Cover"
       },
+      "gallery": {
+        "label": "Gallery Images",
+        "upload": "Upload Image",
+        "required": "Please upload at least one ticket image"
+      },
       "type": {
         "label": "Type"
       },
@@ -126,6 +140,12 @@
         "label": "Product specs",
         "groupLabel": "Spec name",
         "groupPlaceholder": "e.g. Adult / Student",
+        "untitled": "SKU {index}",
+        "skuCode": "SKU code",
+        "skuPlaceholder": "e.g. ONLINE-ADULT",
+        "ticketType": "Ticket format",
+        "ticketTypePlaceholder": "Select ticket format",
+        "ticketTypeRequired": "Select the ticket format",
         "audienceType": "Audience segment",
         "audiencePlaceholder": "Select the primary audience (optional)",
         "audience": {
@@ -136,10 +156,6 @@
           "senior": "Senior",
           "pair": "Pair Ticket"
         },
-        "min": "Minimum age",
-        "minPlaceholder": "e.g. 13",
-        "max": "Maximum age",
-        "maxPlaceholder": "e.g. 17",
         "price": "Price",
         "pricePlaceholder": "Enter price",
         "stock": "Stock",
@@ -147,10 +163,15 @@
         "deliveryType": "Delivery method",
         "deliveryPlaceholder": "Select delivery method",
         "deliveryRequired": "Select a delivery method",
+        "points": "Reward points",
+        "pointsPlaceholder": "Points awarded (optional)",
+        "shipDays": "Fulfillment lead time",
+        "shipDaysPlaceholder": "Days to ship (optional)",
+        "image": "SKU image URL",
+        "imagePlaceholder": "Paste image URL (optional)",
         "add": "Add specification",
         "required": "Please add at least one specification",
-        "priceRequired": "Enter the price for this specification",
-        "rangeError": "Maximum age must be greater than or equal to minimum age"
+        "priceRequired": "Enter the price for this specification"
       },
       "benefits": {
         "label": "Benefits",
@@ -215,6 +236,140 @@
       "deleteConfirm": "Delete this presale ticket?",
       "deleteSuccess": "Presale ticket removed"
     }
+  },
+  "promotion": {
+    "title": "Promotion Management",
+    "table": {
+      "name": "Activity Name",
+      "monthlyRules": "Monthly Rules",
+      "weeklyRules": "Weekly Rules",
+      "specificRules": "Specific Date Rules",
+      "timePeriodRules": "Time Period Rules",
+      "updatedAt": "Updated At",
+      "remark": "Remarks",
+      "remarkEmpty": "Not set"
+    },
+    "serviceDay": {
+      "monthly": {
+        "title": "Monthly Rules",
+        "name": "Rule Name",
+        "day": "Day",
+        "price": "Price",
+        "namePlaceholder": "Enter rule name",
+        "dayPlaceholder": "Enter day (1-31)",
+        "description": "Promotion rules that apply on fixed dates each month",
+        "add": "Add Monthly Rule"
+      },
+      "weekly": {
+        "title": "Weekly Rules",
+        "name": "Rule Name",
+        "weekday": "Weekday",
+        "price": "Price",
+        "namePlaceholder": "Enter rule name",
+        "weekdayPlaceholder": "Select weekday",
+        "description": "Promotion rules that apply on fixed weekdays each week",
+        "add": "Add Weekly Rule"
+      },
+      "specific": {
+        "title": "Specific Date Rules",
+        "name": "Rule Name",
+        "date": "Date",
+        "price": "Price",
+        "namePlaceholder": "Enter rule name",
+        "datePlaceholder": "Select date",
+        "description": "Promotion rules that apply on specific dates",
+        "add": "Add Specific Date Rule"
+      },
+      "timePeriod": {
+        "title": "Time Period Rules",
+        "name": "Rule Name",
+        "scope": "Applicable Scope",
+        "schedule": "Applicable Days",
+        "startTime": "Start Time",
+        "endTime": "End Time",
+        "price": "Price",
+        "remark": "Remarks",
+        "weekday": "Weekday",
+        "date": "Date",
+        "namePlaceholder": "Enter rule name",
+        "schedulePlaceholder": "Select date",
+        "remarkPlaceholder": "Enter remarks (optional)",
+        "description": "Promotion rules that apply during specific time periods",
+        "add": "Add Time Period Rule",
+        "scopeOptions": {
+          "daily": "Daily",
+          "weekday": "Weekdays",
+          "weekend": "Weekend",
+          "weekdaySpecific": "Specific Weekdays",
+          "specific": "Specific Dates"
+        }
+      },
+      "unit": {
+        "daySuffix": "th"
+      },
+      "weekdays": {
+        "monday": "Monday",
+        "tuesday": "Tuesday",
+        "wednesday": "Wednesday",
+        "thursday": "Thursday",
+        "friday": "Friday",
+        "saturday": "Saturday",
+        "sunday": "Sunday"
+      },
+      "action": {
+        "configure": "Configure"
+      },
+      "validation": {
+        "nameRequired": "Please enter rule name",
+        "dayRequired": "Please enter day",
+        "weekdayRequired": "Please select weekday",
+        "dateRequired": "Please select date",
+        "priceRequired": "Please enter price",
+        "scopeRequired": "Please select applicable scope",
+        "timeRangeRequired": "Please select time range",
+        "pairDiscountRange": "Pair discount must be between 0-100"
+      },
+      "remark": {
+        "label": "Remarks",
+        "placeholder": "Enter remarks (optional)"
+      },
+      "eventRule": {
+        "title": "Activity Rules",
+        "description": "Configure activity rules and discount information",
+        "activityName": "Activity Name",
+        "activityNamePlaceholder": "Enter activity name",
+        "scope": "Applicable Scope",
+        "discountPercent": "Discount Percentage",
+        "discountHint": "Discount range: 0-100",
+        "ageLimit": "Age Limit",
+        "add": "Add Activity Rule",
+        "addMonthly": "Add Monthly Rule",
+        "addWeekly": "Add Weekly Rule",
+        "addDaily": "Add Daily Rule",
+        "addSpecific": "Add Specific Date Rule",
+        "section": {
+          "monthly": "Monthly Rules",
+          "weekly": "Weekly Rules",
+          "daily": "Daily Rules",
+          "specific": "Specific Date Rules"
+        },
+        "summary": {
+          "title": "Rule Summary",
+          "monthly": "Monthly Rules",
+          "weekly": "Weekly Rules",
+          "daily": "Daily Rules",
+          "specific": "Specific Date Rules",
+          "daySuffix": "th"
+        },
+        "deleteConfirm": "Delete this rule?"
+      },
+      "message": {
+        "saveSuccess": "Promotion saved"
+      }
+    },
+    "message": {
+      "deleteConfirm": "Delete this promotion?",
+      "deleteSuccess": "Promotion removed"
+    }
   }
 }
-

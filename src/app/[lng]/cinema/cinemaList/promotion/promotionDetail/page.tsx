@@ -210,6 +210,11 @@ export default function PromotionDetailPage({ params: { lng } }: PageProps) {
 
   const hydratePromotionDetail = useCallback(
     (detail: PromotionDetailResponse) => {
+      if (!detail) {
+        console.warn('Cannot hydrate: detail is null or undefined')
+        return
+      }
+      console.log('Hydrating promotion detail:', detail)
       form.setFieldsValue({
         name: detail.name || '',
         remark: detail.remark || undefined,
@@ -217,14 +222,14 @@ export default function PromotionDetailPage({ params: { lng } }: PageProps) {
         unifiedPrice: undefined
       })
 
-      setMonthlyList(
-        (detail.monthlyDays || []).map((item) => ({
-          id: item.id,
-          name: item.name || '',
-          day: item.dayOfMonth,
-          price: item.price
-        })) 
-      )
+      const monthlyData = (detail.monthlyDays || []).map((item) => ({
+        id: item.id,
+        name: item.name || '',
+        day: item.dayOfMonth,
+        price: item.price
+      }))
+      console.log('Setting monthlyList:', monthlyData)
+      setMonthlyList(monthlyData)
 
       setWeeklyList(
         (detail.weeklyDays || []).reduce<WeeklyEntry[]>((acc, item) => {
@@ -310,21 +315,32 @@ export default function PromotionDetailPage({ params: { lng } }: PageProps) {
       resetPromotionState()
       return
     }
-    if (!hasPromotionId) {
-      resetPromotionState()
-      return
-    }
     try {
       setLoading(true)
-      const detail = await getPromotionDetail(cinemaId)
-      hydratePromotionDetail(detail)
+      const detail = await getPromotionDetail(
+        cinemaId,
+        hasPromotionId ? promotionIdFromQuery : undefined
+      )
+      console.log('Fetched promotion detail:', detail)
+      if (detail) {
+        hydratePromotionDetail(detail)
+      } else {
+        console.warn('Promotion detail is null or undefined')
+        resetPromotionState()
+      }
     } catch (error) {
       resetPromotionState()
-      console.error(error)
+      console.error('Error fetching promotion detail:', error)
     } finally {
       setLoading(false)
     }
-  }, [cinemaId, hasPromotionId, hydratePromotionDetail, resetPromotionState])
+  }, [
+    cinemaId,
+    hasPromotionId,
+    promotionIdFromQuery,
+    hydratePromotionDetail,
+    resetPromotionState
+  ])
 
   useEffect(() => {
     fetchPromotionDetail()
@@ -1902,14 +1918,13 @@ export default function PromotionDetailPage({ params: { lng } }: PageProps) {
           </FormItem>
           <Space size={40} direction="vertical">
             <Card
-              variant="borderless"
+              variant="outlined"
               title={
                 <Title style={{ margin: '12px 0' }} level={4}>
                   {t('promotion.serviceDay.monthly.title')}
                 </Title>
               }
               size="small"
-              bordered
             >
               <Paragraph type="secondary" style={{ marginTop: 0 }}>
                 {t('promotion.serviceDay.monthly.description')}
@@ -1935,14 +1950,13 @@ export default function PromotionDetailPage({ params: { lng } }: PageProps) {
             </Card>
 
             <Card
-              variant="borderless"
+              variant="outlined"
               title={
                 <Title style={{ margin: '12px 0' }} level={4}>
                   {t('promotion.serviceDay.weekly.title')}
                 </Title>
               }
               size="small"
-              bordered
             >
               <Paragraph type="secondary" style={{ marginTop: 0 }}>
                 {t('promotion.serviceDay.weekly.description')}
@@ -2077,7 +2091,7 @@ export default function PromotionDetailPage({ params: { lng } }: PageProps) {
         open={!!modalState}
         onCancel={handleModalCancel}
         onOk={handleModalOk}
-        destroyOnClose
+        destroyOnHidden
         width={720}
         title={
           modalState
@@ -2091,7 +2105,9 @@ export default function PromotionDetailPage({ params: { lng } }: PageProps) {
         okText={common('button.save')}
         cancelText={common('button.cancel')}
       >
-        <Form form={modalForm}>{renderModalContent()}</Form>
+        <Form form={modalForm} labelCol={{ span: 6 }} wrapperCol={{ span: 18 }}>
+          {renderModalContent()}
+        </Form>
       </Modal>
       <Divider style={{ margin: 0 }} />
       <Space>

@@ -28,7 +28,7 @@ const WEEKDAY_NUMBER_TO_KEY: Record<number, string> = {
   7: 'sunday'
 }
 
-export default function PromotionPage({ params: { lng } }: PageProps) {
+export default function PricingStrategyPage({ params: { lng } }: PageProps) {
   const { t } = useTranslation(
     lng as 'zh-CN' | 'ja' | 'en-US',
     'pricingStrategy'

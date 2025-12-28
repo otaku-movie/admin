@@ -23,6 +23,17 @@
       "pickupNotes": "引き換え案内",
       "description": "説明",
       "remark": "備考",
+      "galleryCount": "合計 {count} 枚",
+      "galleryMore": "+{count} 枚",
+      "skuColumns": {
+        "name": "仕様",
+        "untitled": "未設定",
+        "price": "価格",
+        "stock": "在庫",
+        "points": "ポイント",
+        "shipDays": "発送目安",
+        "image": "画像"
+      },
       "status": {
         "selling": "販売中",
         "upcoming": "販売予定",
@@ -30,13 +41,6 @@
       }
     },
     "specifications": {
-      "range": {
-        "all": "条件なし",
-        "min": "{age}歳以上",
-        "max": "{age}歳以下",
-        "between": "{min}〜{max}歳",
-        "stock": "在庫 {stock}"
-      },
       "audience": {
         "general": "一般",
         "junior": "ジュニア",
@@ -44,7 +48,11 @@
         "child": "小人",
         "senior": "シニア",
         "pair": "ペア券"
-      }
+      },
+      "sku": "SKU {sku}",
+      "points": "{points} pt",
+      "shipDays": "発送目安 {days} 日",
+      "stock": "在庫 {stock}"
     },
     "type": {
       "presale": "前売券"
@@ -69,6 +77,7 @@
     },
     "form": {
       "section": {
+        "media": "メディア素材",
         "basic": "基本情報",
         "sales": "販売設定",
         "specifications": "券種ラインアップ",
@@ -100,6 +109,11 @@
         "required": "カバー画像をアップロードしてください",
         "upload": "カバーをアップロード"
       },
+      "gallery": {
+        "label": "ギャラリー画像",
+        "upload": "画像をアップロード",
+        "required": "少なくとも1枚の画像をアップロードしてください"
+      },
       "type": {
         "label": "種別"
       },
@@ -126,6 +140,12 @@
         "label": "商品仕様の設定",
         "groupLabel": "仕様名",
         "groupPlaceholder": "例：大人 / 学生",
+        "untitled": "SKU {index}",
+        "skuCode": "SKUコード",
+        "skuPlaceholder": "例：ONLINE-ADULT",
+        "ticketType": "券種形式",
+        "ticketTypePlaceholder": "券種形式を選択してください",
+        "ticketTypeRequired": "券種形式を選択してください",
         "audienceType": "対象区分",
         "audiencePlaceholder": "該当する区分を選択（任意）",
         "audience": {
@@ -136,10 +156,6 @@
           "senior": "シニア",
           "pair": "ペア券"
         },
-        "min": "最小年齢",
-        "minPlaceholder": "例：13",
-        "max": "最大年齢",
-        "maxPlaceholder": "例：17",
         "price": "価格",
         "pricePlaceholder": "価格を入力してください",
         "stock": "在庫",
@@ -147,10 +163,15 @@
         "deliveryType": "配布方式",
         "deliveryPlaceholder": "配布方式を選択してください",
         "deliveryRequired": "配布方式を選択してください",
+        "points": "付与ポイント",
+        "pointsPlaceholder": "ポイント数を入力（任意）",
+        "shipDays": "発送目安（日数）",
+        "shipDaysPlaceholder": "日数を入力（任意）",
+        "image": "SKU画像URL",
+        "imagePlaceholder": "画像URLを貼り付け（任意）",
         "add": "仕様を追加",
         "required": "少なくとも1つの仕様を追加してください",
-        "priceRequired": "価格を入力してください",
-        "rangeError": "最大年齢は最小年齢以上である必要があります"
+        "priceRequired": "価格を入力してください"
       },
       "benefits": {
         "label": "特典内容",
@@ -215,7 +236,140 @@
       "deleteConfirm": "この前売券を削除しますか？",
       "deleteSuccess": "前売券を削除しました"
     }
+  },
+  "promotion": {
+    "title": "プロモーション管理",
+    "table": {
+      "name": "活動名",
+      "monthlyRules": "月次ルール",
+      "weeklyRules": "週次ルール",
+      "specificRules": "特定日ルール",
+      "timePeriodRules": "時間帯ルール",
+      "updatedAt": "更新日時",
+      "remark": "備考",
+      "remarkEmpty": "未設定"
+    },
+    "serviceDay": {
+      "monthly": {
+        "title": "月次ルール",
+        "name": "ルール名",
+        "day": "日",
+        "price": "価格",
+        "namePlaceholder": "ルール名を入力してください",
+        "dayPlaceholder": "日を入力してください（1-31）",
+        "description": "毎月固定日に適用されるプロモーションルール",
+        "add": "月次ルールを追加"
+      },
+      "weekly": {
+        "title": "週次ルール",
+        "name": "ルール名",
+        "weekday": "曜日",
+        "price": "価格",
+        "namePlaceholder": "ルール名を入力してください",
+        "weekdayPlaceholder": "曜日を選択してください",
+        "description": "毎週固定曜日に適用されるプロモーションルール",
+        "add": "週次ルールを追加"
+      },
+      "specific": {
+        "title": "特定日ルール",
+        "name": "ルール名",
+        "date": "日付",
+        "price": "価格",
+        "namePlaceholder": "ルール名を入力してください",
+        "datePlaceholder": "日付を選択してください",
+        "description": "指定した日付に適用されるプロモーションルール",
+        "add": "特定日ルールを追加"
+      },
+      "timePeriod": {
+        "title": "時間帯ルール",
+        "name": "ルール名",
+        "scope": "適用範囲",
+        "schedule": "適用日",
+        "startTime": "開始時間",
+        "endTime": "終了時間",
+        "price": "価格",
+        "remark": "備考",
+        "weekday": "曜日",
+        "date": "日付",
+        "namePlaceholder": "ルール名を入力してください",
+        "schedulePlaceholder": "日付を選択してください",
+        "remarkPlaceholder": "備考を入力してください（任意）",
+        "description": "指定した時間帯に適用されるプロモーションルール",
+        "add": "時間帯ルールを追加",
+        "scopeOptions": {
+          "daily": "毎日",
+          "weekday": "平日",
+          "weekend": "週末",
+          "weekdaySpecific": "指定平日",
+          "specific": "指定日"
+        }
+      },
+      "unit": {
+        "daySuffix": "日"
+      },
+      "weekdays": {
+        "monday": "月曜日",
+        "tuesday": "火曜日",
+        "wednesday": "水曜日",
+        "thursday": "木曜日",
+        "friday": "金曜日",
+        "saturday": "土曜日",
+        "sunday": "日曜日"
+      },
+      "action": {
+        "configure": "設定"
+      },
+      "validation": {
+        "nameRequired": "ルール名を入力してください",
+        "dayRequired": "日を入力してください",
+        "weekdayRequired": "曜日を選択してください",
+        "dateRequired": "日付を選択してください",
+        "priceRequired": "価格を入力してください",
+        "scopeRequired": "適用範囲を選択してください",
+        "timeRangeRequired": "時間帯を選択してください",
+        "pairDiscountRange": "ペア割引は 0-100 の間で指定してください"
+      },
+      "remark": {
+        "label": "備考",
+        "placeholder": "備考を入力してください（任意）"
+      },
+      "eventRule": {
+        "title": "活動ルール",
+        "description": "活動ルールと割引情報を設定",
+        "activityName": "活動名",
+        "activityNamePlaceholder": "活動名を入力してください",
+        "scope": "適用範囲",
+        "discountPercent": "割引率",
+        "discountHint": "割引範囲：0-100",
+        "ageLimit": "年齢制限",
+        "add": "活動ルールを追加",
+        "addMonthly": "月次ルールを追加",
+        "addWeekly": "週次ルールを追加",
+        "addDaily": "日次ルールを追加",
+        "addSpecific": "特定日ルールを追加",
+        "section": {
+          "monthly": "月次ルール",
+          "weekly": "週次ルール",
+          "daily": "日次ルール",
+          "specific": "特定日ルール"
+        },
+        "summary": {
+          "title": "ルール要約",
+          "monthly": "月次ルール",
+          "weekly": "週次ルール",
+          "daily": "日次ルール",
+          "specific": "特定日ルール",
+          "daySuffix": "日"
+        },
+        "deleteConfirm": "このルールを削除しますか？"
+      },
+      "message": {
+        "saveSuccess": "プロモーションを保存しました"
+      }
+    },
+    "message": {
+      "deleteConfirm": "このプロモーションを削除しますか？",
+      "deleteSuccess": "プロモーションを削除しました"
+    }
   }
 }
-
-
