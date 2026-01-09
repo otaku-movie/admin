@@ -22,7 +22,15 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true
   },
-  distDir: process.env.NODE_ENV === 'development' ? 'build/test' : 'build/prod'
+  distDir: process.env.NODE_ENV === 'development' ? 'build/test' : 'build/prod',
+  productionBrowserSourceMaps: false,
+  // 开发环境启用源映射用于调试
+  webpack: (config, { dev }) => {
+    if (dev) {
+      config.devtool = 'source-map'
+    }
+    return config
+  }
   // experimental: {
   //   compilationMode: true
   // }

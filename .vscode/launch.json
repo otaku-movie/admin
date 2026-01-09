@@ -1,9 +1,39 @@
 {
-  // 使用 IntelliSense 了解相关属性。 
+  // 使用 IntelliSense 了解相关属性。
   // 悬停以查看现有属性的描述。
   // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
+    {
+      "name": "Next.js Debug",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": [
+        "dev"
+      ],
+      "console": "integratedTerminal",
+      "skipFiles": [
+        "<node_internals>/**"
+      ]
+    },
+    {
+      "name": "Attach to Chrome",
+      "type": "chrome",
+      "request": "attach",
+      "port": 9222,
+      "pathMapping": {
+        "/": "${workspaceFolder}/",
+        "/_next": "${workspaceFolder}/.next/"
+      }
+    },
+    {
+      "type": "msedge",
+      "request": "launch",
+      "name": "针对 localhost 启动 Edge",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}"
+    },
     {
       "name": "Launch Program",
       "program": "${workspaceFolder}/generator/index.js",
@@ -12,13 +42,6 @@
         "<node_internals>/**"
       ],
       "type": "node"
-    },
-    {
-      "type": "msedge",
-      "request": "launch",
-      "name": "针对 localhost 启动 Chrome",
-      "url": "http://localhost:3000",
-      "webRoot": "${workspaceFolder}"
     }
   ]
 }

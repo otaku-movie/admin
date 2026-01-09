@@ -58,3 +58,11 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 ![menu](./screenshot/06.png)
 ![permission](./screenshot/07.png)
 ![button](./screenshot/08.png)
+
+页面加一个版本信息按钮
+
+点击版本信息，用来添加版本信息（上映日期 语言 等）
+
+然后还有个表格，可以用来添加角色，同一个角色可能有多个人配音或者参演，
+
+添加配音版的时候，角色要同步，默认显示原版配音
