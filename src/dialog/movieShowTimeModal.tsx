@@ -20,12 +20,12 @@ import { Cinema, theaterHall } from '@/type/api'
 import { MovieModal } from './movieModal'
 
 interface MovieShowTimeModalProps {
-  type: 'create' | 'edit'
-  show: boolean
-  data: Record<string, unknown>
-  fromScreeningManagement?: boolean
-  onConfirm?: () => void
-  onCancel?: () => void
+  readonly type: 'create' | 'edit'
+  readonly show: boolean
+  readonly data: Record<string, unknown>
+  readonly fromScreeningManagement?: boolean
+  readonly onConfirm?: () => void
+  readonly onCancel?: () => void
 }
 
 interface Query {
@@ -40,6 +40,8 @@ interface Query {
   subtitleId?: number[]
   movieShowTimeTagId?: number[]
   price?: number
+  reReleaseId?: number
+  dubbingVersionId?: number
 }
 
 export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
@@ -52,6 +54,8 @@ export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
   const [specList, setSpecList] = useState<any[]>([])
   const [languageData, setLanguageData] = useState([])
   const [showTimeTagData, setShowTimeTagData] = useState([])
+  const [reReleaseData, setReReleaseData] = useState<any[]>([])
+  const [dubbingVersionData, setDubbingVersionData] = useState<any[]>([])
   const [cinemaData, setCinemaData] = useState<Cinema[]>([])
   const [theaterHallData, setTheaterHallData] = useState<theaterHall[]>([])
   const [form] = Form.useForm()
@@ -154,6 +158,132 @@ export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
       setSpecList(res.data)
     })
   }
+  const getReReleaseData = (movieId?: number) => {
+    if (!movieId) {
+      setReReleaseData([])
+      return
+    }
+    http({
+      url: 'movie/reRelease/list',
+      method: 'post',
+      data: {
+        movieId,
+        page: 1,
+        pageSize: 100
+      }
+    })
+      .then((res) => {
+        setReReleaseData(res.data?.list || [])
+      })
+      .catch(() => {
+        setReReleaseData([])
+      })
+  }
+  const getDubbingVersionDataFromDict = () => {
+    http({
+      url: 'dict/list',
+      method: 'post',
+      data: {
+        name: 'dubbingVersion',
+        page: 1,
+        pageSize: 100
+      }
+    })
+      .then((res) => {
+        const versions = res.data?.list || []
+        // 确保包含"原版"选项（code=0或1）
+        const hasOriginal = versions.some(
+          (v: any) => (v.id || v.code) === 0 || (v.id || v.code) === 1
+        )
+        if (!hasOriginal && versions.length > 0) {
+          versions.unshift({
+            id: 0,
+            code: 0,
+            name: '原版'
+          })
+        }
+        setDubbingVersionData(versions)
+      })
+      .catch(() => {
+        // 如果字典API失败，至少显示原版和配音版
+        setDubbingVersionData([
+          { id: 0, code: 0, name: '原版' },
+          { id: 1, code: 1, name: '配音版' }
+        ])
+      })
+  }
+  const getDubbingVersionData = (movieId?: number) => {
+    // 如果指定了电影ID，获取该电影的配音版本信息
+    // 然后结合字典数据展示所有可用的配音版本选项
+    if (movieId) {
+      http({
+        url: 'movie/detail',
+        method: 'get',
+        params: {
+          id: movieId
+        }
+      })
+        .then((res) => {
+          const movie = res.data
+          // 获取字典中的配音版本列表
+          http({
+            url: 'dict/list',
+            method: 'post',
+            data: {
+              name: 'dubbingVersion',
+              page: 1,
+              pageSize: 100
+            }
+          })
+            .then((dictRes) => {
+              const versions = dictRes.data?.list || []
+              // 如果电影有配音版本ID，确保包含该版本
+              if (movie.dubbingVersionId) {
+                const hasVersion = versions.some(
+                  (v: any) => (v.id || v.code) === movie.dubbingVersionId
+                )
+                if (!hasVersion) {
+                  versions.push({
+                    id: movie.dubbingVersionId,
+                    code: movie.dubbingVersionId,
+                    name: '配音版'
+                  })
+                }
+              }
+              // 确保包含"原版"选项
+              const hasOriginal = versions.some(
+                (v: any) => (v.id || v.code) === 0 || (v.id || v.code) === 1
+              )
+              if (!hasOriginal) {
+                versions.unshift({
+                  id: 0,
+                  code: 0,
+                  name: '原版'
+                })
+              }
+              setDubbingVersionData(versions)
+            })
+            .catch(() => {
+              // 如果字典API失败，至少显示原版和电影的配音版本
+              const versions: any[] = [{ id: 0, code: 0, name: '原版' }]
+              if (movie.dubbingVersionId) {
+                versions.push({
+                  id: movie.dubbingVersionId,
+                  code: movie.dubbingVersionId,
+                  name: '配音版'
+                })
+              }
+              setDubbingVersionData(versions)
+            })
+        })
+        .catch(() => {
+          // 如果获取电影详情失败，使用字典数据
+          getDubbingVersionDataFromDict()
+        })
+    } else {
+      getDubbingVersionDataFromDict()
+    }
+  }
 
   useEffect(() => {
     if (props.show) {
@@ -165,6 +295,7 @@ export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
       getCinemaData()
       getLanguageData()
       getShowTimeTagData()
+      getDubbingVersionDataFromDict()
     }
 
     if (props.data.id) {
@@ -189,6 +320,12 @@ export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
       // 设置其他数据
       setShowTimeTagData(props.data.movieShowTimeTags as [])
       setLanguageData(props.data.subtitle as [])
+      if (props.data.movieId) {
+        getReReleaseData(props.data.movieId as number)
+        getDubbingVersionData(props.data.movieId as number)
+      } else {
+        getDubbingVersionDataFromDict()
+      }
     } else {
       // 清空查询和表单
       setQuery({})
@@ -231,7 +368,9 @@ export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
               showTimeTagId: query.movieShowTimeTagId,
               startTime: query.startTime?.format('YYYY-MM-DD HH:mm:ss'),
               endTime: query.endTime?.format('YYYY-MM-DD HH:mm:ss'),
-              price: query.price
+              price: query.price,
+              reReleaseId: query.reReleaseId,
+              dubbingVersionId: query.dubbingVersionId
             }
           }).then(() => {
             message.success(common('message.save'))
@@ -465,6 +604,69 @@ export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
             addonAfter={common('unit.jpy')}
           />
         </Form.Item>
+        <Form.Item
+          label={t('showTimeModal.form.reRelease.label')}
+          name="reReleaseId"
+        >
+          <Select
+            allowClear
+            showSearch
+            style={{ width: 200 }}
+            value={query.reReleaseId}
+            disabled={!query.movieId}
+            placeholder={t('showTimeModal.form.reRelease.placeholder')}
+            onFocus={() => {
+              if (query.movieId) {
+                getReReleaseData(query.movieId)
+              }
+            }}
+            onChange={(val) => {
+              setQuery({
+                ...query,
+                reReleaseId: val
+              })
+            }}
+            filterOption={(input, option) =>
+              (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+            }
+            options={reReleaseData.map((item: any) => ({
+              value: item.id,
+              label: `${item.name || ''} (${dayjs(item.startTime).format('YYYY-MM-DD')} - ${dayjs(item.endTime).format('YYYY-MM-DD')})`
+            }))}
+          />
+        </Form.Item>
+        <Form.Item
+          label={t('showTimeModal.form.dubbingVersion.label')}
+          name="dubbingVersionId"
+        >
+          <Select
+            allowClear
+            showSearch
+            style={{ width: 200 }}
+            value={query.dubbingVersionId}
+            placeholder={t('showTimeModal.form.dubbingVersion.placeholder')}
+            onFocus={() => {
+              if (query.movieId) {
+                getDubbingVersionData(query.movieId)
+              } else {
+                getDubbingVersionDataFromDict()
+              }
+            }}
+            onChange={(val) => {
+              setQuery({
+                ...query,
+                dubbingVersionId: val
+              })
+            }}
+            filterOption={(input, option) =>
+              (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+            }
+            options={dubbingVersionData.map((item: any) => ({
+              value: item.id || item.code,
+              label: item.name || item.label
+            }))}
+          />
+        </Form.Item>
 
         <Form.Item
           label={t('showTimeModal.form.showTime.label')}
@@ -585,7 +787,7 @@ export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
           })
           form.setFieldValue('movieId', movie.id)
 
-          // 获取电影时长
+          // 获取电影时长和配音版本
           http({
             url: 'movie/detail',
             method: 'get',
@@ -596,7 +798,12 @@ export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
             if (res.data.time) {
               setTime(res.data.time)
             }
+            // 根据电影获取配音版本选项
+            getDubbingVersionData(movie.id)
           })
+
+          // 获取重映数据
+          getReReleaseData(movie.id)
 
           setMovieModal({ show: false })
         }}
