@@ -27,6 +27,7 @@ import advancedFormat from 'dayjs/plugin/advancedFormat'
 import { useSearchParams } from 'next/navigation'
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
 import { DictSelect } from '@/components/DictSelect'
+import { DictCode } from '@/enum/dict'
 
 dayjs.extend(advancedFormat)
 
@@ -395,7 +396,7 @@ export function One(props: Props) {
               return (
                 <Space size={15} key={item.id}>
                   <DictSelect
-                    code="helloMovie"
+                    code={DictCode.HELLO_MOVIE}
                     value={item.code}
                     style={{ width: '250px' }}
                     onChange={(val) => {
@@ -508,7 +509,7 @@ export function One(props: Props) {
           name="status"
         >
           <DictSelect
-            code="releaseStatus"
+            code={DictCode.RELEASE_STATUS}
             value={data.status}
             style={{ width: '250px' }}
             onChange={(val) => {

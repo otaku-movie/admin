@@ -6,6 +6,7 @@ import http from '@/api'
 import { SpecItem } from '@/type/api'
 import { One } from './step/one'
 import { Two } from './step/two'
+import { Three } from './step/three'
 import { useMovieStore } from '@/store/useMovieStore'
 
 export default function MovieDetail({ params: { lng } }: PageProps) {
@@ -13,6 +14,11 @@ export default function MovieDetail({ params: { lng } }: PageProps) {
   const [step, setStep] = useState(0)
   const movieStore = useMovieStore()
   const searchParams = useSearchParams()
+  
+  // 处理版本信息按钮点击
+  const handleVersionInfo = () => {
+    setStep(2) // 跳转到第三个步骤（版本信息）
+  }
 
   const getData = () => {
     if (searchParams.has('id')) {
@@ -51,8 +57,9 @@ export default function MovieDetail({ params: { lng } }: PageProps) {
   }, [])
 
   const components = [
-    <One language={lng} onNext={next} key={0}></One>,
-    <Two language={lng} onNext={next} onPrev={prev} key={1}></Two>
+    <One language={lng} onNext={next} onVersionInfo={handleVersionInfo} key={0}></One>,
+    <Two language={lng} onNext={next} onPrev={prev} key={1}></Two>,
+    <Three language={lng} onPrev={prev} key={2}></Three>
   ]
 
   return <>{components[step]}</>
