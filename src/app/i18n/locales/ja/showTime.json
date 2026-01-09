@@ -86,6 +86,14 @@
         "label": "場次価格",
         "placeholder": "場次価格を入力してください（オプション）"
       },
+      "reRelease": {
+        "label": "再上映",
+        "placeholder": "再上映を選択してください（オプション）"
+      },
+      "dubbingVersion": {
+        "label": "吹き替え版",
+        "placeholder": "吹き替え版を選択してください（オプション）"
+      },
       "showTime": {
         "label": "開始日時",
         "required": "上映時間を選択してください",

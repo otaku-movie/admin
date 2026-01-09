@@ -86,6 +86,14 @@
         "label": "Show Price",
         "placeholder": "Enter show price (optional)"
       },
+      "reRelease": {
+        "label": "Re-release",
+        "placeholder": "Select re-release (optional)"
+      },
+      "dubbingVersion": {
+        "label": "Dubbing Version",
+        "placeholder": "Select dubbing version (optional)"
+      },
       "showTime": {
         "label": "Start Time",
         "required": "Please select a show time",

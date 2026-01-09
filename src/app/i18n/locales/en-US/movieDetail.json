@@ -37,6 +37,18 @@
       "label": "Description",
       "required": "Please enter the movie description"
     },
+    "dubbingVersion": {
+      "label": "Dubbing Version"
+    },
+    "dubbingStartDate": {
+      "label": "Dubbing Version Start Date",
+      "required": "Please select the dubbing version start date"
+    },
+    "dubbingEndDate": {
+      "label": "Dubbing Version End Date",
+      "required": "Please select the dubbing version end date",
+      "startAfterEnd": "End date must be after the start date"
+    },
     "status": {
       "label": "Release Status",
       "required": "Please select the release status"
@@ -67,11 +79,16 @@
       "position": "Position",
       "cover": "Image",
       "name": "Name",
+      "dubbingVersion": "Version",
+      "originalVersion": "Original",
       "action": "Action"
     },
     "button": {
       "edit": "Edit",
-      "remove": "Delete"
+      "remove": "Delete",
+      "confirm": "Confirm",
+      "cancel": "Cancel",
+      "add": "Add"
     },
     "message": {
       "notRepeat": "This position has already been added"
@@ -79,7 +96,10 @@
     "modal": {
       "button": {
         "addPosition": "Add Position",
-        "addStaff": "Add Staff"
+        "addStaff": "Add Staff",
+        "search": "Search",
+        "addPositionToStaff": "Add Position",
+        "closePositionSelect": "Close"
       },
       "form": {
         "staff": {
@@ -87,9 +107,32 @@
           "required": "Please select staff"
         },
         "position": {
-          "label": "Position Name",
-          "required": "Please select a position"
+          "label": "Position",
+          "required": "Please select a position",
+          "placeholder": "Select position",
+          "searchPlaceholder": "Search position name",
+          "notSelected": "No position",
+          "clickToSelect": "Click to select and add position",
+          "addingFor": "Adding position for:",
+          "current": "Current positions",
+          "table": {
+            "name": "Position Name"
+          }
+        },
+        "searchPlaceholder": "Search staff name",
+        "selected": "Added Staff",
+        "noStaffAdded": "No staff added yet, please add from the list below",
+        "availableStaff": "Available Staff",
+        "dubbingVersion": {
+          "label": "Version"
         }
+      },
+      "message": {
+        "positionExists": "This position already exists",
+        "positionAdded": "Position added successfully",
+        "staffExists": "This staff member already exists",
+        "staffWithoutPosition": "{{count}} staff member(s) have no position assigned",
+        "confirmRemove": "Are you sure you want to remove?"
       }
     }
   },
@@ -99,18 +142,25 @@
       "cover": "Image",
       "name": "Name",
       "staff": "Actor or Voice Actor",
+      "dubbingVersion": "Version",
+      "originalVersion": "Original",
       "action": "Action"
     },
     "button": {
       "edit": "Edit",
-      "remove": "Delete"
+      "remove": "Delete",
+      "selectStaff": "Select Actor"
     },
     "message": {
       "notRepeat": "This character has already been added"
     },
     "modal": {
       "button": {
-        "addCharacter": "Add Character"
+        "addCharacter": "Add Character",
+        "search": "Search"
+      },
+      "selectStaff": {
+        "title": "Select Actor"
       },
       "form": {
         "movie": {
@@ -120,6 +170,11 @@
         "character": {
           "label": "Character",
           "required": "Please select a character"
+        },
+        "searchPlaceholder": "Search character name",
+        "alreadyAdded": "Added",
+        "dubbingVersion": {
+          "label": "Version"
         }
       }
     }
@@ -128,6 +183,43 @@
     "prev": "Previous",
     "next": "Next",
     "save": "Save",
-    "upload": "Upload"
+    "upload": "Upload",
+    "versionInfo": "Version Info"
+  },
+  "version": {
+    "label": "Version Info",
+    "filter": {
+      "label": "Filter Version",
+      "placeholder": "All Versions"
+    },
+    "table": {
+      "version": "Version",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "language": "Language",
+      "characterCount": "Character Count",
+      "characters": "Characters",
+      "noCharacters": "No characters yet, click the button above to add",
+      "action": "Action"
+    },
+    "button": {
+      "add": "Add Version",
+      "edit": "Edit",
+      "remove": "Remove",
+      "addCharacter": "Add Character"
+    },
+    "message": {
+      "versionExists": "This version already exists"
+    },
+    "modal": {
+      "addTitle": "Add Version",
+      "editTitle": "Edit Version",
+      "version": "Version",
+      "versionRequired": "Please select a version",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "language": "Language",
+      "languagePlaceholder": "Please enter language"
+    }
   }
 }

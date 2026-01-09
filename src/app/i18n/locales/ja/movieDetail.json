@@ -37,6 +37,18 @@
       "label": "映画の説明",
       "required": "映画の説明を入力してください"
     },
+    "dubbingVersion": {
+      "label": "吹き替え版"
+    },
+    "dubbingStartDate": {
+      "label": "吹き替え版上映開始日",
+      "required": "吹き替え版上映開始日を選択してください"
+    },
+    "dubbingEndDate": {
+      "label": "吹き替え版上映終了日",
+      "required": "吹き替え版上映終了日を選択してください",
+      "startAfterEnd": "終了日は開始日より後でなければなりません"
+    },
     "status": {
       "label": "上映状態",
       "required": "上映状態を選択してください"
@@ -67,11 +79,16 @@
       "position": "ポジション",
       "cover": "画像",
       "name": "名前",
+      "dubbingVersion": "バージョン",
+      "originalVersion": "原版",
       "action": "操作"
     },
     "button": {
       "edit": "編集",
-      "remove": "削除"
+      "remove": "削除",
+      "confirm": "確認",
+      "cancel": "キャンセル",
+      "add": "追加"
     },
     "message": {
       "notRepeat": "このポジションは既に追加されています"
@@ -79,7 +96,10 @@
     "modal": {
       "button": {
         "addPosition": "ポジションを追加",
-        "addStaff": "スタッフを追加"
+        "addStaff": "スタッフを追加",
+        "search": "検索",
+        "addPositionToStaff": "ポジションを追加",
+        "closePositionSelect": "閉じる"
       },
       "form": {
         "staff": {
@@ -87,9 +107,32 @@
           "required": "スタッフを選択してください"
         },
         "position": {
-          "label": "ポジション名",
-          "required": "ポジションを選択してください"
+          "label": "ポジション",
+          "required": "ポジションを選択してください",
+          "placeholder": "ポジションを選択",
+          "searchPlaceholder": "ポジション名で検索",
+          "notSelected": "ポジションなし",
+          "clickToSelect": "クリックしてポジションを追加",
+          "addingFor": "ポジションを追加：",
+          "current": "現在のポジション",
+          "table": {
+            "name": "ポジション名"
+          }
+        },
+        "searchPlaceholder": "スタッフ名で検索",
+        "selected": "追加済みスタッフ",
+        "noStaffAdded": "スタッフがいません。下のリストから追加してください",
+        "availableStaff": "選択可能なスタッフ",
+        "dubbingVersion": {
+          "label": "バージョン"
         }
+      },
+      "message": {
+        "positionExists": "このポジションは既に追加されています",
+        "positionAdded": "ポジションを追加しました",
+        "staffExists": "このスタッフは既に追加されています",
+        "staffWithoutPosition": "{{count}}名のスタッフにポジションが設定されていません",
+        "confirmRemove": "削除してもよろしいですか？"
       }
     }
   },
@@ -99,18 +142,25 @@
       "cover": "画像",
       "name": "名前",
       "staff": "俳優または声優",
+      "dubbingVersion": "バージョン",
+      "originalVersion": "原版",
       "action": "操作"
     },
     "button": {
       "edit": "編集",
-      "remove": "削除"
+      "remove": "削除",
+      "selectStaff": "俳優を選択"
     },
     "message": {
       "notRepeat": "このキャラクターは既に追加されています"
     },
     "modal": {
       "button": {
-        "addCharacter": "キャラクターを追加"
+        "addCharacter": "キャラクターを追加",
+        "search": "検索"
+      },
+      "selectStaff": {
+        "title": "俳優を選択"
       },
       "form": {
         "movie": {
@@ -120,6 +170,11 @@
         "character": {
           "label": "キャラクター",
           "required": "キャラクターを選択してください"
+        },
+        "searchPlaceholder": "キャラクター名で検索",
+        "alreadyAdded": "追加済み",
+        "dubbingVersion": {
+          "label": "バージョン"
         }
       }
     }
@@ -128,6 +183,43 @@
     "prev": "前のステップ",
     "next": "次のステップ",
     "save": "保存",
-    "upload": "アップロード"
+    "upload": "アップロード",
+    "versionInfo": "バージョン情報"
+  },
+  "version": {
+    "label": "バージョン情報",
+    "filter": {
+      "label": "バージョンで絞り込み",
+      "placeholder": "すべてのバージョン"
+    },
+    "table": {
+      "version": "バージョン",
+      "startDate": "開始日",
+      "endDate": "終了日",
+      "language": "言語",
+      "characterCount": "キャラクター数",
+      "characters": "キャラクター",
+      "noCharacters": "キャラクターがいません。上のボタンをクリックして追加してください",
+      "action": "操作"
+    },
+    "button": {
+      "add": "バージョンを追加",
+      "edit": "編集",
+      "remove": "削除",
+      "addCharacter": "キャラクターを追加"
+    },
+    "message": {
+      "versionExists": "このバージョンは既に存在します"
+    },
+    "modal": {
+      "addTitle": "バージョンを追加",
+      "editTitle": "バージョンを編集",
+      "version": "バージョン",
+      "versionRequired": "バージョンを選択してください",
+      "startDate": "開始日",
+      "endDate": "終了日",
+      "language": "言語",
+      "languagePlaceholder": "言語を入力してください"
+    }
   }
 }

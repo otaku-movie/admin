@@ -13,6 +13,7 @@
     "wantToSeeCount": "Want to See",
     "startDate": "Start Date",
     "endDate": "End Date",
+    "dubbingVersion": "Dubbing Version",
     "status": "Release Status",
     "action": "Action"
   },
@@ -24,5 +25,15 @@
   },
   "movieModal": {
     "title": "Select Movie"
+  },
+  "button": {
+    "addDubbingVersion": "Add Dubbing Version"
+  },
+  "modal": {
+    "addDubbingVersion": {
+      "title": "Add Dubbing Version",
+      "selectVersion": "Please select a dubbing version",
+      "versionPlaceholder": "Please select a dubbing version"
+    }
   }
 }

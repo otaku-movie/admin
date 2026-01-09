@@ -86,6 +86,14 @@
         "label": "场次价格",
         "placeholder": "请输入场次价格（可选）"
       },
+      "reRelease": {
+        "label": "重映",
+        "placeholder": "请选择重映（可选）"
+      },
+      "dubbingVersion": {
+        "label": "配音版本",
+        "placeholder": "请选择配音版本（可选）"
+      },
       "showTime": {
         "label": "开始时间",
         "required": "请选择上映时间",

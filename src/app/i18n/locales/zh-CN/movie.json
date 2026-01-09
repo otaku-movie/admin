@@ -13,6 +13,7 @@
     "wantToSeeCount": "想看数",
     "startDate": "开始日期",
     "endDate": "结束日期",
+    "dubbingVersion": "配音版本",
     "status": "上映状态",
     "action": "操作"
   },
@@ -24,5 +25,15 @@
   },
   "movieModal": {
     "title": "选择电影"
+  },
+  "button": {
+    "addDubbingVersion": "添加配音版"
+  },
+  "modal": {
+    "addDubbingVersion": {
+      "title": "添加配音版",
+      "selectVersion": "请选择配音版本",
+      "versionPlaceholder": "请选择配音版本"
+    }
   }
 }

@@ -13,6 +13,7 @@
     "wantToSeeCount": "見たい数",
     "startDate": "開始日",
     "endDate": "終了日",
+    "dubbingVersion": "吹き替え版",
     "status": "上映ステータス",
     "action": "操作"
   },
@@ -24,5 +25,15 @@
   },
   "movieModal": {
     "title": "映画を選択"
+  },
+  "button": {
+    "addDubbingVersion": "吹き替え版を追加"
+  },
+  "modal": {
+    "addDubbingVersion": {
+      "title": "吹き替え版を追加",
+      "selectVersion": "吹き替え版を選択してください",
+      "versionPlaceholder": "吹き替え版を選択してください"
+    }
   }
 }

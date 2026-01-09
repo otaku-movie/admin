@@ -37,6 +37,18 @@
       "label": "影片简介",
       "required": "请输入影片简介"
     },
+    "dubbingVersion": {
+      "label": "配音版本"
+    },
+    "dubbingStartDate": {
+      "label": "配音版上映开始日期",
+      "required": "请选择配音版开始上映日期"
+    },
+    "dubbingEndDate": {
+      "label": "配音版上映结束日期",
+      "required": "请选择配音版结束上映日期",
+      "startAfterEnd": "结束日期必须比开始日期大"
+    },
     "status": {
       "label": "上映状态",
       "required": "请选择上映状态"
@@ -67,11 +79,16 @@
       "position": "职位",
       "cover": "图片",
       "name": "名称",
+      "dubbingVersion": "版本",
+      "originalVersion": "原版",
       "action": "操作"
     },
     "button": {
       "edit": "编辑",
-      "remove": "删除"
+      "remove": "删除",
+      "confirm": "确定",
+      "cancel": "取消",
+      "add": "添加"
     },
     "message": {
       "notRepeat": "该职位已添加"
@@ -79,7 +96,10 @@
     "modal": {
       "button": {
         "addPosition": "添加职位",
-        "addStaff": "添加工作人员"
+        "addStaff": "添加工作人员",
+        "search": "搜索",
+        "addPositionToStaff": "添加职位",
+        "closePositionSelect": "关闭"
       },
       "form": {
         "staff": {
@@ -87,9 +107,32 @@
           "required": "请选择工作人员"
         },
         "position": {
-          "label": "职位名称",
-          "required": "请选择职位"
+          "label": "职位",
+          "required": "请选择职位",
+          "placeholder": "选择职位",
+          "searchPlaceholder": "搜索职位名称",
+          "notSelected": "未选择职位",
+          "clickToSelect": "点击选择后添加职位",
+          "addingFor": "为以下人员添加职位：",
+          "current": "当前职位",
+          "table": {
+            "name": "职位名称"
+          }
+        },
+        "searchPlaceholder": "搜索工作人员名称",
+        "selected": "已添加的工作人员",
+        "noStaffAdded": "暂无工作人员，请从下方列表添加",
+        "availableStaff": "可选工作人员",
+        "dubbingVersion": {
+          "label": "版本"
         }
+      },
+      "message": {
+        "positionExists": "该职位已添加",
+        "positionAdded": "职位添加成功",
+        "staffExists": "该工作人员已添加",
+        "staffWithoutPosition": "还有 {{count}} 名工作人员未设置职位",
+        "confirmRemove": "确定要删除吗？"
       }
     }
   },
@@ -99,18 +142,25 @@
       "cover": "图片",
       "name": "名称",
       "staff": "演员或者声优",
+      "dubbingVersion": "版本",
+      "originalVersion": "原版",
       "action": "操作"
     },
     "button": {
       "edit": "编辑",
-      "remove": "删除"
+      "remove": "删除",
+      "selectStaff": "选择演员"
     },
     "message": {
       "notRepeat": "该角色已添加"
     },
     "modal": {
       "button": {
-        "addCharacter": "添加角色"
+        "addCharacter": "添加角色",
+        "search": "搜索"
+      },
+      "selectStaff": {
+        "title": "选择演员"
       },
       "form": {
         "movie": {
@@ -120,6 +170,11 @@
         "character": {
           "label": "角色",
           "required": "请选择角色"
+        },
+        "searchPlaceholder": "搜索角色名称",
+        "alreadyAdded": "已添加",
+        "dubbingVersion": {
+          "label": "版本"
         }
       }
     }
@@ -128,6 +183,43 @@
     "prev": "上一步",
     "next": "下一步",
     "save": "保存",
-    "upload": "上传"
+    "upload": "上传",
+    "versionInfo": "版本信息"
+  },
+  "version": {
+    "label": "版本信息",
+    "filter": {
+      "label": "筛选版本",
+      "placeholder": "全部版本"
+    },
+    "table": {
+      "version": "版本",
+      "startDate": "开始日期",
+      "endDate": "结束日期",
+      "language": "语言",
+      "characterCount": "角色数量",
+      "characters": "角色列表",
+      "noCharacters": "暂无角色，请点击上方按钮添加",
+      "action": "操作"
+    },
+    "button": {
+      "add": "添加版本",
+      "edit": "编辑",
+      "remove": "删除",
+      "addCharacter": "添加角色"
+    },
+    "message": {
+      "versionExists": "该版本已存在"
+    },
+    "modal": {
+      "addTitle": "添加版本",
+      "editTitle": "编辑版本",
+      "version": "版本",
+      "versionRequired": "请选择版本",
+      "startDate": "开始日期",
+      "endDate": "结束日期",
+      "language": "语言",
+      "languagePlaceholder": "请输入语言"
+    }
   }
 }
