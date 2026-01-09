@@ -24,6 +24,7 @@ import { PageProps } from '../layout'
 import { showTotal } from '@/utils/pagination'
 import { CheckPermission } from '@/components/checkPermission'
 import { DictSelect } from '@/components/DictSelect'
+import { DictCode } from '@/enum/dict'
 import { Dict } from '@/components/dict'
 import { OrderState } from '@/config/enum'
 import { RangePicker, dateValue } from '@/components/rangePicker'
@@ -433,7 +434,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
 
           <QueryItem label={t('search.orderState')}>
             <DictSelect
-              code="orderState"
+              code={DictCode.ORDER_STATE}
               value={query.orderState}
               onChange={(val) => {
                 setQuery({
@@ -445,7 +446,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
           </QueryItem>
           <QueryItem label={t('search.payState')}>
             <DictSelect
-              code="payState"
+              code={DictCode.PAY_STATE}
               value={query.orderState}
               onChange={(val) => {
                 setQuery({
@@ -526,7 +527,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
             ]}
           >
             <DictSelect
-              code="orderState"
+              code={DictCode.ORDER_STATE}
               value={updateOrderStateModal.data.orderState}
               onChange={(val) => {
                 // updateOrderStateModal.form[0].setFieldValue('orderState', val)
@@ -551,7 +552,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
             ]}
           >
             <DictSelect
-              code="payState"
+              code={DictCode.PAY_STATE}
               value={updateOrderStateModal.data.payState}
               onChange={(val) => {
                 updateOrderStateModal.form[0].setFieldValue('payState', val)
