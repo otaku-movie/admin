@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, useEffect } from 'react'
 import { useTranslation } from '@/app/i18n/client'
-import { Form, Modal, Input, Select } from 'antd'
+import { Form, Modal, Input } from 'antd'
 import http from '@/api'
 import { languageType } from '@/config'
 import { Upload } from '@/components/upload/Upload'
@@ -20,62 +20,26 @@ interface Query {
   name?: string
   originalName?: string
   description?: string
-  staffId?: number[]
   movieId?: number
 }
 
 export function CharacterModal(props: modalProps) {
-  const [staff, setStaffData] = useState([])
   const { t } = useTranslation(navigator.language as languageType, 'character')
   const [form] = Form.useForm()
-  const [query, setQuery] = useState<Query>({
-    staffId: []
-  })
-
-  const getStaffData = (name = '', id = []) => {
-    http({
-      url: 'staff/list',
-      method: 'post',
-      data: {
-        page: 1,
-        pageSize: 10,
-        name,
-        id
-      }
-    }).then((res) => {
-      setStaffData(res.data.list)
-    })
-  }
+  const [query, setQuery] = useState<Query>({})
 
   useEffect(() => {
     if (props.show) {
       form.resetFields()
-      getStaffData()
     }
 
     if (props.data.id) {
-      const staffId = props.data?.staff?.map((item: any) => item.id)
-      form.setFieldsValue({
-        ...props.data,
-        staffId
-      })
-      setQuery({
-        ...props.data,
-        staffId
-      })
-      getStaffData('', staffId)
+      form.setFieldsValue(props.data)
+      setQuery(props.data)
     } else {
-      setQuery({
-        ...props.data,
-        staffId: []
-      })
-      form.setFieldsValue({
-        ...props.data,
-        staffId: []
-      })
-      // getStaffData()
+      setQuery(props.data)
+      form.setFieldsValue(props.data)
     }
-    console.log(props.data, query)
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.show, props.data])
@@ -176,37 +140,6 @@ export function CharacterModal(props: modalProps) {
               })
             }}
           />
-        </Form.Item>
-        <Form.Item
-          label={t('modal.form.staffId.label')}
-          rules={[
-            { required: true, message: t('modal.form.staffId.required') }
-          ]}
-          name="staffId"
-        >
-          <Select
-            mode="multiple"
-            allowClear
-            showSearch
-            style={{ width: '100%' }}
-            placeholder={t('modal.form.staffId.required')}
-            defaultValue={query.staffId}
-            onChange={(val) => {
-              setQuery({
-                ...query,
-                staffId: val
-              })
-            }}
-            onSearch={getStaffData}
-          >
-            {staff.map((item: any) => {
-              return (
-                <Select.Option value={item.id} key={item.id}>
-                  {item.name}
-                </Select.Option>
-              )
-            })}
-          </Select>
         </Form.Item>
       </Form>
     </Modal>

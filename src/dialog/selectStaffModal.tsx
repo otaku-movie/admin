@@ -1,261 +1,170 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import { Form, Modal, Select, Button, Space } from 'antd'
+import {
+  Modal,
+  Input,
+  Button,
+  Space,
+  Table,
+  TableColumnsType,
+  message
+} from 'antd'
 import { useTranslation } from '@/app/i18n/client'
-import { languageType } from '@/config'
-import { PositionModal } from './positionModal'
+import { languageType, notFoundImage } from '@/config'
 import { StaffModal } from './staffModal'
 import { useCommonStore } from '@/store/useCommonStore'
 import { staff } from '@/type/api'
+import { CustomAntImage } from '@/components/CustomAntImage'
 
-export interface movieStaff {
-  id: number
-  name: string
-  staff: staff[]
-}
-
-interface Query {
-  positionId?: number
-  staffId?: number[]
-}
-
-interface modalProps {
+interface ModalProps {
   show?: boolean
-  data: Query
-  onConfirm?: (result: movieStaff) => void
+  // 已选择的工作人员ID列表（用于过滤）
+  selectedIds?: number[]
+  onConfirm?: (selectedStaff: staff[]) => void
   onCancel?: () => void
 }
 
-export function SelectStaffModal(props: modalProps) {
+export function SelectStaffModal(props: Readonly<ModalProps>) {
   const { t } = useTranslation(
     navigator.language as languageType,
     'movieDetail'
   )
   const store = useCommonStore()
-  const [positionModal, setPositionModal] = useState({
-    type: 'create',
-    show: false,
-    data: {}
-  })
   const [staffModal, setStaffModal] = useState({
     type: 'create',
     show: false,
     data: {}
   })
 
-  const [form] = Form.useForm()
-  const [query, setQuery] = useState<Query>({
-    staffId: []
-  })
+  const [staffSearchName, setStaffSearchName] = useState('')
+  // 已选择的工作人员（多选）
+  const [selectedStaffList, setSelectedStaffList] = useState<staff[]>([])
+
+  // 工作人员表格列
+  const staffColumns: TableColumnsType<staff> = [
+    {
+      title: t('staff.table.cover'),
+      dataIndex: 'cover',
+      width: 80,
+      render(cover) {
+        return (
+          <CustomAntImage
+            width={50}
+            src={cover}
+            fallback={notFoundImage}
+            placeholder={true}
+            style={{ borderRadius: '4px' }}
+          />
+        )
+      }
+    },
+    {
+      title: t('staff.table.name'),
+      dataIndex: 'name'
+    }
+  ]
+
+  const handleStaffSearch = () => {
+    store.getStaffList({ name: staffSearchName })
+  }
 
   useEffect(() => {
     if (props.show) {
-      form.resetFields()
-      setQuery(props.data)
+      setSelectedStaffList([])
+      setStaffSearchName('')
+      store.getStaffList({ name: '' })
     }
-
-    if (props.data?.positionId) {
-      setQuery(props.data)
-
-      store.getPositionList({
-        name: '',
-        id: props.data.positionId
-      })
-      store.getStaffList({
-        name: '',
-        id: props.data.staffId
-      })
-    } else {
-      store.getStaffList({
-        name: ''
-      })
-      store.getPositionList({
-        name: ''
-      })
-    }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.show, props.data])
+  }, [props.show])
+
+  const handleConfirm = () => {
+    if (selectedStaffList.length === 0) {
+      message.warning(t('staff.modal.form.staff.required'))
+      return
+    }
+    props.onConfirm?.(selectedStaffList)
+  }
+
+  // 过滤掉已选择的工作人员
+  const filteredStaffList = store.staffList.filter(
+    (s) => !props.selectedIds?.includes(s.id)
+  )
 
   return (
     <Modal
       title={t('staff.select')}
       open={props.show}
       maskClosable={false}
-      onOk={() => {
-        form.setFieldsValue(query)
-        form.validateFields().then(() => {
-          store
-            .getStaffList({
-              id: query.staffId
-            })
-            .then((data) => {
-              const find = store.positionList.find(
-                (item) => item.id === query.positionId
-              )
-
-              props.onConfirm?.({
-                id: find!.id,
-                name: find!.name,
-                staff: data
-              })
-            })
-        })
-      }}
+      width={600}
+      onOk={handleConfirm}
       onCancel={props?.onCancel}
     >
-      <Form
-        name="basic"
-        labelCol={{ span: 4 }}
-        style={{ maxWidth: 600 }}
-        form={form}
-      >
-        <Form.Item
-          label={t('staff.modal.form.position.label')}
-          rules={[
-            { required: true, message: t('staff.modal.form.position.required') }
-          ]}
-          name="positionId"
+      <Space direction="vertical" style={{ width: '100%' }} size={16}>
+        {/* 搜索和添加工作人员 */}
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center'
+          }}
         >
-          <Space
-            style={{
-              display: 'flex'
-              // width: '100vw'
-            }}
-          >
-            <Select
-              showSearch
-              allowClear
-              value={query.positionId}
-              style={{
-                width: '250px'
-              }}
-              onClear={store.getPositionList}
-              onChange={(val) => {
-                setQuery({
-                  ...query,
-                  positionId: val
-                })
-              }}
-              onSearch={(val) => {
-                store.getPositionList({
-                  name: val
-                })
-              }}
-            >
-              {store.positionList.map((item: any) => {
-                return (
-                  <Select.Option value={item.id} key={item.id}>
-                    {item.name}
-                  </Select.Option>
-                )
-              })}
-            </Select>
-            <Button
-              type="primary"
-              onClick={() => {
-                setPositionModal({
-                  ...positionModal,
-                  show: true
-                })
-              }}
-            >
-              {t('staff.modal.button.addPosition')}
+          <Space>
+            <Input
+              placeholder={t('staff.modal.form.searchPlaceholder')}
+              value={staffSearchName}
+              onChange={(e) => setStaffSearchName(e.target.value)}
+              onPressEnter={handleStaffSearch}
+              style={{ width: 200 }}
+            />
+            <Button type="primary" onClick={handleStaffSearch}>
+              {t('staff.modal.button.search')}
             </Button>
           </Space>
-        </Form.Item>
-        <Form.Item
-          label={t('staff.modal.form.staff.label')}
-          rules={[
-            { required: true, message: t('staff.modal.form.staff.required') }
-          ]}
-          name="staffId"
-        >
-          <Space
-            style={{
-              display: 'flex'
+          <Button
+            onClick={() => {
+              setStaffModal({ ...staffModal, show: true })
             }}
           >
-            <Select
-              showSearch
-              mode="multiple"
-              maxTagCount="responsive"
-              style={{
-                width: '250px'
-              }}
-              value={query.staffId}
-              allowClear
-              onClear={store.getStaffList}
-              onChange={(val) => {
-                setQuery({
-                  ...query,
-                  staffId: val
-                })
-              }}
-              onSearch={(val) => {
-                store.getStaffList({
-                  name: val
-                })
-              }}
-            >
-              {store.staffList.map((item: any) => {
-                return (
-                  <Select.Option value={item.id} key={item.id}>
-                    {item.name}
-                  </Select.Option>
-                )
-              })}
-            </Select>
-            <Button
-              type="primary"
-              onClick={() => {
-                setStaffModal({
-                  ...positionModal,
-                  show: true
-                })
-              }}
-            >
-              {t('staff.modal.button.addStaff')}
-            </Button>
-          </Space>
-        </Form.Item>
-      </Form>
-      <PositionModal
-        type={positionModal.type as 'create' | 'edit'}
-        show={positionModal.show}
-        data={positionModal.data}
-        onCancel={() => {
-          setPositionModal({
-            ...positionModal,
-            show: false
-          })
-        }}
-        onConfirm={() => {
-          setPositionModal({
-            ...positionModal,
-            show: false
-          })
-          store.getPositionList()
-        }}
-      ></PositionModal>
+            {t('staff.modal.button.addStaff')}
+          </Button>
+        </div>
+
+        {/* 工作人员列表 */}
+        <Table
+          columns={staffColumns}
+          dataSource={filteredStaffList}
+          rowKey="id"
+          size="small"
+          pagination={{ pageSize: 8 }}
+          scroll={{ y: 400 }}
+          rowSelection={{
+            type: 'checkbox',
+            selectedRowKeys: selectedStaffList.map((s) => s.id),
+            onChange: (_, selectedRows) => {
+              setSelectedStaffList(selectedRows)
+            }
+          }}
+        />
+
+        {selectedStaffList.length > 0 && (
+          <div style={{ color: '#1677ff' }}>
+            {t('staff.modal.form.selected')}: {selectedStaffList.length}
+          </div>
+        )}
+      </Space>
+
       <StaffModal
         type={staffModal.type as 'create' | 'edit'}
         show={staffModal.show}
         data={staffModal.data}
         onCancel={() => {
-          setStaffModal({
-            ...staffModal,
-            show: false
-          })
+          setStaffModal({ ...staffModal, show: false })
         }}
         onConfirm={() => {
-          setStaffModal({
-            ...staffModal,
-            show: false
-          })
-          store.getStaffList()
+          setStaffModal({ ...staffModal, show: false })
+          store.getStaffList({ name: staffSearchName })
         }}
-      ></StaffModal>
+      />
     </Modal>
   )
 }
