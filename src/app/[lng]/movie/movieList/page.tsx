@@ -28,6 +28,8 @@ import { CheckPermission } from '@/components/checkPermission'
 import { showTotal } from '@/utils/pagination'
 import { getMovieList } from '@/api/request/movie'
 import { CustomAntImage } from '@/components/CustomAntImage'
+import { DictSelect } from '@/components/DictSelect'
+import { DictCode } from '@/enum/dict'
 
 interface Query {
   name: string
@@ -42,6 +44,15 @@ export default function Page({ params: { lng } }: Readonly<PageProps>) {
   const [query, setQuery] = useState<Partial<Query>>({})
   const { t } = useTranslation(lng, 'movie')
   const { t: common } = useTranslation(lng, 'common')
+
+  // 添加配音版模态框状态
+  const [addDubbingModal, setAddDubbingModal] = useState<{
+    show: boolean
+    movieId?: number
+    selectedVersion?: number
+  }>({
+    show: false
+  })
 
   const getData = (page = 1) => {
     getMovieList({
@@ -211,6 +222,17 @@ export default function Page({ params: { lng } }: Readonly<PageProps>) {
       dataIndex: 'endDate'
     },
     {
+      title: t('table.dubbingVersion'),
+      width: 150,
+      dataIndex: 'dubbingVersionId',
+      render(code: number) {
+        if (code) {
+          return <Dict code={code} name={'dubbingVersion'}></Dict>
+        }
+        return '--'
+      }
+    },
+    {
       title: t('table.status'),
       width: 150,
       dataIndex: '',
@@ -287,6 +309,20 @@ export default function Page({ params: { lng } }: Readonly<PageProps>) {
             >
               {common('button.commentList')}
             </Button>
+            <CheckPermission code="movie.save">
+              <Button
+                type="default"
+                onClick={() => {
+                  setAddDubbingModal({
+                    show: true,
+                    movieId: row.id,
+                    selectedVersion: undefined
+                  })
+                }}
+              >
+                {t('button.addDubbingVersion')}
+              </Button>
+            </CheckPermission>
           </Space>
         )
       }
@@ -373,6 +409,51 @@ export default function Page({ params: { lng } }: Readonly<PageProps>) {
           }}
         />
       </Flex>
+
+      {/* 添加配音版模态框 */}
+      <Modal
+        title={t('modal.addDubbingVersion.title')}
+        open={addDubbingModal.show}
+        onOk={() => {
+          if (!addDubbingModal.selectedVersion) {
+            message.warning(t('modal.addDubbingVersion.selectVersion'))
+            return
+          }
+          // 跳转到电影详情页面，传递原电影ID和配音版本ID
+          router.push(
+            processPath('movieDetail', {
+              id: addDubbingModal.movieId,
+              dubbingVersionId: addDubbingModal.selectedVersion
+            })
+          )
+        }}
+        onCancel={() => {
+          setAddDubbingModal({
+            show: false,
+            movieId: undefined,
+            selectedVersion: undefined
+          })
+        }}
+      >
+        <Space direction="vertical" style={{ width: '100%' }} size="middle">
+          <div>
+            <label style={{ display: 'block', marginBottom: 8 }}>
+              {t('modal.addDubbingVersion.selectVersion')}
+            </label>
+            <DictSelect
+              code={DictCode.DUBBING_VERSION}
+              value={addDubbingModal.selectedVersion}
+              style={{ width: '100%' }}
+              onChange={(val) => {
+                setAddDubbingModal({
+                  ...addDubbingModal,
+                  selectedVersion: val
+                })
+              }}
+            />
+          </div>
+        </Space>
+      </Modal>
     </section>
   )
 }
