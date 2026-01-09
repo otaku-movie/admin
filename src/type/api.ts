@@ -69,6 +69,9 @@ export interface Movie {
   helloMovie: HelloMovie[]
   startDate?: string
   endDate?: string
+  dubbingVersionId?: number
+  dubbingStartDate?: string
+  dubbingEndDate?: string
 }
 
 export interface user {
@@ -121,9 +124,12 @@ export interface position {
   name: string
 }
 
-export type character = base
-
 export type staff = base
+
+export interface character extends base {
+  cover?: string
+  staff?: staff[]
+}
 
 export type level = base
 

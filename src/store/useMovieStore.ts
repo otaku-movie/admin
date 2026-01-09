@@ -7,6 +7,8 @@ Omit<Movie, 'spec' | 'tags'> & {
   tags: number[]
   startDate: null | string
   endDate: null | string
+  dubbingStartDate?: string | null
+  dubbingEndDate?: string | null
 }>
 
 export interface MovieStore {
