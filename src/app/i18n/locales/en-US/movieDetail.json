@@ -186,6 +186,18 @@
     "upload": "Upload",
     "versionInfo": "Version Info"
   },
+  "season": {
+    "1": "Spring",
+    "2": "Summer",
+    "3": "Autumn",
+    "4": "Winter"
+  },
+  "datePickerType": {
+    "year": "Year",
+    "month": "Month",
+    "date": "Date",
+    "quarter": "Season"
+  },
   "version": {
     "label": "Version Info",
     "filter": {

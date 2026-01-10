@@ -133,6 +133,22 @@ export interface character extends base {
 
 export type level = base
 
+// 电影版本相关类型
+export interface MovieVersion {
+  id?: number
+  movieId: number
+  dubbingVersionId: number
+  startDate?: string
+  endDate?: string
+  languageId?: number
+  characters: character[]
+}
+
+export interface MovieVersionCharacter {
+  id: number
+  staffIds: number[]
+}
+
 export interface Area {
   id?: number
   color?: string

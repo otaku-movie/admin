@@ -186,6 +186,18 @@
     "upload": "アップロード",
     "versionInfo": "バージョン情報"
   },
+  "season": {
+    "1": "春",
+    "2": "夏",
+    "3": "秋",
+    "4": "冬"
+  },
+  "datePickerType": {
+    "year": "年",
+    "month": "月",
+    "date": "日付",
+    "quarter": "季節"
+  },
   "version": {
     "label": "バージョン情報",
     "filter": {

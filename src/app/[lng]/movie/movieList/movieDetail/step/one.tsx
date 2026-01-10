@@ -10,7 +10,6 @@ import {
   Select,
   Row,
   Col,
-  message,
   Form
 } from 'antd'
 import { useTranslation } from '@/app/i18n/client'
@@ -59,21 +58,21 @@ export function One(props: Props) {
 
   const options = [
     {
-      name: '年',
+      name: t('datePickerType.year'),
       type: 'year'
     },
     {
-      name: '月',
+      name: t('datePickerType.month'),
       type: 'month'
     },
     {
-      name: '日期',
+      name: t('datePickerType.date'),
       type: 'date'
+    },
+    {
+      name: t('datePickerType.quarter'),
+      type: 'quarter'
     }
-    // {
-    //   name: '季节',
-    //   type: 'quarter'
-    // }
   ]
 
   const getTagData = () => {
@@ -98,14 +97,68 @@ export function One(props: Props) {
   }
 
   const toDayjs = (type: 'start' | 'end', date: string) => {
+    if (!date) return null
+
     const result = matchFormat(date)
     if (result) {
       if (type === 'start') {
         setPicker(result.type)
       }
+
+      // Handle quarter format specially - support multiple language formats
+      if (result.type === 'quarter') {
+        // Support format: 2024年春 / 2024年夏 / 2024年秋 / 2024年冬 (Chinese/Japanese)
+        // Support format: 2024 Spring / 2024 Summer / 2024 Autumn / 2024 Winter (English)
+        // Support format: 2024-Q1 / 2024-Q2 / 2024-Q3 / 2024-Q4 (backward compatibility)
+
+        // Try Chinese/Japanese format first: 2024年春
+        let match = date.match(/^(\d{4})年([春夏秋冬])$/)
+        if (match) {
+          const year = parseInt(match[1], 10)
+          const season = match[2]
+          const seasonMap: Record<string, number> = {
+            春: 1,
+            夏: 2,
+            秋: 3,
+            冬: 4
+          }
+          const quarter = seasonMap[season]
+          if (quarter) {
+            const month = (quarter - 1) * 3
+            return dayjs(`${year}-${String(month + 1).padStart(2, '0')}-01`)
+          }
+        }
+
+        // Try English format: 2024 Spring
+        match = date.match(/^(\d{4})\s+(Spring|Summer|Autumn|Winter)$/i)
+        if (match) {
+          const year = parseInt(match[1], 10)
+          const season = match[2].toLowerCase()
+          const seasonMap: Record<string, number> = {
+            spring: 1,
+            summer: 2,
+            autumn: 3,
+            winter: 4
+          }
+          const quarter = seasonMap[season]
+          if (quarter) {
+            const month = (quarter - 1) * 3
+            return dayjs(`${year}-${String(month + 1).padStart(2, '0')}-01`)
+          }
+        }
+
+        // Try old format: 2024-Q1 (backward compatibility)
+        match = date.match(/^(\d{4})-Q([1-4])$/)
+        if (match) {
+          const year = parseInt(match[1], 10)
+          const quarter = parseInt(match[2], 10)
+          const month = (quarter - 1) * 3
+          return dayjs(`${year}-${String(month + 1).padStart(2, '0')}-01`)
+        }
+      }
     }
 
-    return !date ? null : dayjs(date, result?.format)
+    return dayjs(date, result?.format)
   }
 
   useEffect(() => {
@@ -176,7 +229,6 @@ export function One(props: Props) {
           }}
           picker={picker as 'year' | 'month' | 'date' | 'quarter'}
           onChange={(date) => {
-            console.log(date.format('YYYY-[Q]Q'))
             setStartDate(date)
           }}
         />
@@ -186,17 +238,26 @@ export function One(props: Props) {
 
   const formatDate = (date: null | dayjs.Dayjs, type = 'auto') => {
     if (!date) return null
+    const targetType = type === 'auto' ? picker : type
+
+    // Handle quarter format specially - use i18n season names
+    if (targetType === 'quarter') {
+      const year = date.year()
+      const month = date.month() + 1 // dayjs months are 0-indexed
+      const quarter = Math.ceil(month / 3)
+      const season = t(`season.${quarter}` as any)
+
+      // Get year separator based on language
+      const yearSeparator = props.language === 'en-US' ? ' ' : '年'
+      return `${year}${yearSeparator}${season}`
+    }
+
     const formatMap = {
       year: 'YYYY',
       month: 'YYYY-MM',
-      date: 'YYYY-MM-DD',
-      quarter: 'YYYY-[Q]Q'
+      date: 'YYYY-MM-DD'
     }
-    if (type === 'auto') {
-      return dayjs(date).format(formatMap[picker as keyof typeof formatMap])
-    } else {
-      return dayjs(date).format(formatMap[type as keyof typeof formatMap])
-    }
+    return dayjs(date).format(formatMap[targetType as keyof typeof formatMap])
   }
 
   return (

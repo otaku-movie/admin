@@ -6,7 +6,6 @@ import {
   message,
   Form,
   Table,
-  Tag,
   TableColumnsType,
   Select
 } from 'antd'
@@ -14,10 +13,9 @@ import { useTranslation } from '@/app/i18n/client'
 import { Props } from './one'
 import { CheckPermission } from '@/components/checkPermission'
 import { SelectStaffModal } from '@/dialog/selectStaffModal'
-import { SelectCharacterModal } from '@/dialog/selectCharacterModal'
 import { PositionModal } from '@/dialog/positionModal'
 import http from '@/api'
-import { character, staff, position } from '@/type/api'
+import { staff, position } from '@/type/api'
 import { useMovieStore } from '@/store/useMovieStore'
 import { notFoundImage } from '@/config'
 import { CustomAntImage } from '@/components/CustomAntImage'
@@ -26,17 +24,6 @@ import { useCommonStore } from '@/store/useCommonStore'
 // 工作人员带职位信息
 interface StaffWithPositions extends staff {
   positions: position[]
-}
-
-interface CharacterModal {
-  columns: TableColumnsType<character>
-  data: character[]
-  modal: {
-    type: 'create' | 'edit'
-    show: boolean
-    data: Record<string, any>
-    index: number
-  }
 }
 
 export function Two(props: Readonly<Props>) {
@@ -135,76 +122,6 @@ export function Two(props: Readonly<Props>) {
     }
   ]
 
-  const [character, setCharacter] = useState<CharacterModal>({
-    columns: [
-      {
-        title: t('character.table.cover'),
-        dataIndex: 'cover',
-        render(cover) {
-          return (
-            <CustomAntImage
-              width={80}
-              src={cover}
-              fallback={notFoundImage}
-              placeholder={true}
-              style={{
-                borderRadius: ' 4px'
-              }}
-            />
-          )
-        }
-      },
-      {
-        title: t('character.table.name'),
-        dataIndex: 'name'
-      },
-      {
-        title: t('character.table.staff'),
-        dataIndex: 'staff',
-        render(staff) {
-          return (
-            <Space>
-              {staff?.map((item: any) => {
-                return <Tag key={item.id}>{item.name}</Tag>
-              })}
-            </Space>
-          )
-        }
-      },
-      {
-        title: t('character.table.action'),
-        key: 'operation',
-        render: (_, row, index: number) => {
-          return (
-            <Button
-              type="link"
-              danger
-              onClick={() => {
-                setCharacter((prev) => {
-                  const newData = [...prev.data]
-                  newData.splice(index, 1)
-                  return {
-                    ...prev,
-                    data: newData
-                  }
-                })
-              }}
-            >
-              {t('staff.button.remove')}
-            </Button>
-          )
-        }
-      }
-    ],
-    data: [],
-    modal: {
-      type: 'create',
-      show: false,
-      data: {},
-      index: 0
-    }
-  })
-
   const getStaffList = () => {
     if (movieStore.movie.id) {
       http({
@@ -239,26 +156,8 @@ export function Two(props: Readonly<Props>) {
     }
   }
 
-  const getCharacterList = () => {
-    if (movieStore.movie.id) {
-      http({
-        url: 'movie/character',
-        method: 'get',
-        params: {
-          id: movieStore.movie.id
-        }
-      }).then((res) => {
-        setCharacter({
-          ...character,
-          data: res.data
-        })
-      })
-    }
-  }
-
   useEffect(() => {
     getStaffList()
-    getCharacterList()
     commonStore.getPositionList()
   }, [])
 
@@ -273,69 +172,49 @@ export function Two(props: Readonly<Props>) {
     setStaffModalShow(false)
   }
 
-  // 处理选择角色
-  const handleCharacterSelect = (data: character) => {
-    const exists = character.data.some((item) => item.id === data.id)
-    if (exists) {
-      message.warning(t('character.message.notRepeat'))
-      return
-    }
-    setCharacter({
-      ...character,
-      data: [...character.data, data],
-      modal: {
-        ...character.modal,
-        show: false
-      }
-    })
-  }
-
   // 保存数据
   const handleSave = () => {
+    props.onNext?.()
     // 检查是否有工作人员未分配职位
-    const staffWithoutPosition = staffList.filter(
-      (s) => s.positions.length === 0
-    )
-    if (staffWithoutPosition.length > 0) {
-      message.warning(
-        t('staff.modal.message.staffWithoutPosition', {
-          count: staffWithoutPosition.length
-        })
-      )
-      return
-    }
+    // const staffWithoutPosition = staffList.filter(
+    //   (s) => s.positions.length === 0
+    // )
+    // if (staffWithoutPosition.length > 0) {
+    //   message.warning(
+    //     t('staff.modal.message.staffWithoutPosition', {
+    //       count: staffWithoutPosition.length
+    //     })
+    //   )
+    //   return
+    // }
 
-    // 构建保存数据
-    const staffData: {
-      positionId: number
-      staffId: number
-      movieId: number
-    }[] = []
-    staffList.forEach((s) => {
-      s.positions.forEach((pos) => {
-        staffData.push({
-          positionId: pos.id,
-          staffId: s.id,
-          movieId: movieStore.movie.id!
-        })
-      })
-    })
+    // // 构建保存数据
+    // const staffData: {
+    //   positionId: number
+    //   staffId: number
+    //   movieId: number
+    // }[] = []
+    // staffList.forEach((s) => {
+    //   s.positions.forEach((pos) => {
+    //     staffData.push({
+    //       positionId: pos.id,
+    //       staffId: s.id,
+    //       movieId: movieStore.movie.id!
+    //     })
+    //   })
+    // })
 
-    http({
-      url: 'admin/movie/save',
-      method: 'post',
-      data: {
-        ...movieStore.movie,
-        characterList: character.data.map((item) => ({
-          movieId: movieStore.movie.id,
-          characterId: item.id
-        })),
-        staffList: staffData
-      }
-    }).then(() => {
-      message.success('保存成功')
-      props.onNext?.()
-    })
+    // http({
+    //   url: 'admin/movie/save',
+    //   method: 'post',
+    //   data: {
+    //     ...movieStore.movie,
+    //     staffList: staffData
+    //   }
+    // }).then(() => {
+    //   message.success('保存成功')
+    //   props.onNext?.()
+    // })
   }
 
   return (
@@ -361,29 +240,6 @@ export function Two(props: Readonly<Props>) {
           </Space>
         </Form.Item>
 
-        <Form.Item label={t('form.character.label')}>
-          <Space direction="vertical" style={{ display: 'flex' }} size={20}>
-            <Button
-              type="primary"
-              onClick={() =>
-                setCharacter({
-                  ...character,
-                  modal: { ...character.modal, show: true }
-                })
-              }
-            >
-              {t('character.select')}
-            </Button>
-            <Table
-              columns={character.columns}
-              dataSource={character.data}
-              rowKey="id"
-              bordered={true}
-              pagination={false}
-            />
-          </Space>
-        </Form.Item>
-
         <Form.Item wrapperCol={{ offset: 2 }}>
           <Space>
             <Button onClick={props.onPrev}>{t('button.prev')}</Button>
@@ -401,18 +257,6 @@ export function Two(props: Readonly<Props>) {
         selectedIds={staffList.map((s) => s.id)}
         onCancel={() => setStaffModalShow(false)}
         onConfirm={handleStaffSelect}
-      />
-
-      <SelectCharacterModal
-        show={character.modal.show}
-        selectedIds={character.data.map((c) => c.id)}
-        onCancel={() =>
-          setCharacter({
-            ...character,
-            modal: { ...character.modal, show: false }
-          })
-        }
-        onConfirm={handleCharacterSelect}
       />
 
       <PositionModal

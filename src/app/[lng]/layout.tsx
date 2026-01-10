@@ -5,6 +5,7 @@ import React, { useEffect, useRef } from 'react'
 import { usePathname } from 'next/navigation'
 import type { MenuProps } from 'antd'
 import { ProgressProvider } from '@bprogress/next/app'
+import NProgress from 'nprogress' 
 
 import {
   ConfigProvider,

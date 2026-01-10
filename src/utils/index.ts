@@ -182,6 +182,19 @@ export const matchFormat = (dateString: string) => {
       regex: /^\d{4}$/,
       format: 'YYYY'
     },
+    // Support Chinese/Japanese format: 2024年春 / 2024年夏 / 2024年秋 / 2024年冬
+    {
+      type: 'quarter',
+      regex: /^\d{4}年[春夏秋冬]$/,
+      format: 'YYYY年[季节]'
+    },
+    // Support English format: 2024 Spring / 2024 Summer / 2024 Autumn / 2024 Winter
+    {
+      type: 'quarter',
+      regex: /^\d{4}\s+(Spring|Summer|Autumn|Winter)$/i,
+      format: 'YYYY [Season]'
+    },
+    // Keep support for old format Q1-Q4 for backward compatibility
     {
       type: 'quarter',
       regex: /^\d{4}-Q[1-4]$/,

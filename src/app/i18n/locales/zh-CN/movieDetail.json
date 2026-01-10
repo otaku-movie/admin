@@ -186,6 +186,18 @@
     "upload": "上传",
     "versionInfo": "版本信息"
   },
+  "season": {
+    "1": "春",
+    "2": "夏",
+    "3": "秋",
+    "4": "冬"
+  },
+  "datePickerType": {
+    "year": "年",
+    "month": "月",
+    "date": "日期",
+    "quarter": "季节"
+  },
   "version": {
     "label": "版本信息",
     "filter": {

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { PlusOutlined } from '@ant-design/icons'
-import { Image, Upload as AntdUpload, message } from 'antd'
+import { Upload as AntdUpload, message } from 'antd'
 import type { GetProp, UploadFile, UploadProps as AntdUploadProps } from 'antd'
 import { BASE_URL, languageType } from '@/config'
 import { ImageCropper } from '../cropper/cropper'
 import './style.scss'
 import http from '@/api'
-import { getFileSize } from '@/utils'
+import { getFileSize, getURL } from '@/utils'
 import { useTranslation } from '@/app/i18n/client'
 import { CustomAntImage } from '@/components/CustomAntImage'
 
@@ -56,7 +56,7 @@ export function Upload(props: UploadProps) {
           uid: '-1',
           name: 'image.png',
           status: 'done',
-          url: props.value
+          url: getURL(props.value)
         }
       ])
       setImageURL(props.value)
@@ -75,7 +75,10 @@ export function Upload(props: UploadProps) {
       file.preview = await getBase64(file.originFileObj as FileType)
     }
 
-    setPreviewImage(file.url || (file.preview as string))
+    const previewUrl = file.url || (file.preview as string)
+    setPreviewImage(
+      previewUrl.startsWith('data:') ? previewUrl : getURL(previewUrl)
+    )
     setPreviewOpen(true)
   }
 
@@ -83,6 +86,16 @@ export function Upload(props: UploadProps) {
     if (file.status === 'done') {
       const url = file.response.data.url
       setImageURL(url)
+      // 更新 fileList 中的 URL 为完整 URL（带域名）
+      setFileList([
+        {
+          uid: '-1',
+          name: 'image.png',
+          status: 'done',
+          url: getURL(url)
+        }
+      ])
+      // 传给父组件的是原始路径（不带域名）
       props.onChange?.(url)
     }
   }
@@ -95,15 +108,25 @@ export function Upload(props: UploadProps) {
   )
 
   const deleteFile = () => {
+    // imageURL 保存的是原始路径（相对路径），直接使用
+    // 如果是完整 URL，需要提取相对路径部分
+    const path = imageURL.startsWith('http')
+      ? imageURL.split('/').slice(4).join('/')
+      : imageURL.startsWith('/')
+        ? imageURL.slice(1)
+        : imageURL
+
     http({
       url: '/deleteFile',
       method: 'delete',
       params: {
-        path: imageURL.split('/').slice(4).join('/')
+        path
       }
-    }).then((res) => {
+    }).then((res: any) => {
       message.success(res.message)
       setFileList([])
+      setImageURL('')
+      props.onChange?.('')
     })
   }
 
@@ -114,19 +137,24 @@ export function Upload(props: UploadProps) {
       data: fd
     })
       .then((res: any) => {
+        const url = res.data.url
+        setImageURL(url)
+        // 显示时使用完整 URL（带域名）
         setFileList([
           {
             uid: '-1',
             name: 'image.png',
             status: 'done',
-            url: res.data.url
+            url: getURL(url)
           }
         ])
-        props.onChange?.(res.data.url)
+        // 传给父组件的是原始路径（不带域名）
+        props.onChange?.(url)
         message.success(res.message)
       })
       .catch(() => {
         setFileList([])
+        setImageURL('')
       })
   }
 

@@ -18,7 +18,7 @@ import { Props } from './one'
 import { CheckPermission } from '@/components/checkPermission'
 import { SelectCharacterModal } from '@/dialog/selectCharacterModal'
 import { SelectActorModal } from '@/dialog/selectActorModal'
-import { character, staff } from '@/type/api'
+import { character, staff, MovieVersion } from '@/type/api'
 import { useMovieStore } from '@/store/useMovieStore'
 import { notFoundImage } from '@/config'
 import { CustomAntImage } from '@/components/CustomAntImage'
@@ -26,28 +26,27 @@ import { DictSelect } from '@/components/DictSelect'
 import { useCommonStore } from '@/store/useCommonStore'
 import dayjs from 'dayjs'
 import { DictCode, DubbingVersionEnum } from '@/enum/dict'
+import { getMovieVersions } from '@/api/request/movie'
+import http from '@/api'
+import { useRouter } from 'next/navigation'
 
 const { Title } = Typography
-
-interface MovieVersion {
-  id?: number
-  movieId: number
-  dubbingVersionId: number
-  startDate?: string
-  endDate?: string
-  language?: string
-  characters: character[]
-}
 
 export function Three(props: Readonly<Props>) {
   const movieStore = useMovieStore()
   const { t } = useTranslation(props.language, 'movieDetail')
   const commonStore = useCommonStore()
+  const router = useRouter()
   const [form] = Form.useForm()
   const [modalForm] = Form.useForm()
 
   // 存储所有版本信息
   const [versions, setVersions] = useState<MovieVersion[]>([])
+
+  // 语言列表
+  const [languageList, setLanguageList] = useState<
+    { id: number; name: string }[]
+  >([])
 
   // 版本编辑模态框状态
   const [versionModal, setVersionModal] = useState<{
@@ -125,8 +124,11 @@ export function Three(props: Readonly<Props>) {
     },
     {
       title: t('version.table.language'),
-      dataIndex: 'language',
-      render: (lang: string) => lang || '--'
+      dataIndex: 'languageId',
+      render: (languageId: number) => {
+        const language = languageList.find((l) => l.id === languageId)
+        return language?.name || '--'
+      }
     },
     {
       title: t('version.table.characterCount'),
@@ -245,11 +247,35 @@ export function Three(props: Readonly<Props>) {
   ]
 
   // 获取版本列表
-  const getVersionList = () => {
+  const getVersionList = async () => {
     if (movieStore.movie.id) {
-      // 调用API获取版本列表
-      // 暂时留空，等待后端API实现
-      // 可以在这里调用API获取已保存的版本信息
+      try {
+        const res = await getMovieVersions(movieStore.movie.id)
+        if (res?.data) {
+          setVersions(res.data as unknown as MovieVersion[])
+        }
+      } catch (error) {
+        console.error('Failed to get version list:', error)
+      }
+    }
+  }
+
+  // 获取语言列表
+  const getLanguageList = async () => {
+    try {
+      const res = await http({
+        url: '/language/list',
+        method: 'post',
+        data: {
+          page: 1,
+          pageSize: 100
+        }
+      })
+      if (res?.data?.list) {
+        setLanguageList(res.data.list)
+      }
+    } catch (error) {
+      console.error('Failed to get language list:', error)
     }
   }
 
@@ -275,7 +301,7 @@ export function Three(props: Readonly<Props>) {
           // 复制原版角色，但清除配音演员信息
           characters = originalVersion.characters.map((char) => ({
             ...char,
-            staff: [] // 清空配音演员，让用户重新选择
+            staff: [] // Clear dubbing actors, let user re-select
           }))
         }
       }
@@ -285,7 +311,7 @@ export function Three(props: Readonly<Props>) {
         dubbingVersionId: values.dubbingVersionId,
         startDate: values.startDate?.format('YYYY-MM-DD'),
         endDate: values.endDate?.format('YYYY-MM-DD'),
-        language: values.language,
+        languageId: values.language,
         characters
       }
       setVersions([...versions, newVersion])
@@ -297,7 +323,7 @@ export function Three(props: Readonly<Props>) {
           ...newVersions[versionModal.index],
           startDate: values.startDate?.format('YYYY-MM-DD'),
           endDate: values.endDate?.format('YYYY-MM-DD'),
-          language: values.language
+          languageId: values.language
         }
         setVersions(newVersions)
       }
@@ -333,6 +359,7 @@ export function Three(props: Readonly<Props>) {
 
   useEffect(() => {
     getVersionList()
+    getLanguageList()
   }, [])
 
   return (
@@ -368,7 +395,6 @@ export function Three(props: Readonly<Props>) {
             >
               {t('version.button.add')}
             </Button>
-            <h2>版本名称</h2>
             {/* 版本信息表格 */}
             <Table
               columns={versionColumns}
@@ -469,12 +495,38 @@ export function Three(props: Readonly<Props>) {
               <Button
                 type="primary"
                 htmlType="submit"
-                onClick={() => {
-                  form.validateFields().then(() => {
-                    // 保存版本信息
-                    // 暂时只显示成功消息，等待后端API实现
-                    message.success('保存成功')
-                  })
+                onClick={async () => {
+                  try {
+                    await form.validateFields()
+
+                    // Call save API
+                    await http({
+                      url: 'admin/movie/save',
+                      method: 'post',
+                      data: {
+                        ...movieStore.movie,
+                        versions: versions.map((v) => ({
+                          id: v.id,
+                          dubbingVersionId: v.dubbingVersionId,
+                          startDate: v.startDate,
+                          endDate: v.endDate,
+                          languageId: v.languageId,
+                          characters: v.characters.map((c) => ({
+                            id: c.id,
+                            staffIds: c.staff?.map((s) => s.id) || []
+                          }))
+                        }))
+                      }
+                    })
+                    message.success(
+                      t('button.saveSuccess') || 'Save successful'
+                    )
+
+                    // 跳转到电影列表页
+                    router.push(`/${props.language}/movie/movieList`)
+                  } catch (error) {
+                    console.error('Save failed:', error)
+                  }
                 }}
               >
                 {t('button.save')}
@@ -515,7 +567,7 @@ export function Three(props: Readonly<Props>) {
                 endDate: versionModal.data.endDate
                   ? dayjs(versionModal.data.endDate)
                   : undefined,
-                language: versionModal.data.language
+                language: versionModal.data.languageId
               })
               setCurrentVersionId(versionModal.data.dubbingVersionId)
             } else {
@@ -557,13 +609,23 @@ export function Three(props: Readonly<Props>) {
                 <DatePicker style={{ width: '100%' }} />
               </Form.Item>
               <Form.Item label={t('version.modal.language')} name="language">
-                <DictSelect
-                  code={DictCode.LANGUAGE}
+                <Select
                   style={{ width: '100%' }}
+                  placeholder={t('version.modal.languagePlaceholder')}
                   value={modalForm.getFieldValue('language')}
                   onChange={(val) =>
                     modalForm.setFieldsValue({ language: val })
                   }
+                  showSearch
+                  filterOption={(input, option) => {
+                    return ((option?.label as string) ?? '')
+                      .toLowerCase()
+                      .includes(input.toLowerCase())
+                  }}
+                  options={languageList.map((lang) => ({
+                    label: lang.name,
+                    value: lang.id
+                  }))}
                 />
               </Form.Item>
             </>
@@ -603,7 +665,7 @@ export function Three(props: Readonly<Props>) {
           })
         }}
         onConfirm={(selectedStaff) => {
-          // 保存选中的演员到对应角色
+          // Save selected actors to corresponding character
           const { versionIndex, characterIndex } = staffModal
           if (versionIndex >= 0 && characterIndex >= 0) {
             const newVersions = [...versions]
