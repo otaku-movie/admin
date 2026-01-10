@@ -29,6 +29,7 @@ import { DictCode, DubbingVersionEnum } from '@/enum/dict'
 import { getMovieVersions } from '@/api/request/movie'
 import http from '@/api'
 import { useRouter } from 'next/navigation'
+import { processPath } from '@/config/router'
 
 const { Title } = Typography
 
@@ -523,7 +524,10 @@ export function Three(props: Readonly<Props>) {
                     )
 
                     // 跳转到电影列表页
-                    router.push(`/${props.language}/movie/movieList`)
+                    router.push(
+                      processPath('movieList')
+                    )
+                    props.onNext?.()
                   } catch (error) {
                     console.error('Save failed:', error)
                   }

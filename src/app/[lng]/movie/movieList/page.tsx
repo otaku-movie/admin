@@ -309,20 +309,6 @@ export default function Page({ params: { lng } }: Readonly<PageProps>) {
             >
               {common('button.commentList')}
             </Button>
-            <CheckPermission code="movie.save">
-              <Button
-                type="default"
-                onClick={() => {
-                  setAddDubbingModal({
-                    show: true,
-                    movieId: row.id,
-                    selectedVersion: undefined
-                  })
-                }}
-              >
-                {t('button.addDubbingVersion')}
-              </Button>
-            </CheckPermission>
           </Space>
         )
       }
