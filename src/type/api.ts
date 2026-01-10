@@ -69,7 +69,7 @@ export interface Movie {
   helloMovie: HelloMovie[]
   startDate?: string
   endDate?: string
-  dubbingVersionId?: number
+  versionCode?: number
   dubbingStartDate?: string
   dubbingEndDate?: string
 }
@@ -137,7 +137,7 @@ export type level = base
 export interface MovieVersion {
   id?: number
   movieId: number
-  dubbingVersionId: number
+  versionCode: number
   startDate?: string
   endDate?: string
   languageId?: number

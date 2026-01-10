@@ -103,7 +103,7 @@ export function Three(props: Readonly<Props>) {
   const versionColumns: TableColumnsType<MovieVersion> = [
     {
       title: t('version.table.version'),
-      dataIndex: 'dubbingVersionId',
+      dataIndex: 'versionCode',
       render: (versionId: number) => {
         const version = allVersions.find((v) => v.code === versionId)
         return version?.name || '--'
@@ -285,7 +285,7 @@ export function Three(props: Readonly<Props>) {
     if (versionModal.type === 'create') {
       // 检查是否已存在该版本
       const exists = versions.some(
-        (v) => v.dubbingVersionId === values.dubbingVersionId
+        (v) => v.versionCode === values.versionCode
       )
       if (exists) {
         message.warning(t('version.message.versionExists'))
@@ -294,9 +294,9 @@ export function Three(props: Readonly<Props>) {
 
       // 如果是配音版，同步原版角色
       let characters: character[] = []
-      if (values.dubbingVersionId !== DubbingVersionEnum.ORIGINAL) {
+      if (values.versionCode !== DubbingVersionEnum.ORIGINAL) {
         const originalVersion = versions.find(
-          (v) => v.dubbingVersionId === DubbingVersionEnum.ORIGINAL
+          (v) => v.versionCode === DubbingVersionEnum.ORIGINAL
         )
         if (originalVersion) {
           // 复制原版角色，但清除配音演员信息
@@ -309,7 +309,7 @@ export function Three(props: Readonly<Props>) {
 
       const newVersion: MovieVersion = {
         movieId: movieStore.movie.id!,
-        dubbingVersionId: values.dubbingVersionId,
+        versionCode: values.versionCode,
         startDate: values.startDate?.format('YYYY-MM-DD'),
         endDate: values.endDate?.format('YYYY-MM-DD'),
         languageId: values.language,
@@ -431,12 +431,12 @@ export function Three(props: Readonly<Props>) {
                     selectedVersionFilter === undefined ||
                     selectedVersionFilter === null
                       ? true
-                      : v.dubbingVersionId === selectedVersionFilter
+                      : v.versionCode === selectedVersionFilter
                   )
                   .map((version, idx) => {
                     const versionName =
                       allVersions.find(
-                        (v) => v.code === version.dubbingVersionId
+                        (v) => v.code === version.versionCode
                       )?.name || '--'
                     const realIndex = versions.indexOf(version)
                     return (
@@ -508,7 +508,7 @@ export function Three(props: Readonly<Props>) {
                         ...movieStore.movie,
                         versions: versions.map((v) => ({
                           id: v.id,
-                          dubbingVersionId: v.dubbingVersionId,
+                          versionCode: v.versionCode,
                           startDate: v.startDate,
                           endDate: v.endDate,
                           languageId: v.languageId,
@@ -564,7 +564,7 @@ export function Three(props: Readonly<Props>) {
           if (open) {
             if (versionModal.data) {
               modalForm.setFieldsValue({
-                dubbingVersionId: versionModal.data.dubbingVersionId,
+                versionCode: versionModal.data.versionCode,
                 startDate: versionModal.data.startDate
                   ? dayjs(versionModal.data.startDate)
                   : undefined,
@@ -573,11 +573,11 @@ export function Three(props: Readonly<Props>) {
                   : undefined,
                 language: versionModal.data.languageId
               })
-              setCurrentVersionId(versionModal.data.dubbingVersionId)
+              setCurrentVersionId(versionModal.data.versionCode)
             } else {
               modalForm.resetFields()
               modalForm.setFieldsValue({
-                dubbingVersionId: DubbingVersionEnum.ORIGINAL
+                versionCode: DubbingVersionEnum.ORIGINAL
               })
               setCurrentVersionId(DubbingVersionEnum.ORIGINAL)
             }
@@ -589,17 +589,17 @@ export function Three(props: Readonly<Props>) {
         <Form form={modalForm} layout="vertical">
           <Form.Item
             label={t('version.modal.version')}
-            name="dubbingVersionId"
+            name="versionCode"
             rules={[
               { required: true, message: t('version.modal.versionRequired') }
             ]}
           >
             <DictSelect
               code={DictCode.DUBBING_VERSION}
-              value={versionModal.data?.dubbingVersionId}
+              value={versionModal.data?.versionCode}
               style={{ width: '100%' }}
               onChange={(val) => {
-                modalForm.setFieldsValue({ dubbingVersionId: val })
+                modalForm.setFieldsValue({ versionCode: val })
                 setCurrentVersionId(val)
               }}
             />

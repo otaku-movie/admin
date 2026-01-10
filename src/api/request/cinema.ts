@@ -29,6 +29,8 @@ export interface MovieShowTimeItem {
   }[]
   specId?: number
   movieShowTimeTagsId: number[]
+  movieVersionId?: number
+  versionCode?: number
 }
 
 export interface CinemaScreeing {

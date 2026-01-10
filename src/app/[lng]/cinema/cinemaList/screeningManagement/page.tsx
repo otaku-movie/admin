@@ -32,6 +32,8 @@ import {
   MovieShowTimeItem
 } from '@/api/request/cinema'
 import dayjs from 'dayjs'
+import { useCommonStore } from '@/store/useCommonStore'
+import { DictCode } from '@/enum/dict'
 
 const { Text, Paragraph } = Typography
 
@@ -45,6 +47,7 @@ export default function CinemaPage({ params: { lng } }: Readonly<PageProps>) {
   })
   const { t } = useTranslation(lng, 'screeningManagment')
   const { t: common } = useTranslation(lng, 'common')
+  const commonStore = useCommonStore()
   const [data, setData] = useState<CinemaScreeing[]>([])
   const [day, setDay] = useState(dayjs())
   const [renderData, setRenderData] = useState<CinemaScreeing[]>([])
@@ -455,6 +458,28 @@ export default function CinemaPage({ params: { lng } }: Readonly<PageProps>) {
                     </div>
                   )}
 
+                  {/* 版本标签 */}
+                  {item.versionCode && (
+                    <div style={{ marginBottom: 4 }}>
+                      <Tag
+                        color="blue"
+                        style={{
+                          margin: 0,
+                          fontSize: 10,
+                          padding: '0 6px'
+                        }}
+                      >
+                        {(() => {
+                          const dictList = commonStore.dict?.[DictCode.DUBBING_VERSION] || []
+                          const dictItem = dictList.find(
+                            (d: any) => d.code === item.versionCode
+                          )
+                          return dictItem?.name || `版本${item.versionCode}`
+                        })()}
+                      </Tag>
+                    </div>
+                  )}
+
                   {/* 底部信息 */}
                   <div
                     style={{
@@ -729,6 +754,22 @@ export default function CinemaPage({ params: { lng } }: Readonly<PageProps>) {
                     </Space>
                   </li>
                 )}
+              {detailModal.item.versionCode && (
+                <li>
+                  <span style={{ fontWeight: 500, marginRight: 8 }}>
+                    {t('table.version') || '版本'}：
+                  </span>
+                  <Tag color="blue">
+                    {(() => {
+                      const dictList = commonStore.dict?.[DictCode.DUBBING_VERSION] || []
+                      const dictItem = dictList.find(
+                        (d: any) => d.code === detailModal.item!.versionCode
+                      )
+                      return dictItem?.name || `版本${detailModal.item!.versionCode}`
+                    })()}
+                  </Tag>
+                </li>
+              )}
             </ul>
           </div>
         )}

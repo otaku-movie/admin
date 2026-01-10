@@ -224,7 +224,7 @@ export default function Page({ params: { lng } }: Readonly<PageProps>) {
     {
       title: t('table.dubbingVersion'),
       width: 150,
-      dataIndex: 'dubbingVersionId',
+      dataIndex: 'versionCode',
       render(code: number) {
         if (code) {
           return <Dict code={code} name={'dubbingVersion'}></Dict>
@@ -409,7 +409,7 @@ export default function Page({ params: { lng } }: Readonly<PageProps>) {
           router.push(
             processPath('movieDetail', {
               id: addDubbingModal.movieId,
-              dubbingVersionId: addDubbingModal.selectedVersion
+              versionCode: addDubbingModal.selectedVersion
             })
           )
         }}
