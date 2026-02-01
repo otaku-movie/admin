@@ -1,4 +1,6 @@
 {
+  "ticketTypeSection": "Ticket Type",
+  "priceConfigSection": "2D/3D Surcharge",
   "form": {
     "brandId": {
       "label": "Brand Name",
@@ -40,6 +42,7 @@
     },
     "save": "Save"
   },
+  "priceConfigDuplicate": "This format has already been added; do not select it again",
   "message": {
     "required": "Specification and additional price for special screenings cannot be empty",
     "repeat": "Specifications cannot be duplicated"

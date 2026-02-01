@@ -1,6 +1,16 @@
 {
+  "prevDay": "上一日",
+  "nextDay": "下一日",
+  "addShowTime": "添加场次",
+  "selectDate": "选择日期",
+  "pageTitle": "排期管理",
   "table": {
     "seatSelectRate": "座位选择比例",
-    "open": "公开"
+    "open": "公开",
+    "version": "版本",
+    "spec": "上映规格",
+    "subtitle": "字幕",
+    "dimension": "放映",
+    "dimensionNotSet": "未设置"
   }
 }

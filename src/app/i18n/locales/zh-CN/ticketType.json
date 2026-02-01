@@ -1,8 +1,41 @@
 {
+  "tabs": {
+    "ticketType": "票种",
+    "priceConfig": "放映类型加价"
+  },
   "table": {
     "name": "电影票类型",
     "price": "价格",
     "action": "操作"
+  },
+  "priceConfig": {
+    "table": {
+      "displayType": "放映类型",
+      "surcharge": "加价金额"
+    },
+    "modal": {
+      "title": {
+        "create": "添加放映类型加价",
+        "edit": "编辑放映类型加价"
+      },
+      "form": {
+        "displayType": {
+          "label": "放映类型",
+          "required": "请选择放映类型",
+          "placeholder": "请选择"
+        },
+        "surcharge": {
+          "label": "加价金额",
+          "required": "请输入加价金额"
+        }
+      }
+    },
+    "message": {
+      "remove": {
+        "content": "是否确认删除该放映类型加价？",
+        "success": "删除成功"
+      }
+    }
   },
   "modal": {
     "title": {

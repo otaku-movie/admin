@@ -1,3 +1,255 @@
+// 排期页根布局
+.screening-page {
+  display: flex;
+  flex-direction: column;
+}
+
+// 顶部导航 grid（日期栏）
+.nav-container.nav-date-bar {
+  grid-template-columns: 40px 1fr 40px;
+}
+
+// 日期切换按钮（仅图标）
+.day-nav-btn {
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+// 日期选择区域（中间列）
+.nav-date-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.date-picker-trigger {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+  }
+}
+
+.calendar-icon {
+  color: #1677ff;
+  font-size: 16px;
+}
+
+.week-text {
+  font-size: 16px;
+}
+
+// 表格区域横向滚动
+.scroll-wrapper {
+  overflow-x: auto;
+  width: 100%;
+}
+
+// 场次卡片（在 TodoList 内使用）
+.show-time-card {
+  padding: 10px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s, border-color 0.2s;
+
+  &.open {
+    background-color: #f0f7ff;
+    border: 1px solid #bae0ff;
+  }
+
+  &.closed {
+    background-color: #fafafa;
+    border: 1px solid #e8e8e8;
+  }
+
+  &:hover {
+    background-color: #e6f4ff;
+    border-color: #91caff;
+  }
+}
+
+.show-time-card.open:hover {
+  background-color: #e6f4ff;
+  border-color: #91caff;
+}
+
+.show-time-card.closed:hover {
+  background-color: #e6f4ff;
+  border-color: #91caff;
+}
+
+.card-time-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.card-time-text {
+  font-size: 14px;
+  color: #1677ff;
+  font-family: monospace;
+}
+
+.card-status-tag {
+  margin: 0;
+  font-size: 11px;
+  line-height: 20px;
+  font-weight: 500;
+  padding: 0 8px;
+}
+
+.card-title {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #262626;
+  margin-bottom: 8px;
+  margin: 0;
+  word-break: break-word;
+}
+
+.card-tags-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 6px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.card-tag-small {
+  margin: 0;
+  font-size: 11px;
+  padding: 2px 8px;
+  line-height: 18px;
+}
+
+.card-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: auto;
+  padding-top: 6px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.card-footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+}
+
+.card-label-small {
+  font-size: 11px;
+}
+
+// 详情弹窗
+.detail-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.detail-list-item {
+  margin-bottom: 16px;
+}
+
+.detail-list-item-sm {
+  margin-bottom: 12px;
+}
+
+.detail-label {
+  font-weight: 500;
+  margin-right: 8px;
+}
+
+.detail-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+.detail-row-sm {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.detail-flex-start {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+
+  &.detail-gap-4 {
+    gap: 4px;
+  }
+}
+
+.detail-flex-center {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  font-size: 14px;
+
+  &.detail-flex-start-align {
+    align-items: flex-start;
+  }
+}
+
+.detail-flex-spec {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+  font-size: 14px;
+  gap: 4px;
+}
+
+.detail-title-strong {
+  font-size: 14px;
+  line-height: 1.5;
+  flex: 1;
+  margin: 0;
+  word-break: break-word;
+}
+
+.detail-text-14 {
+  font-size: 14px;
+}
+
+.detail-label-shrink {
+  font-weight: 500;
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
+// 浮动添加按钮
+.screening-add-float-btn {
+  inset-inline-end: 94px;
+}
+
 .nav-hour {
   display: flex;
   background: rgba($color: #000000, $alpha: 0.5);
@@ -10,6 +262,12 @@
   font-size: 16px;
   text-align: center;
 }
+// 表头动态列宽由 JS 通过 CSS 变量传入
+.table-header.table-header-dynamic {
+  grid-template-columns: var(--table-grid-cols);
+  min-width: var(--table-min-width);
+}
+
 .table-header {
   display: grid;
   // background: black;
@@ -38,7 +296,6 @@
 }
 .nav-container {
   border-top: var(--todo-list-border);
-
   border-left: var(--todo-list-border);
   border-right: var(--todo-list-border);
 
@@ -52,6 +309,14 @@
     width: 100%;
     border-left: var(--todo-list-border);
     border-right: var(--todo-list-border);
+  }
+  // 中间列：日期+星期保持同一行（覆盖 li 的 display: grid）
+  li.nav-date-inner {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
   }
 
   // DatePicker 样式优化

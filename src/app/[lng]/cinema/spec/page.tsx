@@ -101,7 +101,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
                     onOk() {
                       return new Promise((resolve, reject) => {
                         http({
-                          url: 'cinema/spec/remove',
+                          url: 'admin/cinema/spec/remove',
                           method: 'delete',
                           params: {
                             id: row.id

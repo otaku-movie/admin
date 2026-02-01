@@ -84,77 +84,37 @@ export default function CinemaPage({ params: { lng } }: Readonly<PageProps>) {
   }, [day])
 
   return (
-    <section
-      style={{
-        display: 'flex',
-        flexDirection: 'column'
-      }}
-    >
+    <section className="screening-page" aria-label={t('pageTitle')} title={t('pageTitle')}>
       {/* <Query>
         <QueryItem label={t('table.name')} column={1}>
           <Input></Input>
         </QueryItem>
       </Query> */}
       <section className="todo-top">
-        <ul
-          className="nav-container"
-          style={{
-            gridTemplateColumns: `40px 1fr 40px`
-          }}
-        >
+        <ul className="nav-container nav-date-bar">
           <li>
             <button
               type="button"
               onClick={() => {
                 setDay(day.subtract(1, 'day'))
               }}
-              style={{
-                cursor: 'pointer',
-                border: 'none',
-                background: 'transparent',
-                padding: 0,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '100%',
-                height: '100%'
-              }}
+              className="day-nav-btn"
+              title={t('prevDay')}
+              aria-label={t('prevDay')}
             >
               <LeftOutlined />
             </button>
           </li>
-          <li
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: 4
-            }}
-          >
+          <li className="nav-date-inner">
             <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 4,
-                cursor: 'pointer',
-                padding: '4px 8px',
-                borderRadius: 4,
-                transition: 'background-color 0.2s'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.04)'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'transparent'
-              }}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault()
-                  // DatePicker 会自动处理点击
-                }
-              }}
+              className="date-picker-trigger"
+              role="button"
+              tabIndex={0}
+              title={t('selectDate')}
+              aria-label={t('selectDate')}
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') e.preventDefault() }}
             >
-              <CalendarOutlined style={{ color: '#1677ff', fontSize: 16 }} />
+              <CalendarOutlined className="calendar-icon" />
               <DatePicker
                 value={dayjs(day)}
                 onChange={(date) => {
@@ -165,20 +125,11 @@ export default function CinemaPage({ params: { lng } }: Readonly<PageProps>) {
                 format="YYYY-MM-DD"
                 allowClear={false}
                 variant="borderless"
-                style={{
-                  fontSize: 16,
-                  fontWeight: 500,
-                  padding: 0,
-                  border: 'none',
-                  boxShadow: 'none',
-                  cursor: 'pointer',
-                  width: '100px'
-                }}
                 suffixIcon={null}
                 inputReadOnly={true}
               />
             </div>
-            <span style={{ fontSize: 16 }}>
+            <span className="week-text">
               （{common(`week.${i18nWeek[day.day()]}`)}）
             </span>
           </li>
@@ -188,28 +139,23 @@ export default function CinemaPage({ params: { lng } }: Readonly<PageProps>) {
               onClick={() => {
                 setDay(day.add(1, 'day'))
               }}
-              style={{
-                cursor: 'pointer',
-                border: 'none',
-                background: 'transparent',
-                padding: 0,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '100%',
-                height: '100%'
-              }}
+              className="day-nav-btn"
+              title={t('nextDay')}
+              aria-label={t('nextDay')}
             >
               <RightOutlined />
             </button>
           </li>
         </ul>
+        {/* 列宽与最小宽度依赖 renderData.length，仅通过 CSS 变量传入 */}
         <ul
-          className="table-header"
-          style={{
-            gridTemplateColumns: `40px repeat(${renderData.length}, minmax(200px, 1fr)) 40px`,
-            minWidth: `${Math.max(renderData.length * 200 + 80, 100)}px`
-          }}
+          className="table-header table-header-dynamic"
+          style={
+            {
+              '--table-grid-cols': `40px repeat(${renderData.length}, minmax(200px, 1fr)) 40px`,
+              '--table-min-width': `${Math.max(renderData.length * 200 + 80, 100)}px`
+            } as React.CSSProperties
+          }
         >
           <li>
             {/* <DoubleLeftOutlined
@@ -250,13 +196,12 @@ export default function CinemaPage({ params: { lng } }: Readonly<PageProps>) {
         /> */}
       </section>
 
-      <div style={{ overflowX: 'auto', width: '100%' }}>
+      <div className="scroll-wrapper">
         <TodoList
           date={day}
           data={renderData}
           render={(item) => {
             const onClick: MenuProps['onClick'] = ({ key }) => {
-              message.info(`Click on item ${key}`)
               const remove = () => {
                 return new Promise((resolve, reject) => {
                   http({
@@ -349,18 +294,7 @@ export default function CinemaPage({ params: { lng } }: Readonly<PageProps>) {
                 <div
                   role="button"
                   tabIndex={0}
-                  style={{
-                    padding: '10px',
-                    height: '100%',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: 8,
-                    cursor: 'pointer',
-                    borderRadius: 4,
-                    transition: 'background-color 0.2s',
-                    backgroundColor: item.open ? '#f0f7ff' : '#fafafa',
-                    border: `1px solid ${item.open ? '#bae0ff' : '#e8e8e8'}`
-                  }}
+                  className={`show-time-card ${item.open ? 'open' : 'closed'}`}
                   onClick={() => {
                     setDetailModal({ show: true, item })
                   }}
@@ -370,36 +304,10 @@ export default function CinemaPage({ params: { lng } }: Readonly<PageProps>) {
                       setDetailModal({ show: true, item })
                     }
                   }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = '#e6f4ff'
-                    e.currentTarget.style.borderColor = '#91caff'
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = item.open
-                      ? '#f0f7ff'
-                      : '#fafafa'
-                    e.currentTarget.style.borderColor = item.open
-                      ? '#bae0ff'
-                      : '#e8e8e8'
-                  }}
                 >
                   {/* 时间行 */}
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      gap: 8
-                    }}
-                  >
-                    <Text
-                      strong
-                      style={{
-                        fontSize: 14,
-                        color: '#1677ff',
-                        fontFamily: 'monospace'
-                      }}
-                    >
+                  <div className="card-time-row">
+                    <Text strong className="card-time-text">
                       {dayjs(item.startTime).format('HH:mm')} -{' '}
                       {dayjs(item.endTime).format('HH:mm')}
                     </Text>
@@ -409,98 +317,83 @@ export default function CinemaPage({ params: { lng } }: Readonly<PageProps>) {
                         if (item.status === 2) return 'processing'
                         return 'error'
                       })()}
-                      style={{
-                        margin: 0,
-                        fontSize: 11,
-                        lineHeight: '20px',
-                        fontWeight: 500,
-                        padding: '0 8px'
-                      }}
+                      className="card-status-tag"
                     >
                       <Dict code={item.status} name={'cinemaPlayState'}></Dict>
                     </Tag>
                   </div>
 
                   {/* 电影名称 */}
-                  <Paragraph
-                    strong
-                    ellipsis={{ rows: 2 }}
-                    style={{
-                      fontSize: 13,
-                      lineHeight: 1.5,
-                      color: '#262626',
-                      marginBottom: 4,
-                      margin: 0
-                    }}
-                    title={item.movieName}
-                  >
+                  <Paragraph strong className="card-title" title={item.movieName}>
                     {item.movieName}
                   </Paragraph>
 
-                  {/* 字幕标签 */}
-                  {item.subtitle && item.subtitle.length > 0 && (
-                    <div style={{ marginBottom: 4 }}>
-                      <Space wrap size={4}>
-                        {item.subtitle.map((sub) => (
-                          <Tag
-                            color="cyan"
-                            key={sub.id}
-                            style={{
-                              margin: 0,
-                              fontSize: 10,
-                              padding: '0 6px'
-                            }}
-                          >
-                            {sub.name}
-                          </Tag>
-                        ))}
-                      </Space>
-                    </div>
-                  )}
-
-                  {/* 版本标签 */}
-                  {item.versionCode && (
-                    <div style={{ marginBottom: 4 }}>
-                      <Tag
-                        color="blue"
-                        style={{
-                          margin: 0,
-                          fontSize: 10,
-                          padding: '0 6px'
-                        }}
-                      >
+                  {/* 关键标签行：2D/3D、版本、规格、字幕 */}
+                  <div className="card-tags-row">
+                    {/* 2D/3D 放映类型（始终展示） */}
+                    <Tag
+                      color={
+                        item.dimensionType != null &&
+                        item.dimensionType !== undefined
+                          ? 'purple'
+                          : 'default'
+                      }
+                      className="card-tag-small"
+                    >
+                      {(() => {
+                        if (
+                          item.dimensionType == null &&
+                          item.dimensionType !== 0
+                        ) {
+                          return t('table.dimensionNotSet') || '未设置'
+                        }
+                        const dictList =
+                          commonStore.dict?.[DictCode.DIMENSION_TYPE] || []
+                        const dictItem = dictList.find(
+                          (d: any) =>
+                            d.id === item.dimensionType ||
+                            d.code === item.dimensionType
+                        )
+                        return (
+                          dictItem?.name ?? `类型${item.dimensionType}`
+                        )
+                      })()}
+                    </Tag>
+                    {/* 版本 */}
+                    {item.versionCode != null && (
+                      <Tag color="blue" className="card-tag-small">
                         {(() => {
-                          const dictList = commonStore.dict?.[DictCode.DUBBING_VERSION] || []
+                          const dictList =
+                            commonStore.dict?.[DictCode.DUBBING_VERSION] || []
                           const dictItem = dictList.find(
                             (d: any) => d.code === item.versionCode
                           )
                           return dictItem?.name || `版本${item.versionCode}`
                         })()}
                       </Tag>
-                    </div>
-                  )}
+                    )}
+                    {/* 上映规格 */}
+                    {item.specName &&
+                      item.specName.split('、').map((name: string, idx: number) => (
+                        <Tag key={idx} color="green" className="card-tag-small">
+                          {name}
+                        </Tag>
+                      ))}
+                    {/* 字幕 */}
+                    {item.subtitle &&
+                      item.subtitle.length > 0 &&
+                      item.subtitle.map((sub) => (
+                        <Tag color="cyan" key={sub.id} className="card-tag-small">
+                          {sub.name}
+                        </Tag>
+                      ))}
+                  </div>
 
                   {/* 底部信息 */}
-                  <div
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      gap: 6,
-                      marginTop: 'auto',
-                      paddingTop: 6,
-                      borderTop: '1px solid #f0f0f0'
-                    }}
-                  >
+                  <div className="card-footer">
                     {/* 开放状态 */}
-                    <div
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        fontSize: 14
-                      }}
-                    >
-                      <Text type="secondary" style={{ fontSize: 11 }}>
+                    <div className="card-footer-row">
+                      <Text type="secondary" className="card-label-small">
                         {t('table.open')}
                       </Text>
                       <span
@@ -529,7 +422,7 @@ export default function CinemaPage({ params: { lng } }: Readonly<PageProps>) {
                                 cinemaId: item.cinemaId,
                                 theaterHallId: item.theaterHallId,
                                 showTimeTagId: item.movieShowTimeTagsId,
-                                specId: item.specId,
+                                specIds: item.specIds ?? (item.specId != null ? [item.specId] : []),
                                 startTime: dayjs(item.startTime)?.format(
                                   'YYYY-MM-DD HH:mm:ss'
                                 ),
@@ -547,25 +440,12 @@ export default function CinemaPage({ params: { lng } }: Readonly<PageProps>) {
                     </div>
 
                     {/* 座位选择率 */}
-                    <div
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        fontSize: 14
-                      }}
-                    >
-                      <Text type="secondary" style={{ fontSize: 11 }}>
+                    <div className="card-footer-row">
+                      <Text type="secondary" className="card-label-small">
                         {t('table.seatSelectRate')}
                       </Text>
-                      <div
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: 4
-                        }}
-                      >
-                        <Text style={{ fontSize: 11 }}>
+                      <div className="detail-flex-start detail-gap-4">
+                        <Text className="card-label-small">
                           {item.selectedSeatCount || 0}/{item.seatCount || 0}
                         </Text>
                         <Tag
@@ -574,12 +454,7 @@ export default function CinemaPage({ params: { lng } }: Readonly<PageProps>) {
                             if (seatRate >= 50) return 'orange'
                             return 'green'
                           })()}
-                          style={{
-                            margin: 0,
-                            fontSize: 10,
-                            padding: '0 4px',
-                            lineHeight: '16px'
-                          }}
+                          className="card-tag-small"
                         >
                           {seatRate}%
                         </Tag>
@@ -602,8 +477,10 @@ export default function CinemaPage({ params: { lng } }: Readonly<PageProps>) {
       <FloatButton
         shape="circle"
         type="primary"
-        style={{ insetInlineEnd: 94 }}
+        className="screening-add-float-btn"
         icon={<PlusOutlined />}
+        aria-label={t('addShowTime')}
+        tooltip={t('addShowTime')}
         onClick={() => {
           setShowTimeModal({
             data: {
@@ -624,9 +501,9 @@ export default function CinemaPage({ params: { lng } }: Readonly<PageProps>) {
       >
         {detailModal.item && (
           <div>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-              <li style={{ marginBottom: 16 }}>
-                <span style={{ fontWeight: 500, marginRight: 8 }}>
+            <ul className="detail-list">
+              <li className="detail-list-item">
+                <span className="detail-label">
                   {t('table.tags')}：
                 </span>
                 <Space wrap size={5}>
@@ -640,14 +517,12 @@ export default function CinemaPage({ params: { lng } }: Readonly<PageProps>) {
                 </Space>
               </li>
             </ul>
-            <div style={{ marginBottom: 16 }}>
-              <div style={{ marginBottom: 12 }}>
+            <div className="detail-list-item">
+              <div className="detail-list-item-sm">
                 {dayjs(detailModal.item.startTime).format('HH:mm:ss')} -{' '}
                 {dayjs(detailModal.item.endTime).format('HH:mm:ss')}
               </div>
-              <div
-                style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}
-              >
+              <div className="detail-flex-start">
                 <Tag color="blue">
                   <Dict
                     code={detailModal.item.status}
@@ -656,30 +531,16 @@ export default function CinemaPage({ params: { lng } }: Readonly<PageProps>) {
                 </Tag>
                 <Paragraph
                   strong
-                  ellipsis={{ rows: 2 }}
-                  style={{
-                    fontSize: 14,
-                    lineHeight: 1.5,
-                    flex: 1,
-                    margin: 0
-                  }}
+                  className="detail-title-strong"
                   title={detailModal.item.movieName}
                 >
                   {detailModal.item.movieName}
                 </Paragraph>
               </div>
             </div>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-              <li
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  marginBottom: 16,
-                  fontSize: 14
-                }}
-              >
-                <span style={{ fontSize: 14 }}>{t('table.open')}：</span>
+            <ul className="detail-list">
+              <li className="detail-row">
+                <span className="detail-text-14">{t('table.open')}：</span>
                 <Switch
                   checked={detailModal.item.open}
                   onChange={(val) => {
@@ -695,7 +556,7 @@ export default function CinemaPage({ params: { lng } }: Readonly<PageProps>) {
                         cinemaId: detailModal.item!.cinemaId,
                         theaterHallId: detailModal.item!.theaterHallId,
                         showTimeTagId: detailModal.item!.movieShowTimeTagsId,
-                        specId: detailModal.item!.specId,
+                        specIds: detailModal.item!.specIds ?? (detailModal.item!.specId != null ? [detailModal.item!.specId] : []),
                         startTime: dayjs(detailModal.item!.startTime)?.format(
                           'YYYY-MM-DD HH:mm:ss'
                         ),
@@ -710,24 +571,16 @@ export default function CinemaPage({ params: { lng } }: Readonly<PageProps>) {
                   }}
                 />
               </li>
-              <li
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  marginBottom: 12,
-                  fontSize: 14
-                }}
-              >
-                <span style={{ fontSize: 14 }}>
+              <li className="detail-row-sm">
+                <span className="detail-text-14">
                   {t('table.seatSelectRate')}：
                 </span>
-                <span style={{ fontSize: 14 }}>
-                  <span style={{ marginRight: '8px' }}>
+                <span className="detail-text-14">
+                  <span className="detail-label">
                     {detailModal.item.selectedSeatCount || 0} /
                     {detailModal.item.seatCount || 0}
                   </span>
-                  <span style={{ fontWeight: 500 }}>
+                  <span className="detail-label">
                     {detailModal.item.seatCount &&
                     detailModal.item.seatCount > 0
                       ? Math.round(
@@ -740,23 +593,40 @@ export default function CinemaPage({ params: { lng } }: Readonly<PageProps>) {
                   </span>
                 </span>
               </li>
+              {detailModal.item.dimensionType != null && (
+                <li className="detail-flex-center">
+                  <span className="detail-label">
+                    {t('table.dimension') || '放映'}：
+                  </span>
+                  <Tag color="purple">
+                    {(() => {
+                      const dictList = commonStore.dict?.[DictCode.DIMENSION_TYPE] || []
+                      const dictItem = dictList.find(
+                        (d: any) => d.id === detailModal.item!.dimensionType || d.code === detailModal.item!.dimensionType
+                      )
+                      return dictItem?.name ?? `类型${detailModal.item!.dimensionType}`
+                    })()}
+                  </Tag>
+                </li>
+              )}
               {detailModal.item.subtitle &&
                 detailModal.item.subtitle.length > 0 && (
-                  <li>
+                  <li className="detail-flex-center detail-flex-start-align">
+                    <span className="detail-label-shrink">
+                      {t('table.subtitle') || '字幕'}：
+                    </span>
                     <Space wrap size={5}>
-                      {detailModal.item.subtitle.map((sub) => {
-                        return (
-                          <Tag color="#2db7f5" key={sub.id}>
-                            {sub.name}
-                          </Tag>
-                        )
-                      })}
+                      {detailModal.item.subtitle.map((sub) => (
+                        <Tag color="#2db7f5" key={sub.id}>
+                          {sub.name}
+                        </Tag>
+                      ))}
                     </Space>
                   </li>
                 )}
               {detailModal.item.versionCode && (
-                <li>
-                  <span style={{ fontWeight: 500, marginRight: 8 }}>
+                <li className="detail-flex-center">
+                  <span className="detail-label">
                     {t('table.version') || '版本'}：
                   </span>
                   <Tag color="blue">
@@ -768,6 +638,18 @@ export default function CinemaPage({ params: { lng } }: Readonly<PageProps>) {
                       return dictItem?.name || `版本${detailModal.item!.versionCode}`
                     })()}
                   </Tag>
+                </li>
+              )}
+              {detailModal.item.specName && (
+                <li className="detail-flex-spec">
+                  <span className="detail-label">
+                    {t('table.spec') || '上映规格'}：
+                  </span>
+                  {detailModal.item.specName.split('、').map((name: string, idx: number) => (
+                    <Tag color="green" key={idx}>
+                      {name}
+                    </Tag>
+                  ))}
                 </li>
               )}
             </ul>

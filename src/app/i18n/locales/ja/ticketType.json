@@ -1,4 +1,8 @@
 {
+  "tabs": {
+    "ticketType": "チケットタイプ",
+    "priceConfig": "上映方式加算"
+  },
   "table": {
     "name": "映画チケットタイプ",
     "price": "価格",
@@ -17,6 +21,35 @@
       "price": {
         "label": "価格",
         "required": "価格を入力してください"
+      }
+    }
+  },
+  "priceConfig": {
+    "table": {
+      "displayType": "上映方式",
+      "surcharge": "加算金額"
+    },
+    "modal": {
+      "title": {
+        "create": "上映方式加算を追加",
+        "edit": "上映方式加算を編集"
+      },
+      "form": {
+        "displayType": {
+          "label": "上映方式",
+          "required": "上映方式を選択してください",
+          "placeholder": "選択してください"
+        },
+        "surcharge": {
+          "label": "加算金額",
+          "required": "加算金額を入力してください"
+        }
+      }
+    },
+    "message": {
+      "remove": {
+        "content": "この上映方式加算を削除してもよろしいですか？",
+        "success": "削除に成功しました"
       }
     }
   },

@@ -33,5 +33,17 @@
     "zh": "zh-CN",
     "ja": "ja"
   },
-  "i18n-ally.keystyle": "nested"
+  "i18n-ally.keystyle": "nested",
+  // 设置 Git Bash 为默认终端
+  "terminal.integrated.defaultProfile.windows": "Git Bash",
+  "terminal.integrated.profiles.windows": {
+    "Git Bash": {
+      "path": "C:\\Program Files\\Git\\bin\\bash.exe",
+      "icon": "terminal-bash"
+    },
+    "PowerShell": {
+      "source": "PowerShell",
+      "args": ["-NoProfile", "-ExecutionPolicy", "Bypass"]
+    }
+  }
 }

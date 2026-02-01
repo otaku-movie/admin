@@ -9,6 +9,8 @@
     "cinema": "Cinema",
     "theaterHall": "Theater Hall",
     "open": "Public",
+    "dimension": "Format",
+    "dimensionNotSet": "Not set",
     "spec": "Specification",
     "seatSelectionRatio": "Seat Selection Ratio",
     "attendance": "Attendance",
@@ -73,6 +75,11 @@
       "spec": {
         "label": "Screening Specification",
         "required": "Please select the screening specification"
+      },
+      "dimension": {
+        "label": "2D/3D Specification",
+        "required": "Please select at least one 2D or 3D specification",
+        "placeholder": "Select 2D/3D specification (multiple)"
       },
       "subtitle": {
         "label": "Subtitle",

@@ -1,6 +1,16 @@
 {
+  "prevDay": "Previous day",
+  "nextDay": "Next day",
+  "addShowTime": "Add show time",
+  "selectDate": "Select date",
+  "pageTitle": "Screening management",
   "table": {
     "seatSelectRate": "Seat Selection Rate",
-    "open": "Public"
+    "open": "Public",
+    "version": "Version",
+    "spec": "Screen Spec",
+    "subtitle": "Subtitle",
+    "dimension": "Format",
+    "dimensionNotSet": "Not set"
   }
 }

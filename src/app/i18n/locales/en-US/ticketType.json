@@ -1,4 +1,8 @@
 {
+  "tabs": {
+    "ticketType": "Ticket Type",
+    "priceConfig": "Display Type Surcharge"
+  },
   "table": {
     "name": "Movie Ticket Type",
     "price": "Price",
@@ -17,6 +21,35 @@
       "price": {
         "label": "Price",
         "required": "Please enter the price"
+      }
+    }
+  },
+  "priceConfig": {
+    "table": {
+      "displayType": "Display Type",
+      "surcharge": "Surcharge"
+    },
+    "modal": {
+      "title": {
+        "create": "Add Display Type Surcharge",
+        "edit": "Edit Display Type Surcharge"
+      },
+      "form": {
+        "displayType": {
+          "label": "Display Type",
+          "required": "Please select display type",
+          "placeholder": "Select"
+        },
+        "surcharge": {
+          "label": "Surcharge",
+          "required": "Please enter surcharge amount"
+        }
+      }
+    },
+    "message": {
+      "remove": {
+        "content": "Are you sure you want to delete this display type surcharge?",
+        "success": "Deleted successfully"
       }
     }
   },

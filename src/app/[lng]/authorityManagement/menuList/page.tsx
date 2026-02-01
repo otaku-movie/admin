@@ -83,7 +83,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
                 }
               }).then((res) => {
                 getData()
-                message.success(t(res.message))
+                message.success(res.message)
               })
             }}
           />

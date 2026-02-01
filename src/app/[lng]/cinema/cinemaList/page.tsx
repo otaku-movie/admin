@@ -158,20 +158,6 @@ export default function Page({ params: { lng } }: PageProps) {
               >
                 {common('button.promotion')}
               </Button>
-              <Button
-                onClick={() => {
-                  router.push(
-                    processPath({
-                      name: 'ticketType',
-                      query: {
-                        id: row.id
-                      }
-                    })
-                  )
-                }}
-              >
-                {common('button.ticketType')}
-              </Button>
             </Space>
             <Space wrap>
               <Button

@@ -9,6 +9,8 @@
     "cinema": "上映映画館",
     "theaterHall": "上映劇場",
     "open": "公開",
+    "dimension": "上映",
+    "dimensionNotSet": "未設定",
     "spec": "上映仕様",
     "seatSelectionRatio": "座席選択比率",
     "attendance": "観客数",
@@ -73,6 +75,11 @@
       "spec": {
         "label": "上映仕様",
         "required": "上映仕様を選択してください"
+      },
+      "dimension": {
+        "label": "2D/3D仕様",
+        "required": "2Dまたは3D仕様を1つ以上選択してください",
+        "placeholder": "2D/3D仕様を選択（複数可）"
       },
       "subtitle": {
         "label": "字幕",

@@ -24,6 +24,8 @@ import { Cinema, SpecItem, theaterHall } from '@/type/api'
 import { useTranslation } from '@/app/i18n/client'
 import SeatModal from '@/dialog/seatModal/seatModal'
 import { Dict } from '@/components/dict'
+import { useCommonStore } from '@/store/useCommonStore'
+import { DictCode } from '@/enum/dict'
 import MovieShowTimeModal from '@/dialog/movieShowTimeModal'
 import dayjs from 'dayjs'
 import { CheckPermission } from '@/components/checkPermission'
@@ -66,6 +68,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
   const [theaterHallData, setTheaterHallData] = useState<theaterHall[]>([])
   const { t } = useTranslation(lng, 'showTime')
   const { t: common } = useTranslation(lng, 'common')
+  const commonStore = useCommonStore()
 
   const getData = (page = 1) => {
     http({
@@ -142,6 +145,15 @@ export default function MoviePage({ params: { lng } }: PageProps) {
       width: 350,
       fixed: 'left',
       render(_: any, row) {
+        const dimensionType = row.dimensionType
+        const dimensionDictList = commonStore.dict?.[DictCode.DIMENSION_TYPE] || []
+        const dimensionItem = dimensionDictList.find(
+          (d: any) => d.id === dimensionType || d.code === dimensionType
+        )
+        const dimensionName =
+          dimensionType == null
+            ? t('table.dimensionNotSet')
+            : (dimensionItem?.name ?? `类型${dimensionType}`)
         return (
           <Space align="start">
             <CustomAntImage
@@ -150,13 +162,24 @@ export default function MoviePage({ params: { lng } }: PageProps) {
               alt="poster"
               fallback={notFoundImage}
             ></CustomAntImage>
-            <Space direction="vertical">
+            <Space direction="vertical" size={4}>
               <span>{row.movieName}</span>
-              <span></span>
+              <Space wrap size={4}>
+                <Tag color="purple">{dimensionName}</Tag>
+                {row.specName &&
+                  row.specName.split('、').map((name: string, idx: number) => (
+                    <Tag key={idx} color="green">
+                      {name}
+                    </Tag>
+                  ))}
+              </Space>
               <section>
-                <div>{row.cinemaName}</div>
-                <div>{row.theaterHallName}</div>
-                <div>{row.specName}</div>
+                <div style={{ fontWeight: 600, color: '#262626' }}>
+                  {row.cinemaName}
+                </div>
+                <div style={{ fontWeight: 400, color: '#595959' }}>
+                  {row.theaterHallName}
+                </div>
               </section>
             </Space>
           </Space>
@@ -182,7 +205,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
       render(_: any, row) {
         return (
           <Space direction="vertical">
-            {row.movieShowTimeTags.map((item: any) => {
+            {row.movieShowTimeTags?.map((item: any) => {
               return <Tag key={item.id}>{item.name}</Tag>
             })}
           </Space>

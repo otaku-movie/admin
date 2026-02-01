@@ -5,6 +5,8 @@
 export enum DictCode {
   /** 配音版本 */
   DUBBING_VERSION = 'dubbingVersion',
+  /** 2D/3D规格(上映规格) */
+  DIMENSION_TYPE = 'dimensionType',
   /** 语言 */
   LANGUAGE = 'language',
   /** 你好电影 */

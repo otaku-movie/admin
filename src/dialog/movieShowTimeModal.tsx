@@ -21,6 +21,7 @@ import { MovieModal } from './movieModal'
 import { getMovieVersions } from '@/api/request/movie'
 import { useCommonStore } from '@/store/useCommonStore'
 import { DictCode } from '@/enum/dict'
+import { DictSelect } from '@/components/DictSelect'
 
 interface MovieShowTimeModalProps {
   readonly type: 'create' | 'edit'
@@ -37,7 +38,8 @@ interface Query {
   cinemaId?: number
   open?: boolean
   theaterHallId?: number
-  specId?: number
+  specIds?: number[]
+  dimensionType?: number
   startTime?: dayjs.Dayjs
   endTime?: dayjs.Dayjs
   subtitleId?: number[]
@@ -234,9 +236,29 @@ export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
     }
 
     if (props.data.id) {
+      const rawDimensionType = Array.isArray(props.data.dimensionType)
+        ? (props.data.dimensionType as number[])[0]
+        : (props.data.dimensionType as number | undefined)
+      const dimensionDictList = commonStore.dict?.[DictCode.DIMENSION_TYPE] || []
+      const dimensionItem = dimensionDictList.find(
+        (d: any) =>
+          Number(d.id) === Number(rawDimensionType) ||
+          Number(d.code) === Number(rawDimensionType)
+      )
+      const dimensionType =
+        dimensionItem != null ? dimensionItem.code : rawDimensionType
+
       const updatedData = {
         ...props.data,
         movieShowTimeTagId: props.data.movieShowTimeTagsId as number[],
+        dimensionType,
+        specIds:
+          (props.data.specIds as number[] | undefined) ??
+          (Array.isArray(props.data.specId)
+            ? (props.data.specId as number[])
+            : props.data.specId != null
+              ? [props.data.specId as number]
+              : []),
         startTime: dayjs(props.data.startTime as string),
         endTime: dayjs(props.data.endTime as string)
       }
@@ -293,12 +315,21 @@ export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
       onOk={() => {
         console.log(query)
         form.validateFields().then(() => {
+          const dimensionDictList =
+            commonStore.dict?.[DictCode.DIMENSION_TYPE] || []
+          const dimensionItem = dimensionDictList.find(
+            (d: any) => Number(d.code) === Number(query.dimensionType)
+          )
+          const dimensionTypeIdForApi = dimensionItem?.id ?? query.dimensionType
           http({
             url: 'admin/movie_show_time/save',
             method: 'post',
             data: {
               ...query,
               showTimeTagId: query.movieShowTimeTagId,
+              dimensionType: dimensionTypeIdForApi,
+              specIds: query.specIds,
+              specId: query.specIds?.[0],
               startTime: query.startTime?.format('YYYY-MM-DD HH:mm:ss'),
               endTime: query.endTime?.format('YYYY-MM-DD HH:mm:ss'),
               price: query.price,
@@ -467,11 +498,18 @@ export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
               showSearch
               popupMatchSelectWidth={300}
               onChange={(val) => {
+                const hall = theaterHallData.find((item) => item.id === val)
+                const cinemaSpecId = hall?.cinemaSpecId
+                const hasSpecSelected =
+                  query.specIds != null && query.specIds.length > 0
                 setQuery({
                   ...query,
                   theaterHallId: val,
-                  specId: theaterHallData.find((item) => item.id === val)
-                    ?.cinemaSpecId
+                  specIds: hasSpecSelected
+                    ? query.specIds
+                    : cinemaSpecId != null
+                      ? [cinemaSpecId]
+                      : []
                 })
               }}
             >
@@ -484,18 +522,50 @@ export default function MovieShowTimeModal(props: MovieShowTimeModalProps) {
           </Space>
         </Form.Item>
         <Form.Item
+          label={t('showTimeModal.form.dimension.label')}
+          name="dimensionType"
+          rules={[
+            {
+              required: true,
+              message: t('showTimeModal.form.dimension.required'),
+              validator() {
+                if (query.dimensionType == null) {
+                  return Promise.reject(
+                    new Error(t('showTimeModal.form.dimension.required'))
+                  )
+                }
+                return Promise.resolve()
+              }
+            }
+          ]}
+        >
+          <DictSelect
+            code={DictCode.DIMENSION_TYPE}
+            value={query.dimensionType}
+            onChange={(val) => {
+              setQuery({
+                ...query,
+                dimensionType: val
+              })
+              form.setFieldsValue({ dimensionType: val })
+            }}
+            style={{ width: 200 }}
+          />
+        </Form.Item>
+        <Form.Item
           label={t('showTimeModal.form.spec.label')}
           name="cinemaSpecId"
         >
           <Space>
             <Select
+              mode="multiple"
               style={{ width: 200 }}
-              value={query.specId}
+              value={query.specIds ?? []}
               disabled={!query.cinemaId}
               onChange={(val) => {
                 setQuery({
                   ...query,
-                  specId: val
+                  specIds: val ?? []
                 })
               }}
             >

@@ -1,4 +1,6 @@
 {
+  "ticketTypeSection": "チケットタイプ",
+  "priceConfigSection": "2D/3D追加料金",
   "form": {
     "brandId": {
       "label": "ブランド名",
@@ -40,6 +42,7 @@
     },
     "save": "保存"
   },
+  "priceConfigDuplicate": "この上映形式は既に追加済みです。重複して選択しないでください",
   "message": {
     "required": "規格と特別上映の追加料金は必須です",
     "repeat": "規格は重複できません"

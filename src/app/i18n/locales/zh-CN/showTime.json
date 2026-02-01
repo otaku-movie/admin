@@ -9,6 +9,8 @@
     "cinema": "上映影院",
     "theaterHall": "上映影厅",
     "open": "是否公开",
+    "dimension": "放映",
+    "dimensionNotSet": "未设置",
     "spec": "上映规格",
     "seatSelectionRatio": "选座比",
     "attendance": "上座率",
@@ -73,6 +75,11 @@
       "spec": {
         "label": "上映规格",
         "required": "请选择上映规格"
+      },
+      "dimension": {
+        "label": "2D/3D规格",
+        "required": "请至少选择一项2D或3D规格",
+        "placeholder": "请选择2D/3D规格（可多选）"
       },
       "subtitle": {
         "label": "字幕",

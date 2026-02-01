@@ -28,6 +28,10 @@ export interface MovieShowTimeItem {
     name: string
   }[]
   specId?: number
+  specIds?: number[]
+  specName?: string
+  /** 放映类型 dict_item.id (2D/3D) */
+  dimensionType?: number
   movieShowTimeTagsId: number[]
   movieVersionId?: number
   versionCode?: number

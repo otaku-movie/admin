@@ -1,6 +1,16 @@
 {
+  "prevDay": "前日",
+  "nextDay": "翌日",
+  "addShowTime": "上映追加",
+  "selectDate": "日付を選択",
+  "pageTitle": "上映管理",
   "table": {
     "seatSelectRate": "座席選択比率",
-    "open": "公開"
+    "open": "公開",
+    "version": "版本",
+    "spec": "上映规格",
+    "subtitle": "字幕",
+    "dimension": "上映",
+    "dimensionNotSet": "未設定"
   }
 }
