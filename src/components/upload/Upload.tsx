@@ -21,8 +21,11 @@ const getBase64 = (file: FileType): Promise<string> => {
   })
 }
 
-export interface UploadProps {
+/** 单张上传 */
+export interface SingleUploadProps {
   value: string
+  multiple?: false
+  maxCount?: never
   crop?: boolean
   ext?: string[]
   fileSize?: number
@@ -30,7 +33,29 @@ export interface UploadProps {
   onChange?: (val: string) => void
 }
 
+/** 多张上传 */
+export interface MultiUploadProps {
+  value: string[]
+  multiple: true
+  maxCount?: number
+  crop?: never
+  ext?: string[]
+  fileSize?: number
+  cropperOptions?: never
+  onChange?: (val: string[]) => void
+}
+
+export type UploadProps = SingleUploadProps | MultiUploadProps
+
 export function Upload(props: UploadProps) {
+  if (props.multiple) {
+    return <MultiUpload {...props} />
+  }
+  return <SingleUpload {...props} />
+}
+
+/* ─── 单张上传（原有逻辑） ─── */
+function SingleUpload(props: SingleUploadProps) {
   const {
     ext = ['.jpg', '.jpeg', '.webp', '.png'],
     fileSize = 5 * Math.pow(1024, 2)
@@ -86,7 +111,6 @@ export function Upload(props: UploadProps) {
     if (file.status === 'done') {
       const url = file.response.data.url
       setImageURL(url)
-      // 更新 fileList 中的 URL 为完整 URL（带域名）
       setFileList([
         {
           uid: '-1',
@@ -95,7 +119,6 @@ export function Upload(props: UploadProps) {
           url: getURL(url)
         }
       ])
-      // 传给父组件的是原始路径（不带域名）
       props.onChange?.(url)
     }
   }
@@ -108,8 +131,6 @@ export function Upload(props: UploadProps) {
   )
 
   const deleteFile = () => {
-    // imageURL 保存的是原始路径（相对路径），直接使用
-    // 如果是完整 URL，需要提取相对路径部分
     const path = imageURL.startsWith('http')
       ? imageURL.split('/').slice(4).join('/')
       : imageURL.startsWith('/')
@@ -139,7 +160,6 @@ export function Upload(props: UploadProps) {
       .then((res: any) => {
         const url = res.data.url
         setImageURL(url)
-        // 显示时使用完整 URL（带域名）
         setFileList([
           {
             uid: '-1',
@@ -148,7 +168,6 @@ export function Upload(props: UploadProps) {
             url: getURL(url)
           }
         ])
-        // 传给父组件的是原始路径（不带域名）
         props.onChange?.(url)
         message.success(res.message)
       })
@@ -231,6 +250,110 @@ export function Upload(props: UploadProps) {
           uploadFile(fd)
         }}
       ></ImageCropper>
+      {previewImage && (
+        <CustomAntImage
+          wrapperStyle={{ display: 'none' }}
+          alt="image"
+          preview={{
+            visible: previewOpen,
+            onVisibleChange: (visible) => setPreviewOpen(visible),
+            afterOpenChange: (visible) => !visible && setPreviewImage('')
+          }}
+          src={previewImage}
+        />
+      )}
+    </>
+  )
+}
+
+/* ─── 多张上传 ─── */
+function MultiUpload(props: MultiUploadProps) {
+  const {
+    ext = ['.jpg', '.jpeg', '.webp', '.png'],
+    fileSize = 5 * Math.pow(1024, 2),
+    maxCount
+  } = props
+
+  const { t } = useTranslation(navigator.language as languageType, 'components')
+  const [previewOpen, setPreviewOpen] = useState(false)
+  const [previewImage, setPreviewImage] = useState('')
+
+  const list = Array.isArray(props.value) ? props.value : []
+  const fileList: UploadFile[] = list.map((url, index) => ({
+    uid: `multi-${index}-${String(url).slice(-12)}`,
+    name: `image-${index}`,
+    status: 'done' as const,
+    url: getURL(url)
+  }))
+
+  const handlePreview = async (file: UploadFile) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj as FileType)
+    }
+    const previewUrl = file.url || (file.preview as string)
+    setPreviewImage(
+      previewUrl.startsWith('data:') ? previewUrl : getURL(previewUrl)
+    )
+    setPreviewOpen(true)
+  }
+
+  const uploadFile = (fd: FormData) => {
+    http({ url: '/upload', method: 'post', data: fd })
+      .then((res: any) => {
+        const url = res.data.url
+        props.onChange?.([...list, url])
+      })
+      .catch(() => {
+        message.error(t('upload.error.uploadFailed') || '上传失败')
+      })
+  }
+
+  const beforeUpload = (file: FileType) => {
+    const isValidFormat = ext.includes(`.${file.type.split('/')[1]}`)
+    if (!isValidFormat) {
+      message.error(t('upload.error.noSupportedFormat', { ext: ext.join('、') }))
+      return false
+    }
+    const isValidSize = file.size <= fileSize
+    if (!isValidSize) {
+      message.error(t('upload.error.fileSize', { size: getFileSize(fileSize) }))
+      return false
+    }
+    return true
+  }
+
+  const uploadButton = (
+    <button style={{ border: 0, background: 'none' }} type="button">
+      <PlusOutlined />
+      <div style={{ marginTop: 8 }}>Upload</div>
+    </button>
+  )
+
+  return (
+    <>
+      <AntdUpload
+        action={BASE_URL + '/upload'}
+        listType="picture-card"
+        fileList={fileList}
+        multiple
+        maxCount={maxCount}
+        beforeUpload={beforeUpload}
+        onPreview={handlePreview}
+        customRequest={(options) => {
+          const fd = new FormData()
+          fd.append('file', options.file)
+          uploadFile(fd)
+        }}
+        onRemove={(file) => {
+          const idx = fileList.findIndex((f) => f.uid === file.uid)
+          if (idx >= 0) {
+            const next = list.filter((_, i) => i !== idx)
+            props.onChange?.(next)
+          }
+        }}
+      >
+        {maxCount && fileList.length >= maxCount ? null : uploadButton}
+      </AntdUpload>
       {previewImage && (
         <CustomAntImage
           wrapperStyle={{ display: 'none' }}

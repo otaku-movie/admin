@@ -7,28 +7,38 @@ type StrategyRemover = (id: number) => void
 
 export type PresaleDeliveryType = 'virtual' | 'physical'
 export type PresaleDiscountMode = 'fixed' | 'percentage'
-export type MubitikeTicketType = 'online' | 'card' | 'combo'
+export type MubitikeTicketType = 'online' | 'card' | 'combo' | 'movieticket'
 export type MubitikeBonusType = 'digital' | 'physical' | 'voucher'
-export type PresaleAudienceType =
-  | 'general'
-  | 'junior'
-  | 'child'
-  | 'student'
-  | 'senior'
-  | 'pair'
+
+export interface PriceItem {
+  label: string
+  price: number
+}
 
 export interface PresaleSpecification {
   id?: string
   name?: string
   skuCode?: string
   ticketType?: MubitikeTicketType
-  audienceType?: PresaleAudienceType
   deliveryType: PresaleDeliveryType
-  price: number
+  /** 兼容展示，以 priceItems 为准 */
+  price?: number
+  /** 多档价格 [{label,price}] */
+  priceItems?: PriceItem[]
+  /** 规格级特典名称 */
+  bonusTitle?: string
+  /** 规格级特典图片URL数组 */
+  bonusImages?: string[]
+  /** 规格级特典说明 */
+  bonusDescription?: string
+  /** 规格级特典数量 */
+  bonusQuantity?: number
   stock?: number
   points?: number
   shipDays?: number
-  image?: string
+  /** 规格图集（多张），每规格独立 */
+  images?: string[]
+  bonusIncluded?: boolean
 }
 
 export interface PresaleTicket {
@@ -50,16 +60,9 @@ export interface PresaleTicket {
   perUserLimit: number
   movieIds?: number[]
   movieNames?: string[]
-  benefits?: string[]
-  bonusTitle?: string
-  bonusType?: MubitikeBonusType
-  bonusDelivery?: PresaleDeliveryType
-  bonusDescription?: string
   pickupNotes?: string
-  remark?: string
   cover: string
   gallery?: string[]
-  description?: string
   updatedAt: string
   specifications?: PresaleSpecification[]
 }
@@ -105,7 +108,6 @@ export const usePricingStrategyStore = create<PresaleState>()(
               ...item,
               id: item.id ?? createId(),
               deliveryType: item.deliveryType ?? ticket.deliveryType ?? 'virtual',
-              audienceType: item.audienceType ?? undefined,
               ticketType:
                 item.ticketType ??
                 (item.deliveryType === 'physical' ? 'card' : 'online'),
@@ -114,7 +116,7 @@ export const usePricingStrategyStore = create<PresaleState>()(
               stock: item.stock,
               points: item.points,
               shipDays: item.shipDays,
-              image: item.image
+              images: item.images ?? []
             }))
           }
           if (Array.isArray(ticket.agePricing) && ticket.agePricing.length > 0) {
@@ -125,13 +127,12 @@ export const usePricingStrategyStore = create<PresaleState>()(
               ticketType:
                 item.ticketType ??
                 (item.deliveryType === 'physical' ? 'card' : 'online'),
-              audienceType: item.audienceType ?? undefined,
               deliveryType: item.deliveryType ?? ticket.deliveryType ?? 'virtual',
               price: item.price,
               stock: item.stock,
               points: item.points,
               shipDays: item.shipDays,
-              image: item.image
+              images: item.images ?? []
             }))
           }
           if (typeof ticket.price === 'number') {
@@ -143,13 +144,12 @@ export const usePricingStrategyStore = create<PresaleState>()(
                 ticketType:
                   ticket.ticketType ??
                   (ticket.deliveryType === 'physical' ? 'card' : 'online'),
-                audienceType: undefined,
                 deliveryType: ticket.deliveryType ?? 'virtual',
                 price: ticket.price,
                 stock: ticket.stock,
                 points: ticket.points,
                 shipDays: ticket.shipDays,
-                image: ticket.image
+                images: ticket.images ?? []
               }
             ]
           }
@@ -206,13 +206,6 @@ export const usePricingStrategyStore = create<PresaleState>()(
               rest.endTime ??
               rest.finishDate ??
               rest.stopDate,
-            bonusTitle: rest.bonusTitle ?? rest.benefits?.[0],
-            bonusType:
-              rest.bonusType ??
-              (rest.deliveryType === 'physical' ? 'physical' : 'digital'),
-            bonusDelivery:
-              rest.bonusDelivery ?? (rest.deliveryType ?? 'virtual'),
-            bonusDescription: rest.bonusDescription ?? rest.bonusDetail,
             pickupNotes: rest.pickupNotes,
             specifications: ensureSpecifications(item)
           }

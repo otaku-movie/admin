@@ -25,6 +25,7 @@
       "remark": "Remarks",
       "galleryCount": "{count} images",
       "galleryMore": "+{count} more",
+      "noSpecifications": "No specifications",
       "skuColumns": {
         "name": "SKU",
         "untitled": "Untitled",
@@ -64,7 +65,8 @@
     "mubitikeType": {
       "online": "MoviTicket Online",
       "card": "MoviTicket Card",
-      "combo": "Bundle / Combo"
+      "combo": "Bundle / Combo",
+      "movieticket": "Movie Ticket Presale"
     },
     "bonusType": {
       "digital": "Digital Bonus",
@@ -76,13 +78,22 @@
       "percentage": "Percentage"
     },
     "form": {
-      "section": {
-        "media": "Media Assets",
-        "basic": "Basic Information",
-        "sales": "Sales Settings",
+      "steps": {
+        "media": "Product Images",
+        "basic": "Product & Sales",
         "specifications": "Ticket Lineup",
-        "usage": "Usage Window",
-        "bonus": "Purchase Bonus"
+        "usage": "Sale & Usage Period",
+        "extra": "Notes & Remarks",
+        "next": "Next",
+        "prev": "Previous"
+      },
+      "section": {
+        "media": "Product Images",
+        "basic": "Product Info",
+        "sales": "Sales Info",
+        "specifications": "Ticket Lineup",
+        "usage": "Sale & Usage Period",
+        "extra": "Notes & Remarks"
       },
       "code": {
         "label": "Redeem Code",
@@ -120,12 +131,19 @@
       "deliveryType": {
         "label": "Default Delivery Method"
       },
+      "derivedBySpecs": {
+        "hint": "MoviTicket format and delivery method are determined by each specification in 「券種・ラインアップ」 below.",
+        "multiple": "Multiple ({{list}})",
+        "setInSpecs": "Set ticket type and delivery method for each specification in 「券種・ラインアップ」."
+      },
       "discountMode": {
         "label": "Discount Mode"
       },
       "price": {
         "label": "Reference Price",
-        "required": "Please enter the reference price"
+        "required": "Please enter the reference price",
+        "derivedHint": "Set per specification in 「券種・ラインアップ」 below.",
+        "setInSpecs": "Set each specification price in 「券種・ラインアップ」."
       },
       "quantity": {
         "label": "Total Allocation",
@@ -137,18 +155,24 @@
         "percentageLimit": "Percentage must be between 0 and 100"
       },
       "specifications": {
-        "label": "Product specs",
-        "groupLabel": "Spec name",
-        "groupPlaceholder": "e.g. Adult / Student",
-        "untitled": "SKU {index}",
-        "skuCode": "SKU code",
-        "skuPlaceholder": "e.g. ONLINE-ADULT",
-        "ticketType": "Ticket format",
-        "ticketTypePlaceholder": "Select ticket format",
-        "ticketTypeRequired": "Select the ticket format",
-        "audienceType": "Audience segment",
-        "audiencePlaceholder": "Select the primary audience (optional)",
+        "label": "Ticket Lineup",
+        "hint": "Each spec is shown as one purchase line on the store (name + \"with bonus\" + price). Enter the version name.",
+        "untitled": "Spec {{index}}",
+        "add": "Add specification",
+        "required": "Please add at least one specification",
+        "group": {
+          "label": "Spec name (version)",
+          "placeholder": "e.g. General Presale ①Anna Yamada ver.",
+          "required": "Please enter the specification name"
+        },
+        "ticketType": {
+          "label": "Ticket format",
+          "placeholder": "Select ticket format",
+          "required": "Select the ticket format"
+        },
         "audience": {
+          "label": "Audience segment",
+          "placeholder": "Optional",
           "general": "Adult",
           "junior": "Junior",
           "student": "Student",
@@ -156,22 +180,58 @@
           "senior": "Senior",
           "pair": "Pair Ticket"
         },
-        "price": "Price",
-        "pricePlaceholder": "Enter price",
-        "stock": "Stock",
-        "stockPlaceholder": "Enter stock (optional)",
-        "deliveryType": "Delivery method",
-        "deliveryPlaceholder": "Select delivery method",
-        "deliveryRequired": "Select a delivery method",
-        "points": "Reward points",
-        "pointsPlaceholder": "Points awarded (optional)",
-        "shipDays": "Fulfillment lead time",
-        "shipDaysPlaceholder": "Days to ship (optional)",
-        "image": "SKU image URL",
-        "imagePlaceholder": "Paste image URL (optional)",
-        "add": "Add specification",
-        "required": "Please add at least one specification",
-        "priceRequired": "Enter the price for this specification"
+        "price": {
+          "label": "Price",
+          "placeholder": "Enter price",
+          "required": "Enter the price for this specification",
+          "min": "Price cannot be less than 0",
+          "max": "Price cannot exceed 9999999",
+          "atLeastOne": "At least one price item is required (label + price)",
+          "items": "Price lineup",
+          "addItem": "Add price",
+          "itemLabelRequired": "Please enter price label",
+          "itemLabelPlaceholder": "e.g. 2D General, 2D Child"
+        },
+        "stock": {
+          "label": "Stock",
+          "placeholder": "Optional"
+        },
+        "delivery": {
+          "label": "Delivery method",
+          "placeholder": "Select",
+          "required": "Select a delivery method"
+        },
+        "points": {
+          "label": "Reward points",
+          "placeholder": "Optional"
+        },
+        "shipDays": {
+          "label": "Fulfillment lead time",
+          "placeholder": "Optional"
+        },
+        "images": {
+          "label": "Spec images",
+          "placeholder": "Paste image URL (optional)"
+        },
+        "bonus": {
+          "section": "Bonus info",
+          "included": "With bonus",
+          "yes": "With bonus",
+          "no": "No bonus",
+          "title": {
+            "label": "Bonus name",
+            "placeholder": "e.g. Clear file folder (A5)"
+          },
+          "images": "Bonus images",
+          "description": {
+            "label": "Bonus description",
+            "placeholder": "e.g. One bonus per ticket. While supplies last."
+          },
+          "quantity": {
+            "label": "Bonus quantity",
+            "placeholder": "e.g. 1000"
+          }
+        }
       },
       "benefits": {
         "label": "Benefits",
@@ -181,25 +241,30 @@
       },
       "launchTime": {
         "label": "Sale Start",
-        "required": "Please select the sale start time"
+        "required": "Please select the sale start time",
+        "beforeEnd": "Sale start cannot be after sale end"
       },
       "endTime": {
         "label": "Sale End",
+        "hint": "Day before cinema release",
         "required": "Please select the sale end time",
         "afterLaunch": "Sale end must be after the sale start"
       },
       "usageStart": {
         "label": "Usage Start",
-        "required": "Please select the usage start time"
+        "hint": "Release day",
+        "required": "Please select the usage start time",
+        "beforeEnd": "Usage start cannot be after usage end"
       },
       "usageEnd": {
         "label": "Usage End",
+        "hint": "End of run",
         "required": "Please select the usage end time",
         "afterStart": "Usage end must be after the usage start"
       },
       "bonusTitle": {
-        "label": "Bonus title",
-        "placeholder": "e.g. Limited edition card sleeve"
+        "label": "Purchase bonus name",
+        "placeholder": "e.g. Special clear file (A5 size)"
       },
       "bonusType": {
         "label": "Bonus type"
@@ -209,7 +274,7 @@
       },
       "bonusDescription": {
         "label": "Bonus description",
-        "placeholder": "Describe how and when the bonus is provided"
+        "placeholder": "e.g. One bonus per ticket. While stocks last. Bonus is not for resale."
       },
       "pickupNotes": {
         "label": "Pickup / exchange notes",
@@ -221,6 +286,7 @@
       },
       "perUserLimit": {
         "label": "Per User Limit",
+        "placeholder": "Leave empty for no limit",
         "required": "Please enter the limit per user"
       },
       "description": {
@@ -250,6 +316,19 @@
       "remarkEmpty": "Not set"
     },
     "serviceDay": {
+      "priority": "Priority",
+      "priorityPlaceholder": "Lower number = higher priority, default 0",
+      "typePriority": {
+        "title": "Rule Type Priority",
+        "description": "Drag to reorder; top to bottom = higher to lower priority (matched first).",
+        "dragHint": "Drag to reorder",
+        "monthly": "Monthly Rule",
+        "weekly": "Weekly Rule",
+        "specificDate": "Specific Date Rule",
+        "timeRange": "Time Range Rule",
+        "fixedPrice": "Fixed Price",
+        "ticketType": "Ticket Type Rule"
+      },
       "monthly": {
         "title": "Monthly Rules",
         "name": "Rule Name",

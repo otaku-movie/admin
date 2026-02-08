@@ -17,7 +17,7 @@ import {
 import http from '@/api'
 import { languageType, notFoundImage } from '@/config'
 import { Dict } from '@/components/dict'
-import { getMovieList } from '@/api/request/movie'
+import { getMovieList, getMovieDetail } from '@/api/request/movie'
 import page from '@/app/[lng]/dataChart/page'
 import { Query, QueryItem } from '@/components/query'
 import { showTotal } from '@/utils/pagination'
@@ -26,7 +26,9 @@ import { CustomAntImage } from '@/components/CustomAntImage'
 
 interface modalProps {
   show?: boolean
-  data: Record<string, any>
+  data?: Record<string, any>
+  /** 打开时预选中的电影 id */
+  initialMovieId?: number
   onConfirm?: (selectedMovie: Movie) => void
   onCancel?: () => void
 }
@@ -47,6 +49,26 @@ export function MovieModal(props: modalProps) {
     'common'
   )
   const [selectedMovie, setSelectedMovie] = useState<any>({})
+  const [selectedRowKeys, setSelectedRowKeys] = useState<number[]>([])
+
+  // 打开时若有 initialMovieId 则预选中该电影
+  useEffect(() => {
+    if (!props.show) return
+    const id = props.initialMovieId
+    if (id != null) {
+      setSelectedRowKeys([id])
+      getMovieDetail({ id })
+        .then((res) => {
+          const list = res?.data
+          const movie = Array.isArray(list) && list.length > 0 ? list[0] : null
+          if (movie) setSelectedMovie(movie)
+        })
+        .catch(() => {})
+    } else {
+      setSelectedRowKeys([])
+      setSelectedMovie({})
+    }
+  }, [props.show, props.initialMovieId])
 
   const getData = (page = 1) => {
     getMovieList({
@@ -240,11 +262,10 @@ export function MovieModal(props: modalProps) {
           sticky={{ offsetHeader: -20 }}
           rowSelection={{
             type: 'radio',
+            selectedRowKeys,
             onChange(selectedKeys, selectedRows) {
-              console.log(selectedKeys, selectedRows)
-              setSelectedMovie({
-                ...selectedRows[0]
-              })
+              setSelectedRowKeys(selectedKeys as number[])
+              setSelectedMovie(selectedRows[0] ? { ...selectedRows[0] } : {})
             }
           }}
           pagination={{

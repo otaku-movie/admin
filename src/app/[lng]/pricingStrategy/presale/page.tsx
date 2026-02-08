@@ -1,9 +1,10 @@
 'use client'
 
-import React, { useMemo } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import {
   Button,
-  Image,
+  Card,
+  Flex,
   Modal,
   Space,
   Table,
@@ -15,13 +16,12 @@ import type { TableColumnsType } from 'antd'
 import dayjs from 'dayjs'
 import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '@/app/[lng]/layout'
-import {
-  usePricingStrategyStore,
-  type PresaleTicket,
-  type PresaleSpecification
-} from '@/store/usePricingStrategyStore'
+import type { PresaleTicket, PresaleSpecification } from '@/store/usePricingStrategyStore'
 import { useRouter } from 'next/navigation'
 import { processPath } from '@/config/router'
+import { getPresaleList, removePresaleApi } from '@/api/request/presale'
+import { showTotal } from '@/utils/pagination'
+import { CustomAntImage } from '@/components/CustomAntImage'
 
 const { Title } = Typography
 
@@ -36,8 +36,38 @@ export default function PresaleTicketsPage({ params: { lng } }: PageProps) {
   )
   const router = useRouter()
 
-  const presales = usePricingStrategyStore((state) => state.presales)
-  const removePresale = usePricingStrategyStore((state) => state.removePresale)
+  const [presales, setPresales] = useState<PresaleTicket[]>([])
+  const [loading, setLoading] = useState(false)
+  const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 10,
+    total: 0
+  })
+
+  const fetchList = useCallback(
+    async (page = 1, pageSize = 10) => {
+      setLoading(true)
+      try {
+        const res = await getPresaleList({ page, pageSize })
+        setPresales(res.list)
+        setPagination((prev) => ({
+          ...prev,
+          current: page,
+          pageSize,
+          total: res.total
+        }))
+      } catch {
+        setPresales([])
+      } finally {
+        setLoading(false)
+      }
+    },
+    []
+  )
+
+  React.useEffect(() => {
+    fetchList(pagination.current, pagination.pageSize)
+  }, [fetchList])
 
   const formatPrice = (value?: number) => {
     if (value === undefined || value === null) return '--'
@@ -78,7 +108,14 @@ export default function PresaleTicketsPage({ params: { lng } }: PageProps) {
     const format = withSeconds ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD HH:mm'
     const startText = start ? dayjs(start).format(format) : '—'
     const endText = end ? dayjs(end).format(format) : '—'
-    return `${startText} ~ ${endText}`
+
+    return (
+      <Space direction="vertical" size={4} align="center">
+        <Typography.Text>{startText}</Typography.Text>
+        <Typography.Text>~</Typography.Text>
+        <Typography.Text>{endText}</Typography.Text>
+      </Space>
+    )
   }
 
   const handleAdd = () => {
@@ -109,65 +146,43 @@ export default function PresaleTicketsPage({ params: { lng } }: PageProps) {
       )
     }
 
-    const renderBonus = (record: PresaleTicket) => {
-      if (!record.bonusTitle && !record.bonusDescription) {
-        return '--'
-      }
-      return (
-        <Space direction="vertical" size={4}>
-          {record.bonusTitle && <span>{record.bonusTitle}</span>}
-          {record.bonusType && (
-            <Tag color="magenta">
-              {t(`presale.bonusType.${record.bonusType}`)}
-            </Tag>
-          )}
-          {record.bonusDelivery && (
-            <Typography.Text type="secondary">
-              {t('presale.table.bonusDelivery', {
-                delivery: t(`presale.deliveryType.${record.bonusDelivery}`)
-              })}
-            </Typography.Text>
-          )}
-          {record.bonusDescription && (
-            <Typography.Text type="secondary">
-              {record.bonusDescription}
-            </Typography.Text>
-          )}
-        </Space>
-      )
-    }
-
     const expandedRowRender = (record: PresaleTicket) => {
       const skuColumns: TableColumnsType<PresaleSpecification> = [
         {
+          title: t('presale.table.skuColumns.image'),
+          dataIndex: 'image',
+          width: 60,
+          render: (_: unknown, sku) => {
+            const src = sku.images?.[0]
+            return src ? (
+              <CustomAntImage
+                // width={56}
+                // height={56}
+                src={src}
+                alt={sku.name ?? ''}
+                style={{ objectFit: 'cover', borderRadius: 6 }}
+              />
+            ) : (
+              '--'
+            )
+          }
+        },
+        {
           title: t('presale.table.skuColumns.name'),
           dataIndex: 'name',
+          width: 220,
           render: (value: string | undefined, sku) => (
-            <Space direction="vertical" size={2}>
+            <Space direction="vertical" size={4}>
               <Typography.Text strong>
                 {value || t('presale.table.skuColumns.untitled')}
               </Typography.Text>
               <Space size={[4, 4]} wrap>
                 {sku.skuCode && (
-                  <Tag color="blue">
-                    {t('presale.specifications.sku', { sku: sku.skuCode })}
-                  </Tag>
+                  <Tag color="blue">{sku.skuCode}</Tag>
                 )}
                 {sku.ticketType && (
                   <Tag color="geekblue">
                     {t(`presale.mubitikeType.${sku.ticketType}`)}
-                  </Tag>
-                )}
-                {sku.deliveryType && (
-                  <Tag
-                    color={sku.deliveryType === 'virtual' ? 'cyan' : 'volcano'}
-                  >
-                    {t(`presale.deliveryType.${sku.deliveryType}`)}
-                  </Tag>
-                )}
-                {sku.audienceType && (
-                  <Tag color="purple">
-                    {t(`presale.specifications.audience.${sku.audienceType}`)}
                   </Tag>
                 )}
               </Space>
@@ -177,45 +192,104 @@ export default function PresaleTicketsPage({ params: { lng } }: PageProps) {
         {
           title: t('presale.table.skuColumns.price'),
           dataIndex: 'price',
-          render: (value?: number) => formatPrice(value)
+          width: 120,
+          render: (_: unknown, sku) => {
+            const items = sku.priceItems
+            if (items?.length) {
+              return (
+                <Space direction="vertical" size={2}>
+                  {items.map((item, i) => (
+                    <Typography.Text key={i}>
+                      {item.label}: {formatPrice(item.price)}
+                    </Typography.Text>
+                  ))}
+                </Space>
+              )
+            }
+            return formatPrice(
+              sku.price ?? (sku.priceItems?.[0] ? sku.priceItems[0].price : undefined)
+            )
+          }
         },
         {
           title: t('presale.table.skuColumns.stock'),
           dataIndex: 'stock',
+          width: 80,
+          align: 'center',
           render: (value?: number) => (value === undefined ? '--' : value)
         },
         {
-          title: t('presale.table.skuColumns.points'),
-          dataIndex: 'points',
-          render: (value?: number) =>
-            value === undefined
-              ? '--'
-              : t('presale.specifications.points', { points: value })
-        },
-        {
-          title: t('presale.table.skuColumns.shipDays'),
-          dataIndex: 'shipDays',
-          render: (value?: number) =>
-            value === undefined
-              ? '--'
-              : t('presale.specifications.shipDays', { days: value })
-        },
-        {
-          title: t('presale.table.skuColumns.image'),
-          dataIndex: 'image',
-          render: (value?: string) =>
-            value ? <Image width={60} src={value} alt={value} /> : '--'
+          title: t('presale.table.bonus'),
+          key: 'bonus',
+          width: 220,
+          render: (_: unknown, sku: PresaleSpecification) => {
+            if (!sku.bonusIncluded && !sku.bonusTitle && !sku.bonusDescription) {
+              return '--'
+            }
+            return (
+              <Space direction="vertical" size={4} style={{ maxWidth: 220 }}>
+                {sku.bonusIncluded !== false && (sku.bonusTitle || sku.bonusDescription) && (
+                  <>
+                    {sku.bonusTitle && (
+                      <Typography.Text ellipsis={{ tooltip: sku.bonusTitle }}>
+                        {sku.bonusTitle}
+                      </Typography.Text>
+                    )}
+                    {sku.bonusQuantity != null && (
+                      <Tag color="magenta">×{sku.bonusQuantity}</Tag>
+                    )}
+                    {sku.bonusDescription && (
+                      <Typography.Text
+                        type="secondary"
+                        ellipsis={{ tooltip: sku.bonusDescription }}
+                        style={{ display: 'block', fontSize: 12 }}
+                      >
+                        {sku.bonusDescription}
+                      </Typography.Text>
+                    )}
+                  </>
+                )}
+                {sku.bonusIncluded === false && (
+                  <Typography.Text type="secondary">
+                    {t('presale.form.specifications.bonus.no')}
+                  </Typography.Text>
+                )}
+              </Space>
+            )
+          }
         }
       ]
 
+      const specs = record.specifications ?? []
+      if (specs.length === 0) {
+        return (
+          <div style={{ marginLeft: 24, padding: '12px 16px', color: '#8c8c8c' }}>
+            <Typography.Text type="secondary">
+              {t('presale.table.noSpecifications')}
+            </Typography.Text>
+          </div>
+        )
+      }
+
       return (
-        <Table
-          size="small"
-          rowKey={(sku) => sku.id ?? `${sku.skuCode}-${sku.ticketType}`}
-          columns={skuColumns}
-          dataSource={record.specifications ?? []}
-          pagination={false}
-        />
+        <div
+          style={{
+            marginLeft: 24,
+            padding: '12px 16px',
+            background: '#fafafa',
+            borderRadius: 8,
+            border: '1px solid #f0f0f0'
+          }}
+        >
+          <Table
+            size="small"
+            rowKey={(sku) => String(sku.id ?? sku.skuCode ?? Math.random())}
+            columns={skuColumns}
+            dataSource={specs}
+            pagination={false}
+            showHeader
+          />
+        </div>
       )
     }
 
@@ -231,7 +305,7 @@ export default function PresaleTicketsPage({ params: { lng } }: PageProps) {
           return (
             <Space align="start" size={16}>
               {record.cover ? (
-                <Image
+                <CustomAntImage
                   width={64}
                   height={96}
                   src={record.cover}
@@ -258,35 +332,7 @@ export default function PresaleTicketsPage({ params: { lng } }: PageProps) {
                     {t(`presale.mubitikeType.${record.mubitikeType}`)}
                   </Tag>
                   <Tag color={status.color}>{status.label}</Tag>
-                  {gallery.length > 1 && (
-                    <Tag color="volcano">
-                      {t('presale.table.galleryCount', {
-                        count: gallery.length
-                      })}
-                    </Tag>
-                  )}
                 </Space>
-                {secondaryImages.length > 0 && (
-                  <Space size={6} wrap>
-                    {secondaryImages.map((url, index) => (
-                      <Image
-                        key={`${record.id}-thumb-${index}`}
-                        src={url}
-                        alt={`${record.title}-${index + 2}`}
-                        width={48}
-                        height={68}
-                        style={{ objectFit: 'cover', borderRadius: 6 }}
-                      />
-                    ))}
-                    {gallery.length > 4 && (
-                      <Tag>
-                        {t('presale.table.galleryMore', {
-                          count: gallery.length - 4
-                        })}
-                      </Tag>
-                    )}
-                  </Space>
-                )}
               </Space>
             </Space>
           )
@@ -324,40 +370,6 @@ export default function PresaleTicketsPage({ params: { lng } }: PageProps) {
         render: (value?: string[]) => value?.join('、') || '--'
       },
       {
-        title: t('presale.table.benefits'),
-        dataIndex: 'benefits',
-        render: (value?: string[]) =>
-          value && value.length > 0 ? (
-            <Space direction="vertical" size={4}>
-              {value.map((item, index) => (
-                <span key={index}>{item}</span>
-              ))}
-            </Space>
-          ) : (
-            '--'
-          )
-      },
-      {
-        title: t('presale.table.bonus'),
-        key: 'bonus',
-        render: (_: unknown, record: PresaleTicket) => renderBonus(record)
-      },
-      {
-        title: t('presale.table.pickupNotes'),
-        dataIndex: 'pickupNotes',
-        render: (value?: string) => value || '--'
-      },
-      {
-        title: t('presale.table.description'),
-        dataIndex: 'description',
-        render: (value?: string) => value || '--'
-      },
-      {
-        title: t('presale.table.remark'),
-        dataIndex: 'remark',
-        render: (value?: string) => value || '--'
-      },
-      {
         title: common('table.action'),
         key: 'action',
         width: 150,
@@ -378,9 +390,14 @@ export default function PresaleTicketsPage({ params: { lng } }: PageProps) {
                 Modal.confirm({
                   title: common('button.remove'),
                   content: t('presale.message.deleteConfirm'),
-                  onOk: () => {
-                    removePresale(record.id)
-                    message.success(t('presale.message.deleteSuccess'))
+                  onOk: async () => {
+                    try {
+                      await removePresaleApi(record.id)
+                      message.success(t('presale.message.deleteSuccess'))
+                      await fetchList(pagination.current, pagination.pageSize)
+                    } catch {
+                      // error already shown by http interceptor
+                    }
                   }
                 })
               }}
@@ -393,31 +410,38 @@ export default function PresaleTicketsPage({ params: { lng } }: PageProps) {
     ]
 
     return { columns, expandedRowRender }
-  }, [common, formatDateRange, formatPrice, formatSaleStatus, removePresale, t])
+  }, [common, fetchList, formatDateRange, formatPrice, formatSaleStatus, pagination.current, pagination.pageSize, t])
 
   return (
-    <section style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      <header>
-        <Title level={3} style={{ marginBottom: 12 }}>
+    <section style={{ padding: '0 24px 24px', maxWidth: 1600, margin: '0 auto' }}>
+      <Flex justify="space-between" align="center" style={{ marginBottom: 24 }}>
+        <Title level={3} style={{ margin: 0 }}>
           {t('tabs.presale')}
         </Title>
-      </header>
-      <Space style={{ marginBottom: 16 }}>
         <Button type="primary" onClick={handleAdd}>
           {common('button.add')}
         </Button>
-      </Space>
-      <Table
-        rowKey="id"
-        columns={columns}
-        dataSource={presales}
-        pagination={false}
-        size="middle"
-        scroll={{ x: 'max-content', y: 520 }}
-        style={{ background: '#fff', borderRadius: 8 }}
-        locale={{ emptyText: t('empty') }}
-        expandable={{ expandedRowRender }}
-      />
+      </Flex>
+      <Card bordered={false} style={{ borderRadius: 8, boxShadow: '0 1px 2px rgba(0,0,0,0.03)' }}>
+        <Table
+          rowKey="id"
+          loading={loading}
+          columns={columns}
+          dataSource={presales}
+          pagination={{
+            current: pagination.current,
+            pageSize: pagination.pageSize,
+            total: pagination.total,
+            showSizeChanger: true,
+            showTotal,
+            onChange: (page, pageSize) => fetchList(page, pageSize ?? 10)
+          }}
+          size="middle"
+          scroll={{ x: 'max-content', y: 520 }}
+          locale={{ emptyText: t('empty') }}
+          expandable={{ expandedRowRender }}
+        />
+      </Card>
     </section>
   )
 }

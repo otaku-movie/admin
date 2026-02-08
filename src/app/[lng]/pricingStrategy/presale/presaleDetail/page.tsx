@@ -1,88 +1,35 @@
 'use client'
 
 import React, { useEffect, useMemo, useState } from 'react'
-import {
-  Button,
-  DatePicker,
-  Form,
-  Input,
-  InputNumber,
-  Row,
-  Col,
-  Space,
-  Typography,
-  Upload,
-  Tag,
-  Select,
-  Table,
-  message
-} from 'antd'
-import type {
-  UploadFile,
-  UploadFileStatus,
-  RcFile
-} from 'antd/es/upload/interface'
-import { PlusOutlined } from '@ant-design/icons'
+import { Button, Form, Spin, Steps, Typography, message } from 'antd'
 import dayjs from 'dayjs'
 import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '@/app/[lng]/layout'
-import {
-  usePricingStrategyStore,
-  type PresaleTicket,
-  type PresaleSpecification,
-  type MubitikeBonusType,
-  type MubitikeTicketType,
-  type PresaleAudienceType
+import type {
+  PresaleTicket,
+  PresaleSpecification,
+  MubitikeTicketType
 } from '@/store/usePricingStrategyStore'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { MovieModal } from '@/dialog/movieModal'
 import type { Movie } from '@/type/api'
+import {
+  getPresaleDetail,
+  savePresale,
+  buildPresaleSaveBody
+} from '@/api/request/presale'
+import {
+  TICKET_TO_DELIVERY,
+  type PresaleFormValues,
+  type SpecificationFormItem
+} from './types'
+import { StepMedia } from './steps/one'
+import { StepBasic } from './steps/two'
+import { StepSpecifications } from './steps/three'
+import { StepUsage } from './steps/four'
+import { StepExtra } from './steps/five'
 
 const { Title } = Typography
-
-type SpecificationFormItem = {
-  id?: string
-  name?: string
-  skuCode?: string
-  ticketType?: MubitikeTicketType
-  audienceType?: PresaleAudienceType
-  deliveryType?: PresaleSpecification['deliveryType']
-  price?: number
-  stock?: number
-  points?: number
-  shipDays?: number
-  image?: string
-}
-
-interface PresaleFormValues {
-  type?: 'presale'
-  code?: string
-  title?: string
-  cover?: string
-  gallery?: string[]
-  deliveryType?: PresaleTicket['deliveryType']
-  discountMode?: PresaleTicket['discountMode']
-  mubitikeType?: MubitikeTicketType
-  price?: number
-  amount?: number
-  extraFee?: string
-  totalQuantity?: number
-  launchTime?: dayjs.Dayjs
-  endTime?: dayjs.Dayjs
-  usageStart?: dayjs.Dayjs
-  usageEnd?: dayjs.Dayjs
-  perUserLimit?: number
-  remark?: string
-  description?: string
-  pickupNotes?: string
-  bonusTitle?: string
-  bonusType?: MubitikeBonusType
-  bonusDelivery?: PresaleTicket['bonusDelivery']
-  bonusDescription?: string
-  movieId?: number
-  benefits?: string[]
-  specifications?: SpecificationFormItem[]
-}
 
 export default function PresaleFormPage({ params: { lng } }: PageProps) {
   const { t } = useTranslation(
@@ -96,10 +43,6 @@ export default function PresaleFormPage({ params: { lng } }: PageProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
 
-  const addPresale = usePricingStrategyStore((state) => state.addPresale)
-  const updatePresale = usePricingStrategyStore((state) => state.updatePresale)
-  const presales = usePricingStrategyStore((state) => state.presales)
-
   const idParam = searchParams.get('id')
   const editingId = useMemo(() => {
     if (!idParam) return undefined
@@ -108,22 +51,41 @@ export default function PresaleFormPage({ params: { lng } }: PageProps) {
   }, [idParam])
   const isEditing = editingId !== undefined
 
-  const editingTicket = useMemo(() => {
-    if (!isEditing) return undefined
-    return presales.find((item) => item.id === editingId)
-  }, [presales, editingId, isEditing])
+  const [editingTicket, setEditingTicket] = useState<PresaleTicket | undefined>(undefined)
+  const [detailLoading, setDetailLoading] = useState(false)
+  const [detailFetched, setDetailFetched] = useState(false)
 
   const [form] = Form.useForm<PresaleFormValues>()
-  const [coverList, setCoverList] = useState<UploadFile[]>([])
-  const [galleryList, setGalleryList] = useState<UploadFile[]>([])
   const [loading, setLoading] = useState(false)
+  const [currentStep, setCurrentStep] = useState(0)
   const [movieModalOpen, setMovieModalOpen] = useState(false)
   const [selectedMovie, setSelectedMovie] = useState<{
     value: number
     label: string
     startDate?: string
+    endDate?: string
   } | null>(null)
-  const MAX_GALLERY_COUNT = 8
+
+  useEffect(() => {
+    if (!isEditing || editingId == null) {
+      setDetailFetched(true)
+      if (!isEditing) setEditingTicket(undefined)
+      return
+    }
+    setDetailLoading(true)
+    setDetailFetched(false)
+    getPresaleDetail(editingId)
+      .then((data) => {
+        setEditingTicket(data ?? undefined)
+      })
+      .catch(() => {
+        setEditingTicket(undefined)
+      })
+      .finally(() => {
+        setDetailLoading(false)
+        setDetailFetched(true)
+      })
+  }, [isEditing, editingId])
 
   useEffect(() => {
     if (isEditing && editingTicket) {
@@ -132,9 +94,24 @@ export default function PresaleFormPage({ params: { lng } }: PageProps) {
           ? editingTicket.specifications.map((spec) => ({
               ...spec,
               deliveryType:
-                spec.deliveryType ?? editingTicket.deliveryType ?? 'virtual'
+                spec.deliveryType ?? editingTicket.deliveryType ?? 'virtual',
+              bonusIncluded: spec.bonusIncluded !== false,
+              priceItems:
+                Array.isArray(spec.priceItems) && spec.priceItems.length > 0
+                  ? spec.priceItems.map((pi) => ({
+                      label: typeof (pi as { label?: string })?.label === 'string' ? (pi as { label: string }).label : '',
+                      price: typeof (pi as { price?: number })?.price === 'number' ? (pi as { price: number }).price : undefined
+                    }))
+                  : [{ label: '', price: undefined }],
+              images: (spec.images?.length ?? 0) > 0 ? spec.images : []
             }))
-          : [{ deliveryType: editingTicket.deliveryType ?? 'virtual' }]
+          : [
+              {
+                deliveryType: editingTicket.deliveryType ?? 'virtual',
+                bonusIncluded: true,
+                priceItems: [{ label: '', price: undefined }]
+              }
+            ]
       form.setFieldsValue({
         code: editingTicket.code,
         title: editingTicket.title,
@@ -142,7 +119,6 @@ export default function PresaleFormPage({ params: { lng } }: PageProps) {
         deliveryType: editingTicket.deliveryType,
         discountMode: editingTicket.discountMode,
         mubitikeType: editingTicket.mubitikeType,
-        price: editingTicket.price,
         amount: editingTicket.amount,
         extraFee: editingTicket.extraFee,
         totalQuantity: editingTicket.totalQuantity,
@@ -158,40 +134,13 @@ export default function PresaleFormPage({ params: { lng } }: PageProps) {
         usageEnd: editingTicket.usageEnd
           ? dayjs(editingTicket.usageEnd)
           : undefined,
-        perUserLimit: editingTicket.perUserLimit,
-        remark: editingTicket.remark,
-        description: editingTicket.description,
+        perUserLimit: editingTicket.perUserLimit === 0 ? undefined : editingTicket.perUserLimit,
         pickupNotes: editingTicket.pickupNotes,
-        bonusTitle: editingTicket.bonusTitle,
-        bonusType: editingTicket.bonusType,
-        bonusDelivery: editingTicket.bonusDelivery,
-        bonusDescription: editingTicket.bonusDescription,
         movieId: editingTicket.movieIds?.[0],
-        benefits: editingTicket.benefits || [],
+        cover: editingTicket.cover || undefined,
+        gallery: editingTicket.gallery || [],
         specifications
       })
-      if (editingTicket.cover) {
-        setCoverList([
-          {
-            uid: `${editingTicket.id}`,
-            name: editingTicket.code,
-            status: 'done',
-            url: editingTicket.cover
-          }
-        ])
-      }
-      if (editingTicket.gallery && editingTicket.gallery.length > 0) {
-        setGalleryList(
-          editingTicket.gallery.map((url, index) => ({
-            uid: `gallery-${editingTicket.id}-${index}`,
-            name: `${editingTicket.code}-${index}`,
-            status: 'done' as UploadFileStatus,
-            url
-          }))
-        )
-      } else {
-        setGalleryList([])
-      }
       if (editingTicket.movieIds && editingTicket.movieIds[0]) {
         const movieId = editingTicket.movieIds[0]
         const name = editingTicket.movieNames?.[0] || `${movieId}`
@@ -204,48 +153,48 @@ export default function PresaleFormPage({ params: { lng } }: PageProps) {
         discountMode: 'fixed',
         mubitikeType: 'online',
         movieId: undefined,
-        benefits: [],
-        specifications: [{ deliveryType: 'virtual' }]
+        specifications: [{ deliveryType: 'virtual', bonusIncluded: true, priceItems: [{ label: '', price: undefined }] }]
       })
-      setCoverList([])
-      setGalleryList([])
       setSelectedMovie(null)
     }
   }, [editingTicket, form, isEditing])
 
   useEffect(() => {
-    if (isEditing && idParam && !editingTicket) {
+    if (detailFetched && isEditing && idParam && editingTicket == null) {
       message.warning(t('presale.message.deleteConfirm'))
       router.replace(`/${lng}/pricingStrategy/presale`)
     }
-  }, [editingTicket, idParam, isEditing, lng, router, t])
+  }, [detailFetched, editingTicket, idParam, isEditing, lng, router, t])
 
+  // 结束发售时间 = 影院上映前一天；使用开始 = 上映当天；使用结束 = 上映结束（有 endDate 用 endDate，否则上映+60天）
   useEffect(() => {
     if (!selectedMovie?.startDate) return
     const release = dayjs(selectedMovie.startDate)
     if (!release.isValid()) return
-    const computedEnd = release
+    const endOfSale = release
       .subtract(1, 'day')
       .set('hour', 23)
       .set('minute', 59)
       .set('second', 59)
     const currentEnd = form.getFieldValue('endTime') as dayjs.Dayjs | undefined
-    if (!currentEnd || !currentEnd.isSame(computedEnd)) {
-      form.setFieldsValue({ endTime: computedEnd })
+    if (!currentEnd || !currentEnd.isSame(endOfSale)) {
+      form.setFieldsValue({ endTime: endOfSale })
     }
+    const usageStartDay = release.startOf('day')
     const currentUsageStart = form.getFieldValue('usageStart') as
       | dayjs.Dayjs
       | undefined
     if (!currentUsageStart) {
-      form.setFieldsValue({ usageStart: release.startOf('day') })
+      form.setFieldsValue({ usageStart: usageStartDay })
     }
+    const usageEndDay = selectedMovie.endDate
+      ? dayjs(selectedMovie.endDate).endOf('day')
+      : release.add(60, 'day').endOf('day')
     const currentUsageEnd = form.getFieldValue('usageEnd') as
       | dayjs.Dayjs
       | undefined
     if (!currentUsageEnd) {
-      form.setFieldsValue({
-        usageEnd: release.add(60, 'day').endOf('day')
-      })
+      form.setFieldsValue({ usageEnd: usageEndDay })
     }
   }, [form, selectedMovie])
 
@@ -254,49 +203,43 @@ export default function PresaleFormPage({ params: { lng } }: PageProps) {
     router.back()
   }
 
-  const handleSubmit = () => {
-    form
-      .validateFields()
-      .then((values) => {
-        setLoading(true)
-        const galleryValues = galleryList
-          .map((item) => item.url)
-          .filter((url): url is string => Boolean(url))
-        if (galleryValues.length === 0) {
-          message.error(t('presale.form.gallery.required'))
-          setLoading(false)
-          return
-        }
+  const handleSubmit = async () => {
+    try {
+      setLoading(true)
+      const values = form.getFieldsValue(true) as PresaleFormValues
+        const galleryValues = (values.gallery ?? []).filter(Boolean)
         const normalizedSpecifications: PresaleSpecification[] = (
           values.specifications ?? []
         )
-          .filter(
-            (
-              item
-            ): item is Required<
-              Pick<
-                SpecificationFormItem,
-                'price' | 'deliveryType' | 'ticketType'
-              >
-            > &
-              SpecificationFormItem =>
-              !!item &&
-              typeof item.price === 'number' &&
-              !!item.deliveryType &&
-              !!item.ticketType
-          )
-          .map((item) => ({
+          .filter((item): item is SpecificationFormItem => !!item)
+          .map((item) => {
+            const priceItems = (item.priceItems ?? [])
+              .map((pi) => {
+                const label = typeof pi?.label === 'string' ? pi.label.trim() : ''
+                const rawPrice = (pi as { price?: unknown })?.price
+                const price =
+                  typeof rawPrice === 'number' && !Number.isNaN(rawPrice)
+                    ? rawPrice
+                    : Number(rawPrice)
+                return { label, price }
+              })
+              .filter(
+                (pi): pi is { label: string; price: number } =>
+                  pi.label.length > 0 &&
+                  typeof pi.price === 'number' &&
+                  !Number.isNaN(pi.price) &&
+                  pi.price >= 0
+              )
+            const mainPrice = priceItems.length > 0 ? priceItems[0]!.price : 0
+            return {
             id: item.id,
             name: item.name?.trim() || undefined,
-            skuCode: item.skuCode?.trim() || undefined,
+
             ticketType: item.ticketType,
-            audienceType: item.audienceType,
             deliveryType:
-              item.deliveryType ??
-              values.deliveryType ??
-              editingTicket?.deliveryType ??
-              'virtual',
-            price: item.price as number,
+              TICKET_TO_DELIVERY[item.ticketType ?? 'online'] ?? 'virtual',
+            price: mainPrice,
+            priceItems,
             stock:
               item.stock === undefined || item.stock === null
                 ? undefined
@@ -309,41 +252,48 @@ export default function PresaleFormPage({ params: { lng } }: PageProps) {
               item.shipDays === undefined || item.shipDays === null
                 ? undefined
                 : item.shipDays,
-            image: item.image?.trim() || undefined
-          }))
+            images: Array.isArray(item.images)
+              ? item.images.filter(Boolean).map((u) => String(u).trim())
+              : undefined,
+            bonusTitle: item.bonusTitle?.trim() || undefined,
+            bonusImages: Array.isArray(item.bonusImages) ? item.bonusImages.filter(Boolean) : undefined,
+            bonusDescription: item.bonusDescription?.trim() || undefined,
+            bonusQuantity: item.bonusQuantity ?? undefined,
+            bonusIncluded: item.bonusIncluded !== false
+          }})
 
         if (normalizedSpecifications.length === 0) {
           message.error(t('presale.form.specifications.required'))
+          setLoading(false)
           return
         }
 
-        const payload: PresaleTicket = {
-          id:
-            isEditing && editingTicket
-              ? editingTicket.id
-              : Date.now() + Math.floor(Math.random() * 1000),
+        const totalQuantity = normalizedSpecifications
+          .filter((s) => s.deliveryType === 'physical')
+          .reduce((sum, s) => sum + (s.stock ?? 0), 0)
+
+        const deliveryType =
+          (normalizedSpecifications[0]?.deliveryType ||
+            'virtual') as PresaleTicket['deliveryType']
+        const mubitikeType =
+          (normalizedSpecifications[0]?.ticketType ??
+            editingTicket?.mubitikeType ??
+            'online') as MubitikeTicketType
+        const saveBody = buildPresaleSaveBody({
+          id: isEditing && editingTicket ? editingTicket.id : undefined,
           code:
             isEditing && editingTicket
               ? values.code || editingTicket.code
-              : (
-                  values.code || `CP-${Date.now().toString(36).toUpperCase()}`
-                ).toString(),
+              : values.code || undefined,
           title:
             values.title?.trim() ||
             editingTicket?.title ||
             t('presale.form.title.fallback'),
-          type: 'presale',
-          deliveryType:
-            normalizedSpecifications[0]?.deliveryType ||
-            values.deliveryType ||
-            'virtual',
-          discountMode: values.discountMode || 'fixed',
-          mubitikeType:
-            values.mubitikeType || editingTicket?.mubitikeType || 'online',
-          price: normalizedSpecifications[0]?.price ?? values.price!,
-          amount: values.amount!,
-          extraFee: values.extraFee,
-          totalQuantity: values.totalQuantity!,
+          deliveryType,
+          discountMode: (values.discountMode || 'fixed') as PresaleTicket['discountMode'],
+          mubitikeType,
+          amount: values.amount,
+          totalQuantity,
           launchTime: values.launchTime
             ? values.launchTime.format('YYYY-MM-DD HH:mm:ss')
             : undefined,
@@ -356,877 +306,130 @@ export default function PresaleFormPage({ params: { lng } }: PageProps) {
           usageEnd: values.usageEnd
             ? values.usageEnd.format('YYYY-MM-DD HH:mm:ss')
             : undefined,
-          perUserLimit: values.perUserLimit!,
-          remark: values.remark,
+          perUserLimit: values.perUserLimit != null ? Number(values.perUserLimit) : 0,
+          movieId: selectedMovie?.value,
           pickupNotes: values.pickupNotes?.trim(),
-          cover: values.cover!,
+          cover: values.cover,
           gallery: galleryValues,
-          description: values.description,
-          movieIds: selectedMovie ? [selectedMovie.value] : [],
-          movieNames: selectedMovie ? [selectedMovie.label] : [],
-          benefits: values.benefits?.filter(Boolean),
-          updatedAt: dayjs().format('YYYY-MM-DD HH:mm'),
-          bonusTitle: values.bonusTitle?.trim(),
-          bonusType: values.bonusType,
-          bonusDelivery:
-            values.bonusDelivery ??
-            (normalizedSpecifications[0]?.deliveryType ||
-              values.deliveryType ||
-              editingTicket?.deliveryType),
-          bonusDescription: values.bonusDescription?.trim(),
-          specifications: normalizedSpecifications
-        }
+          specifications: normalizedSpecifications.map((s) => ({
+            id:
+              typeof s.id === 'number'
+                ? s.id
+                : typeof s.id === 'string' && /^\d+$/.test(s.id)
+                  ? Number(s.id)
+                  : undefined,
+            name: s.name,
 
-        if (isEditing && editingTicket) {
-          updatePresale(payload)
-        } else {
-          addPresale(payload)
-        }
-
+            ticketType: s.ticketType as MubitikeTicketType | undefined,
+            deliveryType: (s.deliveryType ?? deliveryType) as PresaleTicket['deliveryType'],
+            priceItems: s.priceItems,
+            stock: s.stock,
+            points: s.points,
+            shipDays: s.shipDays,
+            images: Array.isArray(s.images) ? s.images.filter(Boolean) : undefined,
+            bonusTitle: s.bonusTitle,
+            bonusImages: s.bonusImages,
+            bonusDescription: s.bonusDescription,
+            bonusQuantity: s.bonusQuantity,
+            bonusIncluded: s.bonusIncluded !== false
+          }))
+        })
+        await savePresale(saveBody)
         message.success(t('presale.message.saveSuccess'))
         handleBack()
-      })
-      .finally(() => setLoading(false))
+    } catch (err) {
+      console.error('Save presale failed:', err)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
-    <section
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 24,
-        minHeight: '100%',
-        paddingBottom: 80
-      }}
-    >
-      <header>
-        <Title level={3}>{t('tabs.presale')}</Title>
-      </header>
-      <Form form={form} layout="vertical">
-        <Row gutter={[24, 0]}>
-          <Col span={24}>
-            <Title level={4} style={{ marginBottom: 16 }}>
-              {t('presale.form.section.media')}
-            </Title>
-          </Col>
-        </Row>
-        <Row gutter={[24, 0]}>
-          <Col span={24}>
-            <Form.Item
-              label={t('presale.form.cover.label')}
-              name="cover"
-              rules={[
-                { required: true, message: t('presale.form.cover.required') }
-              ]}
-            >
-              <Upload
-                listType="picture-card"
-                fileList={coverList}
-                beforeUpload={(file) => {
-                  const reader = new FileReader()
-                  reader.onload = (e) => {
-                    const result = e.target?.result as string
-                    setCoverList([
-                      {
-                        uid: file.uid,
-                        name: file.name,
-                        status: 'done',
-                        url: result
-                      }
-                    ])
-                    form.setFieldsValue({ cover: result })
-                  }
-                  reader.readAsDataURL(file)
-                  return false
-                }}
-                onRemove={() => {
-                  setCoverList([])
-                  form.setFieldsValue({ cover: undefined })
-                }}
-                maxCount={1}
-              >
-                {coverList.length >= 1 ? null : (
-                  <div>
-                    <PlusOutlined />
-                    <div style={{ marginTop: 8 }}>
-                      {t('presale.form.cover.upload')}
-                    </div>
-                  </div>
-                )}
-              </Upload>
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row gutter={[24, 0]}>
-          <Col span={24}>
-            <Form.Item label={t('presale.form.gallery.label')}>
-              <Upload
-                listType="picture-card"
-                fileList={galleryList}
-                multiple
-                maxCount={MAX_GALLERY_COUNT}
-                beforeUpload={(file: RcFile) => {
-                  const reader = new FileReader()
-                  reader.onload = (e) => {
-                    const url = e.target?.result as string
-                    setGalleryList((prev) => {
-                      const next: UploadFile[] = [
-                        ...prev,
-                        {
-                          uid: file.uid,
-                          name: file.name,
-                          status: 'done' as UploadFileStatus,
-                          url
-                        }
-                      ]
-                      return next
-                    })
-                  }
-                  reader.readAsDataURL(file)
-                  return false
-                }}
-                onRemove={(file) => {
-                  setGalleryList((prev) =>
-                    prev.filter((item) => item.uid !== file.uid)
-                  )
-                  return true
-                }}
-              >
-                {galleryList.length >= MAX_GALLERY_COUNT ? null : (
-                  <div>
-                    <PlusOutlined />
-                    <div style={{ marginTop: 8 }}>
-                      {t('presale.form.gallery.upload')}
-                    </div>
-                  </div>
-                )}
-              </Upload>
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row gutter={[24, 0]}>
-          <Col span={24}>
-            <Title level={4} style={{ marginBottom: 16 }}>
-              {t('presale.form.section.basic')}
-            </Title>
-          </Col>
-        </Row>
-        <Row gutter={[24, 0]}>
-          <Col xs={24} md={12}>
-            <Form.Item label={t('presale.form.code.label')} name="code">
-              <Input disabled placeholder={t('presale.form.code.generated')} />
-            </Form.Item>
-          </Col>
-          <Col xs={24} md={12}>
-            <Form.Item label={t('presale.form.type.label')} name="type">
-              <Select
-                disabled
-                options={[
-                  { value: 'presale', label: t('presale.type.presale') }
-                ]}
-              />
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row gutter={[24, 0]}>
-          <Col xs={24} md={14}>
-            <Form.Item
-              label={t('presale.form.title.label')}
-              name="title"
-              rules={[
-                { required: true, message: t('presale.form.title.required') }
-              ]}
-            >
-              <Input placeholder={t('presale.form.title.placeholder')} />
-            </Form.Item>
-          </Col>
-          <Col xs={24} md={10}>
-            <Form.Item
-              label={t('presale.form.mubitikeType.label')}
-              name="mubitikeType"
-              rules={[
-                {
-                  required: true,
-                  message: t('presale.form.mubitikeType.required')
-                }
-              ]}
-            >
-              <Select
-                options={[
-                  { value: 'online', label: t('presale.mubitikeType.online') },
-                  { value: 'card', label: t('presale.mubitikeType.card') },
-                  { value: 'combo', label: t('presale.mubitikeType.combo') }
-                ]}
-              />
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row gutter={[24, 0]}>
-          <Col span={24}>
-            <Form.Item shouldUpdate>
-              {() => (
-                <Form.Item
-                  label={t('presale.form.movie.label')}
-                  name="movieId"
-                  rules={
-                    selectedMovie
-                      ? []
-                      : [
-                          {
-                            required: true,
-                            message: t('presale.form.movie.required')
-                          }
-                        ]
-                  }
-                >
-                  <div
-                    style={{ display: 'flex', flexDirection: 'column', gap: 8 }}
-                  >
-                    <Space wrap>
-                      {selectedMovie && (
-                        <Tag
-                          closable
-                          onClose={(e) => {
-                            e.preventDefault()
-                            setSelectedMovie(null)
-                            form.setFieldsValue({ movieId: undefined })
-                          }}
-                        >
-                          {selectedMovie.label}
-                        </Tag>
-                      )}
-                    </Space>
-                    {!selectedMovie && (
-                      <Button
-                        type="dashed"
-                        onClick={() => setMovieModalOpen(true)}
-                        style={{ width: 200 }}
-                      >
-                        {common('button.select')}
-                      </Button>
-                    )}
-                  </div>
-                  <Form.Item name="movieId" noStyle>
-                    <Input hidden />
-                  </Form.Item>
-                </Form.Item>
-              )}
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row gutter={[24, 0]}>
-          <Col span={24}>
-            <Title level={4} style={{ margin: '24px 0 16px' }}>
-              {t('presale.form.section.sales')}
-            </Title>
-          </Col>
-        </Row>
-        <Row gutter={[24, 0]}>
-          <Col xs={24} md={12}>
-            <Form.Item
-              label={t('presale.form.deliveryType.label')}
-              name="deliveryType"
-            >
-              <Select
-                options={[
-                  {
-                    value: 'virtual',
-                    label: t('presale.deliveryType.virtual')
-                  },
-                  {
-                    value: 'physical',
-                    label: t('presale.deliveryType.physical')
-                  }
-                ]}
-              />
-            </Form.Item>
-          </Col>
-
-        </Row>
-        <Row gutter={[24, 0]}>
-          <Col xs={24} md={12}>
-            <Form.Item
-              label={t('presale.form.price.label')}
-              name="price"
-              rules={[
-                { required: true, message: t('presale.form.price.required') }
-              ]}
-            >
-              <InputNumber style={{ width: '100%' }} min={0} precision={0} />
-            </Form.Item>
-          </Col>
-
-        </Row>
-        <Row gutter={[24, 0]}>
-          <Col span={24}>
-            <Title level={4} style={{ margin: '24px 0 16px' }}>
-              {t('presale.form.section.specifications')}
-            </Title>
-          </Col>
-        </Row>
-        <Form.List
-          name="specifications"
-          rules={[
-            {
-              validator: async (_, value) => {
-                if (!value || value.length === 0) {
-                  return Promise.reject(
-                    new Error(t('presale.form.specifications.required'))
-                  )
-                }
-                const hasEmptyPrice = value.some(
-                  (item: SpecificationFormItem) =>
-                    !item || item.price === undefined || item.price === null
-                )
-                if (hasEmptyPrice) {
-                  return Promise.reject(
-                    new Error(t('presale.form.specifications.priceRequired'))
-                  )
-                }
-                const hasEmptyDelivery = value.some(
-                  (item: SpecificationFormItem) =>
-                    !item ||
-                    !item.deliveryType ||
-                    (item.deliveryType !== 'virtual' &&
-                      item.deliveryType !== 'physical')
-                )
-                if (hasEmptyDelivery) {
-                  return Promise.reject(
-                    new Error(t('presale.form.specifications.deliveryRequired'))
-                  )
-                }
-                return Promise.resolve()
-              }
-            }
+    <Spin spinning={detailLoading}>
+      <section
+        style={{
+          padding: '0 24px 100px',
+          maxWidth: 960,
+          margin: '0 auto',
+          minHeight: '100%'
+        }}
+      >
+        <header style={{ marginBottom: 24 }}>
+          <Title level={3} style={{ margin: 0 }}>{t('tabs.presale')}</Title>
+        </header>
+        <Form form={form} layout="vertical">
+        <Steps
+          current={currentStep}
+          onChange={setCurrentStep}
+          style={{ marginBottom: 24 }}
+          items={[
+            { title: t('presale.form.steps.media') },
+            { title: t('presale.form.steps.basic') },
+            { title: t('presale.form.steps.specifications') },
+            { title: t('presale.form.steps.usage') },
+            { title: t('presale.form.steps.extra') }
           ]}
-        >
-          {(fields, { add, remove }, { errors }) => {
-            const skuColumns = [
-              {
-                title: t('presale.form.specifications.groupLabel'),
-                dataIndex: 'name',
-                width: 200,
-                render: (_: unknown, record: (typeof fields)[number]) => (
-                  <Space direction="vertical" style={{ width: '100%' }}>
-                    <Form.Item name={[record.name, 'id']} hidden>
-                      <Input hidden />
-                    </Form.Item>
-                    <Form.Item
-                      name={[record.name, 'name']}
-                      style={{ marginBottom: 0 }}
-                    >
-                      <Input
-                        placeholder={t(
-                          'presale.form.specifications.groupPlaceholder'
-                        )}
-                      />
-                    </Form.Item>
-                    <Form.Item
-                      name={[record.name, 'skuCode']}
-                      style={{ marginBottom: 0 }}
-                    >
-                      <Input
-                        placeholder={t(
-                          'presale.form.specifications.skuPlaceholder'
-                        )}
-                      />
-                    </Form.Item>
-                  </Space>
-                )
-              },
-              {
-                title: t('presale.form.specifications.ticketType'),
-                dataIndex: 'ticketType',
-                width: 160,
-                render: (_: unknown, record: (typeof fields)[number]) => (
-                  <Form.Item
-                    name={[record.name, 'ticketType']}
-                    rules={[
-                      {
-                        required: true,
-                        message: t(
-                          'presale.form.specifications.ticketTypeRequired'
-                        )
-                      }
-                    ]}
-                    style={{ marginBottom: 0 }}
-                  >
-                    <Select
-                      options={[
-                        {
-                          value: 'online',
-                          label: t('presale.mubitikeType.online')
-                        },
-                        {
-                          value: 'card',
-                          label: t('presale.mubitikeType.card')
-                        },
-                        {
-                          value: 'combo',
-                          label: t('presale.mubitikeType.combo')
-                        }
-                      ]}
-                      placeholder={t(
-                        'presale.form.specifications.ticketTypePlaceholder'
-                      )}
-                    />
-                  </Form.Item>
-                )
-              },
-              {
-                title: t('presale.form.specifications.deliveryType'),
-                dataIndex: 'deliveryType',
-                width: 160,
-                render: (_: unknown, record: (typeof fields)[number]) => (
-                  <Form.Item
-                    name={[record.name, 'deliveryType']}
-                    rules={[
-                      {
-                        required: true,
-                        message: t(
-                          'presale.form.specifications.deliveryRequired'
-                        )
-                      }
-                    ]}
-                    style={{ marginBottom: 0 }}
-                  >
-                    <Select
-                      options={[
-                        {
-                          value: 'virtual',
-                          label: t('presale.deliveryType.virtual')
-                        },
-                        {
-                          value: 'physical',
-                          label: t('presale.deliveryType.physical')
-                        }
-                      ]}
-                      placeholder={t(
-                        'presale.form.specifications.deliveryPlaceholder'
-                      )}
-                    />
-                  </Form.Item>
-                )
-              },
-
-              {
-                title: t('presale.form.specifications.price'),
-                dataIndex: 'price',
-                width: 140,
-                render: (_: unknown, record: (typeof fields)[number]) => (
-                  <Form.Item
-                    name={[record.name, 'price']}
-                    rules={[
-                      {
-                        required: true,
-                        message: t('presale.form.specifications.priceRequired')
-                      }
-                    ]}
-                    style={{ marginBottom: 0 }}
-                  >
-                    <InputNumber
-                      min={0}
-                      precision={0}
-                      style={{ width: '100%' }}
-                      placeholder={t(
-                        'presale.form.specifications.pricePlaceholder'
-                      )}
-                    />
-                  </Form.Item>
-                )
-              },
-              {
-                title: t('presale.form.specifications.stock'),
-                dataIndex: 'stock',
-                width: 120,
-                render: (_: unknown, record: (typeof fields)[number]) => (
-                  <Form.Item
-                    name={[record.name, 'stock']}
-                    style={{ marginBottom: 0 }}
-                  >
-                    <InputNumber
-                      min={0}
-                      precision={0}
-                      style={{ width: '100%' }}
-                      placeholder={t(
-                        'presale.form.specifications.stockPlaceholder'
-                      )}
-                    />
-                  </Form.Item>
-                )
-              },
-              {
-                title: t('presale.form.specifications.image'),
-                dataIndex: 'image',
-                width: 220,
-                render: (_: unknown, record: (typeof fields)[number]) => (
-                  <Form.Item
-                    name={[record.name, 'image']}
-                    style={{ marginBottom: 0 }}
-                  >
-                    <Input
-                      placeholder={t(
-                        'presale.form.specifications.imagePlaceholder'
-                      )}
-                    />
-                  </Form.Item>
-                )
-              },
-              {
-                title: common('table.action'),
-                dataIndex: 'action',
-                width: 120,
-                render: (_: unknown, record: (typeof fields)[number]) => (
-                  <Button
-                    type="link"
-                    danger
-                    onClick={() => remove(record.name)}
-                  >
-                    {common('button.remove')}
-                  </Button>
-                )
-              }
-            ]
-
-            return (
-              <Row gutter={[24, 0]}>
-                <Col span={24}>
-                  <Form.Item
-                    label={t('presale.form.specifications.label')}
-                    required={false}
-                    style={{ width: '100%' }}
-                  >
-                    <Table
-                      columns={skuColumns}
-                      dataSource={fields}
-                      rowKey={(field) => field.key}
-                      pagination={false}
-                      size="small"
-                      scroll={{ x: 1200 }}
-                    />
-                    <Button
-                      type="dashed"
-                      onClick={() =>
-                        add({
-                          deliveryType:
-                            form.getFieldValue('deliveryType') || 'virtual',
-                          ticketType:
-                            form.getFieldValue('mubitikeType') || 'online'
-                        })
-                      }
-                      style={{ width: 240, marginTop: 16 }}
-                    >
-                      {t('presale.form.specifications.add')}
-                    </Button>
-                    <Form.ErrorList errors={errors} />
-                  </Form.Item>
-                </Col>
-              </Row>
-            )
-          }}
-        </Form.List>
-        <Row gutter={[24, 0]}>
-          <Col xs={24} md={12}>
-            <Form.Item
-              label={t('presale.form.quantity.label')}
-              name="totalQuantity"
-              rules={[
-                { required: true, message: t('presale.form.quantity.required') }
-              ]}
-            >
-              <InputNumber style={{ width: '100%' }} min={1} precision={0} />
-            </Form.Item>
-          </Col>
-          <Col xs={24} md={12}>
-            <Form.Item
-              label={t('presale.form.perUserLimit.label')}
-              name="perUserLimit"
-              rules={[
-                {
-                  required: true,
-                  message: t('presale.form.perUserLimit.required')
-                }
-              ]}
-            >
-              <InputNumber style={{ width: '100%' }} min={1} precision={0} />
-            </Form.Item>
-          </Col>
-        </Row>
-
-        <Form.List name="benefits">
-          {(fields, { add, remove }) => (
-            <Row gutter={[24, 0]}>
-              <Col span={24}>
-                <Form.Item
-                  label={t('presale.form.benefits.label')}
-                  required={false}
-                >
-                  <Space direction="vertical" style={{ width: '100%' }}>
-                    {fields.map((field) => (
-                      <Space
-                        key={field.key}
-                        align="baseline"
-                        style={{ width: '100%' }}
-                      >
-                        <Form.Item
-                          {...field}
-                          name={field.name}
-                          fieldKey={field.fieldKey}
-                          style={{ flex: 1, marginBottom: 0 }}
-                          rules={[
-                            {
-                              required: true,
-                              message: t('presale.form.benefits.required')
-                            }
-                          ]}
-                        >
-                          <Input
-                            placeholder={t('presale.form.benefits.placeholder')}
-                          />
-                        </Form.Item>
-                        <Button
-                          type="link"
-                          danger
-                          onClick={() => remove(field.name)}
-                        >
-                          {common('button.remove')}
-                        </Button>
-                      </Space>
-                    ))}
-                    <Button
-                      type="dashed"
-                      onClick={() => add()}
-                      style={{ width: 200 }}
-                    >
-                      {t('presale.form.benefits.add')}
-                    </Button>
-                  </Space>
-                </Form.Item>
-              </Col>
-            </Row>
-          )}
-        </Form.List>
-        <Row gutter={[24, 0]}>
-          <Col span={24}>
-            <Title level={4} style={{ margin: '24px 0 16px' }}>
-              {t('presale.form.section.usage')}
-            </Title>
-          </Col>
-        </Row>
-        <Row gutter={[24, 0]}>
-          <Col xs={24} md={12}>
-            <Form.Item
-              label={t('presale.form.usageStart.label')}
-              name="usageStart"
-              rules={[
-                {
-                  required: true,
-                  message: t('presale.form.usageStart.required')
-                }
-              ]}
-            >
-              <DatePicker
-                format="YYYY-MM-DD HH:mm"
-                showTime={{ format: 'HH:mm' }}
-                style={{ width: '100%' }}
-              />
-            </Form.Item>
-          </Col>
-          <Col xs={24} md={12}>
-            <Form.Item
-              label={t('presale.form.usageEnd.label')}
-              name="usageEnd"
-              rules={[
-                {
-                  required: true,
-                  message: t('presale.form.usageEnd.required')
-                },
-                ({ getFieldValue }) => ({
-                  validator(_, value) {
-                    const start = getFieldValue('usageStart') as
-                      | dayjs.Dayjs
-                      | undefined
-                    if (!value || !start) {
-                      return Promise.resolve()
-                    }
-                    if (value.isAfter(start) || value.isSame(start)) {
-                      return Promise.resolve()
-                    }
-                    return Promise.reject(t('presale.form.usageEnd.afterStart'))
-                  }
-                })
-              ]}
-            >
-              <DatePicker
-                format="YYYY-MM-DD HH:mm:ss"
-                showTime={{ format: 'HH:mm:ss' }}
-                style={{ width: '100%' }}
-              />
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row gutter={[24, 0]}>
-          <Col xs={24} md={12}>
-            <Form.Item
-              label={t('presale.form.launchTime.label')}
-              name="launchTime"
-              rules={[
-                {
-                  required: true,
-                  message: t('presale.form.launchTime.required')
-                }
-              ]}
-            >
-              <DatePicker
-                showTime={{ format: 'HH:mm' }}
-                format="YYYY-MM-DD HH:mm"
-                style={{ width: '100%' }}
-              />
-            </Form.Item>
-          </Col>
-          <Col xs={24} md={12}>
-            <Form.Item
-              label={t('presale.form.endTime.label')}
-              name="endTime"
-              rules={[
-                {
-                  required: true,
-                  message: t('presale.form.endTime.required')
-                },
-                ({ getFieldValue }) => ({
-                  validator(_, value) {
-                    const launch = getFieldValue('launchTime') as
-                      | dayjs.Dayjs
-                      | undefined
-                    if (!value || !launch) {
-                      return Promise.resolve()
-                    }
-                    if (value.isAfter(launch)) {
-                      return Promise.resolve()
-                    }
-                    return Promise.reject(t('presale.form.endTime.afterLaunch'))
-                  }
-                })
-              ]}
-            >
-              <DatePicker
-                showTime={{ format: 'HH:mm:ss' }}
-                format="YYYY-MM-DD HH:mm:ss"
-                style={{ width: '100%' }}
-              />
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row gutter={[24, 0]}>
-          <Col span={24}>
-            <Title level={4} style={{ margin: '24px 0 16px' }}>
-              {t('presale.form.section.bonus')}
-            </Title>
-          </Col>
-        </Row>
-        <Row gutter={[24, 0]}>
-          <Col xs={24} md={12}>
-            <Form.Item
-              label={t('presale.form.bonusTitle.label')}
-              name="bonusTitle"
-            >
-              <Input placeholder={t('presale.form.bonusTitle.placeholder')} />
-            </Form.Item>
-          </Col>
-          <Col xs={24} md={12}>
-            <Form.Item
-              label={t('presale.form.bonusType.label')}
-              name="bonusType"
-            >
-              <Select
-                allowClear
-                options={[
-                  { value: 'digital', label: t('presale.bonusType.digital') },
-                  { value: 'physical', label: t('presale.bonusType.physical') },
-                  { value: 'voucher', label: t('presale.bonusType.voucher') }
-                ]}
-              />
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row gutter={[24, 0]}>
-          <Col xs={24} md={12}>
-            <Form.Item
-              label={t('presale.form.bonusDelivery.label')}
-              name="bonusDelivery"
-            >
-              <Select
-                allowClear
-                options={[
-                  {
-                    value: 'virtual',
-                    label: t('presale.deliveryType.virtual')
-                  },
-                  {
-                    value: 'physical',
-                    label: t('presale.deliveryType.physical')
-                  }
-                ]}
-              />
-            </Form.Item>
-          </Col>
-          <Col xs={24} md={12}>
-            <Form.Item
-              label={t('presale.form.pickupNotes.label')}
-              name="pickupNotes"
-            >
-              <Input.TextArea
-                rows={3}
-                placeholder={t('presale.form.pickupNotes.placeholder')}
-              />
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row gutter={[24, 0]}>
-          <Col span={24}>
-            <Form.Item
-              label={t('presale.form.bonusDescription.label')}
-              name="bonusDescription"
-            >
-              <Input.TextArea
-                rows={3}
-                placeholder={t('presale.form.bonusDescription.placeholder')}
-              />
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row gutter={[24, 0]}>
-          <Col span={24}>
-            <Form.Item label={t('presale.form.remark.label')} name="remark">
-              <Input.TextArea rows={3} />
-            </Form.Item>
-          </Col>
-        </Row>
+        />
+        <div style={{ display: currentStep === 0 ? 'block' : 'none' }}>
+          <StepMedia form={form} t={t} common={common} />
+        </div>
+        <div style={{ display: currentStep === 1 ? 'block' : 'none' }}>
+          <StepBasic
+            form={form}
+            t={t}
+            common={common}
+            selectedMovieLabel={selectedMovie?.label ?? ''}
+            onOpenMovieModal={() => setMovieModalOpen(true)}
+          />
+        </div>
+        <div style={{ display: currentStep === 2 ? 'block' : 'none' }}>
+          <StepSpecifications form={form} t={t} common={common} />
+        </div>
+        <div style={{ display: currentStep === 3 ? 'block' : 'none' }}>
+          <StepUsage form={form} t={t} common={common} />
+        </div>
+        <div style={{ display: currentStep === 4 ? 'block' : 'none' }}>
+          <StepExtra form={form} t={t} common={common} />
+        </div>
       </Form>
       <div
         style={{
-          position: 'sticky',
+          position: 'fixed',
           bottom: 0,
           left: 0,
+          right: 0,
           display: 'flex',
-          justifyContent: 'flex-end',
+          justifyContent: 'center',
           gap: 12,
           padding: '16px 24px',
-          margin: '0 -24px',
-          background: 'rgba(255, 255, 255, 0.95)',
+          background: 'rgba(255, 255, 255, 0.98)',
           borderTop: '1px solid #f0f0f0',
-          boxShadow: '0 -4px 16px rgba(0, 0, 0, 0.08)',
-          backdropFilter: 'blur(3px)'
+          boxShadow: '0 -2px 8px rgba(0, 0, 0, 0.06)'
         }}
       >
         <Button onClick={handleBack}>{common('button.cancel')}</Button>
-        <Button type="primary" loading={loading} onClick={handleSubmit}>
-          {common('button.save')}
-        </Button>
+        {currentStep > 0 && (
+          <Button onClick={() => setCurrentStep(currentStep - 1)}>
+            {t('presale.form.steps.prev')}
+          </Button>
+        )}
+        {currentStep < 4 ? (
+          <Button
+            type="primary"
+            onClick={() => setCurrentStep(currentStep + 1)}
+          >
+            {t('presale.form.steps.next')}
+          </Button>
+        ) : (
+          <Button type="primary" loading={loading} onClick={handleSubmit}>
+            {common('button.save')}
+          </Button>
+        )}
       </div>
       <MovieModal
         show={movieModalOpen}
         data={{}}
+        initialMovieId={selectedMovie?.value}
         onCancel={() => setMovieModalOpen(false)}
         onConfirm={(movie: Movie) => {
           if (!movie?.id) {
@@ -1238,7 +441,8 @@ export default function PresaleFormPage({ params: { lng } }: PageProps) {
           setSelectedMovie({
             value: movie.id,
             label: displayName,
-            startDate: movie.startDate
+            startDate: movie.startDate,
+            endDate: movie.endDate
           })
           form.setFieldsValue({ movieId: movie.id })
           if (movie.startDate) {
@@ -1251,14 +455,18 @@ export default function PresaleFormPage({ params: { lng } }: PageProps) {
                   .set('minute', 59)
                   .set('second', 59)
               })
+              const usageEnd = movie.endDate
+                ? dayjs(movie.endDate).endOf('day')
+                : release.add(60, 'day').endOf('day')
               form.setFieldsValue({
                 usageStart: release.startOf('day'),
-                usageEnd: release.add(60, 'day').endOf('day')
+                usageEnd
               })
             }
           }
         }}
       />
-    </section>
+      </section>
+    </Spin>
   )
 }
