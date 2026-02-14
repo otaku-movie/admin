@@ -56,11 +56,19 @@
       "create": "場次を追加",
       "edit": "場次を編集"
     },
+    "steps": {
+      "one": "作品・劇場",
+      "two": "料金・チケット",
+      "three": "上映日時"
+    },
     "form": {
       "movie": {
         "label": "映画タイトル",
         "required": "映画を選択してください",
         "placeholder": "映画を選択してください"
+      },
+      "allowPresale": {
+        "label": "前売券(ムビチケ等)対応"
       },
       "open": {
         "label": "公開するか"
@@ -104,14 +112,129 @@
       "showTime": {
         "label": "開始日時",
         "required": "上映時間を選択してください",
-        "startAfterEnd": "終了日時は開始日時より後でなければなりません"
+        "startAfterEnd": "終了日時は開始日時より後でなければなりません",
+        "endBeforeMovieDuration": "終了時刻と開始時刻の間隔は作品の上映時間より短くできません"
       },
       "promotion": {
         "label": "プロモーション戦略",
         "placeholder": "プロモーション戦略を選択してください（オプション）",
         "matchedRule": "マッチしたルール"
+      },
+      "pricingMode": {
+        "label": "料金モード",
+        "placeholder": "選択してください",
+        "systemActivity": "システムプロモ",
+        "fixedPrice": "設定料金"
+      },
+      "activity": {
+        "label": "関連プロモ",
+        "placeholder": "料金モードがシステムプロモのとき選択"
+      },
+      "fixedAmount": {
+        "label": "設定料金",
+        "placeholder": "設定料金モードのとき入力"
+      },
+      "surcharge": {
+        "label": "规格補足料金",
+        "placeholder": "3D/IMAX 等の補足料金"
+      },
+      "publishMode": {
+        "label": "公開方法",
+        "immediate": "すぐに公開",
+        "scheduled": "時間を指定して公開"
+      },
+      "publishAt": {
+        "label": "公開開始時間"
+      },
+      "saleOpenAt": {
+        "label": "販売開始時間"
       }
     }
+  },
+  "releasePage": {
+    "pageTitle": "上映を公開",
+    "step1": {
+      "title": "基本上映情報",
+      "instruction": "必須項目（*）を正確にご入力ください。料金ロジックは公開後即時反映されます。"
+    },
+    "step2": {
+      "title": "公開・販売開始の設定",
+      "instruction": "上映の公開有無、定时公開時刻、販売開始時刻を設定します。",
+      "publishSection": "公開設定",
+      "saleSection": "販売開始時刻",
+      "enableSaleOpenAt": "販売開始時刻を設定",
+      "setToNow": "現在時刻にする"
+    },
+    "step3": {
+      "title": "料金モード",
+      "instruction": "必須項目（*）を正確にご入力ください。料金ロジックは公開後即時反映されます。",
+      "systemActivity": "システムプロモ",
+      "systemActivityDesc": "適用する活動を関連づけて選択",
+      "selectActivityRules": "本上映に適用するルールを選択",
+      "selectActivities": "本上映に適用する活動を選択",
+      "activityLabel": "活動",
+      "rulesUnderActivity": "規則",
+      "ruleMonthly": "月次 {{count}} 件",
+      "ruleWeekly": "週次 {{count}} 件",
+      "ruleSpecific": "特定日 {{count}} 件",
+      "ruleTimeRange": "時間帯 {{count}} 件",
+      "ruleNone": "なし",
+      "ruleTypePriorityTitle": "規則タイプ優先度",
+      "ruleTypePriorityHint": "上から下へ優先度の高い順",
+      "ruleTypeMonthly": "月度規則",
+      "ruleTypeWeekly": "週度規則",
+      "ruleTypeSpecificDate": "固定日規則",
+      "ruleTypeTimeRange": "時間帯規則",
+      "ruleTypeFixedPrice": "固定料金",
+      "ruleTypeTicketType": "券種規則",
+      "ruleCountUnit": "{{count}} 件",
+      "ruleCountNone": "なし",
+      "fixedPrice": "設定料金",
+      "fixedPriceDesc": "一律料金",
+      "noActivity": "デフォルト規則",
+      "noActivityDesc": "定価のみ",
+      "applicableTicketTypes": "当日適用の券種（上映日に合わせて表示）",
+      "applicableTicketTypesEmpty": "当日適用の券種はありません",
+      "applicableDateLabel": "適用日：{{date}}（{{weekday}}）",
+      "showTimeRangeLabel": "上映時間：{{start}} - {{end}}",
+      "weekday1": "月曜",
+      "weekday2": "火曜",
+      "weekday3": "水曜",
+      "weekday4": "木曜",
+      "weekday5": "金曜",
+      "weekday6": "土曜",
+      "weekday7": "日曜",
+      "ticketTypeColumnHeader": "券種",
+      "applicableRuleColumnHeader": "適用条件",
+      "priceColumnHeader": "料金",
+      "priceUnitSymbol": "¥",
+      "ticketPriceOverrideHint": "本回のみ料金を変更できます。空欄の場合は券種の通常料金を使用します。",
+      "ticketTypeEnabledColumnHeader": "本回で有効",
+      "ticketTypeEnabledHint": "この回のみ。デフォルトは有効",
+      "allowMubiTicket": "ムビチケ前売り券"
+    },
+    "step4": {
+      "title": "プレビューと公開確認",
+      "instruction": "必須項目（*）を正確にご入力ください。料金ロジックは公開後即時反映されます。",
+      "auditTitle": "最終ロジック監査",
+      "billingMode": "計費モード",
+      "billingSystem": "SYSTEM",
+      "allowMubiTicket": "ムビチケ前売り券",
+      "yes": "はい",
+      "no": "いいえ",
+      "confirmAlert": "料金をご確認のうえ、確認をクリックすると上映が即時公開され券売機に同期されます。固定料金の変更は「料金モード」で行ってください。",
+      "confirmPublish": "公開する",
+      "openYes": "公開",
+      "openNo": "非公開",
+      "nextDay": "翌",
+      "notSet": "設定しない"
+    },
+    "screeningDate": "上映日",
+    "endDate": "終了日",
+    "startTime": "開始時刻",
+    "endTime": "終了時刻",
+    "currentDuration": "現在の長さ：{{hours}}時間{{minutes}}分",
+    "movieDurationLabel": "作品の長さ：{{hours}}時間{{minutes}}分"
   },
   "seatModal": {
     "title": "通路を設定する"

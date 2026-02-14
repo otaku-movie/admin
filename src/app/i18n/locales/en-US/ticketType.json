@@ -6,7 +6,32 @@
   "table": {
     "name": "Movie Ticket Type",
     "price": "Price",
-    "action": "Action"
+    "action": "Action",
+    "description": "Description",
+    "enabled": "Enabled",
+    "scheduleType": "Schedule type",
+    "applicable": "Applicable"
+  },
+  "schedule": {
+    "selectFirst": "Please select schedule type first",
+    "monthDay": "Days of month",
+    "monthDaySuffix": "",
+    "monthlyPrefix": "Monthly",
+    "specificDate": "Specific dates",
+    "daily": "Daily",
+    "startTime": "Start time",
+    "endTime": "End time",
+    "addDate": "Add date"
+  },
+  "weekday": {
+    "label": "Applicable weekdays",
+    "mon": "Mon",
+    "tue": "Tue",
+    "wed": "Wed",
+    "thu": "Thu",
+    "fri": "Fri",
+    "sat": "Sat",
+    "sun": "Sun"
   },
   "modal": {
     "title": {
@@ -21,6 +46,10 @@
       "price": {
         "label": "Price",
         "required": "Please enter the price"
+      },
+      "description": {
+        "label": "Description",
+        "placeholder": "Optional. Shown in the app when selecting tickets or in orders (e.g. audience, time slot)."
       }
     }
   },
@@ -57,6 +86,15 @@
     "remove": {
       "content": "Are you sure you want to delete the current movie ticket type?",
       "success": "Deleted successfully"
-    }
+    },
+    "required": "Please enter name and price"
+  },
+  "yesNo": {
+    "yes": "Yes",
+    "no": "No"
+  },
+  "button": {
+    "back": "Back",
+    "manage": "Ticket Types"
   }
 }

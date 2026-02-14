@@ -56,11 +56,19 @@
       "create": "Add Show Time",
       "edit": "Edit Show Time"
     },
+    "steps": {
+      "one": "Film & Hall",
+      "two": "Pricing & Ticket",
+      "three": "Show Time"
+    },
     "form": {
       "movie": {
         "label": "Movie Name",
         "required": "Please select a movie",
         "placeholder": "Please select a movie"
+      },
+      "allowPresale": {
+        "label": "Allow presale (MoviTicket etc.)"
       },
       "open": {
         "label": "Public"
@@ -104,14 +112,129 @@
       "showTime": {
         "label": "Start Time",
         "required": "Please select a show time",
-        "startAfterEnd": "The end time must be later than the start time"
+        "startAfterEnd": "The end time must be later than the start time",
+        "endBeforeMovieDuration": "The interval between end time and start time cannot be less than the movie duration"
       },
       "promotion": {
         "label": "Promotion Strategy",
         "placeholder": "Please select a promotion strategy (optional)",
         "matchedRule": "Matched Rule"
+      },
+      "pricingMode": {
+        "label": "Pricing Mode",
+        "placeholder": "Please select",
+        "systemActivity": "System Activity",
+        "fixedPrice": "Set Price"
+      },
+      "activity": {
+        "label": "Linked Activity",
+        "placeholder": "Select when pricing mode is System Activity"
+      },
+      "fixedAmount": {
+        "label": "Set Price",
+        "placeholder": "When using set price mode"
+      },
+      "surcharge": {
+        "label": "Surcharge",
+        "placeholder": "e.g. 3D/IMAX surcharge"
+      },
+      "publishMode": {
+        "label": "Publish Mode",
+        "immediate": "Publish immediately",
+        "scheduled": "Schedule publish"
+      },
+      "publishAt": {
+        "label": "Scheduled publish time"
+      },
+      "saleOpenAt": {
+        "label": "Ticket sales open time"
       }
     }
+  },
+  "releasePage": {
+    "pageTitle": "Release Showtime",
+    "step1": {
+      "title": "Basic Screening Info",
+      "instruction": "Please ensure required fields (*) are filled accurately. All pricing logic takes effect in real-time after publication."
+    },
+    "step2": {
+      "title": "Scheduled Publish & Sale Open",
+      "instruction": "Set whether the showtime is public, scheduled publish time, and ticket sale open time.",
+      "publishSection": "Publish Settings",
+      "saleSection": "Ticket Sale Open Time",
+      "enableSaleOpenAt": "Set ticket sale open time",
+      "setToNow": "Set to now"
+    },
+    "step3": {
+      "title": "Pricing Mode",
+      "instruction": "Please ensure required fields (*) are filled accurately. All pricing logic takes effect in real-time after publication.",
+      "systemActivity": "System Activity",
+      "systemActivityDesc": "Associate and check applicable activities",
+      "selectActivityRules": "Select applicable rules for this screening",
+      "selectActivities": "Select applicable activities for this screening",
+      "activityLabel": "Activity",
+      "rulesUnderActivity": "Rules",
+      "ruleMonthly": "Monthly {{count}}",
+      "ruleWeekly": "Weekly {{count}}",
+      "ruleSpecific": "Specific date {{count}}",
+      "ruleTimeRange": "Time range {{count}}",
+      "ruleNone": "None",
+      "ruleTypePriorityTitle": "Rule Type Priority",
+      "ruleTypePriorityHint": "Top to bottom = high to low priority",
+      "ruleTypeMonthly": "Monthly Rule",
+      "ruleTypeWeekly": "Weekly Rule",
+      "ruleTypeSpecificDate": "Fixed Day Rule",
+      "ruleTypeTimeRange": "Time Slot Rule",
+      "ruleTypeFixedPrice": "Fixed Price",
+      "ruleTypeTicketType": "Ticket Type Rule",
+      "ruleCountUnit": "{{count}} item(s)",
+      "ruleCountNone": "None",
+      "fixedPrice": "Set Price",
+      "fixedPriceDesc": "One price for all",
+      "noActivity": "Default Rule",
+      "noActivityDesc": "Original price only",
+      "applicableTicketTypes": "Ticket types applicable for the date (filtered by screening date)",
+      "applicableTicketTypesEmpty": "No ticket types applicable for this date",
+      "applicableDateLabel": "Applicable date: {{date}} ({{weekday}})",
+      "showTimeRangeLabel": "Show time: {{start}} - {{end}}",
+      "weekday1": "Mon",
+      "weekday2": "Tue",
+      "weekday3": "Wed",
+      "weekday4": "Thu",
+      "weekday5": "Fri",
+      "weekday6": "Sat",
+      "weekday7": "Sun",
+      "ticketTypeColumnHeader": "Ticket type",
+      "applicableRuleColumnHeader": "Applicable rule",
+      "priceColumnHeader": "Price",
+      "priceUnitSymbol": "¥",
+      "ticketPriceOverrideHint": "Override price for this showtime only; leave blank to use default.",
+      "ticketTypeEnabledColumnHeader": "Enable for this show",
+      "ticketTypeEnabledHint": "This showtime only; enabled by default",
+      "allowMubiTicket": "Support mubi ticket"
+    },
+    "step4": {
+      "title": "Preview & Confirm Release",
+      "instruction": "Please ensure required fields (*) are filled accurately. All pricing logic takes effect in real-time after publication.",
+      "auditTitle": "Final Logic Path Audit",
+      "billingMode": "Billing Mode",
+      "billingSystem": "SYSTEM",
+      "allowMubiTicket": "Support mubi ticket",
+      "yes": "Yes",
+      "no": "No",
+      "confirmAlert": "Please verify prices. After confirming, showtimes will be published immediately and synced to ticket machines. To adjust fixed price, change it in Pricing Mode first.",
+      "confirmPublish": "Confirm & Publish",
+      "openYes": "Public",
+      "openNo": "Private",
+      "nextDay": "(next day)",
+      "notSet": "Not set"
+    },
+    "screeningDate": "Screening Date",
+    "endDate": "End Date",
+    "startTime": "Start Time",
+    "endTime": "End Time",
+    "currentDuration": "Current duration: {{hours}}h {{minutes}}min",
+    "movieDurationLabel": "Movie duration: {{hours}}h {{minutes}}min"
   },
   "seatModal": {
     "title": "Set Aisle"

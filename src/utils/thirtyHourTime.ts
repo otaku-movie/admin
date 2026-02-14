@@ -1,8 +1,21 @@
+import type { Dayjs } from 'dayjs'
+
 /**
  * 提供 30 小时制时间（00:00 ~ 29:59）的常用工具函数，适用于跨夜排片等场景。
+ * 排片 30h：当日 6:00 为起点，次日 5:59 为终点，显示为 6〜23、24〜29。
  */
 export const THIRTY_HOUR_MINUTE_STEP = 30
 export const MAX_THIRTY_HOUR_HOUR = 29
+/** 排片 30h 起点（6 点），显示为 6〜29 */
+export const MIN_THIRTY_HOUR_HOUR = 6
+
+/** 6〜29 的整点选项，用于时下拉 */
+export const THIRTY_HOUR_HOUR_OPTIONS = Array.from(
+  { length: MAX_THIRTY_HOUR_HOUR - MIN_THIRTY_HOUR_HOUR + 1 },
+  (_, i) => i + MIN_THIRTY_HOUR_HOUR
+)
+/** 0〜59 的分钟选项 */
+export const THIRTY_HOUR_MINUTE_OPTIONS = Array.from({ length: 60 }, (_, i) => i)
 
 /**
  * 将「HH:mm」格式的 30 小时制字符串解析为分钟数。
@@ -84,5 +97,31 @@ export const generateThirtyHourOptions = (
       label
     }
   })
+}
+
+/**
+ * Dayjs → 30h 显示（6〜23 原样，0〜5 显示为 24〜29）
+ */
+export function dayjsToThirtyHour(time: Dayjs | null): { hour30: number; minute: number } | null {
+  if (!time) return null
+  const h = time.hour()
+  const m = time.minute()
+  if (h >= MIN_THIRTY_HOUR_HOUR && h <= 23) return { hour30: h, minute: m }
+  if (h >= 0 && h <= 5) return { hour30: h + 24, minute: m }
+  return { hour30: h, minute: m }
+}
+
+/**
+ * 30h 选择 → Dayjs（6〜23 用 baseDate 当日，24〜29 用 baseDate+1 日 0〜5 时）
+ */
+export function thirtyHourToDayjs(
+  hour30: number,
+  minute: number,
+  baseDate: Dayjs
+): Dayjs {
+  if (hour30 >= MIN_THIRTY_HOUR_HOUR && hour30 <= 23) {
+    return baseDate.clone().hour(hour30).minute(minute).second(0).millisecond(0)
+  }
+  return baseDate.clone().add(1, 'day').hour(hour30 - 24).minute(minute).second(0).millisecond(0)
 }
 

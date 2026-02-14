@@ -4,22 +4,42 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   Button,
   Card,
+  Col,
   DatePicker,
   Divider,
   Form,
   Input,
   InputNumber,
+  Modal,
+  Row,
   Select,
   Space,
   Spin,
-  Typography,
-  message,
+  Switch,
   Table,
-  Modal
+  Typography,
+  message
 } from 'antd'
 import type { TableColumnsType } from 'antd'
-import { PlusOutlined } from '@ant-design/icons'
+import { HolderOutlined, PlusOutlined } from '@ant-design/icons'
 import dayjs, { Dayjs } from 'dayjs'
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent
+} from '@dnd-kit/core'
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy
+} from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
 import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '@/app/[lng]/layout'
 import {
@@ -51,18 +71,185 @@ type TimeScope =
   | 'weekdaySpecific'
 type ModalType = 'monthly' | 'weekly' | 'specific' | 'timePeriod'
 
+/** 规则类型 key，顺序即优先级（索引 0 最高） */
+const RULE_TYPE_KEYS = [
+  'monthly',
+  'weekly',
+  'specificDate',
+  'timeRange',
+  'fixedPrice',
+  'ticketType'
+] as const
+type RuleTypeKey = (typeof RULE_TYPE_KEYS)[number]
+
+/** 有下方配置卡片的规则类型（固定票价、票种规则暂无配置卡片） */
+const RULE_TYPE_KEYS_WITH_CARDS: RuleTypeKey[] = [
+  'monthly',
+  'weekly',
+  'specificDate',
+  'timeRange'
+]
+
+function orderToFormValues(
+  order: RuleTypeKey[]
+): Record<string, number> {
+  const idx = (key: RuleTypeKey) => order.indexOf(key)
+  return {
+    monthlyPriority: idx('monthly'),
+    weeklyPriority: idx('weekly'),
+    specificDatePriority: idx('specificDate'),
+    timeRangePriority: idx('timeRange'),
+    fixedPricePriority: idx('fixedPrice'),
+    ticketTypePriority: idx('ticketType')
+  }
+}
+
+function formValuesToOrder(values: {
+  monthlyPriority?: number
+  weeklyPriority?: number
+  specificDatePriority?: number
+  timeRangePriority?: number
+  fixedPricePriority?: number
+  ticketTypePriority?: number
+}): RuleTypeKey[] {
+  const items: { key: RuleTypeKey; priority: number }[] = RULE_TYPE_KEYS.map(
+    (key) => ({
+      key,
+      priority:
+        key === 'monthly'
+          ? (values.monthlyPriority ?? 0)
+          : key === 'weekly'
+            ? (values.weeklyPriority ?? 0)
+            : key === 'specificDate'
+              ? (values.specificDatePriority ?? 0)
+              : key === 'timeRange'
+                ? (values.timeRangePriority ?? 0)
+                : key === 'fixedPrice'
+                  ? (values.fixedPricePriority ?? 0)
+                  : (values.ticketTypePriority ?? 0)
+    })
+  )
+  items.sort((a, b) => a.priority - b.priority || RULE_TYPE_KEYS.indexOf(a.key) - RULE_TYPE_KEYS.indexOf(b.key))
+  return items.map((i) => i.key)
+}
+
+function SortableRuleTypeRow({
+  id,
+  label,
+  rank,
+  dragAriaLabel
+}: {
+  id: RuleTypeKey
+  label: string
+  rank: number
+  dragAriaLabel?: string
+}) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging
+  } = useSortable({ id })
+  const style: React.CSSProperties = {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 8,
+    padding: '8px 12px',
+    marginBottom: 4,
+    background: isDragging ? 'var(--ant-color-primary-bg)' : 'var(--ant-color-fill-quaternary)',
+    borderRadius: 6,
+    transform: CSS.Transform.toString(transform),
+    transition
+  }
+  return (
+    <div ref={setNodeRef} style={style}>
+      <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <span style={{ fontWeight: 500, minWidth: 24 }}>{rank}.</span>
+        <span>{label}</span>
+      </span>
+      <span
+        {...attributes}
+        {...listeners}
+        style={{ cursor: 'grab', touchAction: 'none', display: 'flex', alignItems: 'center', color: 'var(--ant-color-text-tertiary)' }}
+        aria-label={dragAriaLabel}
+      >
+        <HolderOutlined />
+      </span>
+    </div>
+  )
+}
+
+/** 规则表格可拖拽行：顺序即优先级，通过拖拽调整 */
+function SortableRuleTableRow(props: React.HTMLAttributes<HTMLTableRowElement> & { 'data-row-key'?: string }) {
+  const id = props['data-row-key'] ?? ''
+  const { attributes, listeners, setNodeRef, setActivatorNodeRef, transform, transition, isDragging } = useSortable({ id })
+  const { style, ...restProps } = props // eslint-disable-line react/prop-types -- typed via TypeScript
+  return (
+    <tr
+      ref={setNodeRef}
+      {...restProps}
+      style={{
+        ...style,
+        transform: CSS.Transform.toString(transform),
+        transition,
+        ...(isDragging ? { opacity: 0.8 } : {})
+      }}
+    >
+      {props.children != null && Array.isArray(props.children)
+        ? props.children.map((child, i) =>
+            i === 0 && React.isValidElement(child) && child.type === 'td' ? (
+              <td key="drag" {...(child.props as React.TdHTMLAttributes<HTMLTableCellElement>)}>
+                <span
+                  ref={setActivatorNodeRef}
+                  {...attributes}
+                  {...listeners}
+                  style={{ cursor: 'grab', touchAction: 'none', display: 'inline-flex' }}
+                >
+                  <HolderOutlined />
+                </span>
+              </td>
+            ) : (
+              child
+            )
+          )
+        : props.children}
+    </tr>
+  )
+}
+
 interface PromotionFormValues {
   name?: string
   pricingMode: PricingMode
   unifiedPrice?: number
   remark?: string
+  allowMuviticket?: boolean
+  monthlyPriority?: number
+  weeklyPriority?: number
+  specificDatePriority?: number
+  timeRangePriority?: number
+  fixedPricePriority?: number
+  ticketTypePriority?: number
 }
+
+interface PricingRuleEntry {
+  id?: number
+  audienceType: number
+  value: number
+  priority: number
+}
+
+type PricingRuleRow = PricingRuleEntry & { index: number }
 
 interface MonthlyEntry {
   id?: number
   name: string
   day: number
   price: number
+  enabled?: boolean
+  priority?: number
 }
 
 interface WeeklyEntry {
@@ -70,6 +257,8 @@ interface WeeklyEntry {
   name: string
   weekday: string
   price: number
+  enabled?: boolean
+  priority?: number
 }
 
 interface SpecificEntry {
@@ -77,6 +266,8 @@ interface SpecificEntry {
   name: string
   date: Dayjs
   price: number
+  enabled?: boolean
+  priority?: number
 }
 
 interface TimePeriodEntry {
@@ -89,6 +280,8 @@ interface TimePeriodEntry {
   endTime: string
   price: number
   remark?: string
+  enabled?: boolean
+  priority?: number
 }
 
 const WEEKDAY_NUMBER_TO_KEY: Record<number, string> = {
@@ -194,17 +387,55 @@ export default function PromotionDetailPage({ params: { lng } }: PageProps) {
   const [weeklyList, setWeeklyList] = useState<WeeklyEntry[]>([])
   const [specificList, setSpecificList] = useState<SpecificEntry[]>([])
   const [timePeriodList, setTimePeriodList] = useState<TimePeriodEntry[]>([])
+  const [pricingRuleList, setPricingRuleList] = useState<PricingRuleEntry[]>([])
+  /** 规则类型优先级顺序（从上到下 = 优先级从高到低），用于拖拽排序 */
+  const [typePriorityOrder, setTypePriorityOrder] = useState<RuleTypeKey[]>([
+    ...RULE_TYPE_KEYS
+  ])
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
+  )
+
+  const handleTypePriorityDragEnd = useCallback(
+    (event: DragEndEvent) => {
+      const { active, over } = event
+      if (over == null || active.id === over.id) return
+      setTypePriorityOrder((prev) => {
+        const oldIndex = prev.indexOf(active.id as RuleTypeKey)
+        const newIndex = prev.indexOf(over.id as RuleTypeKey)
+        if (oldIndex === -1 || newIndex === -1) return prev
+        const next = arrayMove(prev, oldIndex, newIndex)
+        form.setFieldsValue(orderToFormValues(next))
+        return next
+      })
+    },
+    [form]
+  )
+
+  /** 有配置卡片的规则类型按优先级顺序排列，用于左侧表单列展示顺序 */
+  const cardOrder = useMemo(
+    () =>
+      typePriorityOrder.filter((k) =>
+        RULE_TYPE_KEYS_WITH_CARDS.includes(k)
+      ),
+    [typePriorityOrder]
+  )
 
   const resetPromotionState = useCallback(() => {
     setMonthlyList([])
     setWeeklyList([])
     setSpecificList([])
     setTimePeriodList([])
+    setPricingRuleList([])
+    setTypePriorityOrder([...RULE_TYPE_KEYS])
     form.setFieldsValue({
       pricingMode: 'individual',
       unifiedPrice: undefined,
       remark: undefined,
-      name: undefined
+      name: undefined,
+      ...orderToFormValues([...RULE_TYPE_KEYS])
     })
   }, [form])
 
@@ -219,14 +450,31 @@ export default function PromotionDetailPage({ params: { lng } }: PageProps) {
         name: detail.name || '',
         remark: detail.remark || undefined,
         pricingMode: 'individual',
-        unifiedPrice: undefined
+        unifiedPrice: undefined,
+        monthlyPriority: detail.monthlyPriority ?? 0,
+        weeklyPriority: detail.weeklyPriority ?? 0,
+        specificDatePriority: detail.specificDatePriority ?? 0,
+        timeRangePriority: detail.timeRangePriority ?? 0,
+        fixedPricePriority: detail.fixedPricePriority ?? 0,
+        ticketTypePriority: detail.ticketTypePriority ?? 0
       })
+      const order = formValuesToOrder({
+        monthlyPriority: detail.monthlyPriority ?? 0,
+        weeklyPriority: detail.weeklyPriority ?? 0,
+        specificDatePriority: detail.specificDatePriority ?? 0,
+        timeRangePriority: detail.timeRangePriority ?? 0,
+        fixedPricePriority: detail.fixedPricePriority ?? 0,
+        ticketTypePriority: detail.ticketTypePriority ?? 0
+      })
+      setTypePriorityOrder(order)
 
       const monthlyData = (detail.monthlyDays || []).map((item) => ({
         id: item.id,
         name: item.name || '',
         day: item.dayOfMonth,
-        price: item.price
+        price: item.price,
+        enabled: item.enabled ?? true,
+        priority: item.priority ?? 0
       }))
       console.log('Setting monthlyList:', monthlyData)
       setMonthlyList(monthlyData)
@@ -241,7 +489,9 @@ export default function PromotionDetailPage({ params: { lng } }: PageProps) {
             id: item.id,
             name: item.name || '',
             weekday,
-            price: item.price
+            price: item.price,
+            enabled: item.enabled ?? true,
+            priority: item.priority ?? 0
           })
           return acc
         }, [])
@@ -257,7 +507,9 @@ export default function PromotionDetailPage({ params: { lng } }: PageProps) {
             id: item.id,
             name: item.name || '',
             date,
-            price: item.price
+            price: item.price,
+            enabled: item.enabled ?? true,
+            priority: item.priority ?? 0
           })
           return acc
         }, [])
@@ -281,7 +533,9 @@ export default function PromotionDetailPage({ params: { lng } }: PageProps) {
             startTime,
             endTime,
             price: item.price,
-            remark: item.remark
+            remark: item.remark,
+            enabled: item.enabled ?? true,
+            priority: item.priority ?? 0
           }
 
           if (scope === 'weekdaySpecific') {
@@ -306,6 +560,8 @@ export default function PromotionDetailPage({ params: { lng } }: PageProps) {
           return acc
         }, [])
       )
+
+      setPricingRuleList([])
     },
     [form]
   )
@@ -552,6 +808,37 @@ export default function PromotionDetailPage({ params: { lng } }: PageProps) {
     [timePeriodList]
   )
 
+  const monthlySortableIds = useMemo(
+    () => monthlyDataSource.map((_, i) => `monthly-${i}`),
+    [monthlyDataSource]
+  )
+  const weeklySortableIds = useMemo(
+    () => weeklyDataSource.map((_, i) => `weekly-${i}`),
+    [weeklyDataSource]
+  )
+  const specificSortableIds = useMemo(
+    () => specificDataSource.map((_, i) => `specific-${i}`),
+    [specificDataSource]
+  )
+  const timePeriodSortableIds = useMemo(
+    () => timePeriodDataSource.map((_, i) => `timePeriod-${i}`),
+    [timePeriodDataSource]
+  )
+
+  const audienceTypeOptions = useMemo(
+    () =>
+      [1, 2, 3, 4].map((n) => ({
+        value: n,
+        label: t(`promotion.serviceDay.audienceType.${n}` as const)
+      })),
+    [t]
+  )
+
+  const _pricingRuleDataSource = useMemo<PricingRuleRow[]>(
+    () => pricingRuleList.map((item, index) => ({ ...item, index })),
+    [pricingRuleList]
+  )
+
   /*
    * const eventActivityDataSource = useMemo(
    *   () => eventActivities.map((item, index) => ({ ...item, index })),
@@ -578,53 +865,98 @@ export default function PromotionDetailPage({ params: { lng } }: PageProps) {
     }
   }, [])
 
+  const removePricingRule = useCallback((index: number) => {
+    setPricingRuleList((prev) => prev.filter((_, i) => i !== index))
+  }, [])
+
+  const handleMonthlyDragEnd = useCallback((event: DragEndEvent) => {
+    const { active, over } = event
+    if (over == null || active.id === over.id) return
+    const from = Number(String(active.id).replace('monthly-', ''))
+    const to = Number(String(over.id).replace('monthly-', ''))
+    if (Number.isNaN(from) || Number.isNaN(to)) return
+    setMonthlyList((prev) => arrayMove(prev, from, to))
+  }, [])
+  const handleWeeklyDragEnd = useCallback((event: DragEndEvent) => {
+    const { active, over } = event
+    if (over == null || active.id === over.id) return
+    const from = Number(String(active.id).replace('weekly-', ''))
+    const to = Number(String(over.id).replace('weekly-', ''))
+    if (Number.isNaN(from) || Number.isNaN(to)) return
+    setWeeklyList((prev) => arrayMove(prev, from, to))
+  }, [])
+  const handleSpecificDragEnd = useCallback((event: DragEndEvent) => {
+    const { active, over } = event
+    if (over == null || active.id === over.id) return
+    const from = Number(String(active.id).replace('specific-', ''))
+    const to = Number(String(over.id).replace('specific-', ''))
+    if (Number.isNaN(from) || Number.isNaN(to)) return
+    setSpecificList((prev) => arrayMove(prev, from, to))
+  }, [])
+  const handleTimePeriodDragEnd = useCallback((event: DragEndEvent) => {
+    const { active, over } = event
+    if (over == null || active.id === over.id) return
+    const from = Number(String(active.id).replace('timePeriod-', ''))
+    const to = Number(String(over.id).replace('timePeriod-', ''))
+    if (Number.isNaN(from) || Number.isNaN(to)) return
+    setTimePeriodList((prev) => arrayMove(prev, from, to))
+  }, [])
+
   const openModal = useCallback(
     (type: ModalType, index?: number) => {
       modalForm.resetFields()
 
       if (type === 'monthly') {
         if (index !== undefined) {
-          modalForm.setFieldsValue(monthlyList[index])
+          modalForm.setFieldsValue({ ...monthlyList[index] })
         } else {
           modalForm.setFieldsValue({
             price: unifiedPriceValue,
             day: undefined,
-            name: ''
+            name: '',
+            enabled: true,
+            priority: 0
           })
         }
       }
       if (type === 'weekly') {
         if (index !== undefined) {
-          modalForm.setFieldsValue(weeklyList[index])
+          modalForm.setFieldsValue({ ...weeklyList[index] })
         } else {
           modalForm.setFieldsValue({
             price: unifiedPriceValue,
             weekday: undefined,
-            name: ''
+            name: '',
+            enabled: true,
+            priority: 0
           })
         }
       }
       if (type === 'specific') {
         if (index !== undefined) {
-          modalForm.setFieldsValue(specificList[index])
+          modalForm.setFieldsValue({ ...specificList[index] })
         } else {
           modalForm.setFieldsValue({
             price: unifiedPriceValue,
             name: '',
-            date: undefined
+            date: undefined,
+            enabled: true,
+            priority: 0
           })
         }
       }
       if (type === 'timePeriod') {
         if (index !== undefined) {
-          modalForm.setFieldsValue(timePeriodList[index])
+          modalForm.setFieldsValue({ ...timePeriodList[index] })
         } else {
           modalForm.setFieldsValue({
             scope: 'daily',
             price: unifiedPriceValue,
             startTime: undefined,
             endTime: undefined,
-            name: ''
+            name: '',
+            enabled: true,
+            priority: 0
           })
         }
       }
@@ -672,7 +1004,9 @@ export default function PromotionDetailPage({ params: { lng } }: PageProps) {
               id: existing?.id,
               name: (next as MonthlyEntry).name,
               day: Number((next as MonthlyEntry).day),
-              price: Number((next as MonthlyEntry).price ?? 0)
+              price: Number((next as MonthlyEntry).price ?? 0),
+              enabled: (next as MonthlyEntry).enabled ?? true,
+              priority: Number((next as MonthlyEntry).priority ?? 0)
             }
             if (modalState.index !== undefined) {
               list[modalState.index] = entry
@@ -693,7 +1027,9 @@ export default function PromotionDetailPage({ params: { lng } }: PageProps) {
               id: existing?.id,
               name: (next as WeeklyEntry).name,
               weekday: (next as WeeklyEntry).weekday,
-              price: Number((next as WeeklyEntry).price ?? 0)
+              price: Number((next as WeeklyEntry).price ?? 0),
+              enabled: (next as WeeklyEntry).enabled ?? true,
+              priority: Number((next as WeeklyEntry).priority ?? 0)
             }
             if (modalState.index !== undefined) {
               list[modalState.index] = entry
@@ -714,7 +1050,9 @@ export default function PromotionDetailPage({ params: { lng } }: PageProps) {
               id: existing?.id,
               name: (next as SpecificEntry).name,
               date: (next as SpecificEntry).date,
-              price: Number((next as SpecificEntry).price ?? 0)
+              price: Number((next as SpecificEntry).price ?? 0),
+              enabled: (next as SpecificEntry).enabled ?? true,
+              priority: Number((next as SpecificEntry).priority ?? 0)
             }
             if (modalState.index !== undefined) {
               list[modalState.index] = entry
@@ -748,7 +1086,9 @@ export default function PromotionDetailPage({ params: { lng } }: PageProps) {
                 timePeriodValues.endTime ??
                 '',
               price: Number(timePeriodValues.price ?? 0),
-              remark: timePeriodValues.remark
+              remark: timePeriodValues.remark,
+              enabled: timePeriodValues.enabled ?? true,
+              priority: Number(timePeriodValues.priority ?? 0)
             }
             if (modalState.index !== undefined) {
               list[modalState.index] = entry
@@ -824,6 +1164,14 @@ export default function PromotionDetailPage({ params: { lng } }: PageProps) {
             >
               <InputNumber min={0} step={100} style={{ width: '100%' }} />
             </FormItem>
+            <FormItem
+              label={t('promotion.table.enabled')}
+              name="enabled"
+              valuePropName="checked"
+              initialValue={true}
+            >
+              <Switch />
+            </FormItem>
           </>
         )
       case 'weekly':
@@ -872,6 +1220,14 @@ export default function PromotionDetailPage({ params: { lng } }: PageProps) {
             >
               <InputNumber min={0} step={100} style={{ width: '100%' }} />
             </FormItem>
+            <FormItem
+              label={t('promotion.table.enabled')}
+              name="enabled"
+              valuePropName="checked"
+              initialValue={true}
+            >
+              <Switch />
+            </FormItem>
           </>
         )
       case 'specific':
@@ -918,6 +1274,14 @@ export default function PromotionDetailPage({ params: { lng } }: PageProps) {
               ]}
             >
               <InputNumber min={0} step={100} style={{ width: '100%' }} />
+            </FormItem>
+            <FormItem
+              label={t('promotion.table.enabled')}
+              name="enabled"
+              valuePropName="checked"
+              initialValue={true}
+            >
+              <Switch />
             </FormItem>
           </>
         )
@@ -1111,6 +1475,14 @@ export default function PromotionDetailPage({ params: { lng } }: PageProps) {
                   'promotion.serviceDay.timePeriod.remarkPlaceholder'
                 )}
               />
+            </FormItem>
+            <FormItem
+              label={t('promotion.table.enabled')}
+              name="enabled"
+              valuePropName="checked"
+              initialValue={true}
+            >
+              <Switch />
             </FormItem>
           </>
         )
@@ -1432,6 +1804,7 @@ export default function PromotionDetailPage({ params: { lng } }: PageProps) {
 
   const monthlyColumns = useMemo<TableColumnsType<any>>(
     () => [
+      { title: '', key: 'drag', width: 48, align: 'center' as const, render: () => null },
       {
         title: t('promotion.serviceDay.monthly.name'),
         dataIndex: 'name',
@@ -1446,6 +1819,15 @@ export default function PromotionDetailPage({ params: { lng } }: PageProps) {
         title: t('promotion.serviceDay.monthly.price'),
         dataIndex: 'price',
         render: (_: number, record: any) => displayPrice(record.price)
+      },
+      {
+        title: t('promotion.table.enabled'),
+        dataIndex: 'enabled',
+        width: 100,
+        align: 'center',
+        render: (value: boolean) => (
+          <Switch checked={value ?? true} disabled />
+        )
       },
       {
         title: common('table.action'),
@@ -1478,6 +1860,7 @@ export default function PromotionDetailPage({ params: { lng } }: PageProps) {
 
   const weeklyColumns = useMemo<TableColumnsType<any>>(
     () => [
+      { title: '', key: 'drag', width: 48, align: 'center' as const, render: () => null },
       {
         title: t('promotion.serviceDay.weekly.name'),
         dataIndex: 'name',
@@ -1492,6 +1875,15 @@ export default function PromotionDetailPage({ params: { lng } }: PageProps) {
         title: t('promotion.serviceDay.weekly.price'),
         dataIndex: 'price',
         render: (_: number, record: any) => displayPrice(record.price)
+      },
+      {
+        title: t('promotion.table.enabled'),
+        dataIndex: 'enabled',
+        width: 100,
+        align: 'center',
+        render: (value: boolean) => (
+          <Switch checked={value ?? true} disabled />
+        )
       },
       {
         title: common('table.action'),
@@ -1519,11 +1911,12 @@ export default function PromotionDetailPage({ params: { lng } }: PageProps) {
         )
       }
     ],
-    [common, openModal, removeEntry, t, weekdayLabel]
+    [common, displayPrice, openModal, removeEntry, t, weekdayLabel]
   )
 
   const specificColumns = useMemo<TableColumnsType<any>>(
     () => [
+      { title: '', key: 'drag', width: 48, align: 'center' as const, render: () => null },
       {
         title: t('promotion.serviceDay.specific.name'),
         dataIndex: 'name',
@@ -1538,6 +1931,15 @@ export default function PromotionDetailPage({ params: { lng } }: PageProps) {
         title: t('promotion.serviceDay.specific.price'),
         dataIndex: 'price',
         render: (_: number, record: any) => displayPrice(record.price)
+      },
+      {
+        title: t('promotion.table.enabled'),
+        dataIndex: 'enabled',
+        width: 100,
+        align: 'center',
+        render: (value: boolean) => (
+          <Switch checked={value ?? true} disabled />
+        )
       },
       {
         title: common('table.action'),
@@ -1565,11 +1967,92 @@ export default function PromotionDetailPage({ params: { lng } }: PageProps) {
         )
       }
     ],
-    [common, formatDate, openModal, removeEntry, t]
+    [common, displayPrice, formatDate, openModal, removeEntry, t]
+  )
+
+  const _pricingRuleColumns = useMemo<TableColumnsType<PricingRuleRow>>(
+    () => [
+      {
+        title: t('promotion.serviceDay.pricingRulesAudience'),
+        dataIndex: 'audienceType',
+        width: 140,
+        render: (value: number, record: PricingRuleRow) => (
+          <Select
+            value={value}
+            options={audienceTypeOptions}
+            onChange={(v) =>
+              setPricingRuleList((prev: PricingRuleEntry[]) =>
+                prev.map((item: PricingRuleEntry, i: number) =>
+                  i === record.index ? { ...item, audienceType: v ?? 1 } : item
+                )
+              )
+            }
+            style={{ width: '100%' }}
+          />
+        )
+      },
+      {
+        title: t('promotion.serviceDay.pricingRulesPrice'),
+        dataIndex: 'value',
+        width: 120,
+        render: (value: number, record: PricingRuleRow) => (
+          <InputNumber
+            min={0}
+            step={100}
+            value={value}
+            onChange={(v) =>
+              setPricingRuleList((prev: PricingRuleEntry[]) =>
+                prev.map((item: PricingRuleEntry, i: number) =>
+                  i === record.index ? { ...item, value: Number(v ?? 0) } : item
+                )
+              )
+            }
+            style={{ width: '100%' }}
+          />
+        )
+      },
+      {
+        title: t('promotion.serviceDay.pricingRulesPriority'),
+        dataIndex: 'priority',
+        width: 100,
+        render: (value: number, record: PricingRuleRow) => (
+          <InputNumber
+            min={0}
+            value={value}
+            onChange={(v) =>
+              setPricingRuleList((prev: PricingRuleEntry[]) =>
+                prev.map((item: PricingRuleEntry, i: number) =>
+                  i === record.index ? { ...item, priority: Number(v ?? 0) } : item
+                )
+              )
+            }
+            style={{ width: '100%' }}
+          />
+        )
+      },
+      {
+        title: common('table.action'),
+        key: 'action',
+        width: 80,
+        align: 'center',
+        render: (_: unknown, record: PricingRuleRow) => (
+          <Button
+            type="link"
+            size="small"
+            danger
+            onClick={() => removePricingRule(record.index)}
+          >
+            {common('button.remove')}
+          </Button>
+        )
+      }
+    ],
+    [audienceTypeOptions, common, removePricingRule, t]
   )
 
   const timePeriodColumns = useMemo<TableColumnsType<any>>(
     () => [
+      { title: '', key: 'drag', width: 48, align: 'center' as const, render: () => null },
       {
         title: t('promotion.serviceDay.timePeriod.name'),
         dataIndex: 'name',
@@ -1605,6 +2088,15 @@ export default function PromotionDetailPage({ params: { lng } }: PageProps) {
         title: t('promotion.serviceDay.timePeriod.price'),
         dataIndex: 'price',
         render: (_: number, record: any) => displayPrice(record.price)
+      },
+      {
+        title: t('promotion.table.enabled'),
+        dataIndex: 'enabled',
+        width: 80,
+        align: 'center',
+        render: (value: boolean) => (
+          <Switch checked={value ?? true} disabled />
+        )
       },
       {
         title: t('promotion.serviceDay.timePeriod.remark'),
@@ -1756,15 +2248,17 @@ export default function PromotionDetailPage({ params: { lng } }: PageProps) {
 
       const monthlyDays = monthlyList
         .filter((item) => item.day !== undefined)
-        .map((item) => ({
+        .map((item, index) => ({
           id: item.id,
           name: item.name,
           dayOfMonth: item.day,
-          price: resolvePrice(item.price)
+          price: resolvePrice(item.price),
+          enabled: item.enabled ?? true,
+          priority: index
         }))
 
       const weeklyDays = weeklyList.reduce<PromotionWeeklyDay[]>(
-        (acc, item) => {
+        (acc, item, index) => {
           const weekdayNumber = WEEKDAY_KEY_TO_NUMBER[item.weekday]
           if (!weekdayNumber) {
             return acc
@@ -1773,7 +2267,9 @@ export default function PromotionDetailPage({ params: { lng } }: PageProps) {
             id: item.id,
             name: item.name,
             weekday: weekdayNumber,
-            price: resolvePrice(item.price)
+            price: resolvePrice(item.price),
+            enabled: item.enabled ?? true,
+            priority: index
           })
           return acc
         },
@@ -1781,7 +2277,7 @@ export default function PromotionDetailPage({ params: { lng } }: PageProps) {
       )
 
       const specificDates = specificList.reduce<PromotionSpecificDate[]>(
-        (acc, item) => {
+        (acc, item, index) => {
           if (!item.date || !dayjs.isDayjs(item.date)) {
             return acc
           }
@@ -1789,7 +2285,9 @@ export default function PromotionDetailPage({ params: { lng } }: PageProps) {
             id: item.id,
             name: item.name,
             date: item.date.format('YYYY-MM-DD'),
-            price: resolvePrice(item.price)
+            price: resolvePrice(item.price),
+            enabled: item.enabled ?? true,
+            priority: index
           })
           return acc
         },
@@ -1853,7 +2351,9 @@ export default function PromotionDetailPage({ params: { lng } }: PageProps) {
             startTime,
             endTime,
             price: resolvePrice(item.price),
-            remark: item.remark
+            remark: item.remark,
+            enabled: item.enabled ?? true,
+            priority: acc.length
           })
           return acc
         },
@@ -1865,10 +2365,18 @@ export default function PromotionDetailPage({ params: { lng } }: PageProps) {
         cinemaId,
         name: values.name ?? '',
         remark: values.remark ?? '',
+        allowMuviticket: false,
+        monthlyPriority: values.monthlyPriority ?? 0,
+        weeklyPriority: values.weeklyPriority ?? 0,
+        specificDatePriority: values.specificDatePriority ?? 0,
+        timeRangePriority: values.timeRangePriority ?? 0,
+        fixedPricePriority: values.fixedPricePriority ?? 0,
+        ticketTypePriority: values.ticketTypePriority ?? 0,
         monthlyDays,
         weeklyDays,
         specificDates,
-        timeRanges
+        timeRanges,
+        pricingRules: []
       }
 
       await savePromotion(payload)
@@ -1897,194 +2405,227 @@ export default function PromotionDetailPage({ params: { lng } }: PageProps) {
             name: '',
             pricingMode: 'individual',
             unifiedPrice: undefined,
-            remark: undefined
+            remark: undefined,
+            ...orderToFormValues([...RULE_TYPE_KEYS])
           }}
         >
-          <FormItem
-            label={t('promotion.serviceDay.eventRule.activityName')}
-            name="name"
-            rules={[
-              {
-                required: true,
-                message: t('promotion.serviceDay.validation.nameRequired')
-              }
-            ]}
-          >
-            <Input
-              placeholder={t(
-                'promotion.serviceDay.eventRule.activityNamePlaceholder'
-              )}
-            />
-          </FormItem>
-          <Space size={40} direction="vertical">
-            <Card
-              variant="outlined"
-              title={
-                <Title style={{ margin: '12px 0' }} level={4}>
-                  {t('promotion.serviceDay.monthly.title')}
-                </Title>
-              }
-              size="small"
-            >
-              <Paragraph type="secondary" style={{ marginTop: 0 }}>
-                {t('promotion.serviceDay.monthly.description')}
-              </Paragraph>
-              <Space direction="vertical" style={{ width: '100%' }}>
-                <Table
-                  size="small"
-                  pagination={false}
-                  dataSource={monthlyDataSource}
-                  columns={monthlyColumns}
-                  rowKey="index"
-                  locale={{ emptyText: t('empty') }}
-                />
-                <Button
-                  type="dashed"
-                  icon={<PlusOutlined />}
-                  onClick={() => openModal('monthly')}
-                  style={{ width: 'fit-content' }}
-                >
-                  {t('promotion.serviceDay.monthly.add')}
-                </Button>
+          <Row gutter={24}>
+            <Col xs={24} lg={18}>
+              <Space size={40} direction="vertical" style={{ width: '100%' }}>
+                {cardOrder.map((key) => {
+                  if (key === 'monthly') {
+                    return (
+                      <Card
+                        key="monthly"
+                        variant="outlined"
+                        title={
+                          <Title style={{ margin: '12px 0' }} level={4}>
+                            {t('promotion.serviceDay.monthly.title')}
+                          </Title>
+                        }
+                        size="small"
+                      >
+                        <Paragraph type="secondary" style={{ marginTop: 0 }}>
+                          {t('promotion.serviceDay.monthly.description')}
+                        </Paragraph>
+                        <Space direction="vertical" style={{ width: '100%' }}>
+                          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleMonthlyDragEnd}>
+                            <SortableContext items={monthlySortableIds} strategy={verticalListSortingStrategy}>
+                              <Table
+                                size="small"
+                                pagination={false}
+                                dataSource={monthlyDataSource}
+                                columns={monthlyColumns}
+                                rowKey={(r) => `monthly-${r.index}`}
+                                components={{ body: { row: SortableRuleTableRow } }}
+                                locale={{ emptyText: t('empty') }}
+                              />
+                            </SortableContext>
+                          </DndContext>
+                          <Button
+                            type="dashed"
+                            icon={<PlusOutlined />}
+                            onClick={() => openModal('monthly')}
+                            style={{ width: 'fit-content' }}
+                          >
+                            {t('promotion.serviceDay.monthly.add')}
+                          </Button>
+                        </Space>
+                      </Card>
+                    )
+                  }
+                  if (key === 'weekly') {
+                    return (
+                      <Card
+                        key="weekly"
+                        variant="outlined"
+                        title={
+                          <Title style={{ margin: '12px 0' }} level={4}>
+                            {t('promotion.serviceDay.weekly.title')}
+                          </Title>
+                        }
+                        size="small"
+                      >
+                        <Paragraph type="secondary" style={{ marginTop: 0 }}>
+                          {t('promotion.serviceDay.weekly.description')}
+                        </Paragraph>
+                        <Space direction="vertical" style={{ width: '100%' }}>
+                          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleWeeklyDragEnd}>
+                            <SortableContext items={weeklySortableIds} strategy={verticalListSortingStrategy}>
+                              <Table
+                                size="small"
+                                pagination={false}
+                                dataSource={weeklyDataSource}
+                                columns={weeklyColumns}
+                                rowKey={(r) => `weekly-${r.index}`}
+                                components={{ body: { row: SortableRuleTableRow } }}
+                                locale={{ emptyText: t('empty') }}
+                              />
+                            </SortableContext>
+                          </DndContext>
+                          <Button
+                            type="dashed"
+                            icon={<PlusOutlined />}
+                            onClick={() => openModal('weekly')}
+                            style={{ width: 'fit-content' }}
+                          >
+                            {t('promotion.serviceDay.weekly.add')}
+                          </Button>
+                        </Space>
+                      </Card>
+                    )
+                  }
+                  if (key === 'specificDate') {
+                    return (
+                      <Card
+                        key="specific"
+                        variant="borderless"
+                        title={
+                          <Title style={{ margin: '12px 0' }} level={4}>
+                            {t('promotion.serviceDay.specific.title')}
+                          </Title>
+                        }
+                        size="small"
+                      >
+                        <Paragraph type="secondary" style={{ marginTop: 0 }}>
+                          {t('promotion.serviceDay.specific.description')}
+                        </Paragraph>
+                        <Space direction="vertical" style={{ width: '100%' }}>
+                          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleSpecificDragEnd}>
+                            <SortableContext items={specificSortableIds} strategy={verticalListSortingStrategy}>
+                              <Table
+                                size="small"
+                                pagination={false}
+                                dataSource={specificDataSource}
+                                columns={specificColumns}
+                                rowKey={(r) => `specific-${r.index}`}
+                                components={{ body: { row: SortableRuleTableRow } }}
+                                locale={{ emptyText: t('empty') }}
+                              />
+                            </SortableContext>
+                          </DndContext>
+                          <Button
+                            type="dashed"
+                            icon={<PlusOutlined />}
+                            onClick={() => openModal('specific')}
+                            style={{ width: 'fit-content' }}
+                          >
+                            {t('promotion.serviceDay.specific.add')}
+                          </Button>
+                        </Space>
+                      </Card>
+                    )
+                  }
+                  if (key === 'timeRange') {
+                    return (
+                      <Card
+                        key="timePeriod"
+                        variant="borderless"
+                        title={
+                          <Title style={{ margin: '12px 0' }} level={4}>
+                            {t('promotion.serviceDay.timePeriod.title')}
+                          </Title>
+                        }
+                        size="small"
+                      >
+                        <Paragraph type="secondary" style={{ marginTop: 0 }}>
+                          {t('promotion.serviceDay.timePeriod.description')}
+                        </Paragraph>
+                        <Space direction="vertical" style={{ width: '100%' }}>
+                          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleTimePeriodDragEnd}>
+                            <SortableContext items={timePeriodSortableIds} strategy={verticalListSortingStrategy}>
+                              <Table
+                                size="small"
+                                pagination={false}
+                                dataSource={timePeriodDataSource}
+                                columns={timePeriodColumns}
+                                rowKey={(r) => `timePeriod-${r.index}`}
+                                components={{ body: { row: SortableRuleTableRow } }}
+                                locale={{ emptyText: t('empty') }}
+                                scroll={{ x: 960 }}
+                              />
+                            </SortableContext>
+                          </DndContext>
+                          <Button
+                            type="dashed"
+                            icon={<PlusOutlined />}
+                            onClick={() => openModal('timePeriod')}
+                            style={{ width: 'fit-content' }}
+                          >
+                            {t('promotion.serviceDay.timePeriod.add')}
+                          </Button>
+                        </Space>
+                      </Card>
+                    )
+                  }
+                  return null
+                })}
+                <Card size="small">
+                  <FormItem
+                    label={t('promotion.serviceDay.remark.label')}
+                    name="remark"
+                  >
+                    <Input.TextArea
+                      rows={3}
+                      placeholder={t('promotion.serviceDay.remark.placeholder')}
+                    />
+                  </FormItem>
+                </Card>
               </Space>
-            </Card>
-
-            <Card
-              variant="outlined"
-              title={
-                <Title style={{ margin: '12px 0' }} level={4}>
-                  {t('promotion.serviceDay.weekly.title')}
-                </Title>
-              }
-              size="small"
-            >
-              <Paragraph type="secondary" style={{ marginTop: 0 }}>
-                {t('promotion.serviceDay.weekly.description')}
-              </Paragraph>
-              <Space direction="vertical" style={{ width: '100%' }}>
-                <Table
-                  size="small"
-                  pagination={false}
-                  dataSource={weeklyDataSource}
-                  columns={weeklyColumns}
-                  rowKey="index"
-                  locale={{ emptyText: t('empty') }}
-                />
-                <Button
-                  type="dashed"
-                  icon={<PlusOutlined />}
-                  onClick={() => openModal('weekly')}
-                  style={{ width: 'fit-content' }}
+            </Col>
+            <Col xs={24} lg={6}>
+              <Card variant="outlined" size="small">
+                <Paragraph strong style={{ marginTop: 0 }}>
+                  {t('promotion.serviceDay.typePriority.title')}
+                </Paragraph>
+                <Paragraph type="secondary" style={{ marginTop: 4, marginBottom: 16 }}>
+                  {t('promotion.serviceDay.typePriority.description')}
+                </Paragraph>
+                <DndContext
+                  sensors={sensors}
+                  collisionDetection={closestCenter}
+                  onDragEnd={handleTypePriorityDragEnd}
                 >
-                  {t('promotion.serviceDay.weekly.add')}
-                </Button>
-              </Space>
-            </Card>
-
-            <Card
-              variant="borderless"
-              title={
-                <Title style={{ margin: '12px 0' }} level={4}>
-                  {t('promotion.serviceDay.specific.title')}
-                </Title>
-              }
-              size="small"
-            >
-              <Paragraph type="secondary" style={{ marginTop: 0 }}>
-                {t('promotion.serviceDay.specific.description')}
-              </Paragraph>
-              <Space direction="vertical" style={{ width: '100%' }}>
-                <Table
-                  size="small"
-                  pagination={false}
-                  dataSource={specificDataSource}
-                  columns={specificColumns}
-                  rowKey="index"
-                  locale={{ emptyText: t('empty') }}
-                />
-                <Button
-                  type="dashed"
-                  icon={<PlusOutlined />}
-                  onClick={() => openModal('specific')}
-                  style={{ width: 'fit-content' }}
-                >
-                  {t('promotion.serviceDay.specific.add')}
-                </Button>
-              </Space>
-            </Card>
-            <Card
-              variant="borderless"
-              title={
-                <Title style={{ margin: '12px 0' }} level={4}>
-                  {t('promotion.serviceDay.timePeriod.title')}
-                </Title>
-              }
-              size="small"
-            >
-              <Paragraph type="secondary" style={{ marginTop: 0 }}>
-                {t('promotion.serviceDay.timePeriod.description')}
-              </Paragraph>
-              <Space direction="vertical" style={{ width: '100%' }}>
-                <Table
-                  size="small"
-                  pagination={false}
-                  dataSource={timePeriodDataSource}
-                  columns={timePeriodColumns}
-                  rowKey="index"
-                  locale={{ emptyText: t('empty') }}
-                  scroll={{ x: 960 }}
-                />
-                <Button
-                  type="dashed"
-                  icon={<PlusOutlined />}
-                  onClick={() => openModal('timePeriod')}
-                  style={{ width: 'fit-content' }}
-                >
-                  {t('promotion.serviceDay.timePeriod.add')}
-                </Button>
-              </Space>
-            </Card>
-
-            {/* <Card
-          title={t('promotion.serviceDay.eventRule.title')}
-          size="small"
-        >
-          <Paragraph type="secondary" style={{ marginTop: 0 }}>
-            {t('promotion.serviceDay.eventRule.description')}
-          </Paragraph>
-          <Space direction="vertical" style={{ width: '100%' }}>
-            <Table
-              size="small"
-              pagination={false}
-              dataSource={eventActivityDataSource}
-              columns={eventActivityColumns}
-              rowKey="index"
-              locale={{ emptyText: t('empty') }}
-              scroll={{ x: 960 }}
-            />
-            <Button
-              type="dashed"
-              icon={<PlusOutlined />}
-              onClick={() => openModal('eventActivity')}
-              style={{ width: 'fit-content' }}
-            >
-              {t('promotion.serviceDay.eventRule.add')}
-            </Button>
-          </Space>
-        </Card> */}
-
-            <Card size="small">
-              <FormItem
-                label={t('promotion.serviceDay.remark.label')}
-                name="remark"
-              >
-                <Input.TextArea
-                  rows={3}
-                  placeholder={t('promotion.serviceDay.remark.placeholder')}
-                />
-              </FormItem>
-            </Card>
-          </Space>
+                  <SortableContext
+                    items={typePriorityOrder}
+                    strategy={verticalListSortingStrategy}
+                  >
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+                      {typePriorityOrder.map((key, index) => (
+                        <SortableRuleTypeRow
+                          key={key}
+                          id={key}
+                          label={t(`promotion.serviceDay.typePriority.${key}` as const)}
+                          rank={index + 1}
+                          dragAriaLabel={t('promotion.serviceDay.typePriority.dragHint')}
+                        />
+                      ))}
+                    </div>
+                  </SortableContext>
+                </DndContext>
+              </Card>
+            </Col>
+          </Row>
         </Form>
       </Spin>
       <Modal

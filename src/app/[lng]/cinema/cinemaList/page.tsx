@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react'
 import {
   Table,
   Button,
-  Space,
   Input,
   Row,
   message,
@@ -127,13 +126,27 @@ export default function Page({ params: { lng } }: PageProps) {
       width: 360,
       render: (_, row) => {
         return (
-          <Space direction="vertical" size={8} style={{ width: '100%' }}>
-            <Space wrap>
-              <Button
-                onClick={() => {
-                  router.push(
-                    processPath({
-                      name: 'screeningManagement',
+          <Flex wrap="wrap" gap={8} style={{ width: '100%' }}>
+            <Button
+              type="primary"
+              onClick={() => {
+                router.push(
+                  processPath({
+                    name: 'ticketType',
+                      query: {
+                        id: row.id
+                      }
+                    })
+                  )
+                }}
+              >
+              {common('button.ticketType')}
+            </Button>
+            <Button
+              onClick={() => {
+                router.push(
+                  processPath({
+                    name: 'screeningManagement',
                       query: {
                         id: row.id
                       }
@@ -143,11 +156,11 @@ export default function Page({ params: { lng } }: PageProps) {
               >
                 {common('button.cinemaList.screeningManagement')}
               </Button>
-              <Button
-                onClick={() => {
-                  router.push(
-                    processPath({
-                      name: 'promotion',
+            <Button
+              onClick={() => {
+                router.push(
+                  processPath({
+                    name: 'promotion',
                       query: {
                         cinemaId: row.id,
                         cinemaName: encodeURIComponent(row.name)
@@ -156,16 +169,15 @@ export default function Page({ params: { lng } }: PageProps) {
                   )
                 }}
               >
-                {common('button.promotion')}
-              </Button>
-            </Space>
-            <Space wrap>
-              <Button
-                type="primary"
-                onClick={() => {
-                  router.push(
-                    processPath({
-                      name: 'theaterHall',
+              {common('button.promotion')}
+            </Button>
+            <Button
+              type="primary"
+              ghost
+              onClick={() => {
+                router.push(
+                  processPath({
+                    name: 'theaterHall',
                       query: {
                         id: row.id
                       }
@@ -173,20 +185,18 @@ export default function Page({ params: { lng } }: PageProps) {
                   )
                 }}
               >
-                {common('button.theaterHallDetail')}
-              </Button>
-              <CheckPermission code="cinema.save">
-                <Button
-                  type="primary"
-                  onClick={() => {
-                    router.push(
-                      processPath({
-                        name: 'cinemaDetail',
-                        query: {
-                          id: row.id
-                        }
-                      })
-                    )
+              {common('button.theaterHallDetail')}
+            </Button>
+            <CheckPermission code="cinema.save">
+              <Button
+                type="primary"
+                onClick={() => {
+                  router.push(
+                    processPath({
+                      name: 'cinemaDetail',
+                      query: { id: row.id }
+                    })
+                  )
                   }}
                 >
                   {common('button.edit')}
@@ -200,9 +210,7 @@ export default function Page({ params: { lng } }: PageProps) {
                     Modal.confirm({
                       title: common('button.remove'),
                       content: t('message.remove.content'),
-                      onCancel() {
-                        console.log('Cancel')
-                      },
+                      onCancel() {},
                       onOk() {
                         return new Promise((resolve, reject) => {
                           http({
@@ -226,8 +234,7 @@ export default function Page({ params: { lng } }: PageProps) {
                   {common('button.remove')}
                 </Button>
               </CheckPermission>
-            </Space>
-          </Space>
+          </Flex>
         )
       }
     }

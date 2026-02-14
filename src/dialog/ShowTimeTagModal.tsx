@@ -41,6 +41,7 @@ export function ShowTimeTagModal(props: modalProps) {
       }
       open={props.show}
       maskClosable={false}
+      width={1400}
       onOk={() => {
         form.validateFields().then(() => {
           http({

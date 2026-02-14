@@ -304,9 +304,15 @@
     }
   },
   "promotion": {
-    "title": "プロモーション管理",
+    "title": "プロモーションルール管理",
     "table": {
       "name": "活動名",
+      "ruleType": "ルールタイプ",
+      "ruleName": "ルール名",
+      "effectContent": "有効内容",
+      "price": "料金/割引",
+      "enabled": "有効",
+      "priority": "優先度",
       "monthlyRules": "月次ルール",
       "weeklyRules": "週次ルール",
       "specificRules": "特定日ルール",
@@ -315,7 +321,28 @@
       "remark": "備考",
       "remarkEmpty": "未設定"
     },
+    "ruleTypes": {
+      "monthly": "月次ルール",
+      "weekly": "週次ルール",
+      "specificDate": "特定日ルール",
+      "timeRange": "時間帯ルール",
+      "fixedPrice": "固定料金",
+      "ticketType": "チケット種別ルール"
+    },
     "serviceDay": {
+      "allowMuviticket": "ムビチケ対応",
+      "pricingRules": "料金ルール",
+      "pricingRulesAudience": "対象者",
+      "pricingRulesPrice": "料金",
+      "pricingRulesPriority": "優先度",
+      "pricingRulesAdd": "料金ルールを追加",
+      "pricingRulesDescription": "ムビチケ対象者と料金。数値が小さいほど優先",
+      "audienceType": {
+        "1": "一般",
+        "2": "学生",
+        "3": "小人",
+        "4": "シニア"
+      },
       "priority": "優先度",
       "priorityPlaceholder": "数値が小さいほど優先、デフォルト 0",
       "typePriority": {
@@ -337,7 +364,8 @@
         "namePlaceholder": "ルール名を入力してください",
         "dayPlaceholder": "日を入力してください（1-31）",
         "description": "毎月固定日に適用されるプロモーションルール",
-        "add": "月次ルールを追加"
+        "add": "月次ルールを追加",
+        "effectLabel": "毎月{{day}}日"
       },
       "weekly": {
         "title": "週次ルール",
@@ -347,7 +375,8 @@
         "namePlaceholder": "ルール名を入力してください",
         "weekdayPlaceholder": "曜日を選択してください",
         "description": "毎週固定曜日に適用されるプロモーションルール",
-        "add": "週次ルールを追加"
+        "add": "週次ルールを追加",
+        "effectLabel": "毎週{{weekday}}"
       },
       "specific": {
         "title": "特定日ルール",
@@ -357,7 +386,8 @@
         "namePlaceholder": "ルール名を入力してください",
         "datePlaceholder": "日付を選択してください",
         "description": "指定した日付に適用されるプロモーションルール",
-        "add": "特定日ルールを追加"
+        "add": "特定日ルールを追加",
+        "effectLabel": "{{year}}年{{month}}月{{day}}日"
       },
       "timePeriod": {
         "title": "時間帯ルール",
@@ -381,7 +411,8 @@
           "weekend": "週末",
           "weekdaySpecific": "指定平日",
           "specific": "指定日"
-        }
+        },
+        "effectDailyPrefix": "毎日"
       },
       "unit": {
         "daySuffix": "日"
@@ -406,6 +437,7 @@
         "priceRequired": "価格を入力してください",
         "scopeRequired": "適用範囲を選択してください",
         "timeRangeRequired": "時間帯を選択してください",
+        "timeRangeInvalid": "終了時刻は開始時刻より後にしてください",
         "pairDiscountRange": "ペア割引は 0-100 の間で指定してください"
       },
       "remark": {

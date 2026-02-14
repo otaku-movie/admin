@@ -45,5 +45,8 @@
       "source": "PowerShell",
       "args": ["-NoProfile", "-ExecutionPolicy", "Bypass"]
     }
+  },
+  "[json]": {
+    "editor.defaultFormatter": "numso.prettier-standard-vscode"
   }
 }

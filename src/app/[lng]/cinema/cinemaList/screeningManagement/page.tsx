@@ -6,13 +6,14 @@ import {
   Dropdown,
   FloatButton,
   Space,
+  Button,
   message,
   MenuProps,
   Modal,
   Typography,
   DatePicker
 } from 'antd'
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams, useRouter } from 'next/navigation'
 import {
   PlusOutlined,
   LeftOutlined,
@@ -21,6 +22,7 @@ import {
 } from '@ant-design/icons'
 import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '@/app/[lng]/layout'
+import { processPath } from '@/config/router'
 import http from '@/api'
 import { Dict } from '@/components/dict'
 import { TodoList } from '@/components/TodoList/todoList'
@@ -39,6 +41,7 @@ const { Text, Paragraph } = Typography
 
 export default function CinemaPage({ params: { lng } }: Readonly<PageProps>) {
   const searchParams = useSearchParams()
+  const router = useRouter()
   const [showTimeModal, setShowTimeModal] = useState<any>({
     data: {
       cinemaId: searchParams.get('id')
@@ -222,19 +225,29 @@ export default function CinemaPage({ params: { lng } }: Readonly<PageProps>) {
 
               switch (key) {
                 case 'edit':
-                  http({
-                    url: 'movie_show_time/detail',
-                    method: 'get',
-                    params: {
-                      id: item.id
+                  {
+                    const cinemaId = searchParams.get('id')
+                    if (cinemaId) {
+                      router.push(
+                        processPath({
+                          name: 'screeningManagementRelease',
+                          query: { id: cinemaId, showTimeId: item.id }
+                        }) as string
+                      )
+                    } else {
+                      http({
+                        url: 'movie_show_time/detail',
+                        method: 'get',
+                        params: { id: item.id }
+                      }).then((res) => {
+                        setShowTimeModal({
+                          ...showTimeModal,
+                          data: res.data,
+                          show: true
+                        })
+                      })
                     }
-                  }).then((res) => {
-                    setShowTimeModal({
-                      ...showTimeModal,
-                      data: res.data,
-                      show: true
-                    })
-                  })
+                  }
                   break
                 case 'remove':
                   Modal.confirm({
@@ -482,12 +495,15 @@ export default function CinemaPage({ params: { lng } }: Readonly<PageProps>) {
         aria-label={t('addShowTime')}
         tooltip={t('addShowTime')}
         onClick={() => {
-          setShowTimeModal({
-            data: {
-              cinemaId: searchParams.get('id')
-            },
-            show: true
-          })
+          const id = searchParams.get('id')
+          if (id) {
+            router.push(processPath({ name: 'screeningManagementRelease', query: { id } }) as string)
+          } else {
+            setShowTimeModal({
+              data: { cinemaId: id },
+              show: true
+            })
+          }
         }}
       />
       <Modal

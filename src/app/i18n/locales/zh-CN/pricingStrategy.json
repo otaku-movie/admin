@@ -304,9 +304,15 @@
     }
   },
   "promotion": {
-    "title": "促销活动管理",
+    "title": "促销规则管理",
     "table": {
       "name": "活动名称",
+      "ruleType": "规则类型",
+      "ruleName": "规则名称",
+      "effectContent": "生效内容",
+      "price": "价格/优惠",
+      "enabled": "启用状态",
+      "priority": "优先级",
       "monthlyRules": "月度规则",
       "weeklyRules": "周度规则",
       "specificRules": "特定日期规则",
@@ -315,7 +321,28 @@
       "remark": "备注",
       "remarkEmpty": "未设置"
     },
+    "ruleTypes": {
+      "monthly": "月度规则",
+      "weekly": "周度规则",
+      "specificDate": "特定日期规则",
+      "timeRange": "时段规则",
+      "fixedPrice": "固定票价",
+      "ticketType": "票种规则"
+    },
     "serviceDay": {
+      "allowMuviticket": "支持前售券",
+      "pricingRules": "定价规则",
+      "pricingRulesAudience": "适用人群",
+      "pricingRulesPrice": "票价",
+      "pricingRulesPriority": "优先级",
+      "pricingRulesAdd": "添加定价规则",
+      "pricingRulesDescription": "前售券适用人群与票价，数值越小优先级越高",
+      "audienceType": {
+        "1": "一般",
+        "2": "学生",
+        "3": "儿童",
+        "4": "银发"
+      },
       "priority": "优先级",
       "priorityPlaceholder": "数值越小越优先，默认 0",
       "typePriority": {
@@ -337,7 +364,8 @@
         "namePlaceholder": "请输入规则名称",
         "dayPlaceholder": "请输入日期（1-31）",
         "description": "每月固定日期生效的促销规则",
-        "add": "添加月度规则"
+        "add": "添加月度规则",
+        "effectLabel": "每月{{day}}号"
       },
       "weekly": {
         "title": "周度规则",
@@ -347,7 +375,8 @@
         "namePlaceholder": "请输入规则名称",
         "weekdayPlaceholder": "请选择星期",
         "description": "每周固定星期生效的促销规则",
-        "add": "添加周度规则"
+        "add": "添加周度规则",
+        "effectLabel": "每周{{weekday}}"
       },
       "specific": {
         "title": "特定日期规则",
@@ -357,7 +386,8 @@
         "namePlaceholder": "请输入规则名称",
         "datePlaceholder": "请选择日期",
         "description": "指定具体日期生效的促销规则",
-        "add": "添加特定日期规则"
+        "add": "添加特定日期规则",
+        "effectLabel": "{{year}}年{{month}}月{{day}}日"
       },
       "timePeriod": {
         "title": "时段规则",
@@ -381,7 +411,8 @@
           "weekend": "周末",
           "weekdaySpecific": "指定工作日",
           "specific": "指定日期"
-        }
+        },
+        "effectDailyPrefix": "每天"
       },
       "unit": {
         "daySuffix": "日"
@@ -406,6 +437,7 @@
         "priceRequired": "请输入价格",
         "scopeRequired": "请选择适用范围",
         "timeRangeRequired": "请选择时间范围",
+        "timeRangeInvalid": "结束时间需晚于开始时间",
         "pairDiscountRange": "双人折扣需在 0-100 之间"
       },
       "remark": {

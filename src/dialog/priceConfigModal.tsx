@@ -1,10 +1,10 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from '@/app/i18n/client'
-import { Form, Modal, InputNumber, Select } from 'antd'
+import { Form, Modal, InputNumber } from 'antd'
 import http from '@/api'
-import { useCommonStore } from '@/store/useCommonStore'
 import { DictCode } from '@/enum/dict'
+import { DictSelect } from '@/components/DictSelect'
 import { languageType } from '@/config'
 import { useSearchParams } from 'next/navigation'
 
@@ -23,20 +23,12 @@ export function PriceConfigModal(props: ModalProps) {
   )
   const [form] = Form.useForm()
   const searchParams = useSearchParams()
-  const dict = useCommonStore((state) => state.dict)
-  const [query, setQuery] = useState<{
-    dimensionType?: number
-    surcharge?: number
-  }>({})
-
-  const displayTypes = dict[DictCode.DIMENSION_TYPE] || []
 
   useEffect(() => {
     if (props.show) {
       form.resetFields()
     }
     form.setFieldsValue(props.data)
-    setQuery(props.data as { dimensionType?: number; surcharge?: number })
   }, [props.show, props.data, form])
 
   return (
@@ -79,15 +71,10 @@ export function PriceConfigModal(props: ModalProps) {
           ]}
           name="dimensionType"
         >
-          <Select
+          <DictSelect
+            code={DictCode.DIMENSION_TYPE}
             placeholder={t('priceConfig.modal.form.displayType.placeholder')}
-            value={query.dimensionType}
-            onChange={(val) => setQuery({ ...query, dimensionType: val })}
             disabled={props.type === 'edit'}
-            options={displayTypes.map((item: { id: number; code: number; name: string }) => ({
-              value: item.code,
-              label: item.name
-            }))}
           />
         </Form.Item>
         <Form.Item
@@ -99,10 +86,8 @@ export function PriceConfigModal(props: ModalProps) {
         >
           <InputNumber
             style={{ width: '100%' }}
-            value={query.surcharge}
             precision={0}
             min={0}
-            onChange={(val) => setQuery({ ...query, surcharge: val as number })}
           />
         </Form.Item>
       </Form>

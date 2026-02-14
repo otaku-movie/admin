@@ -6,7 +6,32 @@
   "table": {
     "name": "映画チケットタイプ",
     "price": "価格",
-    "action": "操作"
+    "action": "操作",
+    "description": "説明",
+    "enabled": "有効",
+    "scheduleType": "適用周期",
+    "applicable": "適用"
+  },
+  "schedule": {
+    "selectFirst": "適用周期を先に選択してください",
+    "monthDay": "毎月の日付",
+    "monthDaySuffix": "日",
+    "monthlyPrefix": "毎月",
+    "specificDate": "特定日",
+    "daily": "毎日",
+    "startTime": "開始時刻",
+    "endTime": "終了時刻",
+    "addDate": "日付を追加"
+  },
+  "weekday": {
+    "label": "適用曜日",
+    "mon": "月",
+    "tue": "火",
+    "wed": "水",
+    "thu": "木",
+    "fri": "金",
+    "sat": "土",
+    "sun": "日"
   },
   "modal": {
     "title": {
@@ -21,6 +46,10 @@
       "price": {
         "label": "価格",
         "required": "価格を入力してください"
+      },
+      "description": {
+        "label": "説明",
+        "placeholder": "任意。Appのチケット選択・注文時に表示する説明文（対象者・時間帯など）。"
       }
     }
   },
@@ -57,6 +86,15 @@
     "remove": {
       "content": "この映画チケットタイプを削除してもよろしいですか？",
       "success": "削除に成功しました"
-    }
+    },
+    "required": "名称と価格を入力してください"
+  },
+  "yesNo": {
+    "yes": "はい",
+    "no": "いいえ"
+  },
+  "button": {
+    "back": "戻る",
+    "manage": "チケットタイプ管理"
   }
 }

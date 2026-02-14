@@ -1,8 +1,20 @@
 'use client'
 
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { Button, Divider, Modal, Space, Table, Typography, message } from 'antd'
+import { Button, Switch, Modal, Space, Table, Typography, message } from 'antd'
 import type { TableColumnsType } from 'antd'
+import { HolderOutlined } from '@ant-design/icons'
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent
+} from '@dnd-kit/core'
+import { arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
 import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '@/app/[lng]/layout'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -10,13 +22,55 @@ import { processPath } from '@/config/router'
 import dayjs from 'dayjs'
 import {
   getPromotionList,
-  removePromotion,
-  type PromotionListItem
+  type PromotionListItem,
+  type FlattenedRuleItem
 } from '@/api/request/promotion'
 import { normalizeThirtyHourString } from '@/utils/thirtyHourTime'
 import { CheckPermission } from '@/components/checkPermission'
 
 const { Title } = Typography
+
+function rowId(record: FlattenedRuleItem, index: number) {
+  return record.id != null ? `${record.ruleType}-${record.id}` : `row-${record.ruleType}-${index}`
+}
+
+/* eslint-disable react/prop-types -- Ant Table row injects style/children */
+function SortableTableRow(props: React.HTMLAttributes<HTMLTableRowElement> & { 'data-row-key'?: string }) {
+  const id = props['data-row-key'] ?? ''
+  const { attributes, listeners, setNodeRef, setActivatorNodeRef, transform, transition, isDragging } = useSortable({ id })
+  const { style, ...restProps } = props
+  return (
+    <tr
+      ref={setNodeRef}
+      {...restProps}
+      style={{
+        ...style,
+        transform: CSS.Transform.toString(transform),
+        transition,
+        ...(isDragging ? { opacity: 0.8 } : {})
+      }}
+    >
+      {restProps.children != null && Array.isArray(restProps.children)
+        ? restProps.children.map((child, i) =>
+            i === 0 && React.isValidElement(child) ? (
+              <td key="drag" {...(child.props as React.TdHTMLAttributes<HTMLTableCellElement>)}>
+                <span
+                  ref={setActivatorNodeRef}
+                  {...attributes}
+                  {...listeners}
+                  style={{ cursor: 'grab', touchAction: 'none', display: 'inline-flex' }}
+                >
+                  <HolderOutlined />
+                </span>
+              </td>
+            ) : (
+              child
+            )
+          )
+        : restProps.children}
+    </tr>
+  )
+}
 
 const WEEKDAY_NUMBER_TO_KEY: Record<number, string> = {
   1: 'monday',
@@ -26,6 +80,116 @@ const WEEKDAY_NUMBER_TO_KEY: Record<number, string> = {
   5: 'friday',
   6: 'saturday',
   7: 'sunday'
+}
+
+/** 将活动列表数据展平为规则列表 */
+const flattenPromotionToRules = (
+  promotions: PromotionListItem[],
+  t: (key: string, options?: Record<string, string | number>) => string
+): FlattenedRuleItem[] => {
+  const rules: FlattenedRuleItem[] = []
+
+  promotions.forEach((promotion) => {
+    // 月度规则
+    promotion.monthlyDays.forEach((rule) => {
+      rules.push({
+        id: rule.id,
+        ruleType: 'monthly',
+        name: rule.name,
+        effectContent: t('promotion.serviceDay.monthly.effectLabel', {
+          day: rule.dayOfMonth
+        }),
+        price: rule.price,
+        enabled: rule.enabled ?? true,
+        priority: rule.priority ?? 0,
+        originalData: rule
+      })
+    })
+
+    // 周度规则
+    promotion.weeklyDays.forEach((rule) => {
+      const weekdayKey = WEEKDAY_NUMBER_TO_KEY[rule.weekday]
+      const weekdayLabel = weekdayKey
+        ? t(`promotion.serviceDay.weekdays.${weekdayKey}`)
+        : '--'
+      rules.push({
+        id: rule.id,
+        ruleType: 'weekly',
+        name: rule.name,
+        effectContent: t('promotion.serviceDay.weekly.effectLabel', {
+          weekday: weekdayLabel
+        }),
+        price: rule.price,
+        enabled: rule.enabled ?? true,
+        priority: rule.priority ?? 0,
+        originalData: rule
+      })
+    })
+
+    // 特定日期规则
+    promotion.specificDates.forEach((rule) => {
+      const d = dayjs(rule.date)
+      rules.push({
+        id: rule.id,
+        ruleType: 'specificDate',
+        name: rule.name,
+        effectContent: t('promotion.serviceDay.specific.effectLabel', {
+          year: d.year(),
+          month: d.month() + 1,
+          day: d.date()
+        }),
+        price: rule.price,
+        enabled: rule.enabled ?? true,
+        priority: rule.priority ?? 0,
+        originalData: rule
+      })
+    })
+
+    // 时段规则
+    promotion.timeRanges.forEach((rule) => {
+      const start = normalizeThirtyHourString(rule.startTime) ?? rule.startTime
+      const end = normalizeThirtyHourString(rule.endTime) ?? rule.endTime
+
+      const scopeKey = rule.applicableScope || ''
+      const isDailyScope = scopeKey === 'daily'
+
+      // 基础范围文案：每天 / 每周末 / 工作日 等
+      let scopeLabel = ''
+      if (scopeKey) {
+        if (isDailyScope) {
+          scopeLabel = t('promotion.serviceDay.timePeriod.effectDailyPrefix')
+        } else {
+          scopeLabel =
+            t(`promotion.serviceDay.timePeriod.scopeOptions.${scopeKey}`) ||
+            scopeKey
+        }
+      }
+
+      // 如果有具体的适用日期描述（例如：周一/周三），拼在后面
+      if (rule.applicableDays) {
+        scopeLabel = scopeLabel
+          ? `${scopeLabel} (${rule.applicableDays})`
+          : rule.applicableDays
+      }
+
+      const effectContent = scopeLabel
+        ? `${scopeLabel} ${start}-${end}`
+        : `${start}-${end}`
+
+      rules.push({
+        id: rule.id,
+        ruleType: 'timeRange',
+        name: rule.name,
+        effectContent,
+        price: rule.price,
+        enabled: rule.enabled ?? true,
+        priority: rule.priority ?? 0,
+        originalData: rule
+      })
+    })
+  })
+
+  return rules
 }
 
 export default function PricingStrategyPage({ params: { lng } }: PageProps) {
@@ -49,7 +213,7 @@ export default function PricingStrategyPage({ params: { lng } }: PageProps) {
     : undefined
 
   const [loading, setLoading] = useState(false)
-  const [dataSource, setDataSource] = useState<PromotionListItem[]>([])
+  const [dataSource, setDataSource] = useState<FlattenedRuleItem[]>([])
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
   const [total, setTotal] = useState(0)
@@ -71,17 +235,19 @@ export default function PricingStrategyPage({ params: { lng } }: PageProps) {
           page: nextPage,
           pageSize: nextPageSize
         })
-        setDataSource(res.list || [])
+        // 将活动列表展平为规则列表
+        const flattenedRules = flattenPromotionToRules(res.list || [], t)
+        setDataSource(flattenedRules)
         setPage(res.page || nextPage)
         setPageSize(res.pageSize || nextPageSize)
-        setTotal(res.total || 0)
+        setTotal(flattenedRules.length)
       } catch (error) {
         console.error(error)
       } finally {
         setLoading(false)
       }
     },
-    [cinemaId, pageSize]
+    [cinemaId, pageSize, t]
   )
 
   useEffect(() => {
@@ -90,14 +256,16 @@ export default function PricingStrategyPage({ params: { lng } }: PageProps) {
   }, [cinemaId, fetchPromotions, pageSize])
 
   const handleRemove = useCallback(
-    (id: number) => {
+    (rule: FlattenedRuleItem) => {
       Modal.confirm({
         title: t('promotion.message.deleteConfirm'),
         okText: common('button.remove'),
         cancelText: common('button.cancel'),
         okButtonProps: { danger: true },
         onOk: async () => {
-          await removePromotion(id)
+          if (!rule.id) return
+          // TODO: 调用删除单条规则的 API
+          // await removeRule(rule.ruleType, rule.id)
           message.success(t('promotion.message.deleteSuccess'))
           fetchPromotions(page, pageSize)
         }
@@ -106,25 +274,46 @@ export default function PricingStrategyPage({ params: { lng } }: PageProps) {
     [common, fetchPromotions, page, pageSize, t]
   )
 
-  const weekdayLabel = useCallback(
-    (weekday?: number) => {
-      if (!weekday) return '--'
-      const key = WEEKDAY_NUMBER_TO_KEY[weekday]
-      if (!key) return '--'
-      return t(`promotion.serviceDay.weekdays.${key}` as const)
+  const handleToggleEnabled = useCallback(
+    async (rule: FlattenedRuleItem, enabled: boolean) => {
+      if (!rule.id) return
+      try {
+        // TODO: 调用更新规则启用状态的 API
+        message.success(enabled ? '规则已启用' : '规则已禁用')
+        fetchPromotions(page, pageSize)
+      } catch (error) {
+        console.error(error)
+        message.error('更新失败')
+      }
     },
-    [t]
+    [fetchPromotions, page, pageSize]
   )
 
-  const formatDate = useCallback(
-    (value?: string) => (value ? dayjs(value).format('YYYY-MM-DD') : '--'),
+  const handleDragEnd = useCallback(
+    (event: DragEndEvent) => {
+      const { active, over } = event
+      if (over == null || active.id === over.id) return
+      setDataSource((prev) => {
+        const from = prev.findIndex((r, i) => rowId(r, i) === active.id)
+        const to = prev.findIndex((r, i) => rowId(r, i) === over.id)
+        if (from === -1 || to === -1) return prev
+        const next = arrayMove(prev, from, to)
+        // TODO: 调用后端接口保存新顺序（按 priority 更新）
+        return next
+      })
+    },
     []
   )
 
-  const formatDateTime = useCallback(
-    (value?: string) =>
-      value ? dayjs(value).format('YYYY-MM-DD HH:mm') : '--',
-    []
+  const sortableIds = useMemo(
+    () => dataSource.map((r, i) => rowId(r, i)),
+    [dataSource]
+  )
+
+  const dndSensors = useSensors(
+    // 使用 PointerSensor，移除较大的激活距离，提升拖拽敏感度
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   )
 
   const formatPrice = useCallback(
@@ -135,269 +324,65 @@ export default function PricingStrategyPage({ params: { lng } }: PageProps) {
     [common]
   )
 
-  const summarizeRules = useCallback(
-    (items: Array<{ name: string }>, formatter: (item: any) => string) => {
-      if (!items || items.length === 0) return '--'
-      return items.map((item) => formatter(item)).join(' / ')
-    },
-    []
-  )
-
-  const summarizeTimeRanges = useCallback(
-    (items: PromotionListItem['timeRanges']) => {
-      if (!items || items.length === 0) return '--'
-      return items
-        .map((range) => {
-          const start = normalizeThirtyHourString(range.startTime) ?? '--'
-          const end = normalizeThirtyHourString(range.endTime) ?? '--'
-          return `${range.name || '--'} (${start}-${end})`
-        })
-        .join(' / ')
-    },
-    []
-  )
-
-  const expandedRowRender = useCallback(
-    (item: PromotionListItem) => (
-      <Space direction="vertical" style={{ width: '100%' }} size={16}>
-        <Typography.Text>
-          <Typography.Text strong>
-            {t('promotion.table.remark')}:
-          </Typography.Text>{' '}
-          {item.remark || '--'}
-        </Typography.Text>
-
-        <div>
-          <Typography.Title level={5} style={{ marginBottom: 8 }}>
-            {t('promotion.serviceDay.monthly.title')}
-          </Typography.Title>
-          {item.monthlyDays.length ? (
-            <Table
-              size="small"
-              rowKey={(rule) => rule.id ?? `${rule.dayOfMonth}`}
-              pagination={false}
-              columns={[
-                {
-                  title: t('promotion.serviceDay.monthly.name'),
-                  dataIndex: 'name',
-                  key: 'name',
-                  render: (value: string) => value || '--'
-                },
-                {
-                  title: t('promotion.serviceDay.monthly.day'),
-                  dataIndex: 'dayOfMonth',
-                  key: 'dayOfMonth',
-                  render: (value: number) =>
-                    value !== undefined ? `${value}${common('unit.day')}` : '--'
-                },
-                {
-                  title: t('promotion.serviceDay.monthly.price'),
-                  dataIndex: 'price',
-                  key: 'price',
-                  render: (value: number) => formatPrice(value)
-                }
-              ]}
-              dataSource={item.monthlyDays}
-            />
-          ) : (
-            <Typography.Text type="secondary">{t('empty')}</Typography.Text>
-          )}
-        </div>
-
-        <Divider style={{ margin: 0 }} />
-
-        <div>
-          <Typography.Title level={5} style={{ marginBottom: 8 }}>
-            {t('promotion.serviceDay.weekly.title')}
-          </Typography.Title>
-          {item.weeklyDays.length ? (
-            <Table
-              size="small"
-              rowKey={(rule) => rule.id ?? `${rule.weekday}`}
-              pagination={false}
-              columns={[
-                {
-                  title: t('promotion.serviceDay.weekly.name'),
-                  dataIndex: 'name',
-                  key: 'name',
-                  render: (value: string) => value || '--'
-                },
-                {
-                  title: t('promotion.serviceDay.weekly.weekday'),
-                  dataIndex: 'weekday',
-                  key: 'weekday',
-                  render: (value: number) => weekdayLabel(value)
-                },
-                {
-                  title: t('promotion.serviceDay.weekly.price'),
-                  dataIndex: 'price',
-                  key: 'price',
-                  render: (value: number) => formatPrice(value)
-                }
-              ]}
-              dataSource={item.weeklyDays}
-            />
-          ) : (
-            <Typography.Text type="secondary">{t('empty')}</Typography.Text>
-          )}
-        </div>
-
-        <Divider style={{ margin: 0 }} />
-
-        <div>
-          <Typography.Title level={5} style={{ marginBottom: 8 }}>
-            {t('promotion.serviceDay.specific.title')}
-          </Typography.Title>
-          {item.specificDates.length ? (
-            <Table
-              size="small"
-              rowKey={(rule) => rule.id ?? rule.date}
-              pagination={false}
-              columns={[
-                {
-                  title: t('promotion.serviceDay.specific.name'),
-                  dataIndex: 'name',
-                  key: 'name',
-                  render: (value: string) => value || '--'
-                },
-                {
-                  title: t('promotion.serviceDay.specific.date'),
-                  dataIndex: 'date',
-                  key: 'date',
-                  render: (value: string) => formatDate(value)
-                },
-                {
-                  title: t('promotion.serviceDay.specific.price'),
-                  dataIndex: 'price',
-                  key: 'price',
-                  render: (value: number) => formatPrice(value)
-                }
-              ]}
-              dataSource={item.specificDates}
-            />
-          ) : (
-            <Typography.Text type="secondary">{t('empty')}</Typography.Text>
-          )}
-        </div>
-
-        <Divider style={{ margin: 0 }} />
-
-        <div>
-          <Typography.Title level={5} style={{ marginBottom: 8 }}>
-            {t('promotion.serviceDay.timePeriod.title')}
-          </Typography.Title>
-          {item.timeRanges.length ? (
-            <Table
-              size="small"
-              rowKey={(range) => range.id ?? range.name}
-              pagination={false}
-              columns={[
-                {
-                  title: t('promotion.serviceDay.timePeriod.name'),
-                  dataIndex: 'name',
-                  key: 'name',
-                  render: (value: string) => value || '--'
-                },
-                {
-                  title: t('promotion.serviceDay.timePeriod.scope'),
-                  dataIndex: 'applicableScope',
-                  key: 'applicableScope',
-                  render: (value: string) => value || '--'
-                },
-                {
-                  title: t('promotion.serviceDay.timePeriod.schedule'),
-                  dataIndex: 'applicableDays',
-                  key: 'applicableDays',
-                  render: (value: string) => value || '--'
-                },
-                {
-                  title: `${t('promotion.serviceDay.timePeriod.startTime')} ~ ${t(
-                    'promotion.serviceDay.timePeriod.endTime'
-                  )}`,
-                  key: 'timeRange',
-                  render: (_, range) => {
-                    const start =
-                      normalizeThirtyHourString(range.startTime) ?? '--'
-                    const end = normalizeThirtyHourString(range.endTime) ?? '--'
-                    return `${start} ~ ${end}`
-                  }
-                },
-                {
-                  title: t('promotion.serviceDay.timePeriod.price'),
-                  dataIndex: 'price',
-                  key: 'price',
-                  render: (value: number) => formatPrice(value)
-                },
-                {
-                  title: t('promotion.serviceDay.timePeriod.remark'),
-                  dataIndex: 'remark',
-                  key: 'remark',
-                  render: (value: string) => value || '--'
-                }
-              ]}
-              dataSource={item.timeRanges}
-            />
-          ) : (
-            <Typography.Text type="secondary">{t('empty')}</Typography.Text>
-          )}
-        </div>
-      </Space>
-    ),
-    [formatDate, formatPrice, t, weekdayLabel]
-  )
-
-  const columns: TableColumnsType<PromotionListItem> = useMemo(
+  const columns: TableColumnsType<FlattenedRuleItem> = useMemo(
     () => [
       {
-        title: t('promotion.table.name'),
+        title: '',
+        key: 'drag',
+        width: 48,
+        align: 'center',
+        render: () => null
+      },
+      {
+        title: t('promotion.table.priority'),
+        key: 'order',
+        width: 80,
+        align: 'center',
+        render: (_: unknown, __: FlattenedRuleItem, index: number) => index + 1
+      },
+      {
+        title: t('promotion.table.ruleType'),
+        dataIndex: 'ruleType',
+        width: 140,
+        render: (value: FlattenedRuleItem['ruleType']) =>
+          t(`promotion.ruleTypes.${value}`)
+      },
+      {
+        title: t('promotion.table.ruleName'),
         dataIndex: 'name',
-        width: 220
+        width: 200,
+        render: (value: string) => value || '--'
       },
       {
-        title: t('promotion.table.monthlyRules'),
-        key: 'monthlyDays',
-        render: (_, record) =>
-          summarizeRules(record.monthlyDays || [], (item) => {
-            const suffix = t('promotion.serviceDay.unit.daySuffix', {
-              defaultValue: '日'
-            })
-            return `${item.name || '--'} (${item.dayOfMonth}${suffix})`
-          })
+        title: t('promotion.table.effectContent'),
+        dataIndex: 'effectContent',
+        width: 220,
+        render: (value: string) => value || '--'
       },
       {
-        title: t('promotion.table.weeklyRules'),
-        key: 'weeklyDays',
-        render: (_, record) =>
-          summarizeRules(record.weeklyDays || [], (item) => {
-            const weekday = weekdayLabel(item.weekday)
-            return `${item.name || '--'} (${weekday})`
-          })
+        title: t('promotion.table.price'),
+        dataIndex: 'price',
+        width: 140,
+        render: (value: number) => formatPrice(value)
       },
       {
-        title: t('promotion.table.specificRules'),
-        key: 'specificDates',
-        render: (_, record) =>
-          summarizeRules(record.specificDates || [], (item) => {
-            const date = formatDate(item.date)
-            return `${item.name || '--'} (${date})`
-          })
-      },
-      {
-        title: t('promotion.table.timePeriodRules'),
-        key: 'timeRanges',
-        render: (_, record) => summarizeTimeRanges(record.timeRanges)
-      },
-      {
-        title: t('promotion.table.updatedAt'),
-        dataIndex: 'updateTime',
-        width: 180,
-        render: (value?: string) => formatDateTime(value)
+        title: t('promotion.table.enabled'),
+        dataIndex: 'enabled',
+        width: 100,
+        align: 'center',
+        render: (value: boolean, record: FlattenedRuleItem) => (
+          <Switch
+            checked={value}
+            onChange={(checked) => handleToggleEnabled(record, checked)}
+          />
+        )
       },
       {
         title: common('table.action'),
         key: 'action',
         width: 160,
-        render: (_, record) => (
+        align: 'center',
+        render: (_: unknown, record: FlattenedRuleItem) => (
           <Space>
             <Button
               size="small"
@@ -407,8 +392,9 @@ export default function PricingStrategyPage({ params: { lng } }: PageProps) {
                   processPath({
                     name: 'promotionDetail',
                     query: {
-                      cinemaId: record.cinemaId,
-                      promotionId: record.id,
+                      cinemaId,
+                      ruleType: record.ruleType,
+                      ruleId: record.id,
                       cinemaName: encodeURIComponent(cinemaName || '')
                     }
                   })
@@ -417,7 +403,7 @@ export default function PricingStrategyPage({ params: { lng } }: PageProps) {
             >
               {t('promotion.serviceDay.action.configure')}
             </Button>
-            <Button size="small" danger onClick={() => handleRemove(record.id)}>
+            <Button size="small" danger onClick={() => handleRemove(record)}>
               {common('button.remove')}
             </Button>
           </Space>
@@ -425,13 +411,13 @@ export default function PricingStrategyPage({ params: { lng } }: PageProps) {
       }
     ],
     [
+      cinemaId,
       cinemaName,
       common,
-      formatDateTime,
+      formatPrice,
       handleRemove,
+      handleToggleEnabled,
       router,
-      summarizeRules,
-      summarizeTimeRanges,
       t
     ]
   )
@@ -480,27 +466,38 @@ export default function PricingStrategyPage({ params: { lng } }: PageProps) {
           </CheckPermission>
         </div>
       </header>
-      <Table
-        rowKey="id"
-        loading={loading}
-        columns={columns}
-        dataSource={dataSource}
-        expandable={{
-          expandedRowRender
-        }}
-        pagination={{
-          current: page,
-          pageSize,
-          total,
-          showSizeChanger: true,
-          onChange: (current, size) => {
-            setPage(current)
-            setPageSize(size)
-            fetchPromotions(current, size)
-          }
-        }}
-        locale={{ emptyText: t('empty') }}
-      />
+      <DndContext
+        sensors={dndSensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+      >
+        <SortableContext items={sortableIds} strategy={verticalListSortingStrategy}>
+          <Table
+            rowKey={(record, index) => rowId(record, index ?? 0)}
+            loading={loading}
+            columns={columns}
+            dataSource={dataSource}
+            components={{
+              body: {
+                row: SortableTableRow
+              }
+            }}
+            pagination={{
+              current: page,
+              pageSize,
+              total,
+              showSizeChanger: true,
+              onChange: (current, size) => {
+                setPage(current)
+                setPageSize(size)
+                fetchPromotions(current, size)
+              }
+            }}
+            locale={{ emptyText: t('empty') }}
+            scroll={{ x: 1200 }}
+          />
+        </SortableContext>
+      </DndContext>
     </section>
   )
 }

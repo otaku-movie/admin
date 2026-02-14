@@ -380,7 +380,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
   return (
     <section>
       <Flex vertical gap={30}>
-        <Row justify="end">
+        {/* <Row justify="end">
           <CheckPermission code="movieShowTime.save">
             <Button
               onClick={() => {
@@ -394,7 +394,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
               {common('button.add')}
             </Button>
           </CheckPermission>
-        </Row>
+        </Row> */}
         <Query
           model={query}
           onSearch={() => {

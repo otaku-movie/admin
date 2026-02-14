@@ -39,6 +39,7 @@
         "ticketType": "Ticket Type",
         "brandList": "Brand List",
         "screeningManagement": "Screening Management",
+        "screeningManagementRelease": "Release Showtime",
         "promotion": "Promotion",
         "promotionDetail": "Promotion Detail"
       }
@@ -130,6 +131,8 @@
     "configAisle": "Configure Aisle",
     "configArea": "Configure Area",
     "cancel": "Cancel",
+    "prev": "Previous",
+    "next": "Next",
     "select": "Select",
     "promotion": "Promotion",
     "order": {

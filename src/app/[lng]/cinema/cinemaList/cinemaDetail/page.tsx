@@ -27,12 +27,6 @@ import { useCommonStore } from '@/store/useCommonStore'
 import { DictCode } from '@/enum/dict'
 import { DictSelect } from '@/components/DictSelect'
 
-interface TicketTypeItem {
-  id: number
-  name: string
-  price: number
-}
-
 interface PriceConfigItem {
   id: number
   cinemaId: number
@@ -49,8 +43,7 @@ export default function Page({ params: { lng } }: PageProps) {
     maxSelectSeatCount: 5,
     spec: [],
     priceConfig: [],
-    ticketType: []
-  })
+      })
   const dimensionTypeList = useCommonStore(
     (s) => s.dict?.[DictCode.DIMENSION_TYPE] || []
   )
@@ -62,8 +55,6 @@ export default function Page({ params: { lng } }: PageProps) {
     AddressTreeListResponse[]
   >([])
   const [brandList, setBrandList] = useState<any[]>([])
-  const [ticketTypeData, setTicketTypeData] = useState<TicketTypeItem[]>([])
-  const [priceConfigData, setPriceConfigData] = useState<PriceConfigItem[]>([])
   const [form] = Form.useForm()
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -121,7 +112,6 @@ export default function Page({ params: { lng } }: PageProps) {
 
         form.setFieldsValue(parsedData)
         setData(parsedData)
-        getTicketTypeData()
         getPriceConfigData()
       })
     }
@@ -135,37 +125,12 @@ export default function Page({ params: { lng } }: PageProps) {
       data: { cinemaId: +cinemaId }
     }).then((res) => {
       const list = res.data || []
-      setPriceConfigData(list)
       setData((prev) => ({
         ...prev,
         priceConfig: list.map((pc: PriceConfigItem) => ({
           id: pc.id,
           dimensionType: pc.dimensionType,
           surcharge: pc.surcharge
-        }))
-      }))
-    })
-  }
-
-  const getTicketTypeData = () => {
-    if (!cinemaId) return
-    http({
-      url: 'cinema/ticketType/list',
-      method: 'post',
-      data: {
-        cinemaId: +cinemaId,
-        page: 1,
-        pageSize: 100
-      }
-    }).then((res) => {
-      const list = res.data || []
-      setTicketTypeData(list)
-      setData((prev) => ({
-        ...prev,
-        ticketType: list.map((item: TicketTypeItem) => ({
-          id: item.id,
-          name: item.name,
-          price: item.price
         }))
       }))
     })
@@ -199,11 +164,6 @@ export default function Page({ params: { lng } }: PageProps) {
         .join('') + data.address
     const [regionId = null, prefectureId = null, cityId = null] =
       form.getFieldValue('areaId') || []
-    const ticketTypeList = (data.ticketType || [])
-      .filter(
-        (tt: any) => tt.name != null && tt.name !== '' && tt.price != null
-      )
-      .map((tt: any) => ({ name: tt.name, price: tt.price }))
     const priceConfigList = (data.priceConfig || [])
       .filter(
         (pc: any) =>
@@ -222,7 +182,6 @@ export default function Page({ params: { lng } }: PageProps) {
         prefectureId,
         cityId,
         fullAddress,
-        ticketType: ticketTypeList,
         priceConfig: priceConfigList
       }
     }).then(() => {
@@ -330,7 +289,7 @@ export default function Page({ params: { lng } }: PageProps) {
                   noStyle
                   rules={[{ required: true, message: t('form.address.required') }]}
                 >
-                  <Input placeholder="详细地址" style={{ flex: 1, minWidth: 120 }} />
+                  <Input placeholder="" style={{ flex: 1, minWidth: 120 }} />
                 </Form.Item>
               </Flex>
             </Form.Item>
@@ -584,61 +543,6 @@ export default function Page({ params: { lng } }: PageProps) {
                 </Button>
               </Space>
             </Form.Item>
-
-            <Form.Item label={t('ticketTypeSection')}>
-                <Space direction="vertical" size={15} style={{ width: '100%' }}>
-                  {(data.ticketType || []).map((item: any, index: number) => (
-                    <Space size={15} key={item.id ?? index}>
-                      <Input
-                        value={item.name}
-                        placeholder={tTicketType('table.name')}
-                        style={{ width: '200px' }}
-                        onChange={(e) => {
-                          const next = [...(data.ticketType || [])]
-                          next[index] = { ...next[index], name: e.target.value }
-                          setData({ ...data, ticketType: next })
-                        }}
-                      />
-                      <InputNumber
-                        min={0}
-                        value={item.price}
-                        precision={0}
-                        placeholder={tTicketType('table.price')}
-                        style={{ width: '230px' }}
-                        onChange={(val) => {
-                          const next = [...(data.ticketType || [])]
-                          next[index] = { ...next[index], price: val }
-                          setData({ ...data, ticketType: next })
-                        }}
-                      />
-                      <MinusCircleOutlined
-                        onClick={() => {
-                          const next = (data.ticketType || []).filter(
-                            (_: any, i: number) => i !== index
-                          )
-                          setData({ ...data, ticketType: next })
-                        }}
-                      />
-                    </Space>
-                  ))}
-                  <Button
-                    type="dashed"
-                    style={{ width: 467 }}
-                    onClick={() => {
-                      setData({
-                        ...data,
-                        ticketType: [
-                          ...(data.ticketType || []),
-                          { id: data.ticketType?.length ?? 0, name: '', price: undefined }
-                        ]
-                      })
-                    }}
-                    icon={<PlusOutlined />}
-                  >
-                {common('button.add')}
-              </Button>
-                </Space>
-              </Form.Item>
           </Col>
         </Row>
       </Form>

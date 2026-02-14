@@ -39,6 +39,7 @@
         "ticketType": "チケットタイプ",
         "brandList": "ブランドリスト",
         "screeningManagement": "上映スケジュール管理",
+        "screeningManagementRelease": "上映を公開",
         "promotion": "プロモーション設定",
         "promotionDetail": "プロモーション詳細"
       }
@@ -127,6 +128,8 @@
     "configAisle": "通路を設定",
     "configArea": "エリアを設定",
     "cancel": "キャンセル",
+    "prev": "前へ",
+    "next": "次へ",
     "select": "選択",
     "promotion": "プロモーション設定",
     "order": {

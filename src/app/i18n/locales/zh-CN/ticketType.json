@@ -6,7 +6,11 @@
   "table": {
     "name": "电影票类型",
     "price": "价格",
-    "action": "操作"
+    "action": "操作",
+    "description": "描述",
+    "enabled": "启用",
+    "scheduleType": "生效周期",
+    "applicable": "适用"
   },
   "priceConfig": {
     "table": {
@@ -50,13 +54,47 @@
       "price": {
         "label": "价格",
         "required": "请输入价格"
+      },
+      "description": {
+        "label": "描述",
+        "placeholder": "选填。用于在 App 选票页或订单中展示该票种的说明，如适用人群、时段说明等。"
       }
     }
   },
   "message": {
+    "required": "请填写名称与价格",
     "remove": {
       "content": "是否确认要删除当前电影票类型？",
       "success": "删除成功"
     }
+  },
+  "weekday": {
+    "label": "适用星期几",
+    "mon": "周一",
+    "tue": "周二",
+    "wed": "周三",
+    "thu": "周四",
+    "fri": "周五",
+    "sat": "周六",
+    "sun": "周日"
+  },
+  "schedule": {
+    "selectFirst": "请先选择生效周期",
+    "monthDay": "每月几号",
+    "monthDaySuffix": "日",
+    "monthlyPrefix": "每月",
+    "specificDate": "特定日期",
+    "daily": "每天生效",
+    "startTime": "开始时间",
+    "endTime": "结束时间",
+    "addDate": "添加日期"
+  },
+  "yesNo": {
+    "yes": "是",
+    "no": "否"
+  },
+  "button": {
+    "back": "返回",
+    "manage": "票种管理"
   }
 }

@@ -56,11 +56,19 @@
       "create": "添加场次",
       "edit": "编辑场次"
     },
+    "steps": {
+      "one": "影片与影厅",
+      "two": "定价与票务",
+      "three": "场次时间"
+    },
     "form": {
       "movie": {
         "label": "电影名称",
         "required": "请选择电影",
         "placeholder": "请选择电影"
+      },
+      "allowPresale": {
+        "label": "支持前售券(ムビチケ等)"
       },
       "open": {
         "label": "是否公开"
@@ -104,14 +112,129 @@
       "showTime": {
         "label": "开始时间",
         "required": "请选择上映时间",
-        "startAfterEnd": "结束时间必须大于开始时间"
+        "startAfterEnd": "结束时间必须大于开始时间",
+        "endBeforeMovieDuration": "结束时间与开始时间的间隔不能小于电影时长"
       },
       "promotion": {
         "label": "优惠策略",
         "placeholder": "请选择优惠策略（可选）",
         "matchedRule": "匹配的规则"
+      },
+      "pricingMode": {
+        "label": "定价模式",
+        "placeholder": "请选择",
+        "systemActivity": "系统活动",
+        "fixedPrice": "设置价格"
+      },
+      "activity": {
+        "label": "关联活动",
+        "placeholder": "请选择活动（定价模式为系统活动时使用）"
+      },
+      "fixedAmount": {
+        "label": "设置价格",
+        "placeholder": "定价模式为设置价格时填写"
+      },
+      "surcharge": {
+        "label": "规格补价",
+        "placeholder": "如 3D/IMAX 补价"
+      },
+      "publishMode": {
+        "label": "公开方式",
+        "immediate": "立即公开",
+        "scheduled": "定时公开"
+      },
+      "publishAt": {
+        "label": "定时公开时间"
+      },
+      "saleOpenAt": {
+        "label": "开放购票时间"
       }
     }
+  },
+  "releasePage": {
+    "pageTitle": "发布场次",
+    "step1": {
+      "title": "基础放映信息",
+      "instruction": "请确保星号标注的必填项填写准确。所有的票价逻辑将在发布后实时生效。"
+    },
+    "step2": {
+      "title": "定时公开与开放购票",
+      "instruction": "设置场次是否公开、定时公开时间及开放购票时间。",
+      "publishSection": "公开设置",
+      "saleSection": "开放购票时间",
+      "enableSaleOpenAt": "设置开放购票时间",
+      "setToNow": "设为当前时间"
+    },
+    "step3": {
+      "title": "定价模式",
+      "instruction": "请确保星号标注的必填项填写准确。所有的票价逻辑将在发布后实时生效。",
+      "systemActivity": "系统活动",
+      "systemActivityDesc": "关联并勾选适用活动",
+      "selectActivityRules": "勾选本场次适用规则",
+      "selectActivities": "勾选本场次适用活动",
+      "activityLabel": "活动",
+      "rulesUnderActivity": "规则",
+      "ruleMonthly": "月度 {{count}} 条",
+      "ruleWeekly": "周度 {{count}} 条",
+      "ruleSpecific": "固定日 {{count}} 条",
+      "ruleTimeRange": "时段 {{count}} 条",
+      "ruleNone": "无",
+      "ruleTypePriorityTitle": "规则类型优先级",
+      "ruleTypePriorityHint": "从上到下优先级由高到低",
+      "ruleTypeMonthly": "月度规则",
+      "ruleTypeWeekly": "周度规则",
+      "ruleTypeSpecificDate": "固定日规则",
+      "ruleTypeTimeRange": "时段规则",
+      "ruleTypeFixedPrice": "固定票价",
+      "ruleTypeTicketType": "票种规则",
+      "ruleCountUnit": "{{count}} 条",
+      "ruleCountNone": "无",
+      "fixedPrice": "设置价格",
+      "fixedPriceDesc": "全员一口价",
+      "noActivity": "默认规则",
+      "noActivityDesc": "将按影院价格规则进行计算",
+      "applicableTicketTypes": "当日适用票种（按放映日期筛选）",
+      "applicableTicketTypesEmpty": "暂无当日适用的票种",
+      "applicableDateLabel": "当前适用日期：{{date}}（{{weekday}}）",
+      "showTimeRangeLabel": "场次时间：{{start}} - {{end}}",
+      "weekday1": "周一",
+      "weekday2": "周二",
+      "weekday3": "周三",
+      "weekday4": "周四",
+      "weekday5": "周五",
+      "weekday6": "周六",
+      "weekday7": "周日",
+      "ticketTypeColumnHeader": "票种",
+      "applicableRuleColumnHeader": "适用规则",
+      "priceColumnHeader": "价格",
+      "priceUnitSymbol": "¥",
+      "ticketPriceOverrideHint": "可临时修改本场次价格，留空则使用票种默认价。",
+      "ticketTypeEnabledColumnHeader": "本场次启用",
+      "ticketTypeEnabledHint": "仅限该场次，默认启用",
+      "allowMubiTicket": "是否支持ムビチケ预售票"
+    },
+    "step4": {
+      "title": "预览与确认发布",
+      "instruction": "请确保星号标注的必填项填写准确。所有的票价逻辑将在发布后实时生效。",
+      "auditTitle": "最终逻辑路径审计",
+      "billingMode": "计费模式",
+      "billingSystem": "SYSTEM",
+      "allowMubiTicket": "是否支持ムビチケ预售票",
+      "yes": "是",
+      "no": "否",
+      "confirmAlert": "请仔细核对价格。点击确认后场次将立即公开并同步至票机端。若需要调整设置价格，需先在「定价模式」中修改。",
+      "confirmPublish": "确认发布",
+      "openYes": "公开",
+      "openNo": "不公开",
+      "nextDay": "翌",
+      "notSet": "不设置"
+    },
+    "screeningDate": "放映日期",
+    "endDate": "结束日期",
+    "startTime": "开始时间",
+    "endTime": "结束时间",
+    "currentDuration": "当前时长：{{hours}}小时 {{minutes}}分钟",
+    "movieDurationLabel": "电影时长：{{hours}}小时 {{minutes}}分钟"
   },
   "seatModal": {
     "title": "设置过道"

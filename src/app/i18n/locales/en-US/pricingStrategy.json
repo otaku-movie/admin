@@ -304,9 +304,15 @@
     }
   },
   "promotion": {
-    "title": "Promotion Management",
+    "title": "Promotion Rules Management",
     "table": {
       "name": "Activity Name",
+      "ruleType": "Rule Type",
+      "ruleName": "Rule Name",
+      "effectContent": "Effective Content",
+      "price": "Price/Discount",
+      "enabled": "Enabled",
+      "priority": "Priority",
       "monthlyRules": "Monthly Rules",
       "weeklyRules": "Weekly Rules",
       "specificRules": "Specific Date Rules",
@@ -315,7 +321,28 @@
       "remark": "Remarks",
       "remarkEmpty": "Not set"
     },
+    "ruleTypes": {
+      "monthly": "Monthly Rule",
+      "weekly": "Weekly Rule",
+      "specificDate": "Specific Date Rule",
+      "timeRange": "Time Range Rule",
+      "fixedPrice": "Fixed Price",
+      "ticketType": "Ticket Type Rule"
+    },
     "serviceDay": {
+      "allowMuviticket": "MoviTicket enabled",
+      "pricingRules": "Pricing rules",
+      "pricingRulesAudience": "Audience",
+      "pricingRulesPrice": "Price",
+      "pricingRulesPriority": "Priority",
+      "pricingRulesAdd": "Add pricing rule",
+      "pricingRulesDescription": "Audience and price for MoviTicket; lower number = higher priority.",
+      "audienceType": {
+        "1": "General",
+        "2": "Student",
+        "3": "Child",
+        "4": "Senior"
+      },
       "priority": "Priority",
       "priorityPlaceholder": "Lower number = higher priority, default 0",
       "typePriority": {
@@ -337,7 +364,8 @@
         "namePlaceholder": "Enter rule name",
         "dayPlaceholder": "Enter day (1-31)",
         "description": "Promotion rules that apply on fixed dates each month",
-        "add": "Add Monthly Rule"
+        "add": "Add Monthly Rule",
+        "effectLabel": "Every month on day {{day}}"
       },
       "weekly": {
         "title": "Weekly Rules",
@@ -347,7 +375,8 @@
         "namePlaceholder": "Enter rule name",
         "weekdayPlaceholder": "Select weekday",
         "description": "Promotion rules that apply on fixed weekdays each week",
-        "add": "Add Weekly Rule"
+        "add": "Add Weekly Rule",
+        "effectLabel": "Every {{weekday}}"
       },
       "specific": {
         "title": "Specific Date Rules",
@@ -357,7 +386,8 @@
         "namePlaceholder": "Enter rule name",
         "datePlaceholder": "Select date",
         "description": "Promotion rules that apply on specific dates",
-        "add": "Add Specific Date Rule"
+        "add": "Add Specific Date Rule",
+        "effectLabel": "{{year}}-{{month}}-{{day}}"
       },
       "timePeriod": {
         "title": "Time Period Rules",
@@ -381,7 +411,8 @@
           "weekend": "Weekend",
           "weekdaySpecific": "Specific Weekdays",
           "specific": "Specific Dates"
-        }
+        },
+        "effectDailyPrefix": "Every day"
       },
       "unit": {
         "daySuffix": "th"
@@ -406,6 +437,7 @@
         "priceRequired": "Please enter price",
         "scopeRequired": "Please select applicable scope",
         "timeRangeRequired": "Please select time range",
+        "timeRangeInvalid": "End time must be after start time",
         "pairDiscountRange": "Pair discount must be between 0-100"
       },
       "remark": {

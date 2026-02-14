@@ -39,6 +39,7 @@
         "ticketType": "电影票类型",
         "brandList": "品牌列表",
         "screeningManagement": "上映场次管理",
+        "screeningManagementRelease": "发布场次",
         "promotion": "促销设置",
         "promotionDetail": "促销详情"
       }
@@ -128,6 +129,8 @@
     "configAisle": "配置过道",
     "configArea": "配置区域",
     "cancel": "取消",
+    "prev": "上一步",
+    "next": "下一步",
     "select": "选择",
     "promotion": "促销设置",
     "order": {
