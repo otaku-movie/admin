@@ -41,7 +41,8 @@
         "screeningManagement": "上映场次管理",
         "screeningManagementRelease": "发布场次",
         "promotion": "促销设置",
-        "promotionDetail": "促销详情"
+        "promotionDetail": "促销详情",
+        "benefitList": "入场者特典"
       }
     },
     "movie": {
@@ -57,7 +58,9 @@
         "commentList": "评论列表",
         "replyList": "回复列表",
         "tagList": "标签列表",
-        "languageList": "语言列表"
+        "languageList": "语言列表",
+        "benefitList": "入场者特典",
+        "benefitDetail": "特典详情"
       }
     },
     "showTime": {
@@ -95,6 +98,7 @@
     "jpy": "日元",
     "billion": "亿",
     "million": "万",
+    "thousand": "千",
     "minute": "分钟",
     "day": "日"
   },
@@ -109,6 +113,97 @@
   },
   "table": {
     "action": "操作"
+  },
+  "benefit": {
+    "cinema": {
+      "title": "入场者特典",
+      "stockTip": "可编辑该影院已分配物料的配额与剩余；新增物料分配请在「电影管理-入场者特典」中操作。",
+      "goAddStock": "去分配库存",
+      "stockEmptyHint": "暂无库存记录，点击下方按钮为影院分配特典数量",
+      "tabFeedback": "用户反馈"
+    },
+    "tab": {
+      "phase": "阶段列表",
+      "stock": "影院库存"
+    },
+    "form": {
+      "namePlaceholder": "特典名称",
+      "nameExample": "如：第一弹",
+      "nameRequired": "请输入特典名称",
+      "startDateRequired": "请选择开始日期",
+      "selectMovieRequired": "请选择作品",
+      "selectMoviePlaceholder": "请选择电影",
+      "stockStepTip": "先选择要分配的作品与特典，再选择影院并填写数量",
+      "selectCinemaRequired": "请选择影院",
+      "quotaRequired": "请输入数量",
+      "quotaPlaceholder": "请输入分配数量",
+      "backToList": "返回特典列表",
+      "phaseNotFound": "阶段不存在或未选择",
+      "selectMovieWarning": "请选择作品",
+      "quantityPlaceholder": "特典数量",
+      "descriptionPlaceholder": "特典描述"
+    },
+    "table": {
+      "movieName": "作品",
+      "name": "特典名称",
+      "startDate": "开始日期",
+      "endDate": "结束日期",
+      "itemCount": "物料数",
+      "phaseCount": "阶段数",
+      "orderNum": "排序",
+      "image": "图片",
+      "area": "地区",
+      "cinemaName": "影院",
+      "benefitItemName": "物料",
+      "benefitName": "阶段",
+      "quota": "配额",
+      "remaining": "剩余",
+      "status": "状态",
+      "stockUnknownPlaceholder": "不填表示库存未知",
+      "unknown": "未知",
+      "feedbackType": "类型",
+      "createTime": "反馈时间"
+    },
+    "detail": {
+      "phaseInfo": "阶段信息",
+      "benefitName": "特典名称",
+      "description": "特典描述",
+      "images": "特典图片",
+      "cinemaLimit": "影院限定",
+      "specialEffectSessionLimit": "特效场次限定",
+      "quantity": "特典数量",
+      "remaining": "剩余数量",
+      "remainingPlaceholder": "不填表示未知，0 表示已经没有了",
+      "soldOut": "已经没有了"
+    },
+    "placeholder": {
+      "searchMovie": "输入作品名或关键字搜索",
+      "searchCinema": "输入影院名或关键字搜索",
+      "searchPhase": "输入特典阶段名或关键字搜索"
+    },
+    "empty": {
+      "loading": "加载中…",
+      "noMovie": "无匹配作品",
+      "noCinema": "无匹配影院",
+      "noPhase": "无匹配特典阶段",
+      "selectMovieFirst": "请先选择作品"
+    },
+    "limit": {
+      "dimensionType": "放映类型",
+      "spec": "规格",
+      "unlimited": "不限"
+    },
+    "message": {
+      "removeContent": "确定删除该特典阶段？",
+      "removeSuccess": "删除成功"
+    },
+    "button": {
+      "items": "物料",
+      "addStock": "分配库存",
+      "detail": "详情",
+      "addBenefit": "添加特典",
+      "selectMovie": "选择电影"
+    }
   },
   "button": {
     "add": "添加",
@@ -133,6 +228,7 @@
     "next": "下一步",
     "select": "选择",
     "promotion": "促销设置",
+    "benefitList": "入场者特典",
     "order": {
       "updateOrderState": "修改订单状态",
       "generateQRcode": "生成取票码"
@@ -142,7 +238,8 @@
     },
     "reply": "回复",
     "cinemaList": {
-      "screeningManagement": "上映场次管理"
+      "screeningManagement": "上映场次管理",
+      "benefit": "入场者特典"
     }
   }
 }

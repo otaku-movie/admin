@@ -14,7 +14,7 @@ export function getMovieDetail (query: GetDetailQuery) {
   return http<ApiResponse<Movie[]>>({
     url: 'movie/detail',
     method: 'get',
-    data: query
+    params: query
   })
 }
 

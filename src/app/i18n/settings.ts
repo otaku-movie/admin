@@ -1,6 +1,7 @@
-import { languages, defaultLanguage } from "@/config"
+import { languages } from '@/config'
 
-export const fallbackLng = defaultLanguage
+/** 缺失翻译时的回退语言 */
+export const fallbackLng = 'ja'
 export const defaultNS = 'translation'
 export const cookieName = 'i18next'
 export {

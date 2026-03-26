@@ -41,7 +41,8 @@
         "screeningManagement": "上映スケジュール管理",
         "screeningManagementRelease": "上映を公開",
         "promotion": "プロモーション設定",
-        "promotionDetail": "プロモーション詳細"
+        "promotionDetail": "プロモーション詳細",
+        "benefitList": "入場者特典"
       }
     },
     "movie": {
@@ -57,7 +58,9 @@
         "commentList": "コメントリスト",
         "replyList": "返信リスト",
         "tagList": "タグリスト",
-        "languageList": "言語リスト"
+        "languageList": "言語リスト",
+        "benefitList": "入場者特典",
+        "benefitDetail": "特典詳細"
       }
     },
     "showTime": {
@@ -95,6 +98,7 @@
     "jpy": "円",
     "billion": "億",
     "million": "万",
+    "thousand": "千",
     "minute": "分"
   },
   "week": {
@@ -105,6 +109,97 @@
     "Friday": "金",
     "Saturday": "土",
     "Sunday": "日"
+  },
+  "benefit": {
+    "cinema": {
+      "title": "入場者特典",
+      "stockTip": "当劇場に割り当て済みの物料の枠・残数を編集できます。新規物料の割り当ては「映画管理-入場者特典」で行います。",
+      "goAddStock": "在庫を割り当てる",
+      "stockEmptyHint": "在庫記録がありません。下のボタンから劇場に特典数量を割り当ててください。",
+      "tabFeedback": "ユーザーフィードバック"
+    },
+    "tab": {
+      "phase": "フェーズ一覧",
+      "stock": "劇場在庫"
+    },
+    "form": {
+      "namePlaceholder": "特典名",
+      "nameExample": "例：第一弾",
+      "nameRequired": "特典名を入力してください",
+      "startDateRequired": "開始日を選択してください",
+      "selectMovieRequired": "作品を選択してください",
+      "selectMoviePlaceholder": "作品を選択",
+      "stockStepTip": "先に作品と特典を選択し、劇場と数量を入力してください",
+      "selectCinemaRequired": "劇場を選択してください",
+      "quotaRequired": "数量を入力してください",
+      "quotaPlaceholder": "分配数量を入力",
+      "backToList": "特典一覧に戻る",
+      "phaseNotFound": "フェーズが存在しないか未選択です",
+      "selectMovieWarning": "作品を選択してください",
+      "quantityPlaceholder": "特典数量",
+      "descriptionPlaceholder": "特典説明"
+    },
+    "table": {
+      "movieName": "作品",
+      "name": "特典名",
+      "startDate": "開始日",
+      "endDate": "終了日",
+      "itemCount": "物料数",
+      "phaseCount": "フェーズ数",
+      "orderNum": "並び",
+      "image": "画像",
+      "area": "地区",
+      "cinemaName": "劇場",
+      "benefitItemName": "物料",
+      "benefitName": "フェーズ",
+      "quota": "割当数",
+      "remaining": "残数",
+      "status": "状態",
+      "stockUnknownPlaceholder": "未記入の場合は在庫不明",
+      "unknown": "不明",
+      "feedbackType": "タイプ",
+      "createTime": "フィードバック日時"
+    },
+    "detail": {
+      "phaseInfo": "フェーズ情報",
+      "benefitName": "特典名",
+      "description": "特典説明",
+      "images": "特典画像",
+      "cinemaLimit": "劇場限定",
+      "specialEffectSessionLimit": "特效場次限定",
+      "quantity": "特典数量",
+      "remaining": "残数",
+      "remainingPlaceholder": "未記入は不明、0は在庫切れ",
+      "soldOut": "在庫切れ"
+    },
+    "placeholder": {
+      "searchMovie": "作品名またはキーワードで検索",
+      "searchCinema": "劇場名またはキーワードで検索",
+      "searchPhase": "フェーズ名またはキーワードで検索"
+    },
+    "empty": {
+      "loading": "読み込み中…",
+      "noMovie": "該当する作品がありません",
+      "noCinema": "該当する劇場がありません",
+      "noPhase": "該当するフェーズがありません",
+      "selectMovieFirst": "先に作品を選択してください"
+    },
+    "limit": {
+      "dimensionType": "上映タイプ",
+      "spec": "規格",
+      "unlimited": "制限なし"
+    },
+    "message": {
+      "removeContent": "この特典フェーズを削除しますか？",
+      "removeSuccess": "削除しました"
+    },
+    "button": {
+      "items": "物料",
+      "addStock": "在庫割当",
+      "detail": "詳細",
+      "addBenefit": "特典を追加",
+      "selectMovie": "作品を選択"
+    }
   },
   "table": {
     "action": "操作"
@@ -132,6 +227,7 @@
     "next": "次へ",
     "select": "選択",
     "promotion": "プロモーション設定",
+    "benefitList": "入場者特典",
     "order": {
       "updateOrderState": "注文状態を変更",
       "generateQRcode": "QRコードを生成"
@@ -141,7 +237,8 @@
     },
     "reply": "返信",
     "cinemaList": {
-      "screeningManagement": "上映スケジュール管理"
+      "screeningManagement": "上映スケジュール管理",
+      "benefit": "入場者特典"
     }
   }
 }

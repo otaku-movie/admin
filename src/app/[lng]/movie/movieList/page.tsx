@@ -298,6 +298,17 @@ export default function Page({ params: { lng } }: Readonly<PageProps>) {
               </Button>
             </CheckPermission>
             <Button
+              onClick={() => {
+                router.push(
+                  processPath('benefitList', {
+                    id: row.id
+                  })
+                )
+              }}
+            >
+              {common('button.benefitList')}
+            </Button>
+            <Button
               type="primary"
               onClick={() => {
                 router.push(

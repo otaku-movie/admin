@@ -22,7 +22,9 @@ export enum DictCode {
   /** 规则类型优先级（活动下 6 类规则：月度/周度/固定日/时段/固定票价/票种，code 1-6） */
   RULE_TYPE_PRIORITY = 'ruleTypePriority',
   /** 票种生效周期类型：1=周 2=月 3=每日 4=特定日期 */
-  TICKET_TYPE_SCHEDULE_TYPE = 'ticketTypeScheduleType'
+  TICKET_TYPE_SCHEDULE_TYPE = 'ticketTypeScheduleType',
+  /** 特典阶段状态：1=之前 2=进行中 3=已结束 */
+  BENEFIT_PHASE_STATUS = 'benefitPhaseStatus'
 }
 
 

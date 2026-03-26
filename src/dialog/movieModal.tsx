@@ -29,6 +29,8 @@ interface modalProps {
   data?: Record<string, any>
   /** 打开时预选中的电影 id */
   initialMovieId?: number
+  /** 用于在其它弹框内打开时置于顶层，如 1100 */
+  zIndex?: number
   onConfirm?: (selectedMovie: Movie) => void
   onCancel?: () => void
 }
@@ -198,6 +200,7 @@ export function MovieModal(props: modalProps) {
       maskClosable={false}
       width={'80%'}
       style={{ top: 40 }}
+      zIndex={props.zIndex ?? 1000}
       onOk={() => {
         props?.onConfirm?.(selectedMovie)
       }}

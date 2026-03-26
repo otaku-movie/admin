@@ -1,15 +1,6 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import {
-  Table,
-  Button,
-  Input,
-  Row,
-  message,
-  Modal,
-  Tag,
-  Flex
-} from 'antd'
+import { Table, Button, Input, Row, message, Modal, Tag, Flex } from 'antd'
 import type { TableColumnsType } from 'antd'
 import { useRouter } from 'next/navigation'
 import { useTranslation } from '@/app/i18n/client'
@@ -20,7 +11,7 @@ import { processPath } from '@/config/router'
 import { CheckPermission } from '@/components/checkPermission'
 import { showTotal } from '@/utils/pagination'
 
-export default function Page({ params: { lng } }: PageProps) {
+export default function Page ({ params: { lng } }: PageProps) {
   const router = useRouter()
 
   const [data, setData] = useState([])
@@ -37,7 +28,7 @@ export default function Page({ params: { lng } }: PageProps) {
         page,
         pageSize: 10
       }
-    }).then((res) => {
+    }).then(res => {
       setData(res.data.list)
       setPage(page)
       setTotal(res.data.total)
@@ -63,9 +54,9 @@ export default function Page({ params: { lng } }: PageProps) {
     {
       title: t('table.spec'),
       width: 250,
-      render(_, row) {
+      render (_, row) {
         return (
-          <Flex wrap gap="small">
+          <Flex wrap gap='small'>
             {row.spec?.map((item: { id: number; name: string }) => {
               return (
                 <Tag
@@ -100,12 +91,12 @@ export default function Page({ params: { lng } }: PageProps) {
     {
       title: t('table.homePage'),
       width: 300,
-      render(_, row) {
+      render (_, row) {
         return (
           <a
             href={row.homePage}
-            target="_blank"
-            rel="noopener noreferrer"
+            target='_blank'
+            rel='noopener noreferrer'
             style={{ color: 'blue' }}
           >
             {row.homePage}
@@ -126,20 +117,20 @@ export default function Page({ params: { lng } }: PageProps) {
       width: 360,
       render: (_, row) => {
         return (
-          <Flex wrap="wrap" gap={8} style={{ width: '100%' }}>
+          <Flex wrap='wrap' gap={8} style={{ width: '100%' }}>
             <Button
-              type="primary"
+              type='primary'
               onClick={() => {
                 router.push(
                   processPath({
                     name: 'ticketType',
-                      query: {
-                        id: row.id
-                      }
-                    })
-                  )
-                }}
-              >
+                    query: {
+                      id: row.id
+                    }
+                  })
+                )
+              }}
+            >
               {common('button.ticketType')}
             </Button>
             <Button
@@ -147,49 +138,63 @@ export default function Page({ params: { lng } }: PageProps) {
                 router.push(
                   processPath({
                     name: 'screeningManagement',
-                      query: {
-                        id: row.id
-                      }
-                    })
-                  )
-                }}
-              >
-                {common('button.cinemaList.screeningManagement')}
-              </Button>
+                    query: {
+                      id: row.id
+                    }
+                  })
+                )
+              }}
+            >
+              {common('button.cinemaList.screeningManagement')}
+            </Button>
             <Button
               onClick={() => {
                 router.push(
                   processPath({
                     name: 'promotion',
-                      query: {
-                        cinemaId: row.id,
-                        cinemaName: encodeURIComponent(row.name)
-                      }
-                    })
-                  )
-                }}
-              >
+                    query: {
+                      cinemaId: row.id,
+                      cinemaName: encodeURIComponent(row.name)
+                    }
+                  })
+                )
+              }}
+            >
               {common('button.promotion')}
             </Button>
             <Button
-              type="primary"
+              onClick={() => {
+                router.push(
+                  processPath({
+                    name: 'cinemaBenefitList',
+                    query: {
+                      cinemaId: row.id
+                    }
+                  })
+                )
+              }}
+            >
+              {common('button.cinemaList.benefit')}
+            </Button>
+            <Button
+              type='primary'
               ghost
               onClick={() => {
                 router.push(
                   processPath({
                     name: 'theaterHall',
-                      query: {
-                        id: row.id
-                      }
-                    })
-                  )
-                }}
-              >
+                    query: {
+                      id: row.id
+                    }
+                  })
+                )
+              }}
+            >
               {common('button.theaterHallDetail')}
             </Button>
-            <CheckPermission code="cinema.save">
+            <CheckPermission code='cinema.save'>
               <Button
-                type="primary"
+                type='primary'
                 onClick={() => {
                   router.push(
                     processPath({
@@ -197,43 +202,43 @@ export default function Page({ params: { lng } }: PageProps) {
                       query: { id: row.id }
                     })
                   )
-                  }}
-                >
-                  {common('button.edit')}
-                </Button>
-              </CheckPermission>
-              <CheckPermission code="cinema.remove">
-                <Button
-                  type="primary"
-                  danger
-                  onClick={() => {
-                    Modal.confirm({
-                      title: common('button.remove'),
-                      content: t('message.remove.content'),
-                      onCancel() {},
-                      onOk() {
-                        return new Promise((resolve, reject) => {
-                          http({
-                            url: 'cinema/remove',
-                            method: 'delete',
-                            params: {
-                              id: row.id
-                            }
-                          })
-                            .then(() => {
-                              message.success(t('message.remove.success'))
-                              getData()
-                              resolve(true)
-                            })
-                            .catch(reject)
+                }}
+              >
+                {common('button.edit')}
+              </Button>
+            </CheckPermission>
+            <CheckPermission code='cinema.remove'>
+              <Button
+                type='primary'
+                danger
+                onClick={() => {
+                  Modal.confirm({
+                    title: common('button.remove'),
+                    content: t('message.remove.content'),
+                    onCancel () {},
+                    onOk () {
+                      return new Promise((resolve, reject) => {
+                        http({
+                          url: 'cinema/remove',
+                          method: 'delete',
+                          params: {
+                            id: row.id
+                          }
                         })
-                      }
-                    })
-                  }}
-                >
-                  {common('button.remove')}
-                </Button>
-              </CheckPermission>
+                          .then(() => {
+                            message.success(t('message.remove.success'))
+                            getData()
+                            resolve(true)
+                          })
+                          .catch(reject)
+                      })
+                    }
+                  })
+                }}
+              >
+                {common('button.remove')}
+              </Button>
+            </CheckPermission>
           </Flex>
         )
       }
@@ -248,8 +253,8 @@ export default function Page({ params: { lng } }: PageProps) {
         gap: '30px'
       }}
     >
-      <Row justify="end">
-        <CheckPermission code="cinema.save">
+      <Row justify='end'>
+        <CheckPermission code='cinema.save'>
           <Button
             onClick={() => {
               router.push(processPath('cinemaDetail'))
@@ -280,7 +285,7 @@ export default function Page({ params: { lng } }: PageProps) {
           current: page,
           total,
           showTotal,
-          onChange(page) {
+          onChange (page) {
             getData(page)
           },
           position: ['bottomCenter']

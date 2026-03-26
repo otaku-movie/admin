@@ -41,7 +41,8 @@
         "screeningManagement": "Screening Management",
         "screeningManagementRelease": "Release Showtime",
         "promotion": "Promotion",
-        "promotionDetail": "Promotion Detail"
+        "promotionDetail": "Promotion Detail",
+        "benefitList": "Entrance Benefits"
       }
     },
     "movie": {
@@ -57,7 +58,9 @@
         "commentList": "Comment List",
         "replyList": "Reply List",
         "tagList": "Tag List",
-        "languageList": "Language List"
+        "languageList": "Language List",
+        "benefitList": "Entrance Benefits",
+        "benefitDetail": "Benefit Detail"
       }
     },
     "showTime": {
@@ -98,6 +101,7 @@
     "jpy": "JPY",
     "billion": "Billion",
     "million": "Million",
+    "thousand": "K",
     "minute": "Minute"
   },
   "week": {
@@ -108,6 +112,97 @@
     "Friday": "Friday",
     "Saturday": "Saturday",
     "Sunday": "Sunday"
+  },
+  "benefit": {
+    "cinema": {
+      "title": "Entrance Benefits",
+      "stockTip": "Edit quota and remaining for items assigned to this cinema. Add new items in \"Movie Management - Entrance Benefits\".",
+      "goAddStock": "Go to allocate stock",
+      "stockEmptyHint": "No stock records. Click the button below to allocate benefit quantity to a theater.",
+      "tabFeedback": "User Feedback"
+    },
+    "tab": {
+      "phase": "Phases",
+      "stock": "Theater Stock"
+    },
+    "form": {
+      "namePlaceholder": "Benefit name",
+      "nameExample": "e.g. First",
+      "nameRequired": "Please enter benefit name",
+      "startDateRequired": "Please select start date",
+      "selectMovieRequired": "Please select movie",
+      "selectMoviePlaceholder": "Select movie",
+      "stockStepTip": "Select movie and benefit first, then theater and quantity",
+      "selectCinemaRequired": "Please select theater",
+      "quotaRequired": "Please enter quantity",
+      "quotaPlaceholder": "Enter quantity to allocate",
+      "backToList": "Back to benefit list",
+      "phaseNotFound": "Phase not found or not selected",
+      "selectMovieWarning": "Please select a movie",
+      "quantityPlaceholder": "Quantity",
+      "descriptionPlaceholder": "Description"
+    },
+    "table": {
+      "movieName": "Movie",
+      "name": "Benefit Name",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "itemCount": "Items",
+      "phaseCount": "Phases",
+      "orderNum": "Order",
+      "image": "Image",
+      "area": "Region",
+      "cinemaName": "Theater",
+      "benefitItemName": "Item",
+      "benefitName": "Phase",
+      "quota": "Quota",
+      "remaining": "Remaining",
+      "status": "Status",
+      "stockUnknownPlaceholder": "Leave blank if unknown",
+      "unknown": "Unknown",
+      "feedbackType": "Type",
+      "createTime": "Feedback Time"
+    },
+    "detail": {
+      "phaseInfo": "Phase Info",
+      "benefitName": "Benefit Name",
+      "description": "Description",
+      "images": "Images",
+      "cinemaLimit": "Cinema Limit",
+      "specialEffectSessionLimit": "Special Effect Session Limit",
+      "quantity": "Quantity",
+      "remaining": "Remaining",
+      "remainingPlaceholder": "Leave blank if unknown, 0 = sold out",
+      "soldOut": "Sold out"
+    },
+    "placeholder": {
+      "searchMovie": "Search by movie name or keyword",
+      "searchCinema": "Search by theater name or keyword",
+      "searchPhase": "Search by phase name or keyword"
+    },
+    "empty": {
+      "loading": "Loading…",
+      "noMovie": "No matching movie",
+      "noCinema": "No matching theater",
+      "noPhase": "No matching phase",
+      "selectMovieFirst": "Select a movie first"
+    },
+    "limit": {
+      "dimensionType": "Dimension",
+      "spec": "Spec",
+      "unlimited": "Unlimited"
+    },
+    "message": {
+      "removeContent": "Delete this benefit phase?",
+      "removeSuccess": "Deleted successfully"
+    },
+    "button": {
+      "items": "Items",
+      "addStock": "Add Stock",
+      "detail": "Detail",
+      "addBenefit": "Add Benefit",
+      "selectMovie": "Select Movie"
+    }
   },
   "table": {
     "action": "Action"
@@ -135,6 +230,7 @@
     "next": "Next",
     "select": "Select",
     "promotion": "Promotion",
+    "benefitList": "Entrance Benefits",
     "order": {
       "updateOrderState": "Update Order Status",
       "generateQRcode": "Generate QR Code"
@@ -144,7 +240,8 @@
     },
     "reply": "Reply",
     "cinemaList": {
-      "screeningManagement": "Screening Management"
+      "screeningManagement": "Screening Management",
+      "benefit": "Entrance Benefits"
     }
   }
 }
