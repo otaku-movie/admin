@@ -21,10 +21,31 @@
         "label": "电影名称",
         "required": "请选择电影"
       },
+      "status": {
+        "label": "启用状态",
+        "enabled": "启用",
+        "disabled": "停用"
+      },
       "showTime": {
         "label": "开始时间",
         "required": "请选择上映时间",
         "startAfterEnd": "结束时间必须大于开始时间"
+      },
+      "versionInfo": {
+        "label": "重映版本信息",
+        "placeholder": "例如：特别版 / 限定版 / 复刻上映等（可选）"
+      },
+      "displayNameOverride": {
+        "label": "展示名覆盖",
+        "placeholder": "为空则复用电影名称（可选）"
+      },
+      "posterOverride": {
+        "label": "海报覆盖",
+        "placeholder": "填写图片 URL；为空则复用电影海报（可选）"
+      },
+      "timeOverride": {
+        "label": "片长覆盖（分钟）",
+        "placeholder": "为空则复用电影片长（可选）"
       }
     }
   }

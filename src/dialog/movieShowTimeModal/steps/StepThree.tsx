@@ -47,7 +47,7 @@ export function StepThree({ ctx }: StepThreeProps) {
           }
           options={reReleaseData.map((item: any) => ({
             value: item.id,
-            label: `${item.name || ''} (${dayjs(item.startTime).format('YYYY-MM-DD')} - ${dayjs(item.endTime).format('YYYY-MM-DD')})`
+            label: `${item.name || ''} (${dayjs(item.startDate).format('YYYY-MM-DD')} - ${dayjs(item.endDate).format('YYYY-MM-DD')})`
           }))}
         />
       </Form.Item>

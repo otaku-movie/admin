@@ -35,6 +35,8 @@ export interface MovieShowTimeItem {
   movieShowTimeTagsId: number[]
   movieVersionId?: number
   versionCode?: number
+  /** 关联的重映计划 id（有值则为重映场次） */
+  reReleaseId?: number
 }
 
 export interface CinemaScreeing {

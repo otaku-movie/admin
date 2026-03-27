@@ -14,6 +14,10 @@
     "startDate": "開始日",
     "endDate": "終了日",
     "dubbingVersion": "吹き替え版",
+    "reReleaseEnabled": "再上映（有効）",
+    "reReleaseVersionInfo": "再上映バージョン情報",
+    "reReleaseDisplayNameOverride": "表示名の上書き",
+    "reReleasePosterOverride": "ポスターの上書き",
     "status": "上映ステータス",
     "action": "操作"
   },
@@ -24,7 +28,18 @@
     }
   },
   "movieModal": {
-    "title": "映画を選択"
+    "title": "映画を選択",
+    "reReleaseTag": "再上映",
+    "reReleaseButton": "再上映プラン",
+    "reReleaseFilter": {
+      "label": "再上映",
+      "placeholder": "選択してください",
+      "yes": "再上映のみ",
+      "no": "再上映なし"
+    }
+  },
+  "reReleaseByMovieModal": {
+    "title": "再上映プランを選択"
   },
   "button": {
     "addDubbingVersion": "吹き替え版を追加"

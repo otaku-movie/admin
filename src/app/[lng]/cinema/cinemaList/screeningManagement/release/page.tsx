@@ -21,6 +21,7 @@ import { getMovieVersions } from '@/api/request/movie'
 import { useCommonStore } from '@/store/useCommonStore'
 import { DictCode } from '@/enum/dict'
 import { MovieModal } from '@/dialog/movieModal'
+import { ReReleaseByMovieModal } from '@/dialog/reReleaseByMovieModal'
 import { processPath } from '@/config/router'
 import dayjs from 'dayjs'
 import type { ReleaseFormState, PromotionWithRules } from './types'
@@ -56,9 +57,12 @@ export default function ReleaseShowTimePage({ params: { lng } }: Readonly<PagePr
   const [theaterHallData, setTheaterHallData] = useState<{ id: number; name: string; cinemaSpecName?: string }[]>([])
   const [languageData, setLanguageData] = useState<{ id: number; name: string }[]>([])
   const [movieVersionData, setMovieVersionData] = useState<any[]>([])
+  const [reReleaseSelectedPlan, setReReleaseSelectedPlan] = useState<any | undefined>(undefined)
+  const [reReleaseModalOpen, setReReleaseModalOpen] = useState(false)
   const [specList, setSpecList] = useState<{ id: number; name: string; cinemaSpecName?: string }[]>([])
   const [showTimeTagData, setShowTimeTagData] = useState<{ id: number; name: string }[]>([])
   const [promotionList, setPromotionList] = useState<PromotionWithRules[]>([])
+  const [movieBaseDuration, setMovieBaseDuration] = useState(0)
   const [movieDuration, setMovieDuration] = useState(0)
   const [submitting, setSubmitting] = useState(false)
   const [loadingDetail, setLoadingDetail] = useState(false)
@@ -132,6 +136,7 @@ export default function ReleaseShowTimePage({ params: { lng } }: Readonly<PagePr
           specIds: Array.isArray(d.specIds) ? d.specIds : undefined,
           showTimeTagId: Array.isArray(d.movieShowTimeTagsId) ? d.movieShowTimeTagsId : undefined,
           movieVersionId: d.movieVersionId,
+          reReleaseId: d.reReleaseId,
           open: d.open !== false,
           publishMode: d.publishAt ? 'scheduled' : 'immediate',
           publishAt: publishAt ?? undefined,
@@ -146,9 +151,14 @@ export default function ReleaseShowTimePage({ params: { lng } }: Readonly<PagePr
         }))
         if (d.movieId) {
           http({ url: 'movie/detail', method: 'get', params: { id: d.movieId } }).then((movieRes: any) => {
-            if (movieRes.data?.time) setMovieDuration(Number(movieRes.data.time))
+            if (movieRes.data?.time) {
+              const base = Number(movieRes.data.time)
+              setMovieBaseDuration(base)
+              setMovieDuration(base)
+            }
           })
           getMovieVersionData(d.movieId)
+          getReReleaseData(d.movieId)
         }
         getMovieData()
         setLoadingDetail(false)
@@ -201,6 +211,34 @@ export default function ReleaseShowTimePage({ params: { lng } }: Readonly<PagePr
       setMovieVersionData(versions)
     } catch {
       setMovieVersionData([])
+    }
+  }
+
+  /** 拉取重映计划列表（按 movieId） */
+  const getReReleaseData = async (movieId?: number) => {
+    if (!movieId) {
+      setReReleaseSelectedPlan(undefined)
+      return
+    }
+    try {
+      const res: any = await http({
+        url: 'movie/reRelease/list',
+        method: 'post',
+        data: { movieId, page: 1, pageSize: 50 }
+      })
+      const list = res?.data?.list ?? []
+      if (formState.reReleaseId) {
+        const hit = list.find((x: any) => Number(x?.id) === Number(formState.reReleaseId))
+        setReReleaseSelectedPlan(hit)
+        const nextDuration =
+          hit?.timeOverride != null && Number(hit.timeOverride) > 0 ? Number(hit.timeOverride) : movieBaseDuration
+        if (nextDuration > 0) setMovieDuration(nextDuration)
+      } else {
+        setReReleaseSelectedPlan(undefined)
+        if (movieBaseDuration > 0) setMovieDuration(movieBaseDuration)
+      }
+    } catch {
+      setReReleaseSelectedPlan(undefined)
     }
   }
 
@@ -317,6 +355,7 @@ export default function ReleaseShowTimePage({ params: { lng } }: Readonly<PagePr
         allowPresale: formState.allowPresale !== false,
         subtitleId: formState.subtitleId,
         movieVersionId: formState.movieVersionId,
+        reReleaseId: formState.reReleaseId,
         specIds: formState.specIds,
         specId: formState.specIds?.[0],
         showTimeTagId: formState.showTimeTagId,
@@ -337,13 +376,24 @@ export default function ReleaseShowTimePage({ params: { lng } }: Readonly<PagePr
       .finally(() => setSubmitting(false))
   }
 
-  const onMovieSelect = (movie: { id: number; name: string }) => {
-    setFormState((prev) => ({ ...prev, movieId: movie.id, movieName: movie.name }))
-    form.setFieldValue('movieId', movie.id)
-    http({ url: 'movie/detail', method: 'get', params: { id: movie.id } }).then((res) => {
-      if (res.data?.time) setMovieDuration(Number(res.data.time))
-      getMovieVersionData(movie.id)
+  const onMovieSelect = (payload: { movieId: number; movieName?: string; reReleaseId?: number }) => {
+    setFormState((prev) => ({
+      ...prev,
+      movieId: payload.movieId,
+      movieName: payload.movieName,
+      reReleaseId: payload.reReleaseId
+    }))
+    setReReleaseSelectedPlan(undefined)
+    form.setFieldValue('movieId', payload.movieId)
+    http({ url: 'movie/detail', method: 'get', params: { id: payload.movieId } }).then((res) => {
+      if (res.data?.time) {
+        const base = Number(res.data.time)
+        setMovieBaseDuration(base)
+        setMovieDuration(base)
+      }
+      getMovieVersionData(payload.movieId)
     })
+    getReReleaseData(payload.movieId)
     setMovieModalOpen(false)
   }
 
@@ -423,6 +473,7 @@ export default function ReleaseShowTimePage({ params: { lng } }: Readonly<PagePr
             movieData={movieData}
             theaterHallData={theaterHallData}
             movieVersionData={movieVersionData}
+            reReleaseSelectedPlan={reReleaseSelectedPlan}
             specList={specList}
             languageData={languageData}
             showTimeTagData={showTimeTagData}
@@ -432,6 +483,10 @@ export default function ReleaseShowTimePage({ params: { lng } }: Readonly<PagePr
             onSelectMovie={() => {
               getMovieData()
               setMovieModalOpen(true)
+            }}
+            onSelectReRelease={() => {
+              if (!formState.movieId) return
+              setReReleaseModalOpen(true)
             }}
             getMovieVersionData={getMovieVersionData}
             getLanguageData={getLanguageData}
@@ -490,9 +545,28 @@ export default function ReleaseShowTimePage({ params: { lng } }: Readonly<PagePr
 
       <MovieModal
         show={movieModalOpen}
-        data={{}}
         onCancel={() => setMovieModalOpen(false)}
-        onConfirm={onMovieSelect}
+        onConfirm={(m: any) =>
+          onMovieSelect({ movieId: Number(m?.id), movieName: m?.name, reReleaseId: m?.reReleaseId })
+        }
+      />
+
+      <ReReleaseByMovieModal
+        show={reReleaseModalOpen}
+        movieId={formState.movieId}
+        movieName={formState.movieName}
+        zIndex={1150}
+        onCancel={() => setReReleaseModalOpen(false)}
+        onConfirm={(plan) => {
+          setFormState((prev) => ({ ...prev, reReleaseId: plan.id }))
+          setReReleaseSelectedPlan(plan as any)
+          const nextDuration =
+            (plan as any)?.timeOverride != null && Number((plan as any).timeOverride) > 0
+              ? Number((plan as any).timeOverride)
+              : movieBaseDuration
+          if (nextDuration > 0) setMovieDuration(nextDuration)
+          setReReleaseModalOpen(false)
+        }}
       />
     </div>
   )

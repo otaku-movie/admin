@@ -4,6 +4,7 @@
   "addShowTime": "上映追加",
   "selectDate": "日付を選択",
   "pageTitle": "上映管理",
+  "reReleaseTag": "再上映",
   "table": {
     "seatSelectRate": "座席選択比率",
     "open": "公開",

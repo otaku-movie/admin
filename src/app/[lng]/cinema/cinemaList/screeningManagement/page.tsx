@@ -6,7 +6,6 @@ import {
   Dropdown,
   FloatButton,
   Space,
-  Button,
   message,
   MenuProps,
   Modal,
@@ -343,6 +342,12 @@ export default function CinemaPage({ params: { lng } }: Readonly<PageProps>) {
 
                   {/* 关键标签行：2D/3D、版本、规格、字幕 */}
                   <div className="card-tags-row">
+                    {/* 重映标记 */}
+                    {item.reReleaseId != null ? (
+                      <Tag color="blue" className="card-tag-small">
+                        {t('reReleaseTag')}
+                      </Tag>
+                    ) : null}
                     {/* 2D/3D 放映类型（始终展示） */}
                     <Tag
                       color={

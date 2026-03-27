@@ -14,6 +14,10 @@
     "startDate": "开始日期",
     "endDate": "结束日期",
     "dubbingVersion": "配音版本",
+    "reReleaseEnabled": "重映启用",
+    "reReleaseVersionInfo": "重映版本信息",
+    "reReleaseDisplayNameOverride": "展示名覆盖",
+    "reReleasePosterOverride": "海报覆盖",
     "status": "上映状态",
     "action": "操作"
   },
@@ -24,7 +28,18 @@
     }
   },
   "movieModal": {
-    "title": "选择电影"
+    "title": "选择电影",
+    "reReleaseTag": "重映",
+    "reReleaseButton": "重映批次",
+    "reReleaseFilter": {
+      "label": "重映",
+      "placeholder": "请选择",
+      "yes": "仅重映",
+      "no": "未重映"
+    }
+  },
+  "reReleaseByMovieModal": {
+    "title": "选择重映批次"
   },
   "button": {
     "addDubbingVersion": "添加配音版"

@@ -5,7 +5,7 @@
  * 包含影片、放映/结束日期、配音版本、放映规格、字幕、影厅、2D/3D、开始/结束时间及时长展示
  */
 import React from 'react'
-import { Form, Input, Button, DatePicker, Select, Row, Col, Space, Typography, message, Switch } from 'antd'
+import { Form, Input, Button, DatePicker, Select, Row, Col, Space, Typography, Tag, message } from 'antd'
 import { VideoCameraOutlined } from '@ant-design/icons'
 import type { Dayjs } from 'dayjs'
 import { AppTimePicker, type TimeDisplayMode } from '@/components/AppTimePicker'
@@ -32,9 +32,18 @@ interface Step1BasicProps {
   /** 放映日，30h 时用于当日/次日区分 */
   baseDate?: Dayjs
   onSelectMovie: () => void
+  onSelectReRelease: () => void
   getMovieVersionData: (movieId?: number) => void
   getLanguageData: () => void
   getShowTimeTagData: () => void
+  reReleaseSelectedPlan?: {
+    id: number
+    startDate?: string
+    endDate?: string
+    status?: number
+    versionInfo?: string
+    displayNameOverride?: string
+  }
 }
 
 export function Step1Basic({
@@ -52,14 +61,27 @@ export function Step1Basic({
   timeDisplayMode = '24h',
   baseDate,
   onSelectMovie,
+  onSelectReRelease,
   getMovieVersionData,
   getLanguageData,
-  getShowTimeTagData
+  getShowTimeTagData,
+  reReleaseSelectedPlan
 }: Step1BasicProps) {
   const movieName =
     form.movieId != null
       ? movieData.find((m) => m.id === form.movieId)?.name ?? form.movieName ?? ''
       : form.movieName ?? ''
+
+  const reReleaseText = (() => {
+    if (!form.reReleaseId) return ''
+    if (!reReleaseSelectedPlan) return t('showTimeModal.form.reRelease.label')
+    const name = (reReleaseSelectedPlan.displayNameOverride || '').trim()
+    const ver = (reReleaseSelectedPlan.versionInfo || '').trim()
+    if (name && ver) return `${name} · ${ver}`
+    if (name) return name
+    if (ver) return ver
+    return t('showTimeModal.form.reRelease.label')
+  })()
 
   return (
     <>
@@ -166,6 +188,61 @@ export function Step1Basic({
                   return next
                 })
               }}
+            />
+          </Form.Item>
+        </Col>
+      </Row>
+      {/* 重映（可选） + 配音版本 一行 */}
+      <Row gutter={24}>
+        <Col span={12}>
+          <Form.Item label={t('showTimeModal.form.reRelease.label')}>
+            <Space.Compact style={{ width: '100%' }}>
+              <Input
+                readOnly
+                value={reReleaseText}
+                placeholder={t('showTimeModal.form.reRelease.placeholder')}
+                style={{ flex: 1 }}
+              />
+              {form.reReleaseId ? (
+                <Button
+                  onClick={() => {
+                    setForm((prev) => ({ ...prev, reReleaseId: undefined }))
+                  }}
+                >
+                  {common('button.clear')}
+                </Button>
+              ) : null}
+              <Button type="primary" disabled={!form.movieId} onClick={onSelectReRelease}>
+                {common('button.select')}
+              </Button>
+            </Space.Compact>
+            {reReleaseSelectedPlan?.status != null ? (
+              <div style={{ marginTop: 8 }}>
+                <Tag color={Number(reReleaseSelectedPlan.status) === 1 ? 'green' : 'default'}>
+                  {Number(reReleaseSelectedPlan.status) === 1 ? 'ON' : 'OFF'}
+                </Tag>
+              </div>
+            ) : null}
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item label={t('showTimeModal.form.dubbingVersion.label')}>
+            <Select
+              allowClear
+              showSearch
+              placeholder={t('showTimeModal.form.dubbingVersion.placeholder')}
+              value={form.movieVersionId}
+              disabled={!form.movieId}
+              onFocus={() => {
+                if (form.movieId) getMovieVersionData(form.movieId)
+              }}
+              onChange={(v) => setForm((prev) => ({ ...prev, movieVersionId: v }))}
+              optionFilterProp="label"
+              options={(movieVersionData ?? []).map((item: any) => ({
+                value: item.id,
+                label: `${item.name}${item.startDate && item.endDate ? ` (${item.startDate} - ${item.endDate})` : ''}`
+              }))}
+              style={{ width: '100%' }}
             />
           </Form.Item>
         </Col>

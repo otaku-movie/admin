@@ -21,10 +21,31 @@
         "label": "映画名",
         "required": "映画を選択してください"
       },
+      "status": {
+        "label": "有効状態",
+        "enabled": "有効",
+        "disabled": "無効"
+      },
       "showTime": {
         "label": "開始時間",
         "required": "上映時間を選択してください",
         "startAfterEnd": "終了時間は開始時間より後でなければなりません"
+      },
+      "versionInfo": {
+        "label": "再上映バージョン情報",
+        "placeholder": "例：特別版／限定上映など（任意）"
+      },
+      "displayNameOverride": {
+        "label": "表示名の上書き",
+        "placeholder": "未入力の場合は映画名を使用（任意）"
+      },
+      "posterOverride": {
+        "label": "ポスターの上書き",
+        "placeholder": "画像URL；未入力の場合は映画ポスターを使用（任意）"
+      },
+      "timeOverride": {
+        "label": "上映時間の上書き（分）",
+        "placeholder": "未入力の場合は映画の上映時間を使用（任意）"
       }
     }
   }

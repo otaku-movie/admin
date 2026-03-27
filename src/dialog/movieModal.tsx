@@ -2,9 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import { useTranslation } from '@/app/i18n/client'
 import {
-  Switch,
   Modal,
-  Image,
   Table,
   type TableColumnsType,
   message,
@@ -12,17 +10,16 @@ import {
   Tag,
   Select,
   Input,
-  Flex
+  Flex,
+  Button
 } from 'antd'
-import http from '@/api'
 import { languageType, notFoundImage } from '@/config'
-import { Dict } from '@/components/dict'
 import { getMovieList, getMovieDetail } from '@/api/request/movie'
-import page from '@/app/[lng]/dataChart/page'
 import { Query, QueryItem } from '@/components/query'
 import { showTotal } from '@/utils/pagination'
 import { Movie } from '@/type/api'
 import { CustomAntImage } from '@/components/CustomAntImage'
+import { ReReleaseByMovieModal } from '@/dialog/reReleaseByMovieModal'
 
 interface modalProps {
   show?: boolean
@@ -31,13 +28,14 @@ interface modalProps {
   initialMovieId?: number
   /** 用于在其它弹框内打开时置于顶层，如 1100 */
   zIndex?: number
-  onConfirm?: (selectedMovie: Movie) => void
+  onConfirm?: (selectedMovie: Movie & { reReleaseId?: number }) => void
   onCancel?: () => void
 }
 
 interface Query {
   name: string
   status: number
+  hasReRelease: 0 | 1
 }
 
 export function MovieModal(props: modalProps) {
@@ -52,6 +50,8 @@ export function MovieModal(props: modalProps) {
   )
   const [selectedMovie, setSelectedMovie] = useState<any>({})
   const [selectedRowKeys, setSelectedRowKeys] = useState<number[]>([])
+  const [reReleaseModalOpen, setReReleaseModalOpen] = useState(false)
+  const [reReleaseMovie, setReReleaseMovie] = useState<Movie | undefined>(undefined)
 
   // 打开时若有 initialMovieId 则预选中该电影
   useEffect(() => {
@@ -60,7 +60,7 @@ export function MovieModal(props: modalProps) {
     if (id != null) {
       setSelectedRowKeys([id])
       getMovieDetail({ id })
-        .then((res) => {
+        .then((res: any) => {
           const list = res?.data
           const movie = Array.isArray(list) && list.length > 0 ? list[0] : null
           if (movie) setSelectedMovie(movie)
@@ -125,6 +125,18 @@ export function MovieModal(props: modalProps) {
             >
               {row.levelName}
             </Tag>
+            {row.hasReRelease ? (
+              <Tag
+                style={{
+                  position: 'absolute',
+                  top: '0',
+                  left: '54px'
+                }}
+                color="blue"
+              >
+                {t('movieModal.reReleaseTag')}
+              </Tag>
+            ) : null}
             <Space direction="vertical">
               <span>{row.name}</span>
               <section>
@@ -190,6 +202,27 @@ export function MovieModal(props: modalProps) {
       title: t('table.endDate'),
       width: 150,
       dataIndex: 'endDate'
+    },
+    {
+      title: t('table.action'),
+      width: 140,
+      fixed: 'right',
+      render: (_: any, row) => {
+        if (!row.hasReRelease) return null
+        return (
+          <Button
+            size="small"
+            onClick={() => {
+              setSelectedRowKeys([row.id])
+              setSelectedMovie({ ...row })
+              setReReleaseMovie(row)
+              setReReleaseModalOpen(true)
+            }}
+          >
+            {t('movieModal.reReleaseButton')}
+          </Button>
+        )
+      }
     }
   ]
 
@@ -248,6 +281,20 @@ export function MovieModal(props: modalProps) {
               })}
             </Select>
           </QueryItem>
+          <QueryItem label={t('movieModal.reReleaseFilter.label')}>
+            <Select
+              value={query.hasReRelease}
+              allowClear
+              placeholder={t('movieModal.reReleaseFilter.placeholder')}
+              onChange={(val) => {
+                query.hasReRelease = val
+                setQuery(query)
+              }}
+            >
+              <Select.Option value={1}>{t('movieModal.reReleaseFilter.yes')}</Select.Option>
+              <Select.Option value={0}>{t('movieModal.reReleaseFilter.no')}</Select.Option>
+            </Select>
+          </QueryItem>
         </Query>
 
         <Table
@@ -268,7 +315,7 @@ export function MovieModal(props: modalProps) {
             selectedRowKeys,
             onChange(selectedKeys, selectedRows) {
               setSelectedRowKeys(selectedKeys as number[])
-              setSelectedMovie(selectedRows[0] ? { ...selectedRows[0] } : {})
+              setSelectedMovie(selectedRows[0] ? { ...selectedRows[0], reReleaseId: undefined } : {})
             }
           }}
           pagination={{
@@ -280,6 +327,19 @@ export function MovieModal(props: modalProps) {
               getData(page)
             },
             position: ['bottomCenter']
+          }}
+        />
+
+        <ReReleaseByMovieModal
+          show={reReleaseModalOpen}
+          movieId={reReleaseMovie?.id}
+          movieName={reReleaseMovie?.name}
+          zIndex={(props.zIndex ?? 1000) + 50}
+          onCancel={() => setReReleaseModalOpen(false)}
+          onConfirm={(plan) => {
+            setSelectedMovie((prev: any) => ({ ...(prev || {}), reReleaseId: plan.id }))
+            setReReleaseModalOpen(false)
+            message.success(common('message.save'))
           }}
         />
       </Flex>

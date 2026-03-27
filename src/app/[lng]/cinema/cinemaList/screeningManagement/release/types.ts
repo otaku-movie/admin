@@ -13,6 +13,8 @@ export interface ReleaseFormState {
   endTime?: Dayjs
   subtitleId?: number[]
   movieVersionId?: number
+  /** 重映计划 id（可选） */
+  reReleaseId?: number
   dimensionType?: number
   open?: boolean
   /** 公开方式：立即公开 / 定时公开 */

@@ -6,7 +6,6 @@ import {
   Space,
   Row,
   Input,
-  Image,
   Tag,
   Select,
   Modal,
@@ -16,18 +15,13 @@ import {
 
 import type { TableColumnsType } from 'antd'
 import { status, notFoundImage } from '@/config/index'
-import { useRouter } from 'next/navigation'
 
 import { Query, QueryItem } from '@/components/query'
 import http from '@/api/index'
-import { Movie } from '@/type/api'
 import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '../../layout'
-import { Dict } from '@/components/dict'
-import { processPath } from '@/config/router'
 import { CheckPermission } from '@/components/checkPermission'
 import { showTotal } from '@/utils/pagination'
-import { getMovieList } from '@/api/request/movie'
 import { ReReleaseModal } from '@/dialog/reReleaseModal'
 import { CustomAntImage } from '@/components/CustomAntImage'
 
@@ -37,11 +31,33 @@ interface Query {
 }
 
 export default function Page({ params: { lng } }: PageProps) {
-  const router = useRouter()
-  const [data, setData] = useState<Movie[]>([])
+  type ReReleasePlan = {
+    id: number
+    movieId: number
+    name?: string
+    cover?: string
+    levelName?: string
+    startDate?: string
+    endDate?: string
+    status?: number
+    versionInfo?: string
+    displayNameOverride?: string
+    posterOverride?: string
+  }
+
+  type ReReleaseMovieRow = {
+    movieId: number
+    name?: string
+    cover?: string
+    levelName?: string
+    plans: ReReleasePlan[]
+  }
+
+  const [data, setData] = useState<ReReleaseMovieRow[]>([])
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
   const [query, setQuery] = useState<Partial<Query>>({})
+  const [expandedRowKeys, setExpandedRowKeys] = useState<React.Key[]>([])
   const { t } = useTranslation(lng, 'movie')
   const { t: common } = useTranslation(lng, 'common')
   const [modal, setModal] = useState({
@@ -49,19 +65,40 @@ export default function Page({ params: { lng } }: PageProps) {
     data: {}
   })
 
-  const getData = (page = 1) => {
+  const PAGE_SIZE = 10
+
+  const getData = () => {
     http({
       url: '/movie/reRelease/list',
       method: 'post',
       data: {
-        page,
-        pageSize: 10,
+        page: 1,
+        pageSize: 5000,
         ...query
       }
     }).then((res) => {
-      setData(res.data?.list ?? [])
-      setPage(page)
-      setTotal(res.data.total)
+      const list: ReReleasePlan[] = res.data?.list ?? []
+      const map = new Map<number, ReReleaseMovieRow>()
+      for (const item of list) {
+        if (!item?.movieId) continue
+        const mid = Number(item.movieId)
+        const existing = map.get(mid)
+        if (!existing) {
+          map.set(mid, {
+            movieId: mid,
+            name: item.name,
+            cover: item.cover,
+            levelName: item.levelName,
+            plans: [item]
+          })
+        } else {
+          existing.plans.push(item)
+        }
+      }
+      const grouped = Array.from(map.values()).sort((a, b) => (b.movieId ?? 0) - (a.movieId ?? 0))
+      setData(grouped)
+      setPage(1)
+      setTotal(grouped.length)
     })
   }
 
@@ -69,7 +106,7 @@ export default function Page({ params: { lng } }: PageProps) {
     getData()
   }, [])
 
-  const columns: TableColumnsType<Movie> = [
+  const columns: TableColumnsType<ReReleaseMovieRow> = [
     {
       title: t('table.name'),
       dataIndex: 'name',
@@ -112,83 +149,109 @@ export default function Page({ params: { lng } }: PageProps) {
       }
     },
     {
-      title: t('table.startDate'),
-      width: 150,
-      dataIndex: 'startDate'
+      title: '重映批次',
+      width: 120,
+      dataIndex: 'plans',
+      render: (plans: ReReleasePlan[]) => <span>{plans?.length ?? 0}</span>
     },
-    {
-      title: t('table.endDate'),
-      width: 150,
-      dataIndex: 'endDate'
-    },
-    // {
-    //   title: t('table.status'),
-    //   width: 150,
-    //   dataIndex: '',
-    //   render(_, row) {
-    //     return <Dict code={row.status} name={'releaseStatus'}></Dict>
-    //   }
-    // },
     {
       title: t('table.action'),
       key: 'operation',
       fixed: 'right',
-      width: 150,
+      width: 120,
       render: (_, row) => {
+        const expanded = expandedRowKeys.includes(row.movieId)
         return (
-          <Space align="center">
-            {/* <CheckPermission code="movie.save">
-              <Button
-                type="primary"
-                onClick={() => {
-                  router.push(
-                    processPath('movieDetail', {
-                      id: row.id
-                    })
-                  )
-                }}
-              >
-                {common('button.edit')}
-              </Button>
-            </CheckPermission> */}
-
-            {/* <CheckPermission code="movie.remove"> */}
-            <Button
-              type="primary"
-              danger
-              onClick={() => {
-                Modal.confirm({
-                  title: common('button.remove'),
-                  content: t('message.remove.content'),
-                  onCancel() {
-                    console.log('Cancel')
-                  },
-                  onOk() {
-                    return new Promise((resolve, reject) => {
-                      http({
-                        url: 'movie/reRelease/remove',
-                        method: 'delete',
-                        params: {
-                          id: row.id
-                        }
-                      })
-                        .then(() => {
-                          message.success(t('message.remove.success'))
-                          getData()
-                          resolve(true)
-                        })
-                        .catch(reject)
-                    })
-                  }
-                })
-              }}
-            >
-              {common('button.remove')}
-            </Button>
-            {/* </CheckPermission> */}
-          </Space>
+          <Button
+            onClick={() => {
+              setExpandedRowKeys((prev) => {
+                const set = new Set(prev)
+                if (set.has(row.movieId)) set.delete(row.movieId)
+                else set.add(row.movieId)
+                return Array.from(set)
+              })
+            }}
+          >
+            {expanded ? common('button.cancel') : common('button.detail')}
+          </Button>
         )
       }
+    }
+  ]
+
+  const planColumns: TableColumnsType<ReReleasePlan> = [
+    { title: t('table.startDate'), dataIndex: 'startDate', width: 120 },
+    { title: t('table.endDate'), dataIndex: 'endDate', width: 120 },
+    {
+      title: t('table.reReleaseEnabled'),
+      dataIndex: 'status',
+      width: 100,
+      render: (v) => (
+        <Tag color={Number(v) === 1 ? 'green' : 'default'}>{Number(v) === 1 ? '启用' : '停用'}</Tag>
+      )
+    },
+    { title: t('table.reReleaseVersionInfo'), dataIndex: 'versionInfo', width: 220, ellipsis: true },
+    { title: t('table.reReleaseDisplayNameOverride'), dataIndex: 'displayNameOverride', width: 220, ellipsis: true },
+    {
+      title: t('table.reReleasePosterOverride'),
+      dataIndex: 'posterOverride',
+      width: 120,
+      render: (v) =>
+        v ? (
+          <CustomAntImage
+            width={60}
+            src={v}
+            alt="poster"
+            fallback={notFoundImage}
+            placeholder={true}
+            style={{ borderRadius: '4px', objectFit: 'cover' }}
+          />
+        ) : (
+          <span style={{ color: '#999' }}>—</span>
+        )
+    },
+    {
+      title: t('table.action'),
+      key: 'op',
+      fixed: 'right',
+      width: 140,
+      render: (_, p) => (
+        <Space>
+          <Button
+            size="small"
+            onClick={() => setModal({ show: true, data: p as any })}
+          >
+            {common('button.edit')}
+          </Button>
+          <Button
+            size="small"
+            danger
+            onClick={() => {
+              Modal.confirm({
+                title: common('button.remove'),
+                content: t('message.remove.content'),
+                onOk() {
+                  return new Promise((resolve, reject) => {
+                    http({
+                      url: 'movie/reRelease/remove',
+                      method: 'delete',
+                      params: { id: p.id }
+                    })
+                      .then(() => {
+                        message.success(t('message.remove.success'))
+                        getData()
+                        resolve(true)
+                      })
+                      .catch(reject)
+                  })
+                }
+              })
+            }}
+          >
+            {common('button.remove')}
+          </Button>
+        </Space>
+      )
     }
   ]
 
@@ -254,7 +317,22 @@ export default function Page({ params: { lng } }: PageProps) {
 
         <Table
           columns={columns}
-          dataSource={data}
+          dataSource={data.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)}
+          rowKey="movieId"
+          expandable={{
+            expandedRowKeys,
+            onExpandedRowsChange: (keys) => setExpandedRowKeys(keys as React.Key[]),
+            expandedRowRender: (row) => (
+              <Table
+                columns={planColumns}
+                dataSource={row.plans}
+                rowKey="id"
+                pagination={false}
+                size="small"
+                scroll={{ x: planColumns.reduce((acc, c) => acc + (c.width as number), 0) }}
+              />
+            )
+          }}
           bordered={true}
           scroll={{
             x: columns.reduce(
@@ -264,12 +342,12 @@ export default function Page({ params: { lng } }: PageProps) {
           }}
           sticky={{ offsetHeader: -20 }}
           pagination={{
-            pageSize: 10,
+            pageSize: PAGE_SIZE,
             current: page,
             total,
             showTotal,
             onChange(page) {
-              getData(page)
+              setPage(page)
             },
             position: ['bottomCenter']
           }}
@@ -291,7 +369,7 @@ export default function Page({ params: { lng } }: PageProps) {
           })
           getData()
         }}
-        type={'create'}
+        type={modal.data && Object.keys(modal.data).length ? 'edit' : 'create'}
       ></ReReleaseModal>
     </section>
   )

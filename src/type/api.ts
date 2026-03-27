@@ -72,6 +72,7 @@ export interface Movie {
   versionCode?: number
   dubbingStartDate?: string
   dubbingEndDate?: string
+  hasReRelease?: boolean
 }
 
 export interface user {

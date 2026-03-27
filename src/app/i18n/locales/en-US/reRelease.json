@@ -21,10 +21,31 @@
         "label": "Movie Name",
         "required": "Please select a movie"
       },
+      "status": {
+        "label": "Enabled",
+        "enabled": "Enabled",
+        "disabled": "Disabled"
+      },
       "showTime": {
         "label": "Start Time",
         "required": "Please select screening time",
         "startAfterEnd": "End time must be later than start time"
+      },
+      "versionInfo": {
+        "label": "Re-release Version Info",
+        "placeholder": "e.g. Special edition / Limited screening (optional)"
+      },
+      "displayNameOverride": {
+        "label": "Display Name Override",
+        "placeholder": "Leave empty to use the movie name (optional)"
+      },
+      "posterOverride": {
+        "label": "Poster Override",
+        "placeholder": "Image URL; leave empty to use the movie poster (optional)"
+      },
+      "timeOverride": {
+        "label": "Duration Override (min)",
+        "placeholder": "Leave empty to use the movie duration (optional)"
       }
     }
   }

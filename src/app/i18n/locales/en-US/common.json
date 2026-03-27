@@ -210,6 +210,7 @@
   "button": {
     "add": "Add",
     "edit": "Edit",
+    "detail": "Detail",
     "dictDetail": "Dictionary Detail",
     "remove": "Remove",
     "save": "Save",
@@ -226,6 +227,8 @@
     "configAisle": "Configure Aisle",
     "configArea": "Configure Area",
     "cancel": "Cancel",
+    "ok": "OK",
+    "clear": "Clear",
     "prev": "Previous",
     "next": "Next",
     "select": "Select",

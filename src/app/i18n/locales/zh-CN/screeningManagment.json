@@ -4,6 +4,7 @@
   "addShowTime": "添加场次",
   "selectDate": "选择日期",
   "pageTitle": "排期管理",
+  "reReleaseTag": "重映",
   "table": {
     "seatSelectRate": "座位选择比例",
     "open": "公开",
