@@ -1,59 +1,51 @@
 'use client'
-import React, { useState, useEffect } from 'react'
-import {
-  Table,
-  Button,
-  Image,
-  Space,
-  Input,
-  Row,
-  message,
-  Modal,
-  Tag,
-  Select
-} from 'antd'
+import React, { useEffect, useState } from 'react'
+import { Table, Button, Space, Row, message, Modal, Tag, Tabs } from 'antd'
 import type { TableColumnsType } from 'antd'
+import { useRouter } from 'next/navigation'
 import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '../layout'
 import http from '@/api'
-import { Query, QueryItem } from '@/components/query'
-import UserModal from '@/dialog/userModal'
-import { ConfigUserRoleModal } from '@/dialog/configUserRoleModal'
-import { CheckPermission } from '@/components/checkPermission'
 import { showTotal } from '@/utils/pagination'
 
 interface Query {
   platform: string
 }
 
-export default function Page({ params: { lng } }: Readonly<PageProps>) {
-  const [modal, setModal] = useState({
-    type: 'create',
-    show: false,
-    data: {}
-  })
-  const [configUserRoleModal, setConfigUserRoleModal] = useState({
-    type: 'create',
-    show: false,
-    data: {}
-  })
-  const [data, setData] = useState([])
+interface AppVersionRow {
+  id: number
+  platform: 'IOS' | 'Android'
+  versionName: string
+  buildNumber: number
+  isForceUpdate?: boolean
+  minSupportedVersion?: string
+  isLatest?: boolean
+  releasePercent?: number
+  createTime?: string
+}
+
+export default function Page ({ params: { lng } }: Readonly<PageProps>) {
+  const router = useRouter()
+  const [data, setData] = useState<AppVersionRow[]>([])
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
   const [query, setQuery] = useState<Partial<Query>>({})
   const { t } = useTranslation(lng, 'appVersionList')
   const { t: common } = useTranslation(lng, 'common')
+  const [activePlatformTab, setActivePlatformTab] = useState<string>('ALL')
 
-  const getData = (page = 1) => {
+  const getData = (page = 1, queryOverride?: Partial<Query>) => {
+    const requestQuery = { ...(queryOverride ?? query) }
+    if (!requestQuery.platform) delete requestQuery.platform
     http({
       url: 'admin/app/versionList',
       method: 'post',
       data: {
         page,
         pageSize: 10,
-        ...query
+        ...requestQuery
       }
-    }).then((res) => {
+    }).then(res => {
       setData(res.data.list)
       setPage(page)
       setTotal(res.data.total)
@@ -64,18 +56,37 @@ export default function Page({ params: { lng } }: Readonly<PageProps>) {
     getData()
   }, [])
 
-  const columns: TableColumnsType = [
+  const columns: TableColumnsType<AppVersionRow> = [
     {
       title: t('table.platform'),
-      dataIndex: 'platform'
+      dataIndex: 'platform',
+      render: v => <Tag>{v}</Tag>
     },
     {
       title: t('table.version'),
-      dataIndex: 'version'
+      dataIndex: 'versionName',
+      sorter: (a, b) => (a.buildNumber || 0) - (b.buildNumber || 0),
+      defaultSortOrder: 'descend'
     },
     {
-      title: t('table.changeLog'),
-      dataIndex: 'changeLog'
+      title: t('table.buildNumber'),
+      dataIndex: 'buildNumber'
+    },
+    {
+      title: t('table.forceUpdate'),
+      dataIndex: 'isForceUpdate',
+      render: v =>
+        v ? <Tag color='red'>{t('value.yes')}</Tag> : <Tag>{t('value.no')}</Tag>
+    },
+    {
+      title: t('table.minSupportedVersion'),
+      dataIndex: 'minSupportedVersion',
+      render: v => v || '-'
+    },
+    {
+      title: t('table.isLatest'),
+      dataIndex: 'isLatest',
+      render: v => (v ? <Tag color='blue'>{t('value.latest')}</Tag> : '-')
     },
     {
       title: t('table.createTime'),
@@ -85,67 +96,55 @@ export default function Page({ params: { lng } }: Readonly<PageProps>) {
       title: t('table.action'),
       key: 'operation',
       fixed: 'right',
-      width: 200,
-      render: (_, row) => {
+      width: 320,
+      render: (_, row: AppVersionRow) => {
         return (
           <Space>
-            <CheckPermission code="user.save">
+            <Button
+              onClick={() => {
+                router.push(`/${lng}/appVersionList/versionDetail?id=${row.id}`)
+              }}
+            >
+              {common('button.edit')}
+            </Button>
+            {!row.isLatest && (
               <Button
-                type="primary"
+                type='primary'
                 onClick={() => {
-                  // http({
-                  //   url: 'user/detail',
-                  //   method: 'get',
-                  //   params: {
-                  //     id: row.id
-                  //   }
-                  // }).then((res) => {
-                  //   setModal({
-                  //     ...modal,
-                  //     data: res.data,
-                  //     type: 'edit',
-                  //     show: true
-                  //   })
-                  // })
+                  http({
+                    url: 'admin/app/version/setLatest',
+                    method: 'post',
+                    data: { id: row.id }
+                  }).then(() => {
+                    message.success(t('message.setLatestSuccess'))
+                    getData(page)
+                  })
                 }}
               >
-                {common('button.edit')}
+                {t('button.setLatest')}
               </Button>
-            </CheckPermission>
-            <CheckPermission code="user.remove">
-              <Button
-                type="primary"
-                danger
-                onClick={() => {
-                  // Modal.confirm({
-                  //   title: common('button.remove'),
-                  //   content: t('message.remove.content'),
-                  //   onCancel() {
-                  //     console.log('Cancel')
-                  //   },
-                  //   onOk() {
-                  //     return new Promise((resolve, reject) => {
-                  //       http({
-                  //         url: 'admin/user/remove',
-                  //         method: 'delete',
-                  //         params: {
-                  //           id: row.id
-                  //         }
-                  //       })
-                  //         .then(() => {
-                  //           message.success(t('message.remove.success'))
-                  //           getData()
-                  //           resolve(true)
-                  //         })
-                  //         .catch(reject)
-                  //     })
-                  //   }
-                  // })
-                }}
-              >
-                {common('button.remove')}
-              </Button>
-            </CheckPermission>
+            )}
+            <Button
+              danger
+              onClick={() => {
+                Modal.confirm({
+                  title: common('button.remove'),
+                  content: t('message.remove.content'),
+                  onOk () {
+                    return http({
+                      url: 'admin/app/version/remove',
+                      method: 'delete',
+                      params: { id: row.id }
+                    }).then(() => {
+                      message.success(t('message.remove.success'))
+                      getData(page)
+                    })
+                  }
+                })
+              }}
+            >
+              {common('button.remove')}
+            </Button>
           </Space>
         )
       }
@@ -157,97 +156,60 @@ export default function Page({ params: { lng } }: Readonly<PageProps>) {
       style={{
         display: 'flex',
         flexDirection: 'column',
-        gap: '30px'
+        gap: '16px'
       }}
     >
-      <Row justify="end">
-        <CheckPermission code="user.save">
-          <Button
-            onClick={() => {
-              setModal({
-                ...modal,
-                data: {},
-                type: 'create',
-                show: true
-              })
-            }}
-          >
-            {common('button.add')}
-          </Button>
-        </CheckPermission>
+      <Row justify='end'>
+        <Button
+          onClick={() => {
+            router.push(`/${lng}/appVersionList/versionDetail`)
+          }}
+        >
+          {common('button.add')}
+        </Button>
       </Row>
-      <Query
-        onSearch={() => {
-          getData()
-        }}
-      >
-        <QueryItem label={t('table.platform')} column={1}>
-          <Select
-            value={query.platform}
-            allowClear
-            onChange={(e) => {
-              setQuery({
-                ...query,
-                platform: e
-              })
-            }}
-          >
-            <Select.Option value="Android">Android</Select.Option>
-            <Select.Option value="IOS">IOS</Select.Option>
-          </Select>
-        </QueryItem>
-      </Query>
-      <Table
-        columns={columns}
-        dataSource={data}
-        bordered={true}
-        pagination={{
-          pageSize: 10,
-          current: page,
-          total,
-          showTotal,
-          onChange(page) {
-            getData(page)
-          },
-          position: ['bottomCenter']
-        }}
-      />
-      <UserModal
-        type={modal.type as 'create' | 'edit'}
-        show={modal.show}
-        data={modal.data}
-        onCancel={() => {
-          setModal({
-            ...modal,
-            show: false
-          })
-        }}
-        onConfirm={() => {
-          getData()
-          setModal({
-            ...modal,
-            show: false
-          })
-        }}
-      ></UserModal>
-      <ConfigUserRoleModal
-        type={configUserRoleModal.type as 'create' | 'edit'}
-        show={configUserRoleModal.show}
-        data={configUserRoleModal.data}
-        onCancel={() => {
-          setConfigUserRoleModal({
-            ...configUserRoleModal,
-            show: false
-          })
-        }}
-        onConfirm={() => {
-          getData()
-          setConfigUserRoleModal({
-            ...configUserRoleModal,
-            show: false
-          })
-        }}
-      ></ConfigUserRoleModal>
+      <div style={{ background: '#fff', borderRadius: 8, padding: 16 }}>
+        <Row justify='space-between' align='middle'>
+          <Space size={12} align='center'>
+            <Tabs
+              activeKey={activePlatformTab}
+              onChange={key => {
+                setActivePlatformTab(key)
+                const nextPlatform = key === 'ALL' ? '' : key
+                const nextQuery = {
+                  ...query,
+                  platform: nextPlatform
+                }
+                setQuery(nextQuery)
+                getData(1, nextQuery)
+              }}
+              items={[
+                { key: 'ALL', label: t('tab.all') },
+                { key: 'Android', label: t('tab.android') },
+                { key: 'IOS', label: t('tab.ios') }
+              ]}
+              style={{ marginBottom: 0 }}
+            />
+          </Space>
+        </Row>
+        <Table
+          style={{ marginTop: 12 }}
+          columns={columns}
+          dataSource={data}
+          rowKey='id'
+          bordered={true}
+          pagination={{
+            pageSize: 10,
+            current: page,
+            total,
+            showTotal,
+            onChange (page) {
+              getData(page)
+            },
+            position: ['bottomCenter']
+          }}
+        />
+      </div>
     </section>
   )
 }

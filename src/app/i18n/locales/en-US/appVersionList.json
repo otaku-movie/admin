@@ -1,9 +1,54 @@
 {
   "table": {
     "version": "Version",
+    "buildNumber": "Build Number",
     "platform": "Platform",
-    "changeLog": "Change Log",
-    "createTime": "",
+    "forceUpdate": "Force Update",
+    "minSupportedVersion": "Min Supported Version",
+    "isLatest": "Latest",
+    "createTime": "Created At",
     "action": "Action"
+  },
+  "button": {
+    "setLatest": "Set Latest"
+  },
+  "tab": {
+    "all": "All",
+    "android": "Android",
+    "ios": "iOS"
+  },
+  "value": {
+    "yes": "Yes",
+    "no": "No",
+    "latest": "Latest"
+  },
+  "modal": {
+    "title": {
+      "create": "Create Version",
+      "edit": "Edit Version"
+    }
+  },
+  "form": {
+    "platform": "Platform",
+    "versionName": "Version Name",
+    "buildNumber": "Build Number",
+    "minSupportedVersion": "Min Supported Version",
+    "downloadUrl": "Download URL",
+    "releasePercent": "Release Percent(%)",
+    "isForceUpdate": "Force Update",
+    "isLatest": "Set as Latest",
+    "releaseNotes": "Release Notes (Markdown)",
+    "internalNote": "Internal Note",
+    "markdownPlaceholder": "Markdown supported",
+    "editorTab": "Edit",
+    "previewTab": "Preview",
+    "previewEmpty": "Nothing to preview"
+  },
+  "message": {
+    "setLatestSuccess": "Set latest successfully",
+    "remove": {
+      "content": "Confirm delete this version?",
+      "success": "Deleted"
+    }
   }
 }

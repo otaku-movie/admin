@@ -1,9 +1,54 @@
 {
   "table": {
-    "version": "版本",
+    "version": "版本号",
+    "buildNumber": "Build号",
     "platform": "平台",
-    "changeLog": "更新日志",
+    "forceUpdate": "强制更新",
+    "minSupportedVersion": "最低支持版本",
+    "isLatest": "最新版本",
     "createTime": "上架时间",
     "action": "操作"
+  },
+  "button": {
+    "setLatest": "设为最新"
+  },
+  "tab": {
+    "all": "全部",
+    "android": "Android",
+    "ios": "iOS"
+  },
+  "value": {
+    "yes": "是",
+    "no": "否",
+    "latest": "最新"
+  },
+  "modal": {
+    "title": {
+      "create": "新增版本",
+      "edit": "编辑版本"
+    }
+  },
+  "form": {
+    "platform": "平台",
+    "versionName": "版本号",
+    "buildNumber": "Build号",
+    "minSupportedVersion": "最低支持版本",
+    "downloadUrl": "下载地址",
+    "releasePercent": "灰度比例(%)",
+    "isForceUpdate": "强制更新",
+    "isLatest": "设为最新",
+    "releaseNotes": "更新日志（Markdown）",
+    "internalNote": "内部日志",
+    "markdownPlaceholder": "支持 Markdown 文本",
+    "editorTab": "编辑",
+    "previewTab": "预览",
+    "previewEmpty": "暂无预览内容"
+  },
+  "message": {
+    "setLatestSuccess": "设置最新版本成功",
+    "remove": {
+      "content": "确认删除该版本吗？",
+      "success": "删除成功"
+    }
   }
 }

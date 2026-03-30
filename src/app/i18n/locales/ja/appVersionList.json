@@ -1,9 +1,54 @@
 {
   "table": {
     "version": "バージョン",
+    "buildNumber": "ビルド番号",
     "platform": "プラットフォーム",
-    "changeLog": "",
-    "createTime": "",
+    "forceUpdate": "強制更新",
+    "minSupportedVersion": "最低サポート版",
+    "isLatest": "最新",
+    "createTime": "作成時間",
     "action": "操作"
+  },
+  "button": {
+    "setLatest": "最新に設定"
+  },
+  "tab": {
+    "all": "すべて",
+    "android": "Android",
+    "ios": "iOS"
+  },
+  "value": {
+    "yes": "はい",
+    "no": "いいえ",
+    "latest": "最新"
+  },
+  "modal": {
+    "title": {
+      "create": "バージョン追加",
+      "edit": "バージョン編集"
+    }
+  },
+  "form": {
+    "platform": "プラットフォーム",
+    "versionName": "バージョン名",
+    "buildNumber": "ビルド番号",
+    "minSupportedVersion": "最低サポート版",
+    "downloadUrl": "ダウンロードURL",
+    "releasePercent": "リリース割合(%)",
+    "isForceUpdate": "強制更新",
+    "isLatest": "最新として設定",
+    "releaseNotes": "更新ログ（Markdown）",
+    "internalNote": "内部ログ",
+    "markdownPlaceholder": "Markdown入力対応",
+    "editorTab": "編集",
+    "previewTab": "プレビュー",
+    "previewEmpty": "プレビュー内容がありません"
+  },
+  "message": {
+    "setLatestSuccess": "最新バージョンに設定しました",
+    "remove": {
+      "content": "このバージョンを削除しますか？",
+      "success": "削除しました"
+    }
   }
 }
