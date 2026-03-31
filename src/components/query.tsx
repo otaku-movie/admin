@@ -1,6 +1,7 @@
 import React, {
   useState,
   useEffect,
+  useMemo,
   useRef,
   createContext,
   useContext
@@ -100,12 +101,6 @@ export function Query(props: QueryProps) {
   const children = React.Children.toArray(
     props.children
   ) as unknown as React.ReactElement<QueryItemProps>[]
-  const [totalSpan, setTotalSpan] = useState(
-    children.reduce(
-      (total, current) => total + ((current.props?.column || 1) * row) / column,
-      0
-    )
-  )
 
   const { t } = useTranslation(
     globalThis?.navigator?.language as languageType,
@@ -154,21 +149,28 @@ export function Query(props: QueryProps) {
     return result as keyof Option
   }
 
-  const collapse = (column = 3): React.ReactElement<QueryItemProps>[] => {
+  const { rowChildren, totalSpan } = useMemo(() => {
+    const colCount = childrenColumn
     if (expand) {
-      return children.map((node) => {
-        return React.cloneElement(node, {
+      const rows = children.map((node) =>
+        React.cloneElement(node, {
           show: true
         })
-      })
+      )
+      const ts = rows.reduce(
+        (total, current) =>
+          total + ((current.props?.column || 1) * row) / colCount,
+        0
+      )
+      return { rowChildren: rows, totalSpan: ts }
     }
 
-    const arr = []
+    const arr: React.ReactElement<QueryItemProps>[] = []
     let init = 0
 
     for (const element of children) {
       const node = element
-      const span = ((node.props?.column || 1) * row) / column
+      const span = ((node.props?.column || 1) * row) / colCount
       const newNode = React.cloneElement(node, {
         show: init < max
       })
@@ -176,31 +178,25 @@ export function Query(props: QueryProps) {
 
       arr.push(newNode)
     }
-    // 是否显示展开折叠
-    const result = arr.reduce(
-      (total, current) => total + ((current.props?.column || 1) * row) / column,
+    const ts = arr.reduce(
+      (total, current) =>
+        total + ((current.props?.column || 1) * row) / colCount,
       0
     )
-    setTotalSpan(result)
-
-    return arr
-  }
+    return { rowChildren: arr, totalSpan: ts }
+  }, [expand, childrenColumn, children, max, row])
 
   useEffect(() => {
-    if (container.current) {
-      const observer = new ResizeObserver((entries) => {
-        const target = entries[0].target as HTMLElement
-        const size = getColumn(target.offsetWidth)
-
-        setRenderChildren(collapse(autoCol[size]))
-        setChildrenColumn(autoCol[size])
-      })
-      observer.observe(container.current as HTMLElement)
-    } else {
-      setRenderChildren([...collapse()])
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [expand, renderChildren, props.onClear])
+    const el = container.current as HTMLElement | null
+    if (!el) return
+    const observer = new ResizeObserver((entries) => {
+      const target = entries[0].target as HTMLElement
+      const size = getColumn(target.offsetWidth)
+      setChildrenColumn(autoCol[size])
+    })
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
 
   return (
     <section
@@ -222,8 +218,16 @@ export function Query(props: QueryProps) {
           style={formStyle}
           // initialValues={props.initialValues}
           onFinish={onFinish}
+          onKeyDown={(e) => {
+            // IME（中文/日文等）在候选确认时会触发 Enter；避免把 Enter 当成提交导致输入被打断
+            const ne: any = (e as any).nativeEvent
+            if (e.key === 'Enter' && ne?.isComposing) {
+              e.preventDefault()
+              e.stopPropagation()
+            }
+          }}
         >
-          <Row gutter={row}>{renderChildren}</Row>
+          <Row gutter={row}>{rowChildren}</Row>
 
           <div style={{ textAlign: 'right' }}>
             <Space size="small">

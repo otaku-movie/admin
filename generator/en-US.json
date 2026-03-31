@@ -228,54 +228,6 @@
     }
   },
   "common.json": {
-    "menu": {
-      "dataChart": "Data Chart",
-      "cinema": {
-        "name": "Cinema Management",
-        "children": {
-          "cinemaList": "Cinema List",
-          "cinemaDetail": "Cinema Details",
-          "theaterHall": "Theater Hall List",
-          "specList": "Specification List",
-          "ticketType": "Movie Ticket Types",
-          "brandList": "Brand List"
-        }
-      },
-      "movie": {
-        "name": "Movie Management",
-        "children": {
-          "movieList": "Movie List",
-          "characterList": "Character List",
-          "staffList": "Staff List",
-          "positionList": "Position List",
-          "levelList": "Level List",
-          "movieDetail": "Movie Details",
-          "commentList": "Comment List",
-          "replyList": "Reply List",
-          "tagList": "Tag List",
-          "languageList": "Language List"
-        }
-      },
-      "showTime": {
-        "name": "Showtime Management",
-        "children": {
-          "showTimeList": "Movie Showtime List",
-          "showTimeTag": "Showtime Tag List"
-        }
-      },
-      "userList": "User List",
-      "dictList": "Dictionary List",
-      "orderList": "Order List",
-      "permission": {
-        "name": "Permission Management",
-        "children": {
-          "roleList": "Role List",
-          "menuList": "Menu List",
-          "buttonList": "Button List",
-          "apiList": "API List"
-        }
-      }
-    },
     "message": {
       "notPermission": "No permission",
       "save": "Saved successfully"

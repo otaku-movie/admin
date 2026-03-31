@@ -80,7 +80,10 @@ export function numberToAlphabet(num: number): string {
 }
 
 export function listToTree<T extends TreeNode<T>>(data: T[]) {
-  const arr = data.filter(item => item.parentId === null).map(item => {
+  // 兼容：历史数据里 root 节点有时会用 0 而不是 NULL
+  const isRoot = (parentId: number | null) => parentId == null || parentId === 0
+
+  const arr = data.filter(item => isRoot(item.parentId)).map(item => {
     return {
       ...item,
       children: null
@@ -100,7 +103,7 @@ export function listToTree<T extends TreeNode<T>>(data: T[]) {
     })
   }
 
-  return fn(data.filter(item => item.parentId !== null), arr)
+  return fn(data.filter(item => !isRoot(item.parentId)), arr)
 }
 
 

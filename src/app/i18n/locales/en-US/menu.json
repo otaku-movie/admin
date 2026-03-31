@@ -1,4 +1,23 @@
 {
+  "detailPanel": {
+    "title": "Details",
+    "placeholder": "Click a menu name in the tree to view details"
+  },
+  "viewMode": {
+    "tree": "Tree",
+    "list": "List"
+  },
+  "sortModal": {
+    "hint": "Drag to reorder menus. Changes apply to the sidebar and permission tree only after you save.",
+    "saveFailed": "Failed to save menu order"
+  },
+  "buttonPanel": {
+    "columnName": "Button name",
+    "columnI18nKey": "i18n key",
+    "columnApiCode": "API code",
+    "columnAction": "Actions",
+    "empty": "No buttons yet"
+  },
   "table": {
     "name": "Page Name",
     "i18nKey": "Internationalization Key",
@@ -11,9 +30,13 @@
     "remove": {
       "content": "Are you sure you want to delete the current menu? This action cannot be undone.",
       "success": "Deletion successful"
+    },
+    "buttonRemove": {
+      "content": "Delete this button?"
     }
   },
   "modal": {
+    "currentMenuName": "Current menu name",
     "title": {
       "create": "Add Menu",
       "edit": "Edit Menu"

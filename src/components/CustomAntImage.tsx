@@ -9,18 +9,25 @@ export interface CustomAntImageProps extends ImageProps {}
 
 export function CustomAntImage(props: CustomAntImageProps) {
   const url = getURL(props.src as string)
+  const { style, onError, preview = false, ...rest } = props
+  const mergedStyle: React.CSSProperties = {
+    maxWidth: '100%',
+    ...(rest.width == null && rest.height == null ? { height: 'auto' } : {}),
+    ...style
+  }
 
   return (
     // eslint-disable-next-line jsx-a11y/alt-text
     <Image
-      {...props}
+      {...rest}
       src={url}
       fallback={notFoundImage}
       onError={(e) => {
         e.currentTarget.src = notFoundImage
+        onError?.(e)
       }}
-      style={{ maxWidth: '100%', height: 'auto' }}
-      preview={false}
+      style={mergedStyle}
+      preview={preview}
     ></Image>
   )
 }

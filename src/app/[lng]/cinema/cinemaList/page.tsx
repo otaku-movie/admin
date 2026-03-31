@@ -114,7 +114,7 @@ export default function Page ({ params: { lng } }: PageProps) {
       key: 'operation',
       fixed: 'right',
       align: 'center',
-      width: 360,
+      width: 300,
       render: (_, row) => {
         return (
           <Flex wrap='wrap' gap={8} style={{ width: '100%' }}>
@@ -147,7 +147,7 @@ export default function Page ({ params: { lng } }: PageProps) {
             >
               {common('button.cinemaList.screeningManagement')}
             </Button>
-            <Button
+            {/* <Button
               onClick={() => {
                 router.push(
                   processPath({
@@ -161,7 +161,7 @@ export default function Page ({ params: { lng } }: PageProps) {
               }}
             >
               {common('button.promotion')}
-            </Button>
+            </Button> */}
             <Button
               onClick={() => {
                 router.push(

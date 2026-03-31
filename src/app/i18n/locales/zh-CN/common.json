@@ -26,67 +26,115 @@
   "homePage": {
     "logout": "退出登录"
   },
-  "menu": {
-    "appVersionList": "应用版本管理",
-    "dataChart": "数据图表",
-    "cinema": {
+  "menu2": {
+    "operationsCenter": {
+      "name": "运营中心",
+      "children": {
+        "showTimeManagement": {
+          "name": "场次管理",
+          "children": {
+            "showTimeList": "场次列表",
+            "showTimeTagList": "场次标签管理"
+          }
+        },
+        "benefitManagement": "入场者特典管理",
+        "benefitList": "入场者特典列表",
+        "benefitDetail": "入场者特典详情",
+        "presale": "预售管理",
+        "presaleDetail": "预售票详情",
+        "orderManagement": {
+          "name": "订单管理",
+          "children": {
+            "orderList": "订单列表",
+            "orderDetail": "订单详情",
+            "refundList": "退款列表"
+          }
+        }
+      }
+    },
+    "contentManagement": {
+      "name": "内容管理",
+      "children": {
+        "movieManagement": {
+          "name": "电影管理",
+          "children": {
+            "movieList": "电影列表",
+            "movieDetail": "电影详情",
+            "reReleaseList": "重映列表"
+          }
+        },
+        "commentManagement": {
+          "name": "评论管理",
+          "children": {
+            "commentList": "评论列表",
+            "replyList": "回复列表"
+          }
+        },
+        "staffManagement": {
+          "name": "演职员管理",
+          "children": {
+            "staffList": "演职员列表",
+            "positionList": "职位列表",
+            "characterList": "角色列表"
+          }
+        },
+        "attributeConfig": {
+          "name": "属性配置",
+          "children": {
+            "levelList": "分级管理",
+            "tagList": "标签管理",
+            "languageList": "语言管理"
+          }
+        }
+      }
+    },
+    "cinemaManagement": {
       "name": "影院管理",
       "children": {
         "cinemaList": "影院列表",
         "cinemaDetail": "影院详情",
         "theaterHall": "影厅列表",
-        "specList": "规格列表",
+        "benefitList": "入场者特典",
         "ticketType": "电影票类型",
+        "specList": "规格列表",
         "brandList": "品牌列表",
         "screeningManagement": "上映场次管理",
         "screeningManagementRelease": "发布场次",
         "promotion": "促销设置",
-        "promotionDetail": "促销详情",
-        "benefitList": "入场者特典"
+        "promotionDetail": "促销详情"
       }
     },
-    "movie": {
-      "name": "电影管理",
+    "dataCenter": {
+      "name": "数据中心",
       "children": {
-        "reReleaseList": "重映列表",
-        "movieList": "电影列表",
-        "characterList": "角色列表",
-        "staffList": "演职员列表",
-        "positionList": "职位列表",
-        "levelList": "分级列表",
-        "movieDetail": "电影详情",
-        "commentList": "评论列表",
-        "replyList": "回复列表",
-        "tagList": "标签列表",
-        "languageList": "语言列表",
-        "benefitList": "入场者特典",
-        "benefitDetail": "特典详情"
+        "dataChart": "数据中心"
       }
     },
-    "showTime": {
-      "name": "场次管理",
+    "systemManagement": {
+      "name": "系统设置",
       "children": {
-        "showTimeList": "电影场次列表",
-        "showTimeTag": "场次标签列表"
-      }
-    },
-    "pricingStrategy": {
-      "name": "预售票管理",
-      "children": {
-        "presale": "预售票",
-        "presaleDetail": "预售票详情"
-      }
-    },
-    "userList": "用户列表",
-    "dictList": "字典列表",
-    "orderList": "订单列表",
-    "permission": {
-      "name": "权限管理",
-      "children": {
-        "roleList": "角色列表",
-        "menuList": "菜单列表",
-        "buttonList": "按钮列表",
-        "apiList": "接口列表"
+        "permissionManagement": {
+          "name": "权限管理",
+          "children": {
+            "role": "角色管理",
+            "menu": "菜单管理",
+            "button": "按钮管理"
+          }
+        },
+        "userManagement": {
+          "name": "用户管理",
+          "children": {
+            "userList": "用户列表"
+          }
+        },
+        "appVersionManagement": {
+          "name": "应用版本管理",
+          "children": {
+            "appVersionList": "应用版本列表",
+            "appVersionDetail": "应用版本详情"
+          }
+        },
+        "dictList": "字典管理"
       }
     }
   },
@@ -207,11 +255,15 @@
   },
   "button": {
     "add": "添加",
+    "addSubMenu": "添加子菜单",
     "edit": "编辑",
     "detail": "详情",
     "dictDetail": "字典详情",
     "remove": "删除",
     "save": "保存",
+    "sort": "调整排序",
+    "pageButtons": "页面按钮",
+    "manage": "按钮管理",
     "login": "登录",
     "ticketType": "电影票类型",
     "theaterHallDetail": "影厅详情",

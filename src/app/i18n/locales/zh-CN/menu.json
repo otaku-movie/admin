@@ -1,4 +1,23 @@
 {
+  "detailPanel": {
+    "title": "详情",
+    "placeholder": "在左侧树中点击菜单名称查看详情"
+  },
+  "viewMode": {
+    "tree": "树形",
+    "list": "列表"
+  },
+  "sortModal": {
+    "hint": "拖拽调整菜单顺序，保存后才会应用到左侧导航与权限树。",
+    "saveFailed": "保存排序失败"
+  },
+  "buttonPanel": {
+    "columnName": "按钮名称",
+    "columnI18nKey": "国际化Key",
+    "columnApiCode": "接口 code",
+    "columnAction": "操作",
+    "empty": "暂无按钮"
+  },
   "table": {
     "name": "页面名称",
     "i18nKey": "国际化key",
@@ -11,9 +30,13 @@
     "remove": {
       "content": "是否确认要删除当前菜单，删除后不可恢复",
       "success": "删除成功"
+    },
+    "buttonRemove": {
+      "content": "确定删除该按钮？"
     }
   },
   "modal": {
+    "currentMenuName": "当前菜单名称",
     "title": {
       "create": "添加菜单",
       "edit": "编辑菜单"

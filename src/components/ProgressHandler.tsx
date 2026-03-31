@@ -31,10 +31,32 @@ export function ProgressHandler() {
       }
     }
 
+    // 监听程序化跳转（router.push/replace 底层会调用 history.pushState/replaceState）
+    const originalPushState = history.pushState
+    const originalReplaceState = history.replaceState
+
+    history.pushState = function (...args) {
+      start()
+      return originalPushState.apply(this, args as any)
+    } as any
+
+    history.replaceState = function (...args) {
+      start()
+      return originalReplaceState.apply(this, args as any)
+    } as any
+
+    const handlePopState = () => {
+      start()
+    }
+
     document.addEventListener('click', handleClick, true)
+    window.addEventListener('popstate', handlePopState)
 
     return () => {
       document.removeEventListener('click', handleClick, true)
+      window.removeEventListener('popstate', handlePopState)
+      history.pushState = originalPushState
+      history.replaceState = originalReplaceState
     }
   }, [start])
 

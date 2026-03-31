@@ -91,6 +91,8 @@ export interface menuItem {
   path: string
   pathName: string
   show: boolean
+  orderNum?: number
+  children?: menuItem[] | null
 }
 
 export type buttonItem = menuItem & {

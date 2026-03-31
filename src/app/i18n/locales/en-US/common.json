@@ -26,70 +26,119 @@
   "homePage": {
     "logout": "logout"
   },
-  "menu": {
-    "appVersionList": "App version Management",
-    "dataChart": "Data Chart",
-    "cinema": {
+  "menu2": {
+    "operationsCenter": {
+      "name": "Operations Center",
+      "children": {
+        "showTime": "Showtime Management",
+        "showTimeManagement": {
+          "name": "Showtime Management",
+          "children": {
+            "showTimeList": "Showtime List",
+            "showTimeTagList": "Showtime Tag Management"
+          }
+        },
+        "benefitManagement": "Attendee Benefit Management",
+        "benefitList": "Benefit Management",
+        "benefitDetail": "Entrance Benefits",
+        "presale": "Presale Management",
+        "presaleDetail": "Presale Ticket Detail",
+        "orderManagement": {
+          "name": "Order Management",
+          "orderList": "Order List",
+          "orderDetail": "Order Detail",
+          "refundList": "Refund List",
+          "children": {
+            "orderList": "Order List",
+            "orderDetail": "Order Detail",
+            "refundList": "Refund List"
+          }
+        }
+      }
+    },
+    "contentManagement": {
+      "name": "Content Management",
+      "children": {
+        "movieManagement": {
+          "name": "Movie Management",
+          "children": {
+            "movieList": "Movie List",
+            "movieDetail": "Movie Detail",
+            "reReleaseList": "Re-release List"
+          }
+        },
+        "commentManagement": {
+          "name": "Comment Management",
+          "children": {
+            "commentList": "Comment List",
+            "replyList": "Reply List"
+          }
+        },
+        "staffManagement": {
+          "name": "Staff Management",
+          "children": {
+            "staffList": "Staff List",
+            "positionList": "Position List",
+            "characterList": "Character List"
+          }
+        },
+        "attributeConfig": {
+          "name": "Attribute Config",
+          "children": {
+            "levelList": "Level Management",
+            "tagList": "Tag Management",
+            "languageList": "Language Management"
+          }
+        }
+      }
+    },
+    "cinemaManagement": {
       "name": "Cinema Management",
       "children": {
         "cinemaList": "Cinema List",
         "cinemaDetail": "Cinema Detail",
         "theaterHall": "Theater Hall List",
-        "specList": "Spec List",
+        "benefitList": "Entrance Benefits",
         "ticketType": "Ticket Type",
+        "specList": "Spec List",
         "brandList": "Brand List",
         "screeningManagement": "Screening Management",
         "screeningManagementRelease": "Release Showtime",
         "promotion": "Promotion",
-        "promotionDetail": "Promotion Detail",
-        "benefitList": "Entrance Benefits"
+        "promotionDetail": "Promotion Detail"
       }
     },
-    "movie": {
-      "name": "Movie Management",
+    "dataCenter": {
+      "name": "Data Center",
       "children": {
-        "reReleaseList": "Re-release List",
-        "movieList": "Movie List",
-        "characterList": "Character List",
-        "staffList": "Staff List",
-        "positionList": "Position List",
-        "levelList": "Level List",
-        "movieDetail": "Movie Detail",
-        "commentList": "Comment List",
-        "replyList": "Reply List",
-        "tagList": "Tag List",
-        "languageList": "Language List",
-        "benefitList": "Entrance Benefits",
-        "benefitDetail": "Benefit Detail"
+        "dataChart": "Data Center"
       }
     },
-    "showTime": {
-      "name": "Showtime Management",
+    "systemManagement": {
+      "name": "System Settings",
       "children": {
-        "showTimeList": "Showtime List",
-        "showTimeTag": "Showtime Tag List"
-      }
-    },
-    "pricingStrategy": {
-      "name": "Presale Management",
-      "children": {
-        "overview": "Overview",
-        "official": "Official / Single Screening",
-        "date": "Specific Date",
-        "weekly": "Weekly Pricing",
-        "presale": "Presale Tickets"
-      }
-    },
-    "userList": "User List",
-    "dictList": "Dictionary List",
-    "orderList": "Order List",
-    "permission": {
-      "name": "Permission Management",
-      "children": {
-        "roleList": "Role List",
-        "menuList": "Menu List",
-        "buttonList": "Button List",
-        "apiList": "API List"
+        "permissionManagement": {
+          "name": "Permission Management",
+          "children": {
+            "role": "Role Management",
+            "menu": "Menu Management",
+            "button": "Button Management"
+          }
+        },
+        "userManagement": {
+          "name": "User Management",
+          "children": {
+            "userList": "User List"
+          }
+        },
+        "appVersionManagement": {
+          "name": "App Version Management",
+          "children": {
+            "appVersionList": "App Version List",
+            "appVersionDetail": "App Version Detail"
+          }
+        },
+        "dictList": "Dictionary Management"
       }
     }
   },
@@ -102,7 +151,8 @@
     "billion": "Billion",
     "million": "Million",
     "thousand": "K",
-    "minute": "Minute"
+    "minute": "Minute",
+    "day": "Day"
   },
   "week": {
     "Monday": "Monday",
@@ -209,11 +259,15 @@
   },
   "button": {
     "add": "Add",
+    "addSubMenu": "Add Sub-menu",
     "edit": "Edit",
     "detail": "Detail",
     "dictDetail": "Dictionary Detail",
     "remove": "Remove",
     "save": "Save",
+    "sort": "Reorder",
+    "pageButtons": "Page Buttons",
+    "manage": "Buttons",
     "login": "Login",
     "ticketType": "Ticket Type",
     "theaterHallDetail": "Theater Hall Detail",

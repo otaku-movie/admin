@@ -1,4 +1,23 @@
 {
+  "detailPanel": {
+    "title": "詳細",
+    "placeholder": "左のツリーでメニュー名をクリックすると詳細が表示されます"
+  },
+  "viewMode": {
+    "tree": "ツリー",
+    "list": "一覧"
+  },
+  "sortModal": {
+    "hint": "ドラッグでメニュー順を変更します。保存後に左ナビと権限ツリーへ反映されます。",
+    "saveFailed": "並び順の保存に失敗しました"
+  },
+  "buttonPanel": {
+    "columnName": "ボタン名",
+    "columnI18nKey": "国際化キー",
+    "columnApiCode": "API code",
+    "columnAction": "操作",
+    "empty": "ボタンはありません"
+  },
   "table": {
     "name": "ページ名称",
     "i18nKey": "国際化キー",
@@ -11,9 +30,13 @@
     "remove": {
       "content": "現在のメニューを削除してもよろしいですか？",
       "success": "削除に成功しました"
+    },
+    "buttonRemove": {
+      "content": "このボタンを削除しますか？"
     }
   },
   "modal": {
+    "currentMenuName": "現在のメニュー名",
     "title": {
       "create": "メニューを追加",
       "edit": "メニューを編集"

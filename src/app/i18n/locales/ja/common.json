@@ -26,67 +26,115 @@
   "homePage": {
     "logout": "ログアウト"
   },
-  "menu": {
-    "appVersionList": "アプリバージョン管理",
-    "dataChart": "データチャート",
-    "cinema": {
+  "menu2": {
+    "operationsCenter": {
+      "name": "運営センター",
+      "children": {
+        "showTimeManagement": {
+          "name": "上映スケジュール管理",
+          "children": {
+            "showTimeList": "上映スケジュール一覧",
+            "showTimeTagList": "上映スケジュールタグ管理"
+          }
+        },
+        "benefitManagement": "入場者特典管理",
+        "benefitList": "特典管理",
+        "benefitDetail": "入場者特典",
+        "presale": "前売管理",
+        "presaleDetail": "前売チケット詳細",
+        "orderManagement": {
+          "name": "注文管理",
+          "children": {
+            "orderList": "注文一覧",
+            "orderDetail": "注文詳細",
+            "refundList": "返金一覧"
+          }
+        }
+      }
+    },
+    "contentManagement": {
+      "name": "コンテンツ管理",
+      "children": {
+        "movieManagement": {
+          "name": "映画管理",
+          "children": {
+            "movieList": "映画リスト",
+            "movieDetail": "映画詳細",
+            "reReleaseList": "再上映リスト"
+          }
+        },
+        "commentManagement": {
+          "name": "コメント管理",
+          "children": {
+            "commentList": "コメント一覧",
+            "replyList": "返信一覧"
+          }
+        },
+        "staffManagement": {
+          "name": "スタッフ管理",
+          "children": {
+            "staffList": "スタッフ一覧",
+            "positionList": "ポジション一覧",
+            "characterList": "キャラクター一覧"
+          }
+        },
+        "attributeConfig": {
+          "name": "属性設定",
+          "children": {
+            "levelList": "レベル管理",
+            "tagList": "タグ管理",
+            "languageList": "言語管理"
+          }
+        }
+      }
+    },
+    "cinemaManagement": {
       "name": "映画館管理",
       "children": {
         "cinemaList": "映画館リスト",
         "cinemaDetail": "映画館詳細",
         "theaterHall": "スクリーンリスト",
-        "specList": "規格リスト",
+        "benefitList": "入場者特典",
         "ticketType": "チケットタイプ",
+        "specList": "規格リスト",
         "brandList": "ブランドリスト",
         "screeningManagement": "上映スケジュール管理",
         "screeningManagementRelease": "上映を公開",
         "promotion": "プロモーション設定",
-        "promotionDetail": "プロモーション詳細",
-        "benefitList": "入場者特典"
+        "promotionDetail": "プロモーション詳細"
       }
     },
-    "movie": {
-      "name": "映画管理",
+    "dataCenter": {
+      "name": "データセンター",
       "children": {
-        "reReleaseList": "再上映リスト",
-        "movieList": "映画リスト",
-        "characterList": "キャラクターリスト",
-        "staffList": "スタッフリスト",
-        "positionList": "ポジションリスト",
-        "levelList": "レベルリスト",
-        "movieDetail": "映画詳細",
-        "commentList": "コメントリスト",
-        "replyList": "返信リスト",
-        "tagList": "タグリスト",
-        "languageList": "言語リスト",
-        "benefitList": "入場者特典",
-        "benefitDetail": "特典詳細"
+        "dataChart": "データセンター"
       }
     },
-    "showTime": {
-      "name": "上映スケジュール管理",
+    "systemManagement": {
+      "name": "システム設定",
       "children": {
-        "showTimeList": "映画上映スケジュールリスト",
-        "showTimeTag": "上映スケジュールタグリスト"
-      }
-    },
-    "pricingStrategy": {
-      "name": "前売券管理",
-      "children": {
-        "presaleDetail": "前売券詳細",
-        "presale": "前売券"
-      }
-    },
-    "userList": "ユーザーリスト",
-    "dictList": "辞書リスト",
-    "orderList": "注文リスト",
-    "permission": {
-      "name": "権限管理",
-      "children": {
-        "roleList": "役割リスト",
-        "menuList": "メニューリスト",
-        "buttonList": "ボタンリスト",
-        "apiList": "APIリスト"
+        "permissionManagement": {
+          "name": "権限管理",
+          "children": {
+            "role": "役割管理",
+            "menu": "メニュー管理",
+            "button": "ボタン管理"
+          }
+        },
+        "userManagement": {
+          "name": "ユーザー管理",
+          "children": {
+            "userList": "ユーザー一覧"
+          }
+        },
+        "appVersionManagement": {
+          "name": "アプリバージョン管理",
+          "children": {
+            "appVersionList": "アプリバージョン一覧",
+            "appVersionDetail": "アプリバージョン詳細"
+          }
+        },
+        "dictList": "辞書管理"
       }
     }
   },
@@ -99,7 +147,8 @@
     "billion": "億",
     "million": "万",
     "thousand": "千",
-    "minute": "分"
+    "minute": "分",
+    "day": "日"
   },
   "week": {
     "Monday": "月",
@@ -206,11 +255,15 @@
   },
   "button": {
     "add": "追加",
+    "addSubMenu": "サブメニュー追加",
     "edit": "編集",
     "detail": "詳細",
     "dictDetail": "辞書詳細",
     "remove": "削除",
     "save": "保存",
+    "sort": "並び替え",
+    "pageButtons": "ページボタン",
+    "manage": "ボタン管理",
     "login": "ログイン",
     "ticketType": "チケットタイプ",
     "theaterHallDetail": "スクリーン詳細",
