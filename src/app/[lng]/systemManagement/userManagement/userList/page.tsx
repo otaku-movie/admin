@@ -19,8 +19,9 @@ import { Query, QueryItem } from '@/components/query'
 import UserModal from '@/dialog/userModal'
 import { ConfigUserRoleModal } from '@/dialog/configUserRoleModal'
 import { CheckPermission } from '@/components/checkPermission'
-import { role } from '@/type/api'
+import { role, type user as UserRow } from '@/type/api'
 import { showTotal } from '@/utils/pagination'
+import { getUserInfo } from '@/utils'
 import { notFoundImage } from '@/config'
 import { CustomAntImage } from '@/components/CustomAntImage'
 
@@ -94,6 +95,37 @@ export default function Page({ params: { lng } }: PageProps) {
       dataIndex: 'email'
     },
     {
+      title: t('table.dataScope'),
+      dataIndex: 'dataScope',
+      render(v: string) {
+        const key = v === 'chain' || v === 'cinema' ? v : 'platform'
+        return t(`dataScope.${key}`)
+      }
+    },
+    {
+      title: t('table.cinemas'),
+      dataIndex: 'cinemaIds',
+      render(_: unknown, row: UserRow) {
+        const names = row.cinemaNames?.length ? row.cinemaNames : []
+        const ids = row.cinemaIds ?? []
+        if (!names.length && !ids.length) {
+          return '—'
+        }
+        const labels =
+          names.length > 0
+            ? names
+            : ids.map((id) => `#${id}`)
+        return (
+          <Space wrap>
+            {labels.slice(0, 6).map((label, i) => (
+              <Tag key={`${label}-${i}`}>{label}</Tag>
+            ))}
+            {labels.length > 6 ? <Tag>+{labels.length - 6}</Tag> : null}
+          </Space>
+        )
+      }
+    },
+    {
       title: t('table.role'),
       dataIndex: 'roles',
       render(data) {
@@ -132,7 +164,7 @@ export default function Page({ params: { lng } }: PageProps) {
                 type="primary"
                 onClick={() => {
                   http({
-                    url: 'user/detail',
+                    url: 'admin/user/detail',
                     method: 'get',
                     params: {
                       id: row.id
@@ -226,18 +258,20 @@ export default function Page({ params: { lng } }: PageProps) {
     >
       <Row justify="end">
         <CheckPermission code="user.save">
-          <Button
-            onClick={() => {
-              setModal({
-                ...modal,
-                data: {},
-                type: 'create',
-                show: true
-              })
-            }}
-          >
-            {common('button.add')}
-          </Button>
+          {(getUserInfo() as { dataScope?: string }).dataScope === 'platform' ? (
+            <Button
+              onClick={() => {
+                setModal({
+                  ...modal,
+                  data: {},
+                  type: 'create',
+                  show: true
+                })
+              }}
+            >
+              {common('button.add')}
+            </Button>
+          ) : null}
         </CheckPermission>
       </Row>
       <Query
@@ -248,22 +282,18 @@ export default function Page({ params: { lng } }: PageProps) {
         <QueryItem label={t('table.name')} column={1}>
           <Input
             allowClear
-            value={query.name}
+            value={query.name ?? ''}
             onChange={(e) => {
-              query.name = e.target.value
-
-              setQuery(query)
+              setQuery({ ...query, name: e.target.value })
             }}
           ></Input>
         </QueryItem>
         <QueryItem label={t('table.email')} column={1}>
           <Input
             allowClear
-            value={query.name}
+            value={query.email ?? ''}
             onChange={(e) => {
-              query.email = e.target.value
-
-              setQuery(query)
+              setQuery({ ...query, email: e.target.value })
             }}
           ></Input>
         </QueryItem>

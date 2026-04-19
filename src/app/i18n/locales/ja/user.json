@@ -3,10 +3,17 @@
     "cover": "画像",
     "name": "ユーザー名",
     "email": "メールアドレス",
+    "dataScope": "データ範囲",
+    "cinemas": "関連映画館",
     "tel": "電話番号",
     "role": "役割",
     "registerTime": "登録時間",
     "action": "操作"
+  },
+  "dataScope": {
+    "platform": "プラットフォーム",
+    "chain": "チェーン",
+    "cinema": "映画館"
   },
   "message": {
     "remove": {
@@ -15,6 +22,18 @@
     }
   },
   "modal": {
+    "steps": {
+      "dataPermission": "データ権限",
+      "account": "アカウント",
+      "preview": "内容確認",
+      "security": "安全確認"
+    },
+    "preview": {
+      "title": "内容をご確認ください",
+      "hint": "問題なければ「次へ」を押してメール認証コードを取得し、最終ステップでコードを入力して送信してください。",
+      "passwordChange": "入力した新しいパスワードに更新します",
+      "passwordKeep": "ログインパスワードは変更しません"
+    },
     "title": {
       "create": "ユーザーの追加",
       "edit": "ユーザーの編集"
@@ -53,6 +72,30 @@
         "label": "認証コード",
         "required": "認証コードを入力してください",
         "length": "認証コードは6桁でなければなりません"
+      },
+      "dataScope": {
+        "label": "データ範囲",
+        "required": "データ範囲を選択してください"
+      },
+      "brand": {
+        "label": "所属ブランド",
+        "required": "チェーンユーザーはブランドを選択してください",
+        "placeholder": "ブランドを選択"
+      },
+      "cinemas": {
+        "label": "管理対象映画館",
+        "required": "1件以上選択してください",
+        "pickRegionHint": "上で地域を選んでから、映画館を選択してください"
+      },
+      "cinemaRegion": {
+        "label": "地域",
+        "placeholder": "先に地域を選択（必須）",
+        "requiredFirst": "先に地域を選んでから映画館を選択してください",
+        "hydrateFallback": "映画館の地域を取得できませんでした。手動で地域を選んでください。紐付け済みの映画館は保持されます。"
+      },
+      "cinemaBrand": {
+        "label": "ブランドで絞り込み",
+        "placeholder": "ブランドで一覧を絞る（任意）"
       }
     }
   }

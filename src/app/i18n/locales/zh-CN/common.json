@@ -26,6 +26,10 @@
   "homePage": {
     "logout": "退出登录"
   },
+  "header": {
+    "myCinemas": "我的影院",
+    "myBrand": "我的院线"
+  },
   "menu2": {
     "operationsCenter": {
       "name": "运营中心",

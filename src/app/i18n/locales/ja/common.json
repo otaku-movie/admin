@@ -26,6 +26,10 @@
   "homePage": {
     "logout": "ログアウト"
   },
+  "header": {
+    "myCinemas": "担当映画館",
+    "myBrand": "担当チェーン"
+  },
   "menu2": {
     "operationsCenter": {
       "name": "運営センター",

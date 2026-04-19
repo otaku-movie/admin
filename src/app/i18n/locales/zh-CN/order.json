@@ -10,7 +10,7 @@
     "payMethod": "支付方式",
     "payTime": "支付时间",
     "payState": "支付状态",
-    "payTotal": "支付总价",
+    "payTotal": "支付金额",
     "orderTime": "订单创建时间",
     "orderState": "订单状态",
     "orderTotal": "订单总价",

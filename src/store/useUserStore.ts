@@ -82,7 +82,7 @@ export const useUserStore = create<userInfoStore>((set, get) => {
     },
     async login (query: Query) {
       const userInfo = await http({
-        url: 'user/login',
+        url: 'admin/user/login',
         method: 'post',
         data: query
       })

@@ -3,10 +3,17 @@
     "cover": "Image",
     "name": "Username",
     "email": "Email",
+    "dataScope": "Data scope",
+    "cinemas": "Cinemas",
     "tel": "Phone",
     "role": "Role",
     "registerTime": "Registration Time",
     "action": "Action"
+  },
+  "dataScope": {
+    "platform": "Platform",
+    "chain": "Chain",
+    "cinema": "Cinema"
   },
   "message": {
     "remove": {
@@ -15,6 +22,18 @@
     }
   },
   "modal": {
+    "steps": {
+      "dataPermission": "Data access",
+      "account": "Account",
+      "preview": "Review",
+      "security": "Security"
+    },
+    "preview": {
+      "title": "Please review",
+      "hint": "If everything looks correct, click Next to request the email verification code, then enter it on the final step to submit.",
+      "passwordChange": "Password will be updated",
+      "passwordKeep": "Password will not be changed"
+    },
     "title": {
       "create": "Add User",
       "edit": "Edit User"
@@ -53,6 +72,30 @@
         "label": "Verification Code",
         "required": "Please enter the verification code",
         "length": "The verification code must be 6 characters long"
+      },
+      "dataScope": {
+        "label": "Data scope",
+        "required": "Please select a data scope"
+      },
+      "brand": {
+        "label": "Brand",
+        "required": "Chain users must select a brand",
+        "placeholder": "Select brand"
+      },
+      "cinemas": {
+        "label": "Managed cinemas",
+        "required": "Select at least one cinema",
+        "pickRegionHint": "Choose a region above, then select cinemas"
+      },
+      "cinemaRegion": {
+        "label": "Region",
+        "placeholder": "Select region first (required)",
+        "requiredFirst": "Select a region before choosing cinemas",
+        "hydrateFallback": "Could not load the cinema's region. Please pick a region manually; existing cinema bindings are kept."
+      },
+      "cinemaBrand": {
+        "label": "Brand filter",
+        "placeholder": "Filter cinemas by brand (optional)"
       }
     }
   }

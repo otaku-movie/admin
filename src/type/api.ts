@@ -76,11 +76,20 @@ export interface Movie {
 }
 
 export interface user {
-  id: number
-  cover: string
-  username: string
-  email: string
-  createTime: string
+  id?: number
+  cover?: string
+  /** 后台用户名字段（与接口 name 一致） */
+  name?: string
+  username?: string
+  email?: string
+  createTime?: string
+  dataScope?: string
+  brandId?: number | null
+  cinemaIds?: number[]
+  /** 用户列表：关联影院名称（与 cinemaIds 顺序一致） */
+  cinemaNames?: string[]
+  /** 当前用户院线级：品牌名称（顶栏等） */
+  brandName?: string | null
 }
 
 export interface menuItem {
@@ -110,6 +119,12 @@ export type buttonItem = menuItem & {
 
 export type userInfo = user & {
   token: string
+  /** 管理后台登录：platform / chain / cinema */
+  dataScope?: string
+  brandId?: number | null
+  cinemaIds?: number[]
+  brandName?: string | null
+  cinemaNames?: string[]
 }
 export interface base {
   id: number

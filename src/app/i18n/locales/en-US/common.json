@@ -26,6 +26,10 @@
   "homePage": {
     "logout": "logout"
   },
+  "header": {
+    "myCinemas": "My cinemas",
+    "myBrand": "My chain"
+  },
   "menu2": {
     "operationsCenter": {
       "name": "Operations Center",

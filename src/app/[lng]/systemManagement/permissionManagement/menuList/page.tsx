@@ -147,22 +147,28 @@ export default function MoviePage ({ params: { lng } }: PageProps) {
     return dfs(treeDataState)
   }, [treeDataState, searchName, common])
 
-  /** 受控展开：根节点 key 列表（数据异步到达后写入，避免 defaultExpandedKeys 首屏无子树不展开） */
-  const menuTreeRootKeys = useMemo(
-    () => filteredTreeData.map(n => String(n.id)),
-    [filteredTreeData]
-  )
-  const menuTreeRootKeysSig = menuTreeRootKeys.join('\u0001')
+  /** 受控展开：默认展开到第 2 级（根 + 第一层子菜单） */
+  const menuTreeInitExpandedKeys = useMemo(() => {
+    const keys: string[] = []
+    const dfs = (nodes: menuItem[] | null | undefined, depth: number) => {
+      if (!Array.isArray(nodes) || nodes.length === 0) return
+      for (const n of nodes) {
+        if (depth <= 2) keys.push(String(n.id))
+        if (Array.isArray((n as any).children) && (n as any).children.length) {
+          dfs((n as any).children, depth + 1)
+        }
+      }
+    }
+    dfs(filteredTreeData, 1)
+    return keys
+  }, [filteredTreeData])
+  const menuTreeInitExpandedSig = menuTreeInitExpandedKeys.join('\u0001')
 
   const [menuTreeExpandedKeys, setMenuTreeExpandedKeys] = useState<string[]>([])
 
   useLayoutEffect(() => {
-    if (menuTreeRootKeys.length === 0) {
-      setMenuTreeExpandedKeys([])
-      return
-    }
-    setMenuTreeExpandedKeys(menuTreeRootKeys)
-  }, [menuTreeRootKeysSig])
+    setMenuTreeExpandedKeys(menuTreeInitExpandedKeys)
+  }, [menuTreeInitExpandedSig])
 
   const getButtons = () => {
     http({

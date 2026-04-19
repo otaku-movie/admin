@@ -30,8 +30,42 @@ import { OrderState } from '@/config/enum'
 import { RangePicker, dateValue } from '@/components/rangePicker'
 import { CustomAntImage } from '@/components/CustomAntImage'
 
+/** 与后端 OrderState 编码一致，用于 Tag 颜色 */
+function orderStateTagColor(code: number | undefined): string {
+  if (code == null) return 'default'
+  switch (code) {
+    case 2:
+      return 'success'
+    case 3:
+      return 'error'
+    case 5:
+      return 'warning'
+    case 4:
+      return 'default'
+    default:
+      return 'processing'
+  }
+}
+
+/** 与后端 PayState 编码一致，用于 Tag 颜色（与订单状态色系区分） */
+function payStateTagColor(code: number | undefined): string {
+  if (code == null) return 'default'
+  switch (code) {
+    case 3:
+      return 'success'
+    case 4:
+      return 'error'
+    case 5:
+      return 'default'
+    case 2:
+      return 'processing'
+    default:
+      return 'warning'
+  }
+}
+
 interface Query {
-  id: number
+  orderNumber?: string
   movieId: number
   cinemaId: number
   theaterHallId: number
@@ -72,7 +106,15 @@ export default function MoviePage({ params: { lng } }: PageProps) {
     start: null,
     end: null
   })
-  const getData = (page = 1) => {
+  /** 与后端 MovieOrderListQuery.sortField 白名单一致 */
+  const [sortField, setSortField] = useState<string>('orderTime')
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
+
+  const getData = (
+    page = 1,
+    sf: string = sortField,
+    so: 'asc' | 'desc' = sortOrder
+  ) => {
     http({
       url: 'admin/movieOrder/list',
       method: 'post',
@@ -81,13 +123,22 @@ export default function MoviePage({ params: { lng } }: PageProps) {
         pageSize: 10,
         ...query,
         orderStartTime: orderDate.start?.format('YYYY-MM-DD HH:mm:ss'),
-        orderEndTime: orderDate.end?.format('YYYY-MM-DD HH:mm:ss')
+        orderEndTime: orderDate.end?.format('YYYY-MM-DD HH:mm:ss'),
+        sortField: sf,
+        sortOrder: so
       }
     }).then((res) => {
       setData(res.data.list)
       setPage(page)
       setTotal(res.data.total)
     })
+  }
+
+  const specNamesText = (row: { specName?: string; specNames?: string[] }) => {
+    if (row.specNames && row.specNames.length > 0) {
+      return row.specNames.join('、')
+    }
+    return row.specName ?? ''
   }
   const getMovieData = (name: string = '') => {
     http({
@@ -141,14 +192,18 @@ export default function MoviePage({ params: { lng } }: PageProps) {
     getData()
   }, [])
 
-  useEffect(() => {}, [query, setQuery])
-
   const columns: TableColumnsType = [
+    {
+      title: t('table.orderNumber'),
+      key: 'orderNumber',
+      dataIndex: 'orderNumber',
+      width: 140,
+      fixed: 'left'
+    },
     {
       title: t('table.name'),
       dataIndex: 'name',
       width: 350,
-      fixed: 'left',
       render(_: any, row) {
         return (
           <Space align="start">
@@ -171,7 +226,7 @@ export default function MoviePage({ params: { lng } }: PageProps) {
                 {t('table.theaterHallName')}：{row.theaterHallName}
               </span>
               <span>
-                {t('table.specName')}：{row.specName}
+                {t('table.specName')}：{specNamesText(row)}
               </span>
             </Space>
           </Space>
@@ -180,7 +235,16 @@ export default function MoviePage({ params: { lng } }: PageProps) {
     },
     {
       title: t('table.showTime'),
+      key: 'startTime',
+      columnKey: 'startTime',
       width: 180,
+      sorter: true,
+      sortOrder:
+        sortField === 'startTime'
+          ? sortOrder === 'asc'
+            ? 'ascend'
+            : 'descend'
+          : null,
       render(_, row) {
         return (
           <Space direction="vertical">
@@ -217,45 +281,87 @@ export default function MoviePage({ params: { lng } }: PageProps) {
         )
       }
     },
-
-    {
-      title: t('table.orderNumber'),
-      width: 100,
-      dataIndex: 'id'
-    },
     {
       title: t('table.orderTotal'),
+      key: 'orderTotal',
+      columnKey: 'orderTotal',
       width: 100,
-      dataIndex: 'orderTotal'
+      dataIndex: 'orderTotal',
+      sorter: true,
+      sortOrder:
+        sortField === 'orderTotal'
+          ? sortOrder === 'asc'
+            ? 'ascend'
+            : 'descend'
+          : null
     },
     {
       title: t('table.orderTime'),
+      key: 'orderTime',
+      columnKey: 'orderTime',
       width: 120,
-      dataIndex: 'orderTime'
+      dataIndex: 'orderTime',
+      sorter: true,
+      sortOrder:
+        sortField === 'orderTime'
+          ? sortOrder === 'asc'
+            ? 'ascend'
+            : 'descend'
+          : null
     },
     {
       title: t('table.orderState'),
       width: 100,
       render(_, row) {
-        return <Dict code={row.orderState} name={'orderState'}></Dict>
+        return (
+          <Tag color={orderStateTagColor(row.orderState)} style={{ margin: 0 }}>
+            <Dict code={row.orderState} name={'orderState'}></Dict>
+          </Tag>
+        )
       },
       dataIndex: 'orderState'
     },
     {
       title: t('table.payTotal'),
+      key: 'payTotal',
+      columnKey: 'payTotal',
       width: 150,
-      dataIndex: 'payTotal'
+      dataIndex: 'payTotal',
+      sorter: true,
+      sortOrder:
+        sortField === 'payTotal'
+          ? sortOrder === 'asc'
+            ? 'ascend'
+            : 'descend'
+          : null,
+      render(val: number | string | null | undefined) {
+        if (val === null || val === undefined || val === '') return '—'
+        return String(val)
+      }
     },
     {
       title: t('table.payTime'),
+      key: 'payTime',
+      columnKey: 'payTime',
       width: 150,
-      dataIndex: 'payTime'
+      dataIndex: 'payTime',
+      sorter: true,
+      sortOrder:
+        sortField === 'payTime'
+          ? sortOrder === 'asc'
+            ? 'ascend'
+            : 'descend'
+          : null
     },
     {
       title: t('table.payState'),
       width: 150,
       render(_, row) {
-        return <Dict code={row.payState} name={'payState'}></Dict>
+        return (
+          <Tag color={payStateTagColor(row.payState)} style={{ margin: 0 }}>
+            <Dict code={row.payState} name={'payState'}></Dict>
+          </Tag>
+        )
       },
       dataIndex: 'payState'
     },
@@ -349,12 +455,12 @@ export default function MoviePage({ params: { lng } }: PageProps) {
         >
           <QueryItem label={t('search.id')}>
             <Input
-              value={query.id}
+              value={query.orderNumber}
               allowClear
               onChange={(e) => {
                 setQuery({
                   ...query,
-                  id: e.target.value as any
+                  orderNumber: e.target.value
                 })
               }}
             ></Input>
@@ -447,11 +553,11 @@ export default function MoviePage({ params: { lng } }: PageProps) {
           <QueryItem label={t('search.payState')}>
             <DictSelect
               code={DictCode.PAY_STATE}
-              value={query.orderState}
+              value={query.payState}
               onChange={(val) => {
                 setQuery({
                   ...query,
-                  orderState: val
+                  payState: val
                 })
               }}
             ></DictSelect>
@@ -469,14 +575,32 @@ export default function MoviePage({ params: { lng } }: PageProps) {
               0
             )
           }}
+          onChange={(pagination, _filters, sorter) => {
+            const s = Array.isArray(sorter) ? sorter[0] : sorter
+            let nextSF = sortField
+            let nextSO = sortOrder
+            if (s && typeof s === 'object' && s.columnKey != null) {
+              const key = String(s.columnKey)
+              if (s.order === 'ascend') {
+                nextSF = key
+                nextSO = 'asc'
+              } else if (s.order === 'descend') {
+                nextSF = key
+                nextSO = 'desc'
+              } else {
+                nextSF = 'orderTime'
+                nextSO = 'desc'
+              }
+            }
+            setSortField(nextSF)
+            setSortOrder(nextSO)
+            getData(pagination.current ?? 1, nextSF, nextSO)
+          }}
           pagination={{
             pageSize: 10,
             current: page,
             total,
             showTotal,
-            onChange(page) {
-              getData(page)
-            },
             position: ['bottomCenter']
           }}
         />

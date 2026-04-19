@@ -3,10 +3,17 @@
     "cover": "图片",
     "name": "用户名称",
     "email": "邮箱",
+    "dataScope": "数据范围",
+    "cinemas": "关联影院",
     "tel": "电话",
     "role": "角色",
     "registerTime": "注册时间",
     "action": "操作"
+  },
+  "dataScope": {
+    "platform": "平台",
+    "chain": "院线",
+    "cinema": "影院"
   },
   "message": {
     "remove": {
@@ -15,6 +22,18 @@
     }
   },
   "modal": {
+    "steps": {
+      "dataPermission": "数据权限",
+      "account": "账号信息",
+      "preview": "预览确认",
+      "security": "安全确认"
+    },
+    "preview": {
+      "title": "请确认以下信息",
+      "hint": "核对无误后点击「下一步」，将发送邮箱验证码；最后在安全确认步骤填写验证码并提交。",
+      "passwordChange": "将更新为所填新密码",
+      "passwordKeep": "不修改登录密码"
+    },
     "title": {
       "create": "添加用户",
       "edit": "编辑用户"
@@ -53,6 +72,30 @@
         "label": "验证码",
         "required": "请输入验证码",
         "length": "验证码必须位6位"
+      },
+      "dataScope": {
+        "label": "数据范围",
+        "required": "请选择数据范围"
+      },
+      "brand": {
+        "label": "所属品牌",
+        "required": "院线用户须选择品牌",
+        "placeholder": "请选择品牌"
+      },
+      "cinemas": {
+        "label": "可管影院",
+        "required": "请至少选择一个影院",
+        "pickRegionHint": "请先在上方选择地区，再勾选影院"
+      },
+      "cinemaRegion": {
+        "label": "地区",
+        "placeholder": "请先选择地区（必选）",
+        "requiredFirst": "请先选择地区，再选择可管影院",
+        "hydrateFallback": "未能读取影院所在地区，请手动选择地区；已保留已绑定的影院。"
+      },
+      "cinemaBrand": {
+        "label": "品牌筛选",
+        "placeholder": "按品牌缩小影院列表（可选）"
       }
     }
   }
