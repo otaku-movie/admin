@@ -9,8 +9,18 @@
     "userRegisterCount": "日別登録ユーザー数",
     "orderCount": "日別注文数",
     "movieShowTimeCount": "日別上映回数",
-    "DailyTransactionAmount": "一日の取引額"
+    "DailyTransactionAmount": "一日の取引額",
+    "loginPlatform": "マルチプラットフォームログイン統計"
   },
   "registerPlatform": "登録プラットフォーム",
-  "movieBoxOffice": "興行収入"
+  "movieBoxOffice": "興行収入",
+  "loginPlatform": {
+    "title": "登録 / ログインプラットフォーム分布",
+    "platform": {
+      "local": "メール登録",
+      "google": "Google",
+      "apple": "Apple",
+      "mixed": "複数連携"
+    }
+  }
 }

@@ -9,8 +9,18 @@
     "userRegisterCount": "Daily Registered Users",
     "orderCount": "Daily Orders",
     "movieShowTimeCount": "Daily Movie Showtimes",
-    "DailyTransactionAmount": "Daily Transaction Amount"
+    "DailyTransactionAmount": "Daily Transaction Amount",
+    "loginPlatform": "Multi-platform Login Stats"
   },
   "registerPlatform": "Registration Platform",
-  "movieBoxOffice": "Box Office"
+  "movieBoxOffice": "Box Office",
+  "loginPlatform": {
+    "title": "Registration / Login Platform Distribution",
+    "platform": {
+      "local": "Email",
+      "google": "Google",
+      "apple": "Apple",
+      "mixed": "Multi-bound"
+    }
+  }
 }

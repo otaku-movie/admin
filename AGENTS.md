@@ -149,6 +149,11 @@ admin
 ## 代码规范
 
 - 代码凡是可以复用的尽量进行复用
+- **路由跳转禁止拼接完整路径**，必须统一通过 `@/config/router` 暴露的 `processPath` 处理：
+  - `processPath(pathName)` 用于无 query 跳转，例如 `router.push(processPath('agreementList'))`。
+  - `processPath({ name, query })` 用于带 query 跳转，例如 `router.push(processPath({ name: 'agreementDetail', query: { id: row.id } }))`。
+  - `name` 取后端菜单返回的 `pathName`，由 `processPath` 自动拼接 `/${lng}` 前缀与查询串，**避免**手写 ``/${lng}/...`` 或 ``?id=${id}`` 这种写法。
+  - 新增页面时，需同步在菜单管理 / 后端菜单数据里登记对应的 `pathName`，否则 `processPath` 会取不到 `path` 而退化为 `/${lng}undefined`。
 
 
 

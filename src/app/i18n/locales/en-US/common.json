@@ -142,6 +142,19 @@
             "appVersionDetail": "App Version Detail"
           }
         },
+        "authProviderManagement": {
+          "name": "Login Provider Management",
+          "children": {
+            "authProviderList": "Login Provider Settings"
+          }
+        },
+        "agreementManagement": {
+          "name": "Agreement Management",
+          "children": {
+            "agreementList": "Agreement List",
+            "agreementDetail": "Agreement Detail"
+          }
+        },
         "dictList": "Dictionary Management"
       }
     }

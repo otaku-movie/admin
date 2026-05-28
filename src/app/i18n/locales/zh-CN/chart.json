@@ -9,8 +9,18 @@
     "userRegisterCount": "日注册用户",
     "orderCount": "日订单量",
     "movieShowTimeCount": "日排片数",
-    "DailyTransactionAmount": "日成交金额"
+    "DailyTransactionAmount": "日成交金额",
+    "loginPlatform": "多平台登录统计"
   },
   "registerPlatform": "注册平台",
-  "movieBoxOffice": "票房"
+  "movieBoxOffice": "票房",
+  "loginPlatform": {
+    "title": "注册/登录平台分布",
+    "platform": {
+      "local": "邮箱注册",
+      "google": "Google",
+      "apple": "Apple",
+      "mixed": "多平台绑定"
+    }
+  }
 }

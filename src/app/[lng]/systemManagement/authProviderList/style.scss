@@ -1,0 +1,22 @@
+.auth-provider-list-page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  h2 {
+    margin: 0;
+  }
+
+  header p {
+    margin: 8px 0 0;
+    color: #666;
+  }
+
+  .status-enabled {
+    color: #52c41a;
+  }
+
+  .status-disabled {
+    color: #999;
+  }
+}

@@ -7,6 +7,7 @@ import { UserChart } from './chart/userChart'
 import { MovieShowTimeChart } from './chart/movieShowTimeChart'
 import { DailyTransactionAmount } from './chart/dailyTransactionAmount'
 import { DailyOrderStatistics } from './chart/dailyOrderStatistics'
+import { LoginPlatformChart } from './chart/loginPlatformChart'
 import { Tabs } from 'antd'
 import './style.scss'
 import { formatNumber } from '@/utils'
@@ -20,7 +21,8 @@ export default function Page({ params: { lng } }: PageProps) {
     cinemaCount: 0,
     showTimeCount: 0,
     statisticsUserData: [],
-    statisticsOfDailyMovieScreenings: []
+    statisticsOfDailyMovieScreenings: [],
+    loginPlatformStatistics: []
   })
 
   const getData = (page = 1) => {
@@ -101,6 +103,15 @@ export default function Page({ params: { lng } }: PageProps) {
                 <DailyTransactionAmount
                   data={data.dailyTransactionAmount}
                 ></DailyTransactionAmount>
+              )
+            },
+            {
+              key: '5',
+              label: t('tab.loginPlatform'),
+              children: (
+                <LoginPlatformChart
+                  data={data.loginPlatformStatistics}
+                ></LoginPlatformChart>
               )
             }
           ]}
