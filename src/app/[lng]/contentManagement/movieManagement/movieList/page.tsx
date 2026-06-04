@@ -13,7 +13,9 @@ import {
   Flex
 } from 'antd'
 
-import type { TableColumnsType } from 'antd'
+import type { TableColumnsType, TablePaginationConfig } from 'antd'
+import type { SorterResult } from 'antd/es/table/interface'
+import type { MovieListSortField } from '@/type/query/movie'
 import { status, notFoundImage } from '@/config/index'
 import { useRouter } from '@bprogress/next/app'
 
@@ -36,12 +38,18 @@ interface Query {
   status: number
 }
 
+interface SortState {
+  field?: MovieListSortField
+  order?: 'asc' | 'desc'
+}
+
 export default function Page({ params: { lng } }: Readonly<PageProps>) {
   const router = useRouter()
   const [data, setData] = useState<Movie[]>([])
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
   const [query, setQuery] = useState<Partial<Query>>({})
+  const [sort, setSort] = useState<SortState>({})
   const { t } = useTranslation(lng, 'movie')
   const { t: common } = useTranslation(lng, 'common')
 
@@ -54,11 +62,13 @@ export default function Page({ params: { lng } }: Readonly<PageProps>) {
     show: false
   })
 
-  const getData = (page = 1) => {
+  const getData = (page = 1, nextSort: SortState = sort) => {
     getMovieList({
       page,
       pageSize: 10,
-      ...query
+      ...query,
+      sortField: nextSort.field,
+      sortOrder: nextSort.order
     }).then((res) => {
       const data = res.data
 
@@ -147,6 +157,70 @@ export default function Page({ params: { lng } }: Readonly<PageProps>) {
         )
       }
     },
+
+    {
+      title: t('table.time'),
+      dataIndex: 'time',
+      width: 100,
+      render(text: number) {
+        if (text) {
+          return (
+            <span>
+              {text}
+              {common('unit.minute')}
+            </span>
+          )
+        }
+      }
+    },
+    // 7 个可排序列：sorter: true 把排序交给后端，sortOrder 受控
+    // 一次只激活当前 sort.field 对应列的箭头，切换列时旧列自动清掉。
+    ...((): TableColumnsType<Movie> => {
+      const buildSortOrder = (field: MovieListSortField) =>
+        sort.field === field
+          ? sort.order === 'asc'
+            ? ('ascend' as const)
+            : ('descend' as const)
+          : undefined
+      const sortable: Array<{
+        field: MovieListSortField
+        titleKey: string
+      }> = [
+        { field: 'cinemaCount', titleKey: 'table.cinemaCount' },
+        { field: 'theaterCount', titleKey: 'table.theaterCount' },
+        { field: 'commentCount', titleKey: 'table.commentCount' },
+        { field: 'watchedCount', titleKey: 'table.watchedCount' },
+        { field: 'wantToSeeCount', titleKey: 'table.wantToSeeCount' },
+        { field: 'startDate', titleKey: 'table.startDate' },
+        { field: 'endDate', titleKey: 'table.endDate' }
+      ]
+      return sortable.map(({ field, titleKey }) => ({
+        title: t(titleKey),
+        width: 150,
+        dataIndex: field,
+        sorter: true,
+        sortOrder: buildSortOrder(field)
+      }))
+    })(),
+    {
+      title: t('table.dubbingVersion'),
+      width: 150,
+      dataIndex: 'versionCode',
+      render(code: number) {
+        if (code) {
+          return <Dict code={code} name={'dubbingVersion'}></Dict>
+        }
+        return '--'
+      }
+    },
+    {
+      title: t('table.status'),
+      width: 150,
+      dataIndex: '',
+      render(_, row) {
+        return <Dict code={row.status} name={'releaseStatus'}></Dict>
+      }
+    },
     {
       title: t('table.helloMovie'),
       width: 250,
@@ -169,75 +243,6 @@ export default function Page({ params: { lng } }: Readonly<PageProps>) {
             })}
           </Space>
         )
-      }
-    },
-    {
-      title: t('table.time'),
-      dataIndex: 'time',
-      width: 100,
-      render(text: number) {
-        if (text) {
-          return (
-            <span>
-              {text}
-              {common('unit.minute')}
-            </span>
-          )
-        }
-      }
-    },
-    {
-      title: t('table.cinemaCount'),
-      width: 150,
-      dataIndex: 'cinemaCount'
-    },
-    {
-      title: t('table.theaterCount'),
-      width: 150,
-      dataIndex: 'theaterCount'
-    },
-    {
-      title: t('table.commentCount'),
-      width: 150,
-      dataIndex: 'commentCount'
-    },
-    {
-      title: t('table.watchedCount'),
-      width: 150,
-      dataIndex: 'watchedCount'
-    },
-    {
-      title: t('table.wantToSeeCount'),
-      width: 150,
-      dataIndex: 'wantToSeeCount'
-    },
-    {
-      title: t('table.startDate'),
-      width: 150,
-      dataIndex: 'startDate'
-    },
-    {
-      title: t('table.endDate'),
-      width: 150,
-      dataIndex: 'endDate'
-    },
-    {
-      title: t('table.dubbingVersion'),
-      width: 150,
-      dataIndex: 'versionCode',
-      render(code: number) {
-        if (code) {
-          return <Dict code={code} name={'dubbingVersion'}></Dict>
-        }
-        return '--'
-      }
-    },
-    {
-      title: t('table.status'),
-      width: 150,
-      dataIndex: '',
-      render(_, row) {
-        return <Dict code={row.status} name={'releaseStatus'}></Dict>
       }
     },
     {
@@ -394,14 +399,32 @@ export default function Page({ params: { lng } }: Readonly<PageProps>) {
             )
           }}
           sticky={{ offsetHeader: -20 }}
+          // 翻页 + 排序统一走 Table.onChange，避免 pagination.onChange 二次触发拉数据。
+          // 排序变化时回到第 1 页，翻页时保留当前排序。
+          onChange={(pagination: TablePaginationConfig, _filters, sorter) => {
+            const s = Array.isArray(sorter) ? sorter[0] : sorter
+            const single = s as SorterResult<Movie>
+            const field = (single?.field ??
+              single?.columnKey) as MovieListSortField | undefined
+            const order: 'asc' | 'desc' | undefined =
+              single?.order === 'ascend'
+                ? 'asc'
+                : single?.order === 'descend'
+                  ? 'desc'
+                  : undefined
+            const nextSort: SortState =
+              field && order ? { field, order } : {}
+            const sortChanged =
+              nextSort.field !== sort.field || nextSort.order !== sort.order
+            const nextPage = sortChanged ? 1 : pagination.current ?? 1
+            if (sortChanged) setSort(nextSort)
+            getData(nextPage, nextSort)
+          }}
           pagination={{
             pageSize: 10,
             current: page,
             total,
             showTotal,
-            onChange(page) {
-              getData(page)
-            },
             position: ['bottomCenter']
           }}
         />
