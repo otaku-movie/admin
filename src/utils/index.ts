@@ -261,9 +261,20 @@ export function formatNumber(
   return num ? num.toLocaleString() : '0'
 }
 
-export const getURL = (url: string) => {
+/**
+ * 把后端返回的图片路径解析为可访问的完整 URL：
+ *  - 已是 http(s) / data: / blob: / 协议相对（//xxx）的，原样返回
+ *  - 否则用 NEXT_PUBLIC_IMAGE_URL 作为前缀拼接，并规范化中间的斜杠，
+ *    避免出现 "前缀无尾斜杠 + 路径无前导斜杠" 时少一个 / 的问题
+ */
+export const getURL = (url?: string | null) => {
   if (!url) return ''
-  const IMAGE_URL = process.env.NEXT_PUBLIC_IMAGE_URL
-
-  return url.startsWith('http') ? `${url}` : `${IMAGE_URL}${url}`
+  if (/^(https?:)?\/\//i.test(url) || url.startsWith('data:') || url.startsWith('blob:')) {
+    return url
+  }
+  const IMAGE_URL = process.env.NEXT_PUBLIC_IMAGE_URL || ''
+  if (!IMAGE_URL) return url
+  const trimmedBase = IMAGE_URL.replace(/\/+$/, '')
+  const path = url.startsWith('/') ? url : `/${url}`
+  return `${trimmedBase}${path}`
 }
