@@ -1,0 +1,34 @@
+{
+  "title": "登录方式配置",
+  "description": "控制 App 登录页展示哪些登录入口。关闭后前端会完全隐藏对应按钮。",
+  "table": {
+    "code": "代码",
+    "name": "名称",
+    "enabled": "状态",
+    "platform": "平台",
+    "sort": "排序",
+    "minAppVersion": "最低 App 版本",
+    "remark": "备注",
+    "updateTime": "更新时间"
+  },
+  "form": {
+    "name": "名称",
+    "enabled": "是否启用",
+    "platform": "适用平台",
+    "sort": "排序",
+    "minAppVersion": "最低 App 版本",
+    "remark": "备注"
+  },
+  "platform": {
+    "ALL": "全部",
+    "Android": "Android",
+    "IOS": "iOS"
+  },
+  "value": {
+    "enabled": "启用",
+    "disabled": "关闭"
+  },
+  "message": {
+    "nameRequired": "请输入名称"
+  }
+}

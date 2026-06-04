@@ -1,0 +1,34 @@
+{
+  "title": "ログイン方法設定",
+  "description": "アプリのログイン画面に表示するログイン方法を管理します。無効にすると該当ボタンは完全に非表示になります。",
+  "table": {
+    "code": "コード",
+    "name": "名称",
+    "enabled": "状態",
+    "platform": "プラットフォーム",
+    "sort": "並び順",
+    "minAppVersion": "最小アプリバージョン",
+    "remark": "備考",
+    "updateTime": "更新日時"
+  },
+  "form": {
+    "name": "名称",
+    "enabled": "有効",
+    "platform": "対象プラットフォーム",
+    "sort": "並び順",
+    "minAppVersion": "最小アプリバージョン",
+    "remark": "備考"
+  },
+  "platform": {
+    "ALL": "すべて",
+    "Android": "Android",
+    "IOS": "iOS"
+  },
+  "value": {
+    "enabled": "有効",
+    "disabled": "無効"
+  },
+  "message": {
+    "nameRequired": "名称を入力してください"
+  }
+}

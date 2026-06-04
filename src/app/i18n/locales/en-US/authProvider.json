@@ -1,0 +1,34 @@
+{
+  "title": "Login Provider Settings",
+  "description": "Control which login providers are shown on the app login page. Disabled providers are hidden completely.",
+  "table": {
+    "code": "Code",
+    "name": "Name",
+    "enabled": "Status",
+    "platform": "Platform",
+    "sort": "Sort",
+    "minAppVersion": "Minimum App Version",
+    "remark": "Remark",
+    "updateTime": "Updated At"
+  },
+  "form": {
+    "name": "Name",
+    "enabled": "Enabled",
+    "platform": "Platform",
+    "sort": "Sort",
+    "minAppVersion": "Minimum App Version",
+    "remark": "Remark"
+  },
+  "platform": {
+    "ALL": "All",
+    "Android": "Android",
+    "IOS": "iOS"
+  },
+  "value": {
+    "enabled": "Enabled",
+    "disabled": "Disabled"
+  },
+  "message": {
+    "nameRequired": "Please enter a name"
+  }
+}

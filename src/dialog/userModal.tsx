@@ -28,7 +28,6 @@ import {
   getURL
 } from '@/utils'
 import { Upload } from '@/components/upload/Upload'
-import { md5 } from 'js-md5'
 import { VerifyCode } from '@/components/verifyCode'
 import {
   getAddressTreeList,
@@ -509,7 +508,8 @@ export default function UserModal(props: UserModalProps) {
       cinemaIds: scope === 'cinema' ? query.cinemaIds : []
     }
     if (data.password) {
-      data.password = md5(query.password as string)
+      // 直接提交明文密码，由后端 BCrypt 加盐哈希存储（传输依赖 HTTPS 保护）
+      data.password = query.password as string
     }
     delete data.password2
     http({

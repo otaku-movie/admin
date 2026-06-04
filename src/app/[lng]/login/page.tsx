@@ -7,7 +7,6 @@ import { useRouter } from 'next/navigation'
 import { emailRegExp, passwordRegExp } from '@/utils'
 import { processPath } from '@/config/router'
 import { useUserStore } from '@/store/useUserStore'
-import { md5 } from 'js-md5'
 import './style.scss'
 
 interface Query {
@@ -99,7 +98,7 @@ export default function Page({ params: { lng } }: PageProps) {
                 store
                   .login({
                     ...query,
-                    password: query.password ? md5(query.password) : ''
+                    password: query.password ?? ''
                   })
                   .then((res) => {
                     if (res) {
