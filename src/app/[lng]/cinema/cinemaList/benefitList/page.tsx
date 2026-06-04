@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { Table, Button, Tabs, message, Modal, Form, Input } from 'antd'
+import { Table, Button, Tabs, message, Modal, Form, Input, Switch } from 'antd'
 import http from '@/api/index'
 import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '@/app/[lng]/layout'
@@ -17,6 +17,8 @@ interface StockRow {
   benefitName?: string
   quota?: number | null
   remaining?: number | null
+  /** 1=运营置为已领完 */
+  manualSoldOut?: number | null
 }
 
 interface FeedbackRow {
@@ -122,7 +124,8 @@ export default function CinemaBenefitPage ({
           cinemaId: v.cinemaId,
           benefitId: v.benefitId,
           quota,
-          remaining: remaining ?? quota
+          remaining: remaining ?? quota,
+          manualSoldOut: v.manualSoldOut ? 1 : 0
         }
       })
         .then(() => {
@@ -207,6 +210,13 @@ export default function CinemaBenefitPage ({
                           : (common('benefit.table.unknown') ?? '—')
                     },
                     {
+                      title: common('benefit.table.manualSoldOut') ?? '置领完',
+                      dataIndex: 'manualSoldOut',
+                      width: 72,
+                      align: 'center',
+                      render: (v: number | null | undefined) => (v === 1 ? 'Y' : '')
+                    },
+                    {
                       title: common('table.action') ?? '操作',
                       width: 80,
                       render: (_, row) => (
@@ -219,7 +229,8 @@ export default function CinemaBenefitPage ({
                               cinemaId: row.cinemaId,
                               benefitId: row.benefitId,
                               quota: row.quota,
-                              remaining: row.remaining
+                              remaining: row.remaining,
+                              manualSoldOut: row.manualSoldOut === 1
                             })
                             setStockModalOpen(true)
                           }}
@@ -319,6 +330,13 @@ export default function CinemaBenefitPage ({
             label={common('benefit.table.remaining') ?? '剩余'}
           >
             <Input type='number' min={0} placeholder={common('benefit.table.stockUnknownPlaceholder') ?? '不填表示未知'} />
+          </Form.Item>
+          <Form.Item
+            name='manualSoldOut'
+            label={common('benefit.table.manualSoldOut') ?? '运营置为已领完'}
+            valuePropName='checked'
+          >
+            <Switch />
           </Form.Item>
         </Form>
       </Modal>
