@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import {
   Switch,
   Tag,
@@ -10,14 +10,17 @@ import {
   MenuProps,
   Modal,
   Typography,
-  DatePicker
+  DatePicker,
+  Segmented
 } from 'antd'
 import { useSearchParams, useRouter } from 'next/navigation'
 import {
   PlusOutlined,
   LeftOutlined,
   RightOutlined,
-  CalendarOutlined
+  CalendarOutlined,
+  BarsOutlined,
+  AppstoreOutlined
 } from '@ant-design/icons'
 import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '@/app/[lng]/layout'
@@ -35,6 +38,10 @@ import {
 import dayjs from 'dayjs'
 import { useCommonStore } from '@/store/useCommonStore'
 import { DictCode } from '@/enum/dict'
+import GanttView from './ganttView'
+
+type ScreeningViewMode = 'gantt' | 'grid'
+const VIEW_MODE_STORAGE_KEY = 'screeningManagement.viewMode'
 
 const { Text, Paragraph } = Typography
 
@@ -60,6 +67,108 @@ export default function CinemaPage({ params: { lng } }: Readonly<PageProps>) {
     show: false,
     item: null
   })
+  const [viewMode, setViewMode] = useState<ScreeningViewMode>('gantt')
+
+  // 视图偏好持久化（甘特/网格）。SSR 期间用默认 gantt，挂载后从 localStorage 同步
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const saved = window.localStorage.getItem(VIEW_MODE_STORAGE_KEY)
+    if (saved === 'gantt' || saved === 'grid') {
+      setViewMode(saved)
+    }
+  }, [])
+
+  const handleViewModeChange = (mode: ScreeningViewMode) => {
+    setViewMode(mode)
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem(VIEW_MODE_STORAGE_KEY, mode)
+    }
+  }
+
+  // 场次右键菜单：编辑 / 删除。甘特视图和网格视图复用同一份逻辑
+  const buildMenuItems = useCallback(
+    (item: MovieShowTimeItem) => {
+      const onClick: MenuProps['onClick'] = ({ key }) => {
+        const remove = () => {
+          return new Promise((resolve, reject) => {
+            http({
+              url: 'admin/movie_show_time/remove',
+              method: 'delete',
+              params: { id: item.id }
+            })
+              .then(() => {
+                message.success(t('message.remove.success'))
+                getData()
+                resolve(true)
+              })
+              .catch(reject)
+          })
+        }
+
+        switch (key) {
+          case 'edit': {
+            const cinemaId = searchParams.get('id')
+            if (cinemaId) {
+              router.push(
+                processPath({
+                  name: 'screeningManagementRelease',
+                  query: { id: cinemaId, showTimeId: item.id }
+                }) as string
+              )
+            } else {
+              http({
+                url: 'movie_show_time/detail',
+                method: 'get',
+                params: { id: item.id }
+              }).then((res) => {
+                setShowTimeModal({
+                  ...showTimeModal,
+                  data: res.data,
+                  show: true
+                })
+              })
+            }
+            break
+          }
+          case 'remove':
+            Modal.confirm({
+              title: common('button.remove'),
+              content: t('message.remove.content'),
+              onCancel() {
+                console.log('Cancel')
+              },
+              onOk() {
+                if (item.selectedSeatCount > 0) {
+                  Modal.confirm({
+                    title: common('button.remove'),
+                    content: t('message.remove.selectedCount', {
+                      count: item.selectedSeatCount
+                    }),
+                    onCancel() {
+                      console.log('Cancel')
+                    },
+                    onOk() {
+                      remove()
+                    }
+                  })
+                } else {
+                  remove()
+                }
+              }
+            })
+            break
+        }
+      }
+
+      const items: MenuProps['items'] = [
+        { label: common('button.edit'), key: 'edit' },
+        { label: common('button.remove'), danger: true, key: 'remove' }
+      ]
+
+      return { items, onClick }
+    },
+    [searchParams, router, common, t, showTimeModal]
+  )
 
   const i18nWeek = [
     'Sunday',
@@ -71,13 +180,30 @@ export default function CinemaPage({ params: { lng } }: Readonly<PageProps>) {
     'Saturday'
   ]
 
+  const sortScreenings = (list: CinemaScreeing[]) => {
+    return [...list]
+      .map((item) => ({
+        ...item,
+        children: [...item.children].sort((a, b) =>
+          dayjs(a.startTime).valueOf() - dayjs(b.startTime).valueOf()
+        )
+      }))
+      .sort((a, b) =>
+        a.name.localeCompare(b.name, undefined, {
+          numeric: true,
+          sensitivity: 'base'
+        })
+      )
+  }
+
   function getData() {
     getCinemaScreeningList({
       id: searchParams.get('id') as string,
       date: day.format('YYYY-MM-DD')
     }).then((res) => {
-      setData(res.data as unknown as CinemaScreeing[])
-      setRenderData([...(res.data as unknown as CinemaScreeing[])])
+      const sortedData = sortScreenings(res.data as unknown as CinemaScreeing[])
+      setData(sortedData)
+      setRenderData(sortedData)
     })
   }
 
@@ -93,204 +219,120 @@ export default function CinemaPage({ params: { lng } }: Readonly<PageProps>) {
         </QueryItem>
       </Query> */}
       <section className="todo-top">
-        <ul className="nav-container nav-date-bar">
-          <li>
-            <button
-              type="button"
-              onClick={() => {
-                setDay(day.subtract(1, 'day'))
-              }}
-              className="day-nav-btn"
-              title={t('prevDay')}
-              aria-label={t('prevDay')}
-            >
-              <LeftOutlined />
-            </button>
-          </li>
-          <li className="nav-date-inner">
-            <div
-              className="date-picker-trigger"
-              role="button"
-              tabIndex={0}
-              title={t('selectDate')}
-              aria-label={t('selectDate')}
-              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') e.preventDefault() }}
-            >
-              <CalendarOutlined className="calendar-icon" />
-              <DatePicker
-                value={dayjs(day)}
-                onChange={(date) => {
-                  if (date) {
-                    setDay(date)
-                  }
+        <div className="screening-toolbar">
+          <ul className="nav-container nav-date-bar">
+            <li>
+              <button
+                type="button"
+                onClick={() => {
+                  setDay(day.subtract(1, 'day'))
                 }}
-                format="YYYY-MM-DD"
-                allowClear={false}
-                variant="borderless"
-                suffixIcon={null}
-                inputReadOnly={true}
-              />
-            </div>
-            <span className="week-text">
-              （{common(`week.${i18nWeek[day.day()]}`)}）
-            </span>
-          </li>
-          <li>
-            <button
-              type="button"
-              onClick={() => {
-                setDay(day.add(1, 'day'))
-              }}
-              className="day-nav-btn"
-              title={t('nextDay')}
-              aria-label={t('nextDay')}
-            >
-              <RightOutlined />
-            </button>
-          </li>
-        </ul>
-        {/* 列宽与最小宽度依赖 renderData.length，仅通过 CSS 变量传入 */}
-        <ul
-          className="table-header table-header-dynamic"
-          style={
-            {
-              '--table-grid-cols': `40px repeat(${renderData.length}, minmax(200px, 1fr)) 40px`,
-              '--table-min-width': `${Math.max(renderData.length * 200 + 80, 100)}px`
-            } as React.CSSProperties
-          }
-        >
-          <li>
-            {/* <DoubleLeftOutlined
-              style={{
-                color: '#c8c8c8'
-              }}
-              onClick={() => {
-                if (current > 1) {
-                  setCurrent(current - 1)
-                }
-              }}
-            /> */}
-          </li>
-          {renderData.map((item) => {
-            return <li key={item.id}>{item.name}</li>
-          })}
-          <li>
-            {/* <DoubleRightOutlined
-              style={{
-                color: '#929292'
-              }}
-            /> */}
-          </li>
-        </ul>
-        {/* <Table
-          columns={[
-            {},
-            ...renderData.map((children) => {
-              return {
-                title: children.name
-              }
-            }),
-            {}
-          ]}
-          dataSource={data}
-          bordered={true}
-          pagination={false}
-        /> */}
-      </section>
-
-      <div className="scroll-wrapper">
-        <TodoList
-          date={day}
-          data={renderData}
-          render={(item) => {
-            const onClick: MenuProps['onClick'] = ({ key }) => {
-              const remove = () => {
-                return new Promise((resolve, reject) => {
-                  http({
-                    url: 'admin/movie_show_time/remove',
-                    method: 'delete',
-                    params: {
-                      id: item.id
+                className="day-nav-btn"
+                title={t('prevDay')}
+                aria-label={t('prevDay')}
+              >
+                <LeftOutlined />
+              </button>
+            </li>
+            <li className="nav-date-inner">
+              <div
+                className="date-picker-trigger"
+                role="button"
+                tabIndex={0}
+                title={t('selectDate')}
+                aria-label={t('selectDate')}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') e.preventDefault() }}
+              >
+                <CalendarOutlined className="calendar-icon" />
+                <DatePicker
+                  value={dayjs(day)}
+                  onChange={(date) => {
+                    if (date) {
+                      setDay(date)
                     }
-                  })
-                    .then(() => {
-                      message.success(t('message.remove.success'))
-                      getData()
-                      resolve(true)
-                    })
-                    .catch(reject)
-                })
-              }
-
-              switch (key) {
-                case 'edit':
-                  {
-                    const cinemaId = searchParams.get('id')
-                    if (cinemaId) {
-                      router.push(
-                        processPath({
-                          name: 'screeningManagementRelease',
-                          query: { id: cinemaId, showTimeId: item.id }
-                        }) as string
-                      )
-                    } else {
-                      http({
-                        url: 'movie_show_time/detail',
-                        method: 'get',
-                        params: { id: item.id }
-                      }).then((res) => {
-                        setShowTimeModal({
-                          ...showTimeModal,
-                          data: res.data,
-                          show: true
-                        })
-                      })
-                    }
-                  }
-                  break
-                case 'remove':
-                  Modal.confirm({
-                    title: common('button.remove'),
-                    content: t('message.remove.content'),
-                    onCancel() {
-                      console.log('Cancel')
-                    },
-                    onOk() {
-                      if (item.selectedSeatCount > 0) {
-                        Modal.confirm({
-                          title: common('button.remove'),
-                          content: t('message.remove.selectedCount', {
-                            count: item.selectedSeatCount
-                          }),
-                          onCancel() {
-                            console.log('Cancel')
-                          },
-                          onOk() {
-                            remove()
-                          }
-                        })
-                      } else {
-                        remove()
-                      }
-                    }
-                  })
-                  break
-              }
-            }
-
-            const items: MenuProps['items'] = [
+                  }}
+                  format="YYYY-MM-DD"
+                  allowClear={false}
+                  variant="borderless"
+                  suffixIcon={null}
+                  inputReadOnly={true}
+                />
+              </div>
+              <span className="week-text">
+                （{common(`week.${i18nWeek[day.day()]}`)}）
+              </span>
+            </li>
+            <li>
+              <button
+                type="button"
+                onClick={() => {
+                  setDay(day.add(1, 'day'))
+                }}
+                className="day-nav-btn"
+                title={t('nextDay')}
+                aria-label={t('nextDay')}
+              >
+                <RightOutlined />
+              </button>
+            </li>
+          </ul>
+          <Segmented<ScreeningViewMode>
+            className="screening-view-switch"
+            value={viewMode}
+            onChange={handleViewModeChange}
+            options={[
               {
-                label: common('button.edit'),
-                key: 'edit'
+                label: t('viewMode.gantt'),
+                value: 'gantt',
+                icon: <BarsOutlined />
               },
               {
-                label: common('button.remove'),
-                danger: true,
-                key: 'remove'
+                label: t('viewMode.grid'),
+                value: 'grid',
+                icon: <AppstoreOutlined />
               }
-            ]
+            ]}
+          />
+        </div>
+        {viewMode === 'grid' && (
+          <ul
+            className="table-header table-header-dynamic"
+            style={
+              {
+                '--table-grid-cols': `40px repeat(${renderData.length}, minmax(200px, 1fr)) 40px`,
+                '--table-min-width': `${Math.max(renderData.length * 200 + 80, 100)}px`
+              } as React.CSSProperties
+            }
+          >
+            <li />
+            {renderData.map((item) => (
+              <li key={item.id}>{item.name}</li>
+            ))}
+            <li />
+          </ul>
+        )}
+      </section>
 
-            const seatRate =
+      {viewMode === 'gantt' ? (
+        <div className="scroll-wrapper">
+          <GanttView
+            date={day}
+            data={renderData}
+            onItemClick={(item) => setDetailModal({ show: true, item })}
+            buildMenuItems={buildMenuItems}
+            emptyText={t('emptyShowtime')}
+            hallColumnTitle={t('theaterColumn')}
+            closedLabel={t('closedTag')}
+          />
+        </div>
+      ) : (
+        <div className="scroll-wrapper">
+          <TodoList
+            date={day}
+            data={renderData}
+            render={(item) => {
+              const { items, onClick } = buildMenuItems(item)
+              const seatRate =
               item.seatCount && item.seatCount > 0
                 ? Math.round(
                     ((item.selectedSeatCount || 0) / item.seatCount) * 100
@@ -483,15 +525,9 @@ export default function CinemaPage({ params: { lng } }: Readonly<PageProps>) {
               </Dropdown>
             )
           }}
-        ></TodoList>
-      </div>
-      {/* <ul className="nav-hour">
-        {Array(24)
-          .fill(undefined)
-          .map((item, index) => {
-            return <li key={index}>{index + 1}</li>
-          })}
-      </ul> */}
+          ></TodoList>
+        </div>
+      )}
       <FloatButton
         shape="circle"
         type="primary"

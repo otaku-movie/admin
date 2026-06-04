@@ -5,6 +5,13 @@
   "selectDate": "Select date",
   "pageTitle": "Screening management",
   "reReleaseTag": "Re-release",
+  "theaterColumn": "Theater",
+  "emptyShowtime": "No screenings on this day",
+  "closedTag": "Hidden",
+  "viewMode": {
+    "gantt": "Gantt",
+    "grid": "Grid"
+  },
   "table": {
     "seatSelectRate": "Seat Selection Rate",
     "open": "Public",

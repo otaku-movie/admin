@@ -5,6 +5,13 @@
   "selectDate": "选择日期",
   "pageTitle": "排期管理",
   "reReleaseTag": "重映",
+  "theaterColumn": "影厅",
+  "emptyShowtime": "当日暂无排片",
+  "closedTag": "未公开",
+  "viewMode": {
+    "gantt": "甘特图",
+    "grid": "网格"
+  },
   "table": {
     "seatSelectRate": "座位选择比例",
     "open": "公开",

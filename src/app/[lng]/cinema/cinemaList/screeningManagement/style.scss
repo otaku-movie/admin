@@ -4,30 +4,66 @@
   flex-direction: column;
 }
 
-// 顶部导航 grid（日期栏）
+// ---- 日期切换胶囊（覆盖父级 .nav-container 的 grid/border 旧样式） ----
 .nav-container.nav-date-bar {
-  grid-template-columns: 40px 1fr 40px;
+  // 覆盖父类的 grid 模板，改成 flex 胶囊
+  display: inline-flex !important;
+  align-items: center;
+  gap: 2px;
+  // 抹掉父级的 1px 框线 + 改成圆角胶囊
+  border: 1px solid #e8e8e8;
+  border-radius: 999px;
+  background: #fff;
+  padding: 4px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+  grid-template-columns: none;
+  // 父级的 .scroll-wrapper / .screening-toolbar 让它 flex:1，胶囊本身保持紧凑
+  width: auto;
+  min-width: 260px;
+
+  > li {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    height: 32px;
+    width: auto;
+    // 抹掉父级 .nav-container li 的左右 border
+    border: none !important;
+    padding: 0;
+  }
 }
 
-// 日期切换按钮（仅图标）
+// 左右翻页按钮（圆形）
 .day-nav-btn {
   cursor: pointer;
   border: none;
   background: transparent;
-  padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  height: 100%;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  color: #595959;
+  transition: background-color 0.15s, color 0.15s;
+
+  &:hover {
+    background-color: #f0f5ff;
+    color: #1677ff;
+  }
+
+  &:active {
+    background-color: #e6f4ff;
+  }
 }
 
-// 日期选择区域（中间列）
+// 中间「日期 + 星期」一行
 .nav-date-inner {
-  display: flex;
+  display: flex !important;
   align-items: center;
   justify-content: center;
   gap: 4px;
+  padding: 0 4px;
 }
 
 .date-picker-trigger {
@@ -35,22 +71,23 @@
   align-items: center;
   gap: 4px;
   cursor: pointer;
-  padding: 4px 8px;
-  border-radius: 4px;
-  transition: background-color 0.2s;
+  padding: 4px 10px;
+  border-radius: 16px;
+  transition: background-color 0.15s;
 
   &:hover {
-    background-color: rgba(0, 0, 0, 0.04);
+    background-color: #f5f5f5;
   }
 }
 
 .calendar-icon {
   color: #1677ff;
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .week-text {
-  font-size: 16px;
+  font-size: 13px;
+  color: #8c8c8c;
 }
 
 // 表格区域横向滚动
@@ -248,6 +285,466 @@
 // 浮动添加按钮
 .screening-add-float-btn {
   inset-inline-end: 94px;
+}
+
+// 顶部工具栏：3 列 grid，让日期胶囊在中间列自动水平居中、视图切换靠右
+// 1fr auto 1fr：左右两个 1fr 占位负责把中间 auto（胶囊宽度）顶到视觉正中心
+.screening-toolbar {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  column-gap: 12px;
+  margin-bottom: 8px;
+
+  .nav-container.nav-date-bar {
+    grid-column: 2;
+  }
+}
+
+.screening-view-switch {
+  grid-column: 3;
+  justify-self: end;
+  flex-shrink: 0;
+}
+
+// 窄屏（< 720px）下回退成堆叠，避免 grid 把胶囊挤压
+@media (max-width: 720px) {
+  .screening-toolbar {
+    grid-template-columns: 1fr;
+    row-gap: 8px;
+
+    .nav-container.nav-date-bar {
+      grid-column: 1;
+      justify-self: center;
+    }
+  }
+  .screening-view-switch {
+    grid-column: 1;
+    justify-self: center;
+  }
+}
+
+// ---------------- 甘特图视图 ----------------
+
+// 顶部状态图例
+.gantt-legend {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  padding: 8px 14px;
+  margin-bottom: 6px;
+  background: #fff;
+  border: 1px solid #f0f0f0;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #595959;
+}
+
+.gantt-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  line-height: 1;
+
+  &.is-emphasis {
+    color: #1677ff;
+    font-weight: 500;
+  }
+}
+
+.gantt-legend-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+
+  &.gantt-legend-dot-closed {
+    background: repeating-linear-gradient(
+      45deg,
+      #d9d9d9,
+      #d9d9d9 2px,
+      #fafafa 2px,
+      #fafafa 4px
+    );
+    border: 1px solid #d9d9d9;
+  }
+}
+
+.gantt-legend-divider {
+  display: inline-block;
+  width: 1px;
+  height: 12px;
+  background: #e8e8e8;
+}
+
+// 把后续元素（按钮 / 提示）推到 legend 行的最右
+.gantt-legend-spacer {
+  flex: 1;
+}
+
+.gantt-legend-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 26px;
+  padding: 0 10px;
+  font-size: 13px;
+  color: #ff4d4f;
+  font-weight: 500;
+
+  .anticon {
+    font-size: 13px;
+  }
+}
+
+.gantt-legend-hint {
+  color: #595959;
+  font-size: 14px;
+  font-weight: 600;
+  user-select: none;
+  letter-spacing: 0.2px;
+}
+
+.gantt-empty-wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.gantt-empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 240px;
+  background: #fff;
+  border: 1px solid #f0f0f0;
+  border-radius: 6px;
+}
+
+.gantt-scroll {
+  width: 100%;
+  overflow: auto;
+  background: #fff;
+  border: 1px solid #f0f0f0;
+  border-radius: 6px;
+  position: relative;
+  max-height: calc(100vh - 220px);
+
+  // 加粗 + 提色的横/纵滚动条（只作用于本容器，不污染全局）
+  scrollbar-width: auto;
+  scrollbar-color: #bfbfbf #f5f5f5;
+
+  &::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+  }
+  &::-webkit-scrollbar-track {
+    background: #fafafa;
+    border-radius: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #bfbfbf;
+    border-radius: 6px;
+    border: 2px solid #fafafa;
+    background-clip: padding-box;
+
+    &:hover {
+      background: #8c8c8c;
+      background-clip: padding-box;
+    }
+  }
+  &::-webkit-scrollbar-corner {
+    background: #fafafa;
+  }
+}
+
+.gantt-grid {
+  display: grid;
+  grid-auto-rows: var(--gantt-row-height);
+  position: relative;
+  // 第一行（表头）单独 40px
+  grid-template-rows: 40px;
+}
+
+.gantt-cell {
+  border-right: 1px solid #f0f0f0;
+  border-bottom: 1px solid #f0f0f0;
+  background: #fff;
+  position: relative;
+  box-sizing: border-box;
+
+  &:last-child {
+    border-right: none;
+  }
+}
+
+// 表头单元（最左上角 "影厅" 标签）
+.gantt-corner {
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 6;
+  background: #fafafa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  color: #595959;
+  font-weight: 500;
+  border-bottom: 1px solid #e8e8e8;
+  border-right: 1px solid #e8e8e8;
+}
+
+// 顶部时间刻度行
+.gantt-header-timeline {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: #fafafa;
+  height: 40px;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.gantt-hour-tick {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding-left: 6px;
+  font-size: 13px;
+  color: #595959;
+  border-left: 1px dashed #f0f0f0;
+
+  &.major {
+    color: #262626;
+    border-left: 1px solid #e8e8e8;
+  }
+
+  // 跨日小时（25:00 ~）用紫色调，方便和当日的时段区分
+  &.is-next-day {
+    color: #722ed1;
+
+    .gantt-hour-label::after {
+      content: ' 翌';
+      font-size: 10px;
+      color: #b37feb;
+      margin-left: 2px;
+    }
+  }
+
+  .gantt-hour-label {
+    font-family: 'SFMono-Regular', Menlo, Consolas, monospace;
+    font-size: 13px;
+    font-weight: 500;
+  }
+}
+
+// 影厅名一列（每行第一列），随主体一起纵向滚，但水平固定
+.gantt-hall-label {
+  position: sticky;
+  left: 0;
+  z-index: 4;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+  border-right: 1px solid #e8e8e8;
+  font-size: 14px;
+  color: #262626;
+  font-weight: 500;
+
+  .gantt-hall-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+  }
+
+  .gantt-hall-count {
+    flex-shrink: 0;
+    min-width: 24px;
+    height: 20px;
+    line-height: 20px;
+    padding: 0 7px;
+    border-radius: 10px;
+    background: #f5f5f5;
+    color: #595959;
+    font-size: 12px;
+    font-weight: 500;
+    text-align: center;
+    margin-left: 8px;
+  }
+}
+
+// 每行右半（含场次条 + 网格线）
+.gantt-row-canvas {
+  position: relative;
+  overflow: hidden;
+
+  &.striped {
+    background: #fafafa;
+  }
+}
+
+// 背景每小时一条竖线
+.gantt-grid-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(0, 0, 0, 0.04);
+
+  &.major {
+    background: rgba(0, 0, 0, 0.06);
+  }
+}
+
+// 场次条
+.gantt-bar {
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 10px 0 14px; // 左侧多留空间给状态色条
+  border-radius: 4px;
+  border: 1px solid;
+  cursor: pointer;
+  overflow: hidden;
+  font-size: 13px;
+  line-height: 1.3;
+  transition: filter 0.15s, transform 0.15s, box-shadow 0.15s;
+
+  &:hover {
+    filter: brightness(0.95);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    z-index: 2;
+  }
+
+  // 放映中：加描边 + 微动画呼吸，强调"正在进行"
+  &.is-playing {
+    border-width: 2px;
+    box-shadow: 0 0 0 1px rgba(22, 119, 255, 0.15);
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #ff4d4f;
+      box-shadow: 0 0 0 2px rgba(255, 77, 79, 0.25);
+      animation: gantt-pulse 1.6s ease-in-out infinite;
+    }
+  }
+
+  &.is-closed {
+    opacity: 0.6;
+    background-image: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 6px,
+      rgba(0, 0, 0, 0.05) 6px,
+      rgba(0, 0, 0, 0.05) 12px
+    );
+  }
+
+  // 左侧 4px 状态色条（背景色由 JS inline-style 注入对应 accent 色）
+  .gantt-bar-accent {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 4px;
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+  }
+
+  .gantt-bar-time {
+    font-family: 'SFMono-Regular', Menlo, Consolas, monospace;
+    font-size: 12px;
+    flex-shrink: 0;
+    opacity: 0.85;
+    font-weight: 500;
+  }
+
+  .gantt-bar-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 500;
+    min-width: 0;
+    font-size: 13px;
+  }
+}
+
+@keyframes gantt-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.4);
+    opacity: 0.6;
+  }
+}
+
+// 当前时间红线
+.gantt-now-line {
+  position: absolute;
+  top: 40px;
+  width: 2px;
+  background: #ff4d4f;
+  z-index: 3;
+  pointer-events: none;
+
+  .gantt-now-badge {
+    position: absolute;
+    top: -22px;
+    left: -22px;
+    background: #ff4d4f;
+    color: #fff;
+    font-size: 10px;
+    font-family: 'SFMono-Regular', Menlo, Consolas, monospace;
+    padding: 1px 4px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+}
+
+// 详情 tooltip 内容
+.gantt-tip {
+  min-width: 180px;
+
+  .gantt-tip-title {
+    font-weight: 600;
+    margin-bottom: 4px;
+    word-break: break-word;
+  }
+
+  .gantt-tip-row {
+    font-size: 12px;
+    line-height: 1.6;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .gantt-tip-time {
+    font-family: 'SFMono-Regular', Menlo, Consolas, monospace;
+    font-size: 12px;
+  }
+
+  .gantt-tip-tag {
+    margin: 0;
+  }
 }
 
 .nav-hour {

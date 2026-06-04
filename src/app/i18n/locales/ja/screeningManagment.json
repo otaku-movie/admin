@@ -5,6 +5,13 @@
   "selectDate": "日付を選択",
   "pageTitle": "上映管理",
   "reReleaseTag": "再上映",
+  "theaterColumn": "シアター",
+  "emptyShowtime": "当日の上映データはありません",
+  "closedTag": "未公開",
+  "viewMode": {
+    "gantt": "ガント",
+    "grid": "グリッド"
+  },
   "table": {
     "seatSelectRate": "座席選択比率",
     "open": "公開",
