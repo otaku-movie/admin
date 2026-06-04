@@ -1,16 +1,89 @@
 {
   "top": {
-    "userCount": "ユーザー数",
+    "userCount": "登録ユーザー",
     "movieCount": "映画数",
     "cinemaCount": "映画館数",
-    "movieScreeningCount": "今日の上映回数"
+    "brandCount": "ブランド数",
+    "todayShowTime": "本日の上映回数",
+    "contentLibrary": "コンテンツ",
+    "cinemaNetwork": "シネマ網",
+    "brandLabel": "ブランド",
+    "hallLabel": "スクリーン",
+    "tmdbProgress": "TMDb マッチ {{count}} / {{total}} ({{rate}}%)",
+    "totalShowTime": "累計 {{count}} 回",
+    "userExtra": "アプリ累計登録"
+  },
+  "tabGroup": {
+    "showtime": "上映分析",
+    "quality": "データ品質",
+    "user": "ユーザー構成",
+    "business": "業務・注文"
   },
   "tab": {
-    "userRegisterCount": "日別登録ユーザー数",
+    "userRegisterCount": "日別登録ユーザー",
     "orderCount": "日別注文数",
-    "movieShowTimeCount": "日別上映回数",
-    "DailyTransactionAmount": "一日の取引額"
+    "movieShowTimeCount": "毎日の上映",
+    "next7Days": "今後 7 日間",
+    "DailyTransactionAmount": "日別取引額",
+    "loginPlatform": "ログインプラットフォーム",
+    "brandPie": "ブランド比率",
+    "topCinema": "Top 10 映画館",
+    "prefecture": "都道府県",
+    "dataQuality": "映画データ品質"
   },
   "registerPlatform": "登録プラットフォーム",
-  "movieBoxOffice": "興行収入"
+  "movieBoxOffice": "興行収入",
+  "emptyToday": "本日のデータはありません",
+  "loginPlatform": {
+    "title": "登録 / ログインプラットフォーム分布",
+    "platform": {
+      "local": "メール登録",
+      "google": "Google",
+      "apple": "Apple",
+      "mixed": "複数連携"
+    }
+  },
+  "brandPie": {
+    "title": "本日のブランド別上映比率",
+    "others": "その他"
+  },
+  "topCinema": {
+    "count": "上映回数"
+  },
+  "prefecture": {
+    "count": "上映回数",
+    "empty": "本日の都道府県別上映データはまだありません"
+  },
+  "next7Days": {
+    "unit": "上映回数",
+    "today": "今日",
+    "empty": "今後 7 日間の上映データはまだありません",
+    "hint": "クローラがどこまで先のスケジュールを取得済みかを確認できます。途中で急に低くなる日があれば、その日以降は未取得です。"
+  },
+  "movieShowTime": {
+    "unit": "上映回数",
+    "others": "その他",
+    "trendTitle": "上映トレンド（合計）",
+    "shareTitle": "映画比率（Top10 + その他）",
+    "deltaTitle": "作品別上映回数の前日比 Top 10",
+    "deltaMovie": "作品",
+    "deltaCount": "回数",
+    "deltaChange": "変化",
+    "deltaNew": "新規",
+    "yesterdayHint": "前日 {{count}} 回",
+    "noPrev": "前日比較データなし",
+    "trendSeries": "合計上映回数",
+    "topRank": "Top{{rank}}",
+    "empty": "上映データがありません"
+  },
+  "dataQuality": {
+    "totalMovies": "映画総数",
+    "tmdb": "TMDb マッチ済",
+    "description": "あらすじ",
+    "releaseDate": "公開日",
+    "homePage": "公式サイト",
+    "movieRate": "評価",
+    "level": "レーティング",
+    "empty": "映画データがありません"
+  }
 }

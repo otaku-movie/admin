@@ -1,16 +1,89 @@
 {
   "top": {
-    "userCount": "用户数",
+    "userCount": "注册用户",
     "movieCount": "电影数",
     "cinemaCount": "影院数",
-    "movieScreeningCount": "今日电影上映场次"
+    "brandCount": "影院品牌数",
+    "todayShowTime": "今日场次",
+    "contentLibrary": "影片库",
+    "cinemaNetwork": "影院网络",
+    "brandLabel": "品牌",
+    "hallLabel": "影厅",
+    "tmdbProgress": "TMDb 已匹配 {{count}} / {{total}} ({{rate}}%)",
+    "totalShowTime": "累计 {{count}} 场",
+    "userExtra": "APP 累计注册"
+  },
+  "tabGroup": {
+    "showtime": "排片分析",
+    "quality": "数据质量",
+    "user": "用户构成",
+    "business": "业务订单"
   },
   "tab": {
     "userRegisterCount": "日注册用户",
     "orderCount": "日订单量",
-    "movieShowTimeCount": "日排片数",
-    "DailyTransactionAmount": "日成交金额"
+    "movieShowTimeCount": "每日排片",
+    "next7Days": "未来 7 天",
+    "DailyTransactionAmount": "日成交金额",
+    "loginPlatform": "登录平台分布",
+    "brandPie": "品牌占比",
+    "topCinema": "Top 10 影院",
+    "prefecture": "都道府县",
+    "dataQuality": "电影数据质量"
   },
   "registerPlatform": "注册平台",
-  "movieBoxOffice": "票房"
+  "movieBoxOffice": "票房",
+  "emptyToday": "今日暂无数据",
+  "loginPlatform": {
+    "title": "注册/登录平台分布",
+    "platform": {
+      "local": "邮箱注册",
+      "google": "Google",
+      "apple": "Apple",
+      "mixed": "多平台绑定"
+    }
+  },
+  "brandPie": {
+    "title": "今日品牌场次占比",
+    "others": "其他"
+  },
+  "topCinema": {
+    "count": "场次"
+  },
+  "prefecture": {
+    "count": "场次",
+    "empty": "今日尚无可定位都道府县的场次（依赖 V12 迁移后的 cinema.prefecture_id）"
+  },
+  "next7Days": {
+    "unit": "场次",
+    "today": "今天",
+    "empty": "未来 7 天暂无排片数据",
+    "hint": "用来观察爬虫排片覆盖到第几天，柱子断崖说明该日及之后尚未抓取。"
+  },
+  "movieShowTime": {
+    "unit": "场次",
+    "others": "其他",
+    "trendTitle": "排片趋势（总场次）",
+    "shareTitle": "电影占比（Top10 + 其他）",
+    "deltaTitle": "单影片场次环比 Top 10",
+    "deltaMovie": "影片",
+    "deltaCount": "场次",
+    "deltaChange": "变化",
+    "deltaNew": "新增",
+    "yesterdayHint": "昨日 {{count}} 场",
+    "noPrev": "暂无昨日对比数据",
+    "trendSeries": "总场次",
+    "topRank": "Top{{rank}}",
+    "empty": "暂无排片数据"
+  },
+  "dataQuality": {
+    "totalMovies": "电影总数",
+    "tmdb": "TMDb 已匹配",
+    "description": "剧情简介",
+    "releaseDate": "上映日期",
+    "homePage": "官方网站",
+    "movieRate": "评分",
+    "level": "分级",
+    "empty": "暂无电影数据"
+  }
 }

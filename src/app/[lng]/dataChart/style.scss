@@ -4,14 +4,17 @@ $shadow: 0 2px 8px 0 rgba(0, 35, 144, 10%);
   display: flex;
   flex-direction: column;
   gap: 20px;
+  // 4 张大 KPI 卡：高度由内容定（含进度条 / 多统计行时自动撑高），
+  // 240px 作为最小宽阈值，窄屏会自动折成 2x2。
   .top-message {
     display: grid;
-    grid-gap: 20px;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: 120px;
-    li {
-      // border: 2px solid red;
-      padding: 20px;
+    grid-gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    .kpi-card {
+      padding: 18px 22px;
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
@@ -19,8 +22,79 @@ $shadow: 0 2px 8px 0 rgba(0, 35, 144, 10%);
       background: white;
       box-shadow: $shadow;
       border-radius: 10px;
+      min-height: 132px;
+      .label {
+        color: rgba(0, 0, 0, 0.55);
+        font-size: 13px;
+        font-weight: 500;
+      }
       .count {
-        font-size: 36px;
+        font-size: 32px;
+        line-height: 1.05;
+        font-weight: 600;
+        color: rgba(0, 0, 0, 0.88);
+        font-variant-numeric: tabular-nums;
+      }
+      .count-row {
+        display: flex;
+        align-items: baseline;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      .kpi-trend {
+        font-size: 13px;
+        font-weight: 500;
+        line-height: 1;
+      }
+      .kpi-trend-up {
+        color: #52c41a;
+      }
+      .kpi-trend-down {
+        color: #f5222d;
+      }
+      .extra {
+        font-size: 12px;
+        color: rgba(0, 0, 0, 0.55);
+        margin-top: auto;
+      }
+      .extra-with-progress {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        .ant-progress-line {
+          margin: 0;
+        }
+      }
+      .extra-stats {
+        display: flex;
+        gap: 18px;
+        flex-wrap: wrap;
+        b {
+          color: rgba(0, 0, 0, 0.85);
+          font-weight: 600;
+          font-variant-numeric: tabular-nums;
+          margin-right: 4px;
+        }
+      }
+    }
+  }
+  .quality-card {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    .quality-row {
+      display: grid;
+      grid-template-columns: 140px 1fr 110px;
+      align-items: center;
+      gap: 12px;
+      .quality-label {
+        font-size: 13px;
+        color: rgba(0, 0, 0, 0.75);
+      }
+      .quality-meta {
+        font-size: 12px;
+        color: rgba(0, 0, 0, 0.45);
+        text-align: right;
       }
     }
   }
@@ -34,6 +108,120 @@ $shadow: 0 2px 8px 0 rgba(0, 35, 144, 10%);
       display: grid;
       grid-template-columns: 1fr 300px;
       gap: 20px;
+    }
+  }
+  // 排片分析面板：左列趋势 + 占比上下叠，右列单影片环比 Top10 跨两行贴顶。
+  // < 1199px 退化为单列垂直，避免右列被挤到不足 360px 显示不下。
+  .daily-showtime-panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 440px;
+    grid-template-areas:
+      "trend delta"
+      "share delta";
+    gap: 24px 28px;
+    align-items: start;
+    .area-trend {
+      grid-area: trend;
+      min-width: 0;
+    }
+    .area-share {
+      grid-area: share;
+      min-width: 0;
+    }
+    .area-delta {
+      grid-area: delta;
+    }
+    &.empty-hint {
+      display: block;
+      padding: 40px;
+      text-align: center;
+      color: rgba(0, 0, 0, 0.45);
+    }
+    .chart-section-title {
+      margin: 0 0 12px;
+      font-size: 14px;
+      font-weight: 600;
+      color: rgba(0, 0, 0, 0.75);
+    }
+    .chart-block {
+      width: 100%;
+    }
+  }
+  @media (max-width: 1199px) {
+    .daily-showtime-panel {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        "trend"
+        "share"
+        "delta";
+    }
+  }
+  .movie-delta-empty {
+    padding: 24px;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.45);
+    font-size: 13px;
+  }
+  // 单影片环比 Top 10 列表：rank / name / yesterday / today / delta 五列升序。
+  // 紧凑列宽塞进 440px 右栏；只有 1 天数据时退化为 4 列（.no-prev）。
+  .movie-delta-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    .row {
+      display: grid;
+      grid-template-columns: 30px minmax(0, 1fr) 50px 50px 120px;
+      gap: 8px;
+      align-items: center;
+      padding: 6px 10px;
+      font-size: 12.5px;
+      border-radius: 6px;
+      background: #fafafa;
+      .rank {
+        color: rgba(0, 0, 0, 0.45);
+        font-variant-numeric: tabular-nums;
+      }
+      .name {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .value {
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+      }
+      .delta {
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+        font-weight: 500;
+        &.up {
+          color: #52c41a;
+        }
+        &.down {
+          color: #f5222d;
+        }
+      }
+    }
+    .row.header {
+      background: transparent;
+      color: rgba(0, 0, 0, 0.45);
+      font-size: 11.5px;
+      padding: 4px 10px;
+    }
+    .row.hint {
+      background: transparent;
+      color: rgba(0, 0, 0, 0.45);
+      font-size: 12px;
+      grid-template-columns: 1fr;
+      .name {
+        text-align: center;
+      }
+    }
+    &.no-prev .row {
+      grid-template-columns: 30px minmax(0, 1fr) 50px 120px;
     }
   }
 }

@@ -1,16 +1,89 @@
 {
   "top": {
-    "userCount": "Number of Users",
-    "movieCount": "Number of Movies",
-    "cinemaCount": "Number of Cinemas",
-    "movieScreeningCount": "Number of Movie Screenings Today"
+    "userCount": "Registered Users",
+    "movieCount": "Movies",
+    "cinemaCount": "Cinemas",
+    "brandCount": "Cinema Brands",
+    "todayShowTime": "Today's Showtimes",
+    "contentLibrary": "Content Library",
+    "cinemaNetwork": "Cinema Network",
+    "brandLabel": "brands",
+    "hallLabel": "halls",
+    "tmdbProgress": "TMDb matched {{count}} / {{total}} ({{rate}}%)",
+    "totalShowTime": "{{count}} total",
+    "userExtra": "App total registered"
+  },
+  "tabGroup": {
+    "showtime": "Showtimes",
+    "quality": "Data Quality",
+    "user": "Users",
+    "business": "Business"
   },
   "tab": {
-    "userRegisterCount": "Daily Registered Users",
+    "userRegisterCount": "Daily Registered",
     "orderCount": "Daily Orders",
-    "movieShowTimeCount": "Daily Movie Showtimes",
-    "DailyTransactionAmount": "Daily Transaction Amount"
+    "movieShowTimeCount": "Daily Showtimes",
+    "next7Days": "Next 7 Days",
+    "DailyTransactionAmount": "Daily Revenue",
+    "loginPlatform": "Login Platforms",
+    "brandPie": "By Brand",
+    "topCinema": "Top 10 Cinemas",
+    "prefecture": "By Prefecture",
+    "dataQuality": "Movie Data Quality"
   },
   "registerPlatform": "Registration Platform",
-  "movieBoxOffice": "Box Office"
+  "movieBoxOffice": "Box Office",
+  "emptyToday": "No data for today",
+  "loginPlatform": {
+    "title": "Registration / Login Platform Distribution",
+    "platform": {
+      "local": "Email",
+      "google": "Google",
+      "apple": "Apple",
+      "mixed": "Multi-bound"
+    }
+  },
+  "brandPie": {
+    "title": "Today's Showtimes by Brand",
+    "others": "Others"
+  },
+  "topCinema": {
+    "count": "Showtimes"
+  },
+  "prefecture": {
+    "count": "Showtimes",
+    "empty": "No prefecture-mapped showtimes today (depends on V12 migration)"
+  },
+  "next7Days": {
+    "unit": "Showtimes",
+    "today": "today",
+    "empty": "No upcoming showtimes data",
+    "hint": "Shows how many days ahead the crawler has fetched. A cliff means that day and beyond are not yet crawled."
+  },
+  "movieShowTime": {
+    "unit": "Showtimes",
+    "others": "Others",
+    "trendTitle": "Showtime Trend (Total)",
+    "shareTitle": "Movie Share (Top10 + Others)",
+    "deltaTitle": "Top 10 Movies Day-over-Day",
+    "deltaMovie": "Movie",
+    "deltaCount": "Today",
+    "deltaChange": "Change",
+    "deltaNew": "New",
+    "yesterdayHint": "Yesterday: {{count}}",
+    "noPrev": "No previous-day data",
+    "trendSeries": "Total showtimes",
+    "topRank": "Top{{rank}}",
+    "empty": "No showtime data"
+  },
+  "dataQuality": {
+    "totalMovies": "Total movies",
+    "tmdb": "TMDb matched",
+    "description": "Synopsis",
+    "releaseDate": "Release date",
+    "homePage": "Official site",
+    "movieRate": "Rating",
+    "level": "Certification",
+    "empty": "No movie data"
+  }
 }
