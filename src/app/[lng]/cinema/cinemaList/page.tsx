@@ -139,7 +139,8 @@ export default function Page ({ params: { lng } }: PageProps) {
                   processPath({
                     name: 'screeningManagement',
                     query: {
-                      id: row.id
+                      id: row.id,
+                      name: row.name
                     }
                   })
                 )

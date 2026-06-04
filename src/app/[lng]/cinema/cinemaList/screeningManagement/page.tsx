@@ -3,15 +3,14 @@ import React, { useState, useEffect, useCallback } from 'react'
 import {
   Switch,
   Tag,
-  Dropdown,
+  Button,
   FloatButton,
   Space,
   message,
   MenuProps,
   Modal,
   Typography,
-  DatePicker,
-  Segmented
+  DatePicker
 } from 'antd'
 import { useSearchParams, useRouter } from 'next/navigation'
 import {
@@ -19,15 +18,13 @@ import {
   LeftOutlined,
   RightOutlined,
   CalendarOutlined,
-  BarsOutlined,
-  AppstoreOutlined
+  ArrowLeftOutlined
 } from '@ant-design/icons'
 import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '@/app/[lng]/layout'
 import { processPath } from '@/config/router'
 import http from '@/api'
 import { Dict } from '@/components/dict'
-import { TodoList } from '@/components/TodoList/todoList'
 import './style.scss'
 import MovieShowTimeModal from '@/dialog/movieShowTimeModal'
 import {
@@ -40,10 +37,7 @@ import { useCommonStore } from '@/store/useCommonStore'
 import { DictCode } from '@/enum/dict'
 import GanttView from './ganttView'
 
-type ScreeningViewMode = 'gantt' | 'grid'
-const VIEW_MODE_STORAGE_KEY = 'screeningManagement.viewMode'
-
-const { Text, Paragraph } = Typography
+const { Paragraph } = Typography
 
 export default function CinemaPage({ params: { lng } }: Readonly<PageProps>) {
   const searchParams = useSearchParams()
@@ -67,25 +61,10 @@ export default function CinemaPage({ params: { lng } }: Readonly<PageProps>) {
     show: false,
     item: null
   })
-  const [viewMode, setViewMode] = useState<ScreeningViewMode>('gantt')
+  // 影院名称：由 cinemaList 跳转时通过 query 带入，用于页面标题展示
+  const cinemaName = searchParams.get('name') ?? ''
 
-  // 视图偏好持久化（甘特/网格）。SSR 期间用默认 gantt，挂载后从 localStorage 同步
-  useEffect(() => {
-    if (typeof window === 'undefined') return
-    const saved = window.localStorage.getItem(VIEW_MODE_STORAGE_KEY)
-    if (saved === 'gantt' || saved === 'grid') {
-      setViewMode(saved)
-    }
-  }, [])
-
-  const handleViewModeChange = (mode: ScreeningViewMode) => {
-    setViewMode(mode)
-    if (typeof window !== 'undefined') {
-      window.localStorage.setItem(VIEW_MODE_STORAGE_KEY, mode)
-    }
-  }
-
-  // 场次右键菜单：编辑 / 删除。甘特视图和网格视图复用同一份逻辑
+  // 场次右键菜单：编辑 / 删除
   const buildMenuItems = useCallback(
     (item: MovieShowTimeItem) => {
       const onClick: MenuProps['onClick'] = ({ key }) => {
@@ -196,10 +175,13 @@ export default function CinemaPage({ params: { lng } }: Readonly<PageProps>) {
       )
   }
 
+  // 甘特按「营业日（30h）」展示：传 use30HourFormat=true，后端会把当天 <6:00 的早场归到
+  // 前一天、并把次日 <6:00 的早场作为午夜尾巴并入，返回干净的营业日数据（详见后端 screening）。
   function getData() {
     getCinemaScreeningList({
       id: searchParams.get('id') as string,
-      date: day.format('YYYY-MM-DD')
+      date: day.format('YYYY-MM-DD'),
+      use30HourFormat: true
     }).then((res) => {
       const sortedData = sortScreenings(res.data as unknown as CinemaScreeing[])
       setData(sortedData)
@@ -213,11 +195,19 @@ export default function CinemaPage({ params: { lng } }: Readonly<PageProps>) {
 
   return (
     <section className="screening-page" aria-label={t('pageTitle')} title={t('pageTitle')}>
-      {/* <Query>
-        <QueryItem label={t('table.name')} column={1}>
-          <Input></Input>
-        </QueryItem>
-      </Query> */}
+      <div className="screening-header">
+        <Button
+          icon={<ArrowLeftOutlined />}
+          onClick={() => router.back()}
+        >
+          {t('back')}
+        </Button>
+        {cinemaName && (
+          <Paragraph strong className="screening-cinema-name" title={cinemaName}>
+            {cinemaName}
+          </Paragraph>
+        )}
+      </div>
       <section className="todo-top">
         <div className="screening-toolbar">
           <ul className="nav-container nav-date-bar">
@@ -276,258 +266,20 @@ export default function CinemaPage({ params: { lng } }: Readonly<PageProps>) {
               </button>
             </li>
           </ul>
-          <Segmented<ScreeningViewMode>
-            className="screening-view-switch"
-            value={viewMode}
-            onChange={handleViewModeChange}
-            options={[
-              {
-                label: t('viewMode.gantt'),
-                value: 'gantt',
-                icon: <BarsOutlined />
-              },
-              {
-                label: t('viewMode.grid'),
-                value: 'grid',
-                icon: <AppstoreOutlined />
-              }
-            ]}
-          />
         </div>
-        {viewMode === 'grid' && (
-          <ul
-            className="table-header table-header-dynamic"
-            style={
-              {
-                '--table-grid-cols': `40px repeat(${renderData.length}, minmax(200px, 1fr)) 40px`,
-                '--table-min-width': `${Math.max(renderData.length * 200 + 80, 100)}px`
-              } as React.CSSProperties
-            }
-          >
-            <li />
-            {renderData.map((item) => (
-              <li key={item.id}>{item.name}</li>
-            ))}
-            <li />
-          </ul>
-        )}
       </section>
 
-      {viewMode === 'gantt' ? (
-        <div className="scroll-wrapper">
-          <GanttView
-            date={day}
-            data={renderData}
-            onItemClick={(item) => setDetailModal({ show: true, item })}
-            buildMenuItems={buildMenuItems}
-            emptyText={t('emptyShowtime')}
-            hallColumnTitle={t('theaterColumn')}
-            closedLabel={t('closedTag')}
-          />
-        </div>
-      ) : (
-        <div className="scroll-wrapper">
-          <TodoList
-            date={day}
-            data={renderData}
-            render={(item) => {
-              const { items, onClick } = buildMenuItems(item)
-              const seatRate =
-              item.seatCount && item.seatCount > 0
-                ? Math.round(
-                    ((item.selectedSeatCount || 0) / item.seatCount) * 100
-                  )
-                : 0
-
-            return (
-              <Dropdown
-                menu={{ items, onClick }}
-                key={item.id}
-                trigger={['contextMenu']}
-              >
-                <div
-                  role="button"
-                  tabIndex={0}
-                  className={`show-time-card ${item.open ? 'open' : 'closed'}`}
-                  onClick={() => {
-                    setDetailModal({ show: true, item })
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      e.preventDefault()
-                      setDetailModal({ show: true, item })
-                    }
-                  }}
-                >
-                  {/* 时间行 */}
-                  <div className="card-time-row">
-                    <Text strong className="card-time-text">
-                      {dayjs(item.startTime).format('HH:mm')} -{' '}
-                      {dayjs(item.endTime).format('HH:mm')}
-                    </Text>
-                    <Tag
-                      color={(() => {
-                        if (item.status === 1) return 'default'
-                        if (item.status === 2) return 'processing'
-                        return 'error'
-                      })()}
-                      className="card-status-tag"
-                    >
-                      <Dict code={item.status} name={'cinemaPlayState'}></Dict>
-                    </Tag>
-                  </div>
-
-                  {/* 电影名称 */}
-                  <Paragraph strong className="card-title" title={item.movieName}>
-                    {item.movieName}
-                  </Paragraph>
-
-                  {/* 关键标签行：2D/3D、版本、规格、字幕 */}
-                  <div className="card-tags-row">
-                    {/* 重映标记 */}
-                    {item.reReleaseId != null ? (
-                      <Tag color="blue" className="card-tag-small">
-                        {t('reReleaseTag')}
-                      </Tag>
-                    ) : null}
-                    {/* 2D/3D 放映类型（始终展示） */}
-                    <Tag
-                      color={
-                        item.dimensionType != null &&
-                        item.dimensionType !== undefined
-                          ? 'purple'
-                          : 'default'
-                      }
-                      className="card-tag-small"
-                    >
-                      {(() => {
-                        if (
-                          item.dimensionType == null &&
-                          item.dimensionType !== 0
-                        ) {
-                          return t('table.dimensionNotSet') || '未设置'
-                        }
-                        const dictList =
-                          commonStore.dict?.[DictCode.DIMENSION_TYPE] || []
-                        const dictItem = dictList.find(
-                          (d: any) =>
-                            d.id === item.dimensionType ||
-                            d.code === item.dimensionType
-                        )
-                        return (
-                          dictItem?.name ?? `类型${item.dimensionType}`
-                        )
-                      })()}
-                    </Tag>
-                    {/* 版本 */}
-                    {item.versionCode != null && (
-                      <Tag color="blue" className="card-tag-small">
-                        {(() => {
-                          const dictList =
-                            commonStore.dict?.[DictCode.DUBBING_VERSION] || []
-                          const dictItem = dictList.find(
-                            (d: any) => d.code === item.versionCode
-                          )
-                          return dictItem?.name || `版本${item.versionCode}`
-                        })()}
-                      </Tag>
-                    )}
-                    {/* 上映规格 */}
-                    {item.specName &&
-                      item.specName.split('、').map((name: string, idx: number) => (
-                        <Tag key={idx} color="green" className="card-tag-small">
-                          {name}
-                        </Tag>
-                      ))}
-                    {/* 字幕 */}
-                    {item.subtitle &&
-                      item.subtitle.length > 0 &&
-                      item.subtitle.map((sub) => (
-                        <Tag color="cyan" key={sub.id} className="card-tag-small">
-                          {sub.name}
-                        </Tag>
-                      ))}
-                  </div>
-
-                  {/* 底部信息 */}
-                  <div className="card-footer">
-                    {/* 开放状态 */}
-                    <div className="card-footer-row">
-                      <Text type="secondary" className="card-label-small">
-                        {t('table.open')}
-                      </Text>
-                      <span
-                        onClick={(e) => e.stopPropagation()}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter' || e.key === ' ') {
-                            e.stopPropagation()
-                          }
-                        }}
-                        role="button"
-                        tabIndex={0}
-                      >
-                        <Switch
-                          size="small"
-                          checked={item.open}
-                          onChange={(val) => {
-                            item.open = val
-                            setData([...data])
-                            http({
-                              url: 'admin/movie_show_time/save',
-                              method: 'post',
-                              data: {
-                                id: item.id,
-                                open: val,
-                                movieId: item.movieId,
-                                cinemaId: item.cinemaId,
-                                theaterHallId: item.theaterHallId,
-                                showTimeTagId: item.movieShowTimeTagsId,
-                                specIds: item.specIds ?? (item.specId != null ? [item.specId] : []),
-                                startTime: dayjs(item.startTime)?.format(
-                                  'YYYY-MM-DD HH:mm:ss'
-                                ),
-                                endTime: dayjs(item.endTime)?.format(
-                                  'YYYY-MM-DD HH:mm:ss'
-                                )
-                              }
-                            }).then(() => {
-                              message.success(common('message.save'))
-                              getData()
-                            })
-                          }}
-                        />
-                      </span>
-                    </div>
-
-                    {/* 座位选择率 */}
-                    <div className="card-footer-row">
-                      <Text type="secondary" className="card-label-small">
-                        {t('table.seatSelectRate')}
-                      </Text>
-                      <div className="detail-flex-start detail-gap-4">
-                        <Text className="card-label-small">
-                          {item.selectedSeatCount || 0}/{item.seatCount || 0}
-                        </Text>
-                        <Tag
-                          color={(() => {
-                            if (seatRate >= 80) return 'red'
-                            if (seatRate >= 50) return 'orange'
-                            return 'green'
-                          })()}
-                          className="card-tag-small"
-                        >
-                          {seatRate}%
-                        </Tag>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </Dropdown>
-            )
-          }}
-          ></TodoList>
-        </div>
-      )}
+      <div className="scroll-wrapper">
+        <GanttView
+          date={day}
+          data={renderData}
+          onItemClick={(item) => setDetailModal({ show: true, item })}
+          buildMenuItems={buildMenuItems}
+          emptyText={t('emptyShowtime')}
+          hallColumnTitle={t('theaterColumn')}
+          closedLabel={t('closedTag')}
+        />
+      </div>
       <FloatButton
         shape="circle"
         type="primary"

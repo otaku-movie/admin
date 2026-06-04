@@ -48,6 +48,8 @@ export interface CinemaScreeing {
 export interface GetCinemaScreeningQuery {
   id: string
   date: string
+  /** 是否按 30 小时制（营业日）返回：当天 <6:00 早场归前一天，次日 <6:00 早场并入午夜尾巴 */
+  use30HourFormat?: boolean
 }
 
 export function getCinemaScreeningList (query: GetCinemaScreeningQuery) {

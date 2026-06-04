@@ -4,6 +4,23 @@
   flex-direction: column;
 }
 
+// 顶部页头：返回按钮 + 影院名称
+.screening-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+
+  .screening-cinema-name {
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.4;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}
+
 // ---- 日期切换胶囊（覆盖父级 .nav-container 的 grid/border 旧样式） ----
 .nav-container.nav-date-bar {
   // 覆盖父类的 grid 模板，改成 flex 胶囊
