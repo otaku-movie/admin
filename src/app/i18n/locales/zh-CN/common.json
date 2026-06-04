@@ -138,6 +138,19 @@
             "appVersionDetail": "应用版本详情"
           }
         },
+        "authProviderManagement": {
+          "name": "登录方式管理",
+          "children": {
+            "authProviderList": "登录方式配置"
+          }
+        },
+        "agreementManagement": {
+          "name": "协议管理",
+          "children": {
+            "agreementList": "协议列表",
+            "agreementDetail": "协议详情"
+          }
+        },
         "dictList": "字典管理"
       }
     }

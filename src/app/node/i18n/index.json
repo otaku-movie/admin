@@ -1,4 +1,233 @@
 {
+  "agreement.json": {
+    "title": {
+      "create": {
+        "zhCN": "新增协议",
+        "ja": "規約の新規作成",
+        "enUS": "New Agreement"
+      },
+      "edit": {
+        "zhCN": "编辑协议",
+        "ja": "規約の編集",
+        "enUS": "Edit Agreement"
+      }
+    },
+    "table": {
+      "code": {
+        "zhCN": "协议码",
+        "ja": "規約コード",
+        "enUS": "Code"
+      },
+      "language": {
+        "zhCN": "语言",
+        "ja": "言語",
+        "enUS": "Language"
+      },
+      "title": {
+        "zhCN": "标题",
+        "ja": "タイトル",
+        "enUS": "Title"
+      },
+      "version": {
+        "zhCN": "版本",
+        "ja": "バージョン",
+        "enUS": "Version"
+      },
+      "status": {
+        "zhCN": "状态",
+        "ja": "ステータス",
+        "enUS": "Status"
+      },
+      "isRequiredAccept": {
+        "zhCN": "需同意",
+        "ja": "同意必要",
+        "enUS": "Required"
+      },
+      "publishedAt": {
+        "zhCN": "发布时间",
+        "ja": "公開日時",
+        "enUS": "Published At"
+      }
+    },
+    "form": {
+      "code": {
+        "label": {
+          "zhCN": "协议码",
+          "ja": "規約コード",
+          "enUS": "Agreement Code"
+        },
+        "placeholder": {
+          "zhCN": "USER_TERMS / PRIVACY_POLICY",
+          "ja": "USER_TERMS / PRIVACY_POLICY",
+          "enUS": "USER_TERMS / PRIVACY_POLICY"
+        },
+        "required": {
+          "zhCN": "请选择协议码",
+          "ja": "規約コードを選択してください",
+          "enUS": "Please select agreement code"
+        }
+      },
+      "language": {
+        "label": {
+          "zhCN": "语言",
+          "ja": "言語",
+          "enUS": "Language"
+        },
+        "required": {
+          "zhCN": "请选择语言",
+          "ja": "言語を選択してください",
+          "enUS": "Please select language"
+        }
+      },
+      "version": {
+        "label": {
+          "zhCN": "版本",
+          "ja": "バージョン",
+          "enUS": "Version"
+        },
+        "required": {
+          "zhCN": "请输入版本号",
+          "ja": "バージョンを入力してください",
+          "enUS": "Please enter version"
+        }
+      },
+      "title": {
+        "label": {
+          "zhCN": "标题",
+          "ja": "タイトル",
+          "enUS": "Title"
+        },
+        "required": {
+          "zhCN": "请输入标题",
+          "ja": "タイトルを入力してください",
+          "enUS": "Please enter title"
+        }
+      },
+      "status": {
+        "label": {
+          "zhCN": "状态",
+          "ja": "ステータス",
+          "enUS": "Status"
+        }
+      },
+      "isRequiredAccept": {
+        "label": {
+          "zhCN": "是否需要用户同意",
+          "ja": "ユーザー同意が必要",
+          "enUS": "Requires user consent"
+        }
+      },
+      "content": {
+        "label": {
+          "zhCN": "协议正文",
+          "ja": "規約本文",
+          "enUS": "Content"
+        },
+        "required": {
+          "zhCN": "请输入协议正文",
+          "ja": "規約本文を入力してください",
+          "enUS": "Please enter content"
+        }
+      }
+    },
+    "code": {
+      "USER_TERMS": {
+        "zhCN": "用户协议",
+        "ja": "利用規約",
+        "enUS": "User Terms"
+      },
+      "PRIVACY_POLICY": {
+        "zhCN": "隐私协议",
+        "ja": "プライバシーポリシー",
+        "enUS": "Privacy Policy"
+      },
+      "THIRD_PARTY_SDK": {
+        "zhCN": "第三方 SDK 清单",
+        "ja": "サードパーティ SDK 一覧",
+        "enUS": "Third-party SDK List"
+      }
+    },
+    "language": {
+      "zh": {
+        "zhCN": "中文",
+        "ja": "中国語",
+        "enUS": "Chinese"
+      },
+      "ja": {
+        "zhCN": "日本語",
+        "ja": "日本語",
+        "enUS": "Japanese"
+      },
+      "en": {
+        "zhCN": "English",
+        "ja": "英語",
+        "enUS": "English"
+      }
+    },
+    "status": {
+      "DRAFT": {
+        "zhCN": "草稿",
+        "ja": "下書き",
+        "enUS": "Draft"
+      },
+      "PUBLISHED": {
+        "zhCN": "已发布",
+        "ja": "公開済み",
+        "enUS": "Published"
+      },
+      "OFFLINE": {
+        "zhCN": "下线",
+        "ja": "非公開",
+        "enUS": "Offline"
+      }
+    },
+    "yesNo": {
+      "yes": {
+        "zhCN": "是",
+        "ja": "はい",
+        "enUS": "Yes"
+      },
+      "no": {
+        "zhCN": "否",
+        "ja": "いいえ",
+        "enUS": "No"
+      }
+    },
+    "button": {
+      "publish": {
+        "zhCN": "发布",
+        "ja": "公開",
+        "enUS": "Publish"
+      },
+      "query": {
+        "zhCN": "查询",
+        "ja": "検索",
+        "enUS": "Search"
+      },
+      "addAgreement": {
+        "zhCN": "新增协议",
+        "ja": "規約を追加",
+        "enUS": "New Agreement"
+      }
+    },
+    "message": {
+      "saveSuccess": {
+        "zhCN": "保存成功",
+        "ja": "保存しました",
+        "enUS": "Saved successfully"
+      },
+      "publishSuccess": {
+        "zhCN": "发布成功",
+        "ja": "公開しました",
+        "enUS": "Published successfully"
+      },
+      "removeConfirm": {
+        "zhCN": "确认删除该协议？",
+        "ja": "この規約を削除しますか？",
+        "enUS": "Delete this agreement?"
+      }
+    }
+  },
   "brandList.json": {
     "table": {
       "name": {
@@ -382,6 +611,11 @@
         "zhCN": "日成交金额",
         "ja": "一日の取引額",
         "enUS": "Daily Transaction Amount"
+      },
+      "loginPlatform": {
+        "zhCN": "多平台登录统计",
+        "ja": "マルチプラットフォームログイン統計",
+        "enUS": "Multi-platform Login Stats"
       }
     },
     "registerPlatform": {
@@ -393,6 +627,35 @@
       "zhCN": "票房",
       "ja": "興行収入",
       "enUS": "Box Office"
+    },
+    "loginPlatform": {
+      "title": {
+        "zhCN": "注册/登录平台分布",
+        "ja": "登録 / ログインプラットフォーム分布",
+        "enUS": "Registration / Login Platform Distribution"
+      },
+      "platform": {
+        "local": {
+          "zhCN": "邮箱注册",
+          "ja": "メール登録",
+          "enUS": "Email"
+        },
+        "google": {
+          "zhCN": "Google",
+          "ja": "Google",
+          "enUS": "Google"
+        },
+        "apple": {
+          "zhCN": "Apple",
+          "ja": "Apple",
+          "enUS": "Apple"
+        },
+        "mixed": {
+          "zhCN": "多平台绑定",
+          "ja": "複数連携",
+          "enUS": "Multi-bound"
+        }
+      }
     }
   },
   "cinema.json": {

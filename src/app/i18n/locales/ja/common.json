@@ -138,6 +138,19 @@
             "appVersionDetail": "アプリバージョン詳細"
           }
         },
+        "authProviderManagement": {
+          "name": "ログイン方法管理",
+          "children": {
+            "authProviderList": "ログイン方法設定"
+          }
+        },
+        "agreementManagement": {
+          "name": "規約管理",
+          "children": {
+            "agreementList": "規約一覧",
+            "agreementDetail": "規約詳細"
+          }
+        },
         "dictList": "辞書管理"
       }
     }

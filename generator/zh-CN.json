@@ -1,4 +1,77 @@
 {
+  "agreement.json": {
+    "title": {
+      "create": "新增协议",
+      "edit": "编辑协议"
+    },
+    "table": {
+      "code": "协议码",
+      "language": "语言",
+      "title": "标题",
+      "version": "版本",
+      "status": "状态",
+      "isRequiredAccept": "需同意",
+      "publishedAt": "发布时间"
+    },
+    "form": {
+      "code": {
+        "label": "协议码",
+        "placeholder": "USER_TERMS / PRIVACY_POLICY",
+        "required": "请选择协议码"
+      },
+      "language": {
+        "label": "语言",
+        "required": "请选择语言"
+      },
+      "version": {
+        "label": "版本",
+        "required": "请输入版本号"
+      },
+      "title": {
+        "label": "标题",
+        "required": "请输入标题"
+      },
+      "status": {
+        "label": "状态"
+      },
+      "isRequiredAccept": {
+        "label": "是否需要用户同意"
+      },
+      "content": {
+        "label": "协议正文",
+        "required": "请输入协议正文"
+      }
+    },
+    "code": {
+      "USER_TERMS": "用户协议",
+      "PRIVACY_POLICY": "隐私协议",
+      "THIRD_PARTY_SDK": "第三方 SDK 清单"
+    },
+    "language": {
+      "zh": "中文",
+      "ja": "日本語",
+      "en": "English"
+    },
+    "status": {
+      "DRAFT": "草稿",
+      "PUBLISHED": "已发布",
+      "OFFLINE": "下线"
+    },
+    "yesNo": {
+      "yes": "是",
+      "no": "否"
+    },
+    "button": {
+      "publish": "发布",
+      "query": "查询",
+      "addAgreement": "新增协议"
+    },
+    "message": {
+      "saveSuccess": "保存成功",
+      "publishSuccess": "发布成功",
+      "removeConfirm": "确认删除该协议？"
+    }
+  },
   "brandList.json": {
     "table": {
       "name": "品牌名称",
@@ -129,10 +202,20 @@
       "userRegisterCount": "日注册用户",
       "orderCount": "日订单量",
       "movieShowTimeCount": "日排片数",
-      "DailyTransactionAmount": "日成交金额"
+      "DailyTransactionAmount": "日成交金额",
+      "loginPlatform": "多平台登录统计"
     },
     "registerPlatform": "注册平台",
-    "movieBoxOffice": "票房"
+    "movieBoxOffice": "票房",
+    "loginPlatform": {
+      "title": "注册/登录平台分布",
+      "platform": {
+        "local": "邮箱注册",
+        "google": "Google",
+        "apple": "Apple",
+        "mixed": "多平台绑定"
+      }
+    }
   },
   "cinema.json": {
     "table": {
