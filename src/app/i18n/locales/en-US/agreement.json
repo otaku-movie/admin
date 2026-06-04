@@ -1,0 +1,73 @@
+{
+  "title": {
+    "create": "New Agreement",
+    "edit": "Edit Agreement"
+  },
+  "table": {
+    "code": "Code",
+    "language": "Language",
+    "title": "Title",
+    "version": "Version",
+    "status": "Status",
+    "isRequiredAccept": "Required",
+    "publishedAt": "Published At"
+  },
+  "form": {
+    "code": {
+      "label": "Agreement Code",
+      "placeholder": "USER_TERMS / PRIVACY_POLICY",
+      "required": "Please select agreement code"
+    },
+    "language": {
+      "label": "Language",
+      "required": "Please select language"
+    },
+    "version": {
+      "label": "Version",
+      "required": "Please enter version"
+    },
+    "title": {
+      "label": "Title",
+      "required": "Please enter title"
+    },
+    "status": {
+      "label": "Status"
+    },
+    "isRequiredAccept": {
+      "label": "Requires user consent"
+    },
+    "content": {
+      "label": "Content",
+      "required": "Please enter content"
+    }
+  },
+  "code": {
+    "USER_TERMS": "User Terms",
+    "PRIVACY_POLICY": "Privacy Policy",
+    "THIRD_PARTY_SDK": "Third-party SDK List"
+  },
+  "language": {
+    "zh": "Chinese",
+    "ja": "Japanese",
+    "en": "English"
+  },
+  "status": {
+    "DRAFT": "Draft",
+    "PUBLISHED": "Published",
+    "OFFLINE": "Offline"
+  },
+  "yesNo": {
+    "yes": "Yes",
+    "no": "No"
+  },
+  "button": {
+    "publish": "Publish",
+    "query": "Search",
+    "addAgreement": "New Agreement"
+  },
+  "message": {
+    "saveSuccess": "Saved successfully",
+    "publishSuccess": "Published successfully",
+    "removeConfirm": "Delete this agreement?"
+  }
+}

@@ -1,0 +1,38 @@
+.agreement-detail {
+  padding: 0 0 24px;
+
+  .agreement-detail__header {
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .agreement-detail__editor {
+    .bytemd {
+      height: calc(100vh - 360px);
+      min-height: 480px;
+    }
+
+    .bytemd-editor .CodeMirror {
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .bytemd-editor .CodeMirror .CodeMirror-lines,
+    .bytemd-preview .markdown-body {
+      max-width: none;
+      padding: 16px 24px;
+    }
+
+    .bytemd-editor .CodeMirror pre.CodeMirror-line,
+    .bytemd-editor .CodeMirror pre.CodeMirror-line-like {
+      padding: 0;
+    }
+
+    .bytemd-preview .markdown-body {
+      font-size: 14px;
+      line-height: 1.7;
+    }
+  }
+}

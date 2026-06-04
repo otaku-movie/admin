@@ -1,0 +1,73 @@
+{
+  "title": {
+    "create": "規約の新規作成",
+    "edit": "規約の編集"
+  },
+  "table": {
+    "code": "規約コード",
+    "language": "言語",
+    "title": "タイトル",
+    "version": "バージョン",
+    "status": "ステータス",
+    "isRequiredAccept": "同意必要",
+    "publishedAt": "公開日時"
+  },
+  "form": {
+    "code": {
+      "label": "規約コード",
+      "placeholder": "USER_TERMS / PRIVACY_POLICY",
+      "required": "規約コードを選択してください"
+    },
+    "language": {
+      "label": "言語",
+      "required": "言語を選択してください"
+    },
+    "version": {
+      "label": "バージョン",
+      "required": "バージョンを入力してください"
+    },
+    "title": {
+      "label": "タイトル",
+      "required": "タイトルを入力してください"
+    },
+    "status": {
+      "label": "ステータス"
+    },
+    "isRequiredAccept": {
+      "label": "ユーザー同意が必要"
+    },
+    "content": {
+      "label": "規約本文",
+      "required": "規約本文を入力してください"
+    }
+  },
+  "code": {
+    "USER_TERMS": "利用規約",
+    "PRIVACY_POLICY": "プライバシーポリシー",
+    "THIRD_PARTY_SDK": "サードパーティ SDK 一覧"
+  },
+  "language": {
+    "zh": "中国語",
+    "ja": "日本語",
+    "en": "英語"
+  },
+  "status": {
+    "DRAFT": "下書き",
+    "PUBLISHED": "公開済み",
+    "OFFLINE": "非公開"
+  },
+  "yesNo": {
+    "yes": "はい",
+    "no": "いいえ"
+  },
+  "button": {
+    "publish": "公開",
+    "query": "検索",
+    "addAgreement": "規約を追加"
+  },
+  "message": {
+    "saveSuccess": "保存しました",
+    "publishSuccess": "公開しました",
+    "removeConfirm": "この規約を削除しますか？"
+  }
+}
