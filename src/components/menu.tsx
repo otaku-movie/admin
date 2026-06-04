@@ -2,14 +2,15 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { Menu as AntdMenu } from 'antd'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { permission } from '@/dialog/rolePermission'
 import { useTranslation } from '@/app/i18n/client'
 import { languageType } from '@/config'
-import { processPath } from '@/config/router'
 import { ItemType, MenuItemType } from 'antd/es/menu/interface'
 
 interface Props {
   data: permission[]
+  lng: languageType
 }
 
 function findMatchedKey(
@@ -37,7 +38,8 @@ function findMatchedKey(
 }
 
 export function Menu(props: Readonly<Props>) {
-  const { t } = useTranslation(navigator.language as languageType, 'common')
+  const pathname = usePathname()
+  const { t } = useTranslation(props.lng, 'common')
 
   const recursion = (menu: permission[]): ItemType<MenuItemType>[] => {
     return menu.map((item) => {
@@ -53,7 +55,7 @@ export function Menu(props: Readonly<Props>) {
 
       return {
         key: `${item.path}`,
-        label: <Link href={processPath(item.pathName)}>{name}</Link>,
+        label: <Link href={`/${props.lng}${item.path}`}>{name}</Link>,
         children: null
       }
     })
@@ -189,6 +191,7 @@ export function Menu(props: Readonly<Props>) {
       const buttonNode = collectByI18nKeys([systemRoot], ['menu.permission.children.buttonList'])[0]
       const userNode = collectByI18nKeys(props.data, ['menu.userList'])[0]
       const appVersionNode = collectByI18nKeys(props.data, ['menu.appVersionList'])[0]
+      const authProviderNode = collectByI18nKeys(props.data, ['menu.authProviderList'])[0]
       const dictNode = collectByI18nKeys(props.data, ['menu.dictList'])[0]
 
       const children: permission[] = []
@@ -212,6 +215,12 @@ export function Menu(props: Readonly<Props>) {
         ]))
       }
 
+      if (authProviderNode) {
+        children.push(makeGroup(systemRoot.path, 'menu2.systemManagement.children.authProviderManagement.name', [
+          cloneWithI18nKey(authProviderNode, 'menu2.systemManagement.children.authProviderManagement.children.authProviderList')
+        ]))
+      }
+
       if (dictNode) children.push(cloneWithI18nKey(dictNode, 'menu2.systemManagement.children.dictList'))
 
       out.push(cloneWithI18nKey(systemRoot, 'menu2.systemManagement.name', children))
@@ -222,12 +231,14 @@ export function Menu(props: Readonly<Props>) {
   }, [props.data])
 
   // 获取当前路径（去除语言前缀）
-  const removeLangPrefix = () => {
-    return location.pathname.split(navigator.language).slice(1).join('')
+  const removeLangPrefix = (path: string) => {
+    const pathWithoutQuery = path.split('?')[0]
+    const segments = pathWithoutQuery.split('/').filter(Boolean)
+    return `/${segments.slice(1).join('/')}`
   }
-  const currentPath = removeLangPrefix()
+  const currentPath = removeLangPrefix(pathname)
   const matchedKey = findMatchedKey(displayData, currentPath) ?? currentPath
-  const openKeyFallback = '/' + removeLangPrefix().split('/')[1]
+  const openKeyFallback = '/' + currentPath.split('/')[1]
 
   // 根据 matchedKey 在树中的祖先链计算 openKeys，避免「按 URL 第一段」导致的误折叠
   const computedOpenKeys = useMemo(() => {
@@ -261,7 +272,7 @@ export function Menu(props: Readonly<Props>) {
   useEffect(() => {
     setSelectedKeys([matchedKey])
     setOpenKeys(computedOpenKeys.length ? computedOpenKeys : [openKeyFallback])
-  }, [location.pathname, matchedKey, computedOpenKeys, openKeyFallback])
+  }, [pathname, matchedKey, computedOpenKeys, openKeyFallback])
 
   return (
     <AntdMenu

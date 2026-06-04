@@ -192,8 +192,10 @@ function RootLayout({ children, params: { lng } }: PageProps) {
   }
 
   useEffect(() => {
+    if (set.has(str)) return
     getDict()
-  }, [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [str])
 
   // useEffect(() => {
   console.log(process.env.NODE_ENV)
@@ -309,7 +311,7 @@ function RootLayout({ children, params: { lng } }: PageProps) {
       </head>
       <body
         style={{
-          minWidth: '1200px'
+          minWidth: set.has(str) ? undefined : '1200px'
         }}
       >
         <AntdRegistry>
@@ -425,7 +427,7 @@ function RootLayout({ children, params: { lng } }: PageProps) {
                   </Header>
                   <Layout>
                     <Sider width={250} style={{ background: colorBgContainer }}>
-                      <Menu data={menu}></Menu>
+                      <Menu data={menu} lng={lng}></Menu>
                     </Sider>
                     <Layout
                       style={{
