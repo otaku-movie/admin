@@ -95,7 +95,7 @@ export default function PresaleFormPage({ params: { lng } }: PageProps) {
               ...spec,
               deliveryType:
                 spec.deliveryType ?? editingTicket.deliveryType ?? 'virtual',
-              bonusIncluded: spec.bonusIncluded !== false,
+              bonusIncluded: spec.bonusIncluded === true,
               priceItems:
                 Array.isArray(spec.priceItems) && spec.priceItems.length > 0
                   ? spec.priceItems.map((pi) => ({
@@ -108,7 +108,7 @@ export default function PresaleFormPage({ params: { lng } }: PageProps) {
           : [
               {
                 deliveryType: editingTicket.deliveryType ?? 'virtual',
-                bonusIncluded: true,
+                bonusIncluded: false,
                 priceItems: [{ label: '', price: undefined }]
               }
             ]
@@ -153,7 +153,7 @@ export default function PresaleFormPage({ params: { lng } }: PageProps) {
         discountMode: 'fixed',
         mubitikeType: 'online',
         movieId: undefined,
-        specifications: [{ deliveryType: 'virtual', bonusIncluded: true, priceItems: [{ label: '', price: undefined }] }]
+        specifications: [{ deliveryType: 'virtual', bonusIncluded: false, priceItems: [{ label: '', price: undefined }] }]
       })
       setSelectedMovie(null)
     }
@@ -259,7 +259,7 @@ export default function PresaleFormPage({ params: { lng } }: PageProps) {
             bonusImages: Array.isArray(item.bonusImages) ? item.bonusImages.filter(Boolean) : undefined,
             bonusDescription: item.bonusDescription?.trim() || undefined,
             bonusQuantity: item.bonusQuantity ?? undefined,
-            bonusIncluded: item.bonusIncluded !== false
+            bonusIncluded: item.bonusIncluded === true
           }})
 
         if (normalizedSpecifications.length === 0) {
@@ -331,7 +331,7 @@ export default function PresaleFormPage({ params: { lng } }: PageProps) {
             bonusImages: s.bonusImages,
             bonusDescription: s.bonusDescription,
             bonusQuantity: s.bonusQuantity,
-            bonusIncluded: s.bonusIncluded !== false
+            bonusIncluded: s.bonusIncluded === true
           }))
         })
         await savePresale(saveBody)

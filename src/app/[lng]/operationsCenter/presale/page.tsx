@@ -3,9 +3,10 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import {
   Button,
-  Card,
   Flex,
+  Input,
   Modal,
+  Select,
   Space,
   Table,
   Tag,
@@ -22,8 +23,22 @@ import { processPath } from '@/config/router'
 import { getPresaleList, removePresaleApi } from '@/api/request/presale'
 import { showTotal } from '@/utils/pagination'
 import { CustomAntImage } from '@/components/CustomAntImage'
+import { MovieModal } from '@/dialog/movieModal'
+import type { Movie } from '@/type/api'
+import { Query, QueryItem } from '@/components/query'
 
 const { Title } = Typography
+
+interface PresaleFilters {
+  title?: string
+  movieId?: number
+  mubitikeType?: number
+}
+
+const MUBITIKE_TYPE_OPTIONS = [
+  { value: 1, key: 'online' },
+  { value: 2, key: 'card' },
+] as const
 
 export default function PresaleTicketsPage({ params: { lng } }: PageProps) {
   const { t } = useTranslation(
@@ -38,6 +53,9 @@ export default function PresaleTicketsPage({ params: { lng } }: PageProps) {
 
   const [presales, setPresales] = useState<PresaleTicket[]>([])
   const [loading, setLoading] = useState(false)
+  const [filters, setFilters] = useState<PresaleFilters>({})
+  const [movieModalOpen, setMovieModalOpen] = useState(false)
+  const [filterMovie, setFilterMovie] = useState<{ id: number; name: string } | null>(null)
   const [pagination, setPagination] = useState({
     current: 1,
     pageSize: 10,
@@ -45,10 +63,16 @@ export default function PresaleTicketsPage({ params: { lng } }: PageProps) {
   })
 
   const fetchList = useCallback(
-    async (page = 1, pageSize = 10) => {
+    async (page = 1, pageSize = 10, activeFilters: PresaleFilters = filters) => {
       setLoading(true)
       try {
-        const res = await getPresaleList({ page, pageSize })
+        const res = await getPresaleList({
+          page,
+          pageSize,
+          title: activeFilters.title?.trim() || undefined,
+          movieId: activeFilters.movieId,
+          mubitikeType: activeFilters.mubitikeType
+        })
         setPresales(res.list)
         setPagination((prev) => ({
           ...prev,
@@ -62,12 +86,28 @@ export default function PresaleTicketsPage({ params: { lng } }: PageProps) {
         setLoading(false)
       }
     },
-    []
+    [filters]
   )
 
   React.useEffect(() => {
-    fetchList(pagination.current, pagination.pageSize)
-  }, [fetchList])
+    fetchList(1, pagination.pageSize)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const searchWithFilters = (next: PresaleFilters) => {
+    setFilters(next)
+    fetchList(1, pagination.pageSize, next)
+  }
+
+  const handleSearch = () => {
+    fetchList(1, pagination.pageSize, filters)
+  }
+
+  const handleReset = () => {
+    setFilterMovie(null)
+    setFilters({})
+    fetchList(1, pagination.pageSize, {})
+  }
 
   const formatPrice = (value?: number) => {
     if (value === undefined || value === null) return '--'
@@ -151,13 +191,13 @@ export default function PresaleTicketsPage({ params: { lng } }: PageProps) {
         {
           title: t('presale.table.skuColumns.image'),
           dataIndex: 'image',
-          width: 60,
+          width: 110,
           render: (_: unknown, sku) => {
             const src = sku.images?.[0]
             return src ? (
               <CustomAntImage
-                // width={56}
-                // height={56}
+                width={84}
+                height={126}
                 src={src}
                 alt={sku.name ?? ''}
                 style={{ objectFit: 'cover', borderRadius: 6 }}
@@ -177,9 +217,6 @@ export default function PresaleTicketsPage({ params: { lng } }: PageProps) {
                 {value || t('presale.table.skuColumns.untitled')}
               </Typography.Text>
               <Space size={[4, 4]} wrap>
-                {sku.skuCode && (
-                  <Tag color="blue">{sku.skuCode}</Tag>
-                )}
                 {sku.ticketType && (
                   <Tag color="geekblue">
                     {t(`presale.mubitikeType.${sku.ticketType}`)}
@@ -219,15 +256,53 @@ export default function PresaleTicketsPage({ params: { lng } }: PageProps) {
           render: (value?: number) => (value === undefined ? '--' : value)
         },
         {
+          title: t('presale.table.skuColumns.points'),
+          dataIndex: 'points',
+          width: 80,
+          align: 'center',
+          render: (value?: number) =>
+            value != null && value > 0 ? value : '--'
+        },
+        {
+          title: t('presale.table.skuColumns.shipDays'),
+          dataIndex: 'shipDays',
+          width: 100,
+          align: 'center',
+          render: (value?: number) => {
+            if (value == null) return '--'
+            return t('presale.specifications.shipDays', { days: value })
+          }
+        },
+        {
           title: t('presale.table.bonus'),
           key: 'bonus',
-          width: 220,
+          width: 260,
           render: (_: unknown, sku: PresaleSpecification) => {
-            if (!sku.bonusIncluded && !sku.bonusTitle && !sku.bonusDescription) {
+            const bonusImages = sku.bonusImages?.filter(Boolean) ?? []
+            if (
+              !sku.bonusIncluded &&
+              !sku.bonusTitle &&
+              !sku.bonusDescription &&
+              bonusImages.length === 0
+            ) {
               return '--'
             }
             return (
-              <Space direction="vertical" size={4} style={{ maxWidth: 220 }}>
+              <Space direction="vertical" size={6} style={{ maxWidth: 260 }}>
+                {bonusImages.length > 0 && (
+                  <Space size={6} wrap>
+                    {bonusImages.map((src, i) => (
+                      <CustomAntImage
+                        key={`${src}-${i}`}
+                        width={48}
+                        height={72}
+                        src={src}
+                        alt={sku.bonusTitle ?? ''}
+                        style={{ objectFit: 'cover', borderRadius: 4 }}
+                      />
+                    ))}
+                  </Space>
+                )}
                 {sku.bonusIncluded !== false && (sku.bonusTitle || sku.bonusDescription) && (
                   <>
                     {sku.bonusTitle && (
@@ -297,17 +372,14 @@ export default function PresaleTicketsPage({ params: { lng } }: PageProps) {
       {
         title: t('presale.table.product'),
         key: 'product',
-        fixed: 'left' as const,
         render: (_: unknown, record: PresaleTicket) => {
-          const gallery = record.gallery ?? []
-          const secondaryImages = gallery.slice(1, 4)
           const status = formatSaleStatus(record)
           return (
             <Space align="start" size={16}>
               {record.cover ? (
                 <CustomAntImage
-                  width={64}
-                  height={96}
+                  width={96}
+                  height={144}
                   src={record.cover}
                   alt={record.title}
                   style={{ objectFit: 'cover', borderRadius: 8 }}
@@ -315,17 +387,20 @@ export default function PresaleTicketsPage({ params: { lng } }: PageProps) {
               ) : (
                 <div
                   style={{
-                    width: 64,
-                    height: 96,
+                    width: 96,
+                    height: 144,
                     background: '#f5f5f5',
                     borderRadius: 8
                   }}
                 />
               )}
-              <Space direction="vertical" size={6}>
-                <Typography.Text strong>{record.title || '--'}</Typography.Text>
-                <Typography.Text type="secondary">
-                  {record.code}
+              <Space direction="vertical" size={6} style={{ maxWidth: 280 }}>
+                <Typography.Text
+                  strong
+                  ellipsis={{ tooltip: record.title }}
+                  style={{ maxWidth: 280 }}
+                >
+                  {record.title || '--'}
                 </Typography.Text>
                 <Space size={[4, 4]} wrap>
                   <Tag color="blue">
@@ -341,12 +416,14 @@ export default function PresaleTicketsPage({ params: { lng } }: PageProps) {
       {
         title: t('presale.table.salePeriod'),
         key: 'salePeriod',
+        width: 150,
         render: (_: unknown, record: PresaleTicket) =>
           formatDateRange(record.launchTime, record.endTime, true)
       },
       {
         title: t('presale.table.usageWindow'),
         key: 'usageWindow',
+        width: 150,
         render: (_: unknown, record: PresaleTicket) =>
           formatDateRange(record.usageStart, record.usageEnd, true)
       },
@@ -358,14 +435,19 @@ export default function PresaleTicketsPage({ params: { lng } }: PageProps) {
       },
       {
         title: t('presale.table.quantity'),
+        width: 150,
         dataIndex: 'totalQuantity'
       },
       {
         title: t('presale.table.perUserLimit'),
-        dataIndex: 'perUserLimit'
+        width: 150,
+        dataIndex: 'perUserLimit',
+        render: (value?: number) =>
+          value && value > 0 ? value : t('presale.table.perUserLimitUnlimited')
       },
       {
         title: t('presale.table.movies'),
+        width: 200,
         dataIndex: 'movieNames',
         render: (value?: string[]) => value?.join('、') || '--'
       },
@@ -373,7 +455,6 @@ export default function PresaleTicketsPage({ params: { lng } }: PageProps) {
         title: common('table.action'),
         key: 'action',
         width: 150,
-        fixed: 'right' as const,
         render: (_: unknown, record: PresaleTicket) => (
           <Space>
             <Button
@@ -414,7 +495,7 @@ export default function PresaleTicketsPage({ params: { lng } }: PageProps) {
 
   return (
     <section style={{ padding: '0 24px 24px', maxWidth: 1600, margin: '0 auto' }}>
-      <Flex justify="space-between" align="center" style={{ marginBottom: 24 }}>
+      <Flex justify="space-between" align="center" style={{ marginBottom: 16 }}>
         <Title level={3} style={{ margin: 0 }}>
           {t('tabs.presale')}
         </Title>
@@ -422,8 +503,68 @@ export default function PresaleTicketsPage({ params: { lng } }: PageProps) {
           {common('button.add')}
         </Button>
       </Flex>
-      <Card bordered={false} style={{ borderRadius: 8, boxShadow: '0 1px 2px rgba(0,0,0,0.03)' }}>
-        <Table
+      <Flex vertical gap={24}>
+      <Query
+        initialValues={{}}
+        showClear
+        onSearch={handleSearch}
+        onClear={handleReset}
+      >
+        <QueryItem label={t('presale.filter.title')}>
+          <Input
+            value={filters.title}
+            allowClear
+            placeholder={t('presale.filter.titlePlaceholder')}
+            onChange={(e) => {
+              setFilters((prev) => ({
+                ...prev,
+                title: e.target.value
+              }))
+            }}
+          />
+        </QueryItem>
+        <QueryItem label={t('presale.filter.movie')}>
+          <Space.Compact style={{ width: '100%' }}>
+            <Input
+              readOnly
+              value={filterMovie?.name ?? ''}
+              placeholder={t('presale.filter.moviePlaceholder')}
+              allowClear
+              onChange={(e) => {
+                if (!e.target.value) {
+                  setFilterMovie(null)
+                  const next: PresaleFilters = { ...filters }
+                  delete next.movieId
+                  searchWithFilters(next)
+                }
+              }}
+            />
+            <Button onClick={() => setMovieModalOpen(true)}>
+              {t('presale.filter.select')}
+            </Button>
+          </Space.Compact>
+        </QueryItem>
+        <QueryItem label={t('presale.filter.mubitikeType')}>
+          <Select
+            value={filters.mubitikeType}
+            allowClear
+            placeholder={t('presale.filter.mubitikeTypePlaceholder')}
+            onChange={(value) => {
+              const next: PresaleFilters = {
+                ...filters,
+                mubitikeType: value,
+                movieId: filterMovie?.id
+              }
+              searchWithFilters(next)
+            }}
+            options={MUBITIKE_TYPE_OPTIONS.map((o) => ({
+              value: o.value,
+              label: t(`presale.mubitikeType.${o.key}`)
+            }))}
+          />
+        </QueryItem>
+      </Query>
+      <Table
           rowKey="id"
           loading={loading}
           columns={columns}
@@ -432,16 +573,34 @@ export default function PresaleTicketsPage({ params: { lng } }: PageProps) {
             current: pagination.current,
             pageSize: pagination.pageSize,
             total: pagination.total,
-            showSizeChanger: true,
             showTotal,
+            position: ['bottomCenter'],
             onChange: (page, pageSize) => fetchList(page, pageSize ?? 10)
           }}
           size="middle"
-          scroll={{ x: 'max-content', y: 520 }}
           locale={{ emptyText: t('empty') }}
           expandable={{ expandedRowRender }}
         />
-      </Card>
+      </Flex>
+      <MovieModal
+        show={movieModalOpen}
+        data={{}}
+        initialMovieId={filterMovie?.id}
+        onCancel={() => setMovieModalOpen(false)}
+        onConfirm={(movie: Movie) => {
+          if (!movie?.id) return
+          setMovieModalOpen(false)
+          const movieName = movie.name || movie.originalName || `${movie.id}`
+          setFilterMovie({
+            id: movie.id,
+            name: movieName
+          })
+          searchWithFilters({
+            ...filters,
+            movieId: movie.id
+          })
+        }}
+      />
     </section>
   )
 }

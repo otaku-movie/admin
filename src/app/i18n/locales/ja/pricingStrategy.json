@@ -8,6 +8,19 @@
   },
   "presale": {
     "description": "前売券は通常上映の料金を相殺し、IMAX・Dolby など特殊フォーマットでは差額を徴収します。",
+    "filter": {
+      "title": "タイトル",
+      "titlePlaceholder": "タイトルで検索",
+      "code": "コード",
+      "codePlaceholder": "コードで検索",
+      "movie": "対象作品",
+      "moviePlaceholder": "作品を選択",
+      "mubitikeType": "カード種別",
+      "mubitikeTypePlaceholder": "カード種別を選択",
+      "search": "検索",
+      "reset": "リセット",
+      "select": "選択"
+    },
     "table": {
       "product": "ムビチケ商品",
       "salePeriod": "販売期間",
@@ -16,6 +29,7 @@
       "specifications": "商品仕様",
       "quantity": "販売枚数",
       "perUserLimit": "お一人様上限",
+      "perUserLimitUnlimited": "無制限",
       "movies": "対象作品",
       "benefits": "付帯特典",
       "bonus": "購入特典",

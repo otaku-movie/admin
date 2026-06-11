@@ -8,6 +8,19 @@
   },
   "presale": {
     "description": "预售票可用于标准制式场次，IMAX / Dolby 等特殊制式需补差。",
+    "filter": {
+      "title": "标题",
+      "titlePlaceholder": "按标题搜索",
+      "code": "编码",
+      "codePlaceholder": "按编码搜索",
+      "movie": "关联影片",
+      "moviePlaceholder": "请选择影片",
+      "mubitikeType": "卡片类型",
+      "mubitikeTypePlaceholder": "请选择卡片类型",
+      "search": "搜索",
+      "reset": "重置",
+      "select": "选择"
+    },
     "table": {
       "product": "预售票",
       "salePeriod": "发售期间",
@@ -16,6 +29,7 @@
       "specifications": "商品规格",
       "quantity": "发放数量",
       "perUserLimit": "单人限购",
+      "perUserLimitUnlimited": "不限",
       "movies": "关联影片",
       "benefits": "特典内容",
       "bonus": "预售票特典",

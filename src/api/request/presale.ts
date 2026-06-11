@@ -238,6 +238,8 @@ export interface PresaleListQueryDto {
   title?: string
   code?: string
   movieId?: number
+  /** 券种 dict_item.code：1=网络券 2=卡券 3=套票 4=电影票预售券 */
+  mubitikeType?: number
   page?: number
   pageSize?: number
 }
@@ -275,7 +277,8 @@ export const getPresaleList = async (
       pageSize: query.pageSize ?? 10,
       title: query.title,
       code: query.code,
-      movieId: query.movieId
+      movieId: query.movieId,
+      mubitikeType: query.mubitikeType
     }
   })
   const data = res?.data

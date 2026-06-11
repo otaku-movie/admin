@@ -8,6 +8,19 @@
   },
   "presale": {
     "description": "Presale tickets cover standard screenings. IMAX / Dolby and other premium formats may require an additional fee.",
+    "filter": {
+      "title": "Title",
+      "titlePlaceholder": "Search by title",
+      "code": "Code",
+      "codePlaceholder": "Search by code",
+      "movie": "Linked Film",
+      "moviePlaceholder": "Select a film",
+      "mubitikeType": "Card Type",
+      "mubitikeTypePlaceholder": "Select card type",
+      "search": "Search",
+      "reset": "Reset",
+      "select": "Select"
+    },
     "table": {
       "product": "Presale Ticket",
       "salePeriod": "Sale Period",
@@ -16,6 +29,7 @@
       "specifications": "Product Specifications",
       "quantity": "Quantity",
       "perUserLimit": "Per User Limit",
+      "perUserLimitUnlimited": "Unlimited",
       "movies": "Linked Films",
       "benefits": "Benefits",
       "bonus": "Purchase Bonus",

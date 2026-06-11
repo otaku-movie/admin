@@ -438,7 +438,7 @@ export function StepSpecifications({ form, t, common }: StepProps) {
                     add({
                       deliveryType: first?.deliveryType ?? 'virtual',
                       ticketType: first?.ticketType ?? 'online',
-                      bonusIncluded: true,
+                      bonusIncluded: false,
                       images: [],
                       priceItems: [{ label: '', price: undefined }]
                     })

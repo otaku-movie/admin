@@ -41,6 +41,7 @@ export type QueryProps = {
   option?: Option
   onSearch?: () => void
   onClear?: (obj: Record<string, unknown>) => void
+  showClear?: boolean
   defaultCol?: keyof Option
 } & FormProps
 
@@ -234,14 +235,16 @@ export function Query(props: QueryProps) {
               <Button type="primary" htmlType="submit">
                 {t('query.search')}
               </Button>
-              {/* <Button
-                onClick={() => {
-                  form.resetFields()
-                  props.onClear?.({ ...props.initialValues })
-                }}
-              >
-                {t('query.clear')}
-              </Button> */}
+              {props.showClear ? (
+                <Button
+                  onClick={() => {
+                    form.resetFields()
+                    props.onClear?.({ ...props.initialValues })
+                  }}
+                >
+                  {t('query.clear')}
+                </Button>
+              ) : null}
               {totalSpan > max ? (
                 <a
                   style={{ fontSize: 12 }}
