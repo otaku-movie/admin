@@ -1,0 +1,157 @@
+/* 隐藏 ByteMD 内置「行内代码」(第 6 个) 和「代码块」(第 7 个) 按钮 */
+.main-container .bytemd-toolbar-left .bytemd-toolbar-icon:nth-child(6),
+.main-container .bytemd-toolbar-left .bytemd-toolbar-icon:nth-child(7) {
+  display: none !important;
+}
+
+/* 隐藏 ByteMD 右侧 Github 按钮（最右） */
+.main-container .bytemd-toolbar-right .bytemd-toolbar-icon:last-child {
+  display: none !important;
+}
+
+/* Markdown 预览表格样式（避免被全局样式重置） */
+.main-container .bytemd-preview table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.main-container .bytemd-preview th,
+.main-container .bytemd-preview td {
+  border: 1px solid #d9d9d9;
+  padding: 6px 10px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.main-container .bytemd-preview thead th {
+  background: #fafafa;
+  font-weight: 600;
+}
+
+.main-container .bytemd-preview tbody tr:nth-child(2n) {
+  background: #fcfcfc;
+}
+
+/* 恢复列表样式：normalize.scss 全局把 ul 的 list-style 置为 none */
+.main-container .bytemd-preview ul {
+  list-style: disc;
+  padding-left: 1.5em;
+  margin: 8px 0;
+}
+
+.main-container .bytemd-preview ol {
+  list-style: decimal;
+  padding-left: 1.5em;
+  margin: 8px 0;
+}
+
+.main-container .bytemd-preview li {
+  margin: 2px 0;
+}
+
+/* ── 发布日志编辑器整体外观 ── */
+.release-notes-tabs .ant-tabs-nav {
+  margin-bottom: 0;
+}
+
+.release-notes-tabs .ant-tabs-tab {
+  border-radius: 8px 8px 0 0 !important;
+  background: #fafafa !important;
+  border-color: #e5e7eb !important;
+  transition: background 0.2s;
+}
+
+.release-notes-tabs .ant-tabs-tab-active {
+  background: #fff !important;
+  border-bottom-color: #fff !important;
+}
+
+.release-notes-editor {
+  border: 1px solid #e5e7eb;
+  border-radius: 0 8px 8px 8px;
+  overflow: hidden;
+}
+
+.release-notes-editor .bytemd {
+  border: none;
+  height: calc(100vh - 380px);
+  min-height: 460px;
+}
+
+.release-notes-editor .CodeMirror {
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+.release-notes-editor .bytemd-preview .markdown-body {
+  font-size: 16px;
+  line-height: 1.9;
+}
+
+/* 预览区标题按浏览器默认 HTML h1-h6 比例 */
+.release-notes-editor .bytemd-preview .markdown-body h1 {
+  font-size: 2em;
+  font-weight: bold;
+  margin: 0.67em 0;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.release-notes-editor .bytemd-preview .markdown-body h2 {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin: 0.83em 0;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.release-notes-editor .bytemd-preview .markdown-body h3 {
+  font-size: 1.17em;
+  font-weight: bold;
+  margin: 1em 0;
+}
+
+.release-notes-editor .bytemd-preview .markdown-body h4 {
+  font-size: 1em;
+  font-weight: bold;
+  margin: 1.33em 0;
+}
+
+.release-notes-editor .bytemd-preview .markdown-body h5 {
+  font-size: 0.83em;
+  font-weight: bold;
+  margin: 1.67em 0;
+}
+
+.release-notes-editor .bytemd-preview .markdown-body h6 {
+  font-size: 0.67em;
+  font-weight: bold;
+  margin: 2.33em 0;
+}
+
+/* 语言 Tab 状态点 */
+.release-notes-tabs .note-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.release-notes-tabs .note-dot.filled {
+  background: #52c41a;
+  box-shadow: 0 0 0 2px rgba(82, 196, 26, 0.18);
+}
+
+.release-notes-tabs .note-dot.empty {
+  background: #d9d9d9;
+}
+
+.release-notes-tabs .note-dot.dirty {
+  background: #ff4d4f;
+  box-shadow: 0 0 0 2px rgba(255, 77, 79, 0.18);
+}

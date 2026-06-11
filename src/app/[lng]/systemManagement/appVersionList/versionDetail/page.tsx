@@ -2,7 +2,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { Button, Col, Form, Input, InputNumber, Row, Select, Space, Switch, Tabs, Typography, message } from 'antd'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { PageProps } from '../../layout'
+import { PageProps } from '@/app/[lng]/layout'
 import { useTranslation } from '@/app/i18n/client'
 import { languageType } from '@/config'
 import http from '@/api'
@@ -14,6 +14,7 @@ import 'bytemd/dist/index.css'
 import zhHans from 'bytemd/locales/zh_Hans.json'
 import ja from 'bytemd/locales/ja.json'
 import en from 'bytemd/locales/en.json'
+import './style.scss'
 
 const plugins = [gfm()]
 const { Title } = Typography
@@ -62,9 +63,27 @@ export default function AppVersionDetailPage({ params: { lng } }: PageProps) {
     return en as any
   }, [lng])
 
+  const noteFields: { key: string; label: string; field: keyof Query }[] = [
+    { key: 'zh', label: 'ZH', field: 'releaseNoteZh' },
+    { key: 'ja', label: 'JA', field: 'releaseNoteJa' },
+    { key: 'en', label: 'EN', field: 'releaseNoteEn' },
+    { key: 'internal', label: t('form.internalNote'), field: 'releaseNoteInternal' }
+  ]
+
+  // 各语言发布日志的「已保存原始值」，用于判断本次是否有未保存改动（红点）
+  const [originalNotes, setOriginalNotes] = useState<Record<string, string>>({})
+
+  const snapshotNotes = (src: Partial<Query>): Record<string, string> =>
+    noteFields.reduce((acc, { field }) => {
+      acc[field as string] = (src[field] as string | undefined) || ''
+      return acc
+    }, {} as Record<string, string>)
+
   useEffect(() => {
     if (!isEdit || editingId == null) {
       form.setFieldsValue(query)
+      // 新建：原始值都为空，填了内容即视为「未保存改动」
+      setOriginalNotes(snapshotNotes({}))
       return
     }
     http({ url: 'admin/app/version/detail', method: 'get', params: { id: editingId } }).then((res) => {
@@ -88,6 +107,7 @@ export default function AppVersionDetailPage({ params: { lng } }: PageProps) {
       }
       setQuery(next)
       form.setFieldsValue(next)
+      setOriginalNotes(snapshotNotes(next))
     })
   }, [editingId, form, isEdit])
 
@@ -175,95 +195,45 @@ export default function AppVersionDetailPage({ params: { lng } }: PageProps) {
         </Row>
         <Form.Item label={t('form.releaseNotes')}>
           <Tabs
-            items={[
-              {
-                key: 'zh',
-                label: 'ZH',
+            type="card"
+            className="release-notes-tabs"
+            items={noteFields.map(({ key, label, field }) => {
+              const val = (query[field] as string | undefined) || ''
+              const original = originalNotes[field as string] ?? ''
+              // 三态：未保存改动(红) > 有内容已保存(绿) > 空(灰)
+              const dirty = val !== original
+              const state = dirty ? 'dirty' : val.trim() ? 'filled' : 'empty'
+              const stateTitle = dirty
+                ? t('form.noteDirty')
+                : val.trim()
+                  ? t('form.noteFilled')
+                  : t('form.noteEmpty')
+              return {
+                key,
+                label: (
+                  <span>
+                    {label}
+                    <span className={`note-dot ${state}`} title={stateTitle} />
+                  </span>
+                ),
+                // 不能用 forceRender：bytemd 的 CodeMirror 在隐藏(display:none)状态下挂载会渲染成空白，
+                // 切到该 Tab 时编辑区是空的。让编辑器在 Tab 变可见时再挂载，内容来自 query state 不会丢。
                 children: (
-                  <Editor
-                    value={query.releaseNoteZh || ''}
-                    plugins={plugins}
-                    mode="split"
-                    locale={editorLocale}
-                    onChange={(v) => setQuery({ ...query, releaseNoteZh: v })}
-                  />
-                )
-              },
-              {
-                key: 'ja',
-                label: 'JA',
-                children: (
-                  <Editor
-                    value={query.releaseNoteJa || ''}
-                    plugins={plugins}
-                    mode="split"
-                    locale={editorLocale}
-                    onChange={(v) => setQuery({ ...query, releaseNoteJa: v })}
-                  />
-                )
-              },
-              {
-                key: 'en',
-                label: 'EN',
-                children: (
-                  <Editor
-                    value={query.releaseNoteEn || ''}
-                    plugins={plugins}
-                    mode="split"
-                    locale={editorLocale}
-                    onChange={(v) => setQuery({ ...query, releaseNoteEn: v })}
-                  />
-                )
-              },
-              {
-                key: 'internal',
-                label: t('form.internalNote'),
-                children: (
-                  <Editor
-                    value={query.releaseNoteInternal || ''}
-                    plugins={plugins}
-                    mode="split"
-                    locale={editorLocale}
-                    onChange={(v) => setQuery({ ...query, releaseNoteInternal: v })}
-                  />
+                  <div className="release-notes-editor">
+                    <Editor
+                      value={val}
+                      plugins={plugins}
+                      mode="split"
+                      locale={editorLocale}
+                      onChange={(v) => setQuery({ ...query, [field]: v })}
+                    />
+                  </div>
                 )
               }
-            ]}
+            })}
           />
         </Form.Item>
       </Form>
-      <style jsx global>{`
-        /* 隐藏 ByteMD 内置「代码块」按钮（左侧第 7 个） */
-        .main-container .bytemd-toolbar-left .bytemd-toolbar-icon:nth-child(7) {
-          display: none !important;
-        }
-        /* 隐藏 ByteMD 右侧 Github 按钮（最右） */
-        .main-container .bytemd-toolbar-right .bytemd-toolbar-icon:last-child {
-          display: none !important;
-        }
-        /* Markdown 预览表格样式（避免被全局样式重置） */
-        .main-container .bytemd-preview table {
-          width: 100%;
-          border-collapse: collapse;
-          margin: 12px 0;
-          font-size: 13px;
-          line-height: 1.6;
-        }
-        .main-container .bytemd-preview th,
-        .main-container .bytemd-preview td {
-          border: 1px solid #d9d9d9;
-          padding: 6px 10px;
-          text-align: left;
-          vertical-align: top;
-        }
-        .main-container .bytemd-preview thead th {
-          background: #fafafa;
-          font-weight: 600;
-        }
-        .main-container .bytemd-preview tbody tr:nth-child(2n) {
-          background: #fcfcfc;
-        }
-      `}</style>
     </section>
   )
 }
