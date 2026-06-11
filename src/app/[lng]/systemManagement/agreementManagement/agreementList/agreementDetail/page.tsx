@@ -10,6 +10,7 @@ import http from '@/api'
 import { useTranslation } from '@/app/i18n/client'
 import { processPath } from '@/config/router'
 import { PageProps } from '@/app/[lng]/layout'
+import { CheckPermission } from '@/components/checkPermission'
 import './style.scss'
 
 const { Title } = Typography
@@ -107,7 +108,9 @@ export default function AgreementDetailPage ({ params: { lng } }: Readonly<PageP
         <Title level={3}>{editingId ? t('title.edit') : t('title.create')}</Title>
         <Space>
           <Button onClick={() => router.push(processPath('agreementList'))}>{common('button.cancel')}</Button>
-          <Button type="primary" onClick={onSave}>{common('button.save')}</Button>
+          <CheckPermission code='agreement.save'>
+            <Button type="primary" onClick={onSave}>{common('button.save')}</Button>
+          </CheckPermission>
         </Space>
       </header>
 

@@ -8,6 +8,7 @@ import { PageProps } from '../layout'
 import http from '@/api'
 import { processPath } from '@/config/router'
 import { showTotal } from '@/utils/pagination'
+import { CheckPermission } from '@/components/checkPermission'
 
 interface AgreementRow {
   id: number
@@ -104,33 +105,39 @@ export default function AgreementListPage ({ params: { lng } }: Readonly<PagePro
       width: 260,
       render: (_, row) => (
         <Space>
-          <Button onClick={() => router.push(processPath({ name: 'agreementDetail', query: { id: row.id } }))}>
-            {common('button.edit')}
-          </Button>
+          <CheckPermission code='agreement.save'>
+            <Button onClick={() => router.push(processPath({ name: 'agreementDetail', query: { id: row.id } }))}>
+              {common('button.edit')}
+            </Button>
+          </CheckPermission>
           {row.status !== 'PUBLISHED' && (
+            <CheckPermission code='agreement.publish'>
+              <Button
+                type="primary"
+                onClick={() => {
+                  http({ url: 'admin/agreement/publish', method: 'post', data: { id: row.id } }).then(() => {
+                    message.success(t('message.publishSuccess'))
+                    getData(page)
+                  })
+                }}
+              >
+                {t('button.publish')}
+              </Button>
+            </CheckPermission>
+          )}
+          <CheckPermission code='agreement.remove'>
             <Button
-              type="primary"
+              danger
               onClick={() => {
-                http({ url: 'admin/agreement/publish', method: 'post', data: { id: row.id } }).then(() => {
-                  message.success(t('message.publishSuccess'))
-                  getData(page)
+                Modal.confirm({
+                  title: t('message.removeConfirm'),
+                  onOk: () => http({ url: 'admin/agreement/remove', method: 'delete', params: { id: row.id } }).then(() => getData(page))
                 })
               }}
             >
-              {t('button.publish')}
+              {common('button.remove')}
             </Button>
-          )}
-          <Button
-            danger
-            onClick={() => {
-              Modal.confirm({
-                title: t('message.removeConfirm'),
-                onOk: () => http({ url: 'admin/agreement/remove', method: 'delete', params: { id: row.id } }).then(() => getData(page))
-              })
-            }}
-          >
-            {common('button.remove')}
-          </Button>
+          </CheckPermission>
         </Space>
       )
     }
@@ -151,9 +158,11 @@ export default function AgreementListPage ({ params: { lng } }: Readonly<PagePro
           </Form.Item>
           <Button htmlType="submit" type="primary">{t('button.query')}</Button>
         </Form>
-        <Button type="primary" onClick={() => router.push(processPath('agreementDetail'))}>
-          {t('button.addAgreement')}
-        </Button>
+        <CheckPermission code='agreement.save'>
+          <Button type="primary" onClick={() => router.push(processPath('agreementDetail'))}>
+            {t('button.addAgreement')}
+          </Button>
+        </CheckPermission>
       </header>
       <Table
         rowKey="id"

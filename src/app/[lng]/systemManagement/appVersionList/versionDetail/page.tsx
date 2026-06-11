@@ -6,6 +6,8 @@ import { PageProps } from '../../layout'
 import { useTranslation } from '@/app/i18n/client'
 import { languageType } from '@/config'
 import http from '@/api'
+import { processPath } from '@/config/router'
+import { CheckPermission } from '@/components/checkPermission'
 import { Editor } from '@bytemd/react'
 import gfm from '@bytemd/plugin-gfm'
 import 'bytemd/dist/index.css'
@@ -97,7 +99,7 @@ export default function AppVersionDetailPage({ params: { lng } }: PageProps) {
         data: { ...query, forceUpdate: query.isForceUpdate }
       }).then(() => {
         message.success(common('message.save'))
-        router.push(`/${lng}/appVersionList`)
+        router.push(processPath('appVersionList'))
       })
     })
   }
@@ -109,8 +111,10 @@ export default function AppVersionDetailPage({ params: { lng } }: PageProps) {
           {isEdit ? t('modal.title.edit') : t('modal.title.create')}
         </Title>
         <Space>
-          <Button onClick={() => router.push(`/${lng}/appVersionList`)}>{common('button.cancel')}</Button>
-          <Button type="primary" onClick={onSave}>{common('button.save')}</Button>
+          <Button onClick={() => router.push(processPath('appVersionList'))}>{common('button.cancel')}</Button>
+          <CheckPermission code='appVersion.save'>
+            <Button type="primary" onClick={onSave}>{common('button.save')}</Button>
+          </CheckPermission>
         </Space>
       </header>
 

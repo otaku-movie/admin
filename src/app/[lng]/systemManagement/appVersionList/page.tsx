@@ -7,6 +7,8 @@ import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '../layout'
 import http from '@/api'
 import { showTotal } from '@/utils/pagination'
+import { processPath } from '@/config/router'
+import { CheckPermission } from '@/components/checkPermission'
 
 interface Query {
   platform: string
@@ -100,51 +102,57 @@ export default function Page ({ params: { lng } }: Readonly<PageProps>) {
       render: (_, row: AppVersionRow) => {
         return (
           <Space>
-            <Button
-              onClick={() => {
-                router.push(`/${lng}/appVersionList/versionDetail?id=${row.id}`)
-              }}
-            >
-              {common('button.edit')}
-            </Button>
-            {!row.isLatest && (
+            <CheckPermission code='appVersion.save'>
               <Button
-                type='primary'
                 onClick={() => {
-                  http({
-                    url: 'admin/app/version/setLatest',
-                    method: 'post',
-                    data: { id: row.id }
-                  }).then(() => {
-                    message.success(t('message.setLatestSuccess'))
-                    getData(page)
+                  router.push(processPath('appVersionDetail', { id: row.id }))
+                }}
+              >
+                {common('button.edit')}
+              </Button>
+            </CheckPermission>
+            {!row.isLatest && (
+              <CheckPermission code='appVersion.save'>
+                <Button
+                  type='primary'
+                  onClick={() => {
+                    http({
+                      url: 'admin/app/version/setLatest',
+                      method: 'post',
+                      data: { id: row.id }
+                    }).then(() => {
+                      message.success(t('message.setLatestSuccess'))
+                      getData(page)
+                    })
+                  }}
+                >
+                  {t('button.setLatest')}
+                </Button>
+              </CheckPermission>
+            )}
+            <CheckPermission code='appVersion.remove'>
+              <Button
+                danger
+                onClick={() => {
+                  Modal.confirm({
+                    title: common('button.remove'),
+                    content: t('message.remove.content'),
+                    onOk () {
+                      return http({
+                        url: 'admin/app/version/remove',
+                        method: 'delete',
+                        params: { id: row.id }
+                      }).then(() => {
+                        message.success(t('message.remove.success'))
+                        getData(page)
+                      })
+                    }
                   })
                 }}
               >
-                {t('button.setLatest')}
+                {common('button.remove')}
               </Button>
-            )}
-            <Button
-              danger
-              onClick={() => {
-                Modal.confirm({
-                  title: common('button.remove'),
-                  content: t('message.remove.content'),
-                  onOk () {
-                    return http({
-                      url: 'admin/app/version/remove',
-                      method: 'delete',
-                      params: { id: row.id }
-                    }).then(() => {
-                      message.success(t('message.remove.success'))
-                      getData(page)
-                    })
-                  }
-                })
-              }}
-            >
-              {common('button.remove')}
-            </Button>
+            </CheckPermission>
           </Space>
         )
       }
@@ -160,13 +168,15 @@ export default function Page ({ params: { lng } }: Readonly<PageProps>) {
       }}
     >
       <Row justify='end'>
-        <Button
-          onClick={() => {
-            router.push(`/${lng}/appVersionList/versionDetail`)
-          }}
-        >
-          {common('button.add')}
-        </Button>
+        <CheckPermission code='appVersion.save'>
+          <Button
+            onClick={() => {
+              router.push(processPath('appVersionDetail'))
+            }}
+          >
+            {common('button.add')}
+          </Button>
+        </CheckPermission>
       </Row>
       <div style={{ background: '#fff', borderRadius: 8, padding: 16 }}>
         <Row justify='space-between' align='middle'>

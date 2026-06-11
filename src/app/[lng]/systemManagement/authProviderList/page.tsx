@@ -13,6 +13,7 @@ import Icon, {
 import { useTranslation } from '@/app/i18n/client'
 import { PageProps } from '../../layout'
 import http from '@/api'
+import { CheckPermission } from '@/components/checkPermission'
 import './style.scss'
 
 const XIconSvg = () => (
@@ -216,7 +217,9 @@ export default function AuthProviderListPage ({ params: { lng } }: Readonly<Page
       key: 'action',
       width: 120,
       render: (_, row) => (
-        <Button onClick={() => startEdit(row)}>{common('button.edit')}</Button>
+        <CheckPermission code='authProvider.save'>
+          <Button onClick={() => startEdit(row)}>{common('button.edit')}</Button>
+        </CheckPermission>
       )
     }
   ]
