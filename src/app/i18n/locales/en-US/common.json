@@ -45,6 +45,7 @@
         "benefitManagement": "Attendee Benefit Management",
         "benefitList": "Benefit Management",
         "benefitDetail": "Entrance Benefits",
+        "benefitStock": "Theater Stock",
         "presale": "Presale Management",
         "presaleDetail": "Presale Ticket Detail",
         "orderManagement": {
@@ -186,6 +187,10 @@
       "stockTip": "Edit quota and remaining for items assigned to this cinema. Add new items in \"Movie Management - Entrance Benefits\".",
       "goAddStock": "Go to allocate stock",
       "stockEmptyHint": "No stock records. Click the button below to allocate benefit quantity to a theater.",
+      "allocated": "Allocated",
+      "appendTip": "Selecting an already-allocated theater appends to its existing quota and remaining",
+      "limitedStockTip": "This benefit is restricted to specific theaters; stock can only be allocated within them. To add a theater, click \"Manage Cinema Limit\".",
+      "manageLimitTip": "Check the theaters this benefit can allocate stock to; selecting none means unrestricted (all theaters allowed).",
       "tabFeedback": "User Feedback"
     },
     "tab": {
@@ -219,6 +224,7 @@
       "orderNum": "Order",
       "image": "Image",
       "area": "Region",
+      "brand": "Brand",
       "cinemaName": "Theater",
       "benefitItemName": "Item",
       "benefitName": "Phase",
@@ -228,7 +234,8 @@
       "stockUnknownPlaceholder": "Leave blank if unknown",
       "unknown": "Unknown",
       "feedbackType": "Type",
-      "createTime": "Feedback Time"
+      "createTime": "Feedback Time",
+      "manualSoldOut": "Mark Sold Out"
     },
     "detail": {
       "phaseInfo": "Phase Info",
@@ -245,6 +252,8 @@
     "placeholder": {
       "searchMovie": "Search by movie name or keyword",
       "searchCinema": "Search by theater name or keyword",
+      "selectSpec": "Filter by spec",
+      "selectBrand": "Filter by brand",
       "searchPhase": "Search by phase name or keyword"
     },
     "empty": {
@@ -257,7 +266,9 @@
     "limit": {
       "dimensionType": "Dimension",
       "spec": "Spec",
-      "unlimited": "Unlimited"
+      "unlimited": "Unlimited",
+      "unlimitedTip": "Leave empty for no theater restriction",
+      "selectedCount": "{{count}} theater(s) selected"
     },
     "message": {
       "removeContent": "Delete this benefit phase?",
@@ -268,7 +279,19 @@
       "addStock": "Add Stock",
       "detail": "Detail",
       "addBenefit": "Add Benefit",
-      "selectMovie": "Select Movie"
+      "selectMovie": "Select Movie",
+      "selectCinema": "Select Theaters",
+      "manageCinemaLimit": "Manage Cinema Limit",
+      "setSoldOut": "Mark Sold Out",
+      "cancelSoldOut": "Cancel Sold Out"
+    },
+    "status": {
+      "soldOut": "Sold Out",
+      "normal": "Normal"
+    },
+    "transfer": {
+      "available": "Available Theaters",
+      "selected": "Selected Theaters"
     }
   },
   "table": {

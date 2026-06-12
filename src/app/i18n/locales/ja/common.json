@@ -44,6 +44,7 @@
         "benefitManagement": "入場者特典管理",
         "benefitList": "特典管理",
         "benefitDetail": "入場者特典",
+        "benefitStock": "劇場在庫",
         "presale": "前売管理",
         "presaleDetail": "前売チケット詳細",
         "orderManagement": {
@@ -182,6 +183,10 @@
       "stockTip": "当劇場に割り当て済みの物料の枠・残数を編集できます。新規物料の割り当ては「映画管理-入場者特典」で行います。",
       "goAddStock": "在庫を割り当てる",
       "stockEmptyHint": "在庫記録がありません。下のボタンから劇場に特典数量を割り当ててください。",
+      "allocated": "割当済み",
+      "appendTip": "「割当済み」の劇場を選ぶと、既存の割当数・残数に追加されます",
+      "limitedStockTip": "この特典は劇場限定が設定されています。限定された劇場のみ割り当て可能です。追加する場合は「劇場限定を管理」から追加してください。",
+      "manageLimitTip": "この特典で在庫を割り当て可能な劇場を選択してください。何も選択しない場合は限定なし（すべての劇場で割り当て可能）になります。",
       "tabFeedback": "ユーザーフィードバック"
     },
     "tab": {
@@ -215,6 +220,7 @@
       "orderNum": "並び",
       "image": "画像",
       "area": "地区",
+      "brand": "ブランド",
       "cinemaName": "劇場",
       "benefitItemName": "物料",
       "benefitName": "フェーズ",
@@ -224,7 +230,8 @@
       "stockUnknownPlaceholder": "未記入の場合は在庫不明",
       "unknown": "不明",
       "feedbackType": "タイプ",
-      "createTime": "フィードバック日時"
+      "createTime": "フィードバック日時",
+      "manualSoldOut": "品切れに設定"
     },
     "detail": {
       "phaseInfo": "フェーズ情報",
@@ -241,6 +248,8 @@
     "placeholder": {
       "searchMovie": "作品名またはキーワードで検索",
       "searchCinema": "劇場名またはキーワードで検索",
+      "selectSpec": "規格で絞り込み",
+      "selectBrand": "ブランドで絞り込み",
       "searchPhase": "フェーズ名またはキーワードで検索"
     },
     "empty": {
@@ -264,7 +273,18 @@
       "addStock": "在庫割当",
       "detail": "詳細",
       "addBenefit": "特典を追加",
-      "selectMovie": "作品を選択"
+      "selectMovie": "作品を選択",
+      "manageCinemaLimit": "劇場限定を管理",
+      "setSoldOut": "配布終了にする",
+      "cancelSoldOut": "配布終了を解除"
+    },
+    "status": {
+      "soldOut": "配布終了",
+      "normal": "正常"
+    },
+    "transfer": {
+      "available": "選択可能な劇場",
+      "selected": "限定済み劇場"
     }
   },
   "table": {

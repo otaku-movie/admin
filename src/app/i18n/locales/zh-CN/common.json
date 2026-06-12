@@ -44,6 +44,7 @@
         "benefitManagement": "入场者特典管理",
         "benefitList": "入场者特典列表",
         "benefitDetail": "入场者特典详情",
+        "benefitStock": "影院库存",
         "presale": "预售管理",
         "presaleDetail": "预售票详情",
         "orderManagement": {
@@ -185,6 +186,10 @@
       "stockTip": "可编辑该影院已分配物料的配额与剩余；新增物料分配请在「电影管理-入场者特典」中操作。",
       "goAddStock": "去分配库存",
       "stockEmptyHint": "暂无库存记录，点击下方按钮为影院分配特典数量",
+      "allocated": "已分配",
+      "appendTip": "选择已标记「已分配」的影院，将在其原有配额和剩余上追加",
+      "limitedStockTip": "该特典已设置影院限定，只能从限定影院中分配；如需新增影院，请点击「管理影院限定」添加",
+      "manageLimitTip": "勾选该特典可分配库存的影院；不勾选任何影院表示不限定（所有影院均可分配）",
       "tabFeedback": "用户反馈"
     },
     "tab": {
@@ -218,6 +223,7 @@
       "orderNum": "排序",
       "image": "图片",
       "area": "地区",
+      "brand": "品牌",
       "cinemaName": "影院",
       "benefitItemName": "物料",
       "benefitName": "阶段",
@@ -227,7 +233,8 @@
       "stockUnknownPlaceholder": "不填表示库存未知",
       "unknown": "未知",
       "feedbackType": "类型",
-      "createTime": "反馈时间"
+      "createTime": "反馈时间",
+      "manualSoldOut": "设置为已领完"
     },
     "detail": {
       "phaseInfo": "阶段信息",
@@ -244,6 +251,8 @@
     "placeholder": {
       "searchMovie": "输入作品名或关键字搜索",
       "searchCinema": "输入影院名或关键字搜索",
+      "selectSpec": "特效规格筛选",
+      "selectBrand": "品牌筛选",
       "searchPhase": "输入特典阶段名或关键字搜索"
     },
     "empty": {
@@ -256,7 +265,9 @@
     "limit": {
       "dimensionType": "放映类型",
       "spec": "规格",
-      "unlimited": "不限"
+      "unlimited": "不限",
+      "unlimitedTip": "不选择则不限定影院",
+      "selectedCount": "已选 {{count}} 家影院"
     },
     "message": {
       "removeContent": "确定删除该特典阶段？",
@@ -267,7 +278,19 @@
       "addStock": "分配库存",
       "detail": "详情",
       "addBenefit": "添加特典",
-      "selectMovie": "选择电影"
+      "selectMovie": "选择电影",
+      "selectCinema": "选择影院",
+      "manageCinemaLimit": "管理影院限定",
+      "setSoldOut": "设为已领完",
+      "cancelSoldOut": "取消已领完"
+    },
+    "status": {
+      "soldOut": "已领完",
+      "normal": "正常"
+    },
+    "transfer": {
+      "available": "可选影院",
+      "selected": "已限定影院"
     }
   },
   "button": {
