@@ -1,0 +1,119 @@
+{
+  "tab": {
+    "auto": "Auto detect",
+    "manual": "Manual search",
+    "pending": "Pending review"
+  },
+  "reason": {
+    "same_tmdb": "Same TMDB",
+    "same_name": "Same name"
+  },
+  "column": {
+    "survivor": "Keep",
+    "merge": "Merge",
+    "id": "ID",
+    "name": "Name",
+    "movieKey": "movie_key",
+    "showCount": "Showtimes",
+    "releaseDate": "Release",
+    "referenceSummary": "Reference counts"
+  },
+  "status": {
+    "active": "Active",
+    "deleted": "Deleted"
+  },
+  "newNamePlaceholder": "New name after merge (leave blank to keep current)",
+  "mergeButton": "Merge into kept row",
+  "survivorHint": "Kept row ID: {{id}}, merging {{count}} row(s)",
+  "manualHint": "Search results (check duplicate rows to merge into the kept row)",
+  "empty": "No duplicate movies detected",
+  "pending": {
+    "title": "Fuzzy match",
+    "empty": "No pending matches",
+    "ignore": "Ignore",
+    "ignoreTitle": "Ignore this match?",
+    "ignoreContent": "This pending match will be marked as ignored and will not be merged automatically.",
+    "ignoreSuccess": "Ignored"
+  },
+  "search": {
+    "placeholder": "Search by name / movie_key / id / tmdb_id",
+    "button": "Search",
+    "empty": "Please enter a search keyword",
+    "noResult": "No matching movies found",
+    "history": "Recent searches",
+    "clearHistory": "Clear"
+  },
+  "confirm": {
+    "title": "Confirm merge",
+    "content": "This will merge {{count}} row(s) into the kept row and soft-delete them. This cannot be undone automatically. Continue?"
+  },
+  "message": {
+    "needSurvivor": "Please select a row to keep",
+    "needLoser": "Please select at least 1 duplicate row to merge",
+    "success": "Merged successfully"
+  },
+  "counts": {
+    "show": "Showtimes",
+    "comment": "Comments",
+    "rate": "Ratings",
+    "version": "Versions",
+    "staff": "Staff",
+    "character": "Characters",
+    "spec": "Specs",
+    "tag": "Tags",
+    "benefit": "Benefits",
+    "presale": "Presale",
+    "reRelease": "Re-release"
+  },
+  "detail": {
+    "title": "Merge detail comparison",
+    "compareEntry": "Compare details",
+    "back": "Back",
+    "empty": "No candidate movie details found",
+    "keepThis": "Set as kept",
+    "mergeThis": "Merge this row",
+    "survivorTag": "Kept row",
+    "releaseDate": "Release",
+    "runtime": "Runtime",
+    "more": "More",
+    "counts": "Reference counts",
+    "showtimesByCinema": "Showtimes (by cinema)",
+    "cinema": "Cinema",
+    "showCount": "Count",
+    "dateRange": "Date range",
+    "staff": "Staff",
+    "characters": "Characters",
+    "versions": "Versions",
+    "tags": "Tags",
+    "basicCompare": "Field-by-field comparison",
+    "field": "Field",
+    "apply": "Apply",
+    "applied": "Applied",
+    "appliedFrom": "From #{{id}}",
+    "edited": "Edited",
+    "revert": "Revert",
+    "current": "Current",
+    "appliedCount": "{{count}} field(s) applied",
+    "resultColumn": "Merged result",
+    "resultHint": "Written back to kept row #{{id}}",
+    "relationCompare": "Related data (auto-merged)",
+    "category": "Category",
+    "mergedColumn": "Merged result",
+    "coverUrlPlaceholder": "Poster image URL",
+    "willMergeIn": "Not on the kept row; will be merged in",
+    "legend": "Blue column = merged result (written back to the kept row); editable here directly. Click \"Apply\" on any candidate column to adopt its value. Green = matches the result (current); Yellow = differs (can apply). Versions / staff / characters / tags are unioned automatically via foreign keys, so no data is lost.",
+    "dubbed": "Dubbed",
+    "original": "Original",
+    "versionOther": "Version",
+    "fields": {
+      "cover": "Poster",
+      "name": "Name",
+      "originalName": "Original name",
+      "tmdbId": "TMDB",
+      "releaseDate": "Release",
+      "runtime": "Runtime",
+      "level": "Rating",
+      "description": "Overview"
+    }
+  }
+}

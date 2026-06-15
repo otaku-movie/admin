@@ -1,0 +1,119 @@
+{
+  "tab": {
+    "auto": "自动检测",
+    "manual": "手动搜索",
+    "pending": "待确认"
+  },
+  "reason": {
+    "same_tmdb": "同 TMDB",
+    "same_name": "同名字"
+  },
+  "column": {
+    "survivor": "保留",
+    "merge": "合并",
+    "id": "ID",
+    "name": "名字",
+    "movieKey": "movie_key",
+    "showCount": "场次数",
+    "releaseDate": "上映日",
+    "referenceSummary": "关联计数"
+  },
+  "status": {
+    "active": "活跃",
+    "deleted": "已删除"
+  },
+  "newNamePlaceholder": "合并后的新名字（留空保留原名）",
+  "mergeButton": "合并到保留行",
+  "survivorHint": "保留行 ID：{{id}}，将合并 {{count}} 行",
+  "manualHint": "搜索结果（勾选要合并进保留行的重复行）",
+  "empty": "未检测到重复电影",
+  "pending": {
+    "title": "模糊匹配",
+    "empty": "暂无待确认匹配",
+    "ignore": "忽略",
+    "ignoreTitle": "忽略该匹配？",
+    "ignoreContent": "忽略后这条待确认记录会标记为已忽略，不会自动合并。",
+    "ignoreSuccess": "已忽略"
+  },
+  "search": {
+    "placeholder": "按 名字 / movie_key / id / tmdb_id 搜索",
+    "button": "搜索",
+    "empty": "请输入搜索关键词",
+    "noResult": "未找到匹配的电影",
+    "history": "搜索历史",
+    "clearHistory": "清空"
+  },
+  "confirm": {
+    "title": "确认合并",
+    "content": "将把 {{count}} 行合并进保留行并软删，操作不可自动撤销，确定继续？"
+  },
+  "message": {
+    "needSurvivor": "请先选择要保留的行",
+    "needLoser": "请至少勾选 1 行要合并的重复行",
+    "success": "合并成功"
+  },
+  "counts": {
+    "show": "场次",
+    "comment": "评论",
+    "rate": "评分",
+    "version": "版本",
+    "staff": "演职员",
+    "character": "角色",
+    "spec": "规格",
+    "tag": "标签",
+    "benefit": "特典",
+    "presale": "预售",
+    "reRelease": "重映"
+  },
+  "detail": {
+    "title": "合并详情对比",
+    "compareEntry": "详情对比",
+    "back": "返回",
+    "empty": "未获取到候选电影详情",
+    "keepThis": "设为保留",
+    "mergeThis": "合并此行",
+    "survivorTag": "保留行",
+    "releaseDate": "上映日",
+    "runtime": "片长",
+    "more": "展开",
+    "counts": "关联计数",
+    "showtimesByCinema": "场次（按影院）",
+    "cinema": "影院",
+    "showCount": "场次",
+    "dateRange": "日期范围",
+    "staff": "演职员",
+    "characters": "角色",
+    "versions": "版本",
+    "tags": "标签",
+    "basicCompare": "基本信息逐项对比",
+    "field": "字段",
+    "apply": "应用",
+    "applied": "已采用",
+    "appliedFrom": "来自 #{{id}}",
+    "edited": "已手动修改",
+    "revert": "撤销",
+    "current": "当前采用",
+    "appliedCount": "已应用 {{count}} 项",
+    "resultColumn": "合并后结果",
+    "resultHint": "最终写回保留行 #{{id}}",
+    "relationCompare": "关联信息对比（自动合并）",
+    "category": "类别",
+    "mergedColumn": "合并后结果",
+    "coverUrlPlaceholder": "海报图片地址",
+    "willMergeIn": "保留行没有，合并后将并入",
+    "legend": "蓝色列＝合并后结果（写回保留行），可直接在此编辑。任意候选列点「应用」把该值采用为结果；绿色＝与结果一致（当前采用），黄色＝与结果不同可应用。版本 / staff / 角色 / 标签按外键自动并集，不会丢数据。",
+    "dubbed": "配音版",
+    "original": "原版",
+    "versionOther": "版本",
+    "fields": {
+      "cover": "海报",
+      "name": "名称",
+      "originalName": "原名",
+      "tmdbId": "TMDB",
+      "releaseDate": "上映日",
+      "runtime": "片长",
+      "level": "分级",
+      "description": "简介"
+    }
+  }
+}

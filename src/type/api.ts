@@ -53,6 +53,124 @@ export interface Tag {
   name: string
 }
 
+/** 重复电影候选组里的单行（也用于手动搜索结果） */
+export interface MovieDuplicateItem {
+  id: number
+  name: string
+  movieKey?: string
+  tmdbId?: number
+  /** 0=活跃 1=已软删 */
+  deleted: number
+  kind: string
+  releaseDate?: string
+  /** 当前挂着的未删除场次数 */
+  showCount: number
+  /** 合并前关联计数摘要，如 show=12,comment=1 */
+  referenceSummary?: string
+}
+
+/** 一组疑似同一部电影的重复候选行 */
+export interface MovieDuplicateGroup {
+  /** same_tmdb=同 tmdb_id；same_name=名字完全相同 */
+  reason: 'same_tmdb' | 'same_name'
+  groupValue: string
+  recommendedSurvivorId: number
+  items: MovieDuplicateItem[]
+}
+
+/** 合并结果回包 */
+export interface MovieMergeResult {
+  survivorId: number
+  survivorName: string
+  mergedCount: number
+  survivorShowCount: number
+}
+
+/** 合并详情对比页：单部候选电影的关联表结构化计数 */
+export interface MovieMergeDetailCounts {
+  show: number
+  reRelease: number
+  benefit: number
+  presale: number
+  comment: number
+  rate: number
+  staff: number
+  character: number
+  spec: number
+  tag: number
+  version: number
+}
+
+/** 合并详情对比页：场次按影院分布 */
+export interface MovieMergeShowtimeByCinema {
+  cinemaId?: number
+  cinemaName?: string
+  count: number
+  firstDate?: string
+  lastDate?: string
+}
+
+/** 合并详情对比页：staff 名单样本 */
+export interface MovieMergeStaffBrief {
+  name?: string
+  position?: string
+}
+
+/** 合并详情对比页：版本（原版/配音 + 语言） */
+export interface MovieMergeVersionBrief {
+  /** 1=原版 2=配音版 */
+  versionCode?: number
+  language?: string
+}
+
+/** 合并详情对比页：单部候选电影完整信息 */
+export interface MovieMergeDetail {
+  id: number
+  name: string
+  originalName?: string
+  movieKey?: string
+  tmdbId?: number
+  deleted: number
+  kind: string
+  releaseDate?: string
+  runtime?: number
+  cover?: string
+  description?: string
+  levelId?: number
+  levelName?: string
+  counts: MovieMergeDetailCounts
+  showtimesByCinema: MovieMergeShowtimeByCinema[]
+  staff: MovieMergeStaffBrief[]
+  characters: string[]
+  versions: MovieMergeVersionBrief[]
+  tags: string[]
+  specs: string[]
+}
+
+/** 合并详情对比页：字段级覆盖（逐项「应用」的结果，合并时写回保留行） */
+export interface MovieMergeFieldOverrides {
+  name?: string
+  originalName?: string
+  releaseDate?: string
+  runtime?: number
+  cover?: string
+  description?: string
+  tmdbId?: number
+  levelId?: number
+}
+
+/** crawler 发现但需要人工确认的灰区匹配 */
+export interface MoviePendingMatch {
+  id: number
+  confidence: number
+  matchReason: string
+  status: string
+  createTime: string
+  updateTime: string
+  recommendedSurvivorId: number
+  items: MovieDuplicateItem[]
+}
+
 export interface Movie {
   id: number
   cover: string

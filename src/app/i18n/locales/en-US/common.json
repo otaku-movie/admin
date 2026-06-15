@@ -69,7 +69,9 @@
           "children": {
             "movieList": "Movie List",
             "movieDetail": "Movie Detail",
-            "reReleaseList": "Re-release List"
+            "reReleaseList": "Re-release List",
+            "movieMerge": "Movie Dedup & Merge",
+            "movieMergeDetail": "Merge Detail"
           }
         },
         "commentManagement": {
@@ -306,6 +308,7 @@
     "remove": "Remove",
     "save": "Save",
     "publish": "Publish",
+    "merge": "Merge",
     "sort": "Reorder",
     "pageButtons": "Page Buttons",
     "manage": "Buttons",

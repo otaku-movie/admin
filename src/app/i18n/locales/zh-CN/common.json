@@ -65,7 +65,9 @@
           "children": {
             "movieList": "电影列表",
             "movieDetail": "电影详情",
-            "reReleaseList": "重映列表"
+            "reReleaseList": "重映列表",
+            "movieMerge": "电影去重合并",
+            "movieMergeDetail": "合并详情"
           }
         },
         "commentManagement": {
@@ -302,6 +304,7 @@
     "remove": "删除",
     "save": "保存",
     "publish": "发布",
+    "merge": "合并",
     "sort": "调整排序",
     "pageButtons": "页面按钮",
     "manage": "按钮管理",

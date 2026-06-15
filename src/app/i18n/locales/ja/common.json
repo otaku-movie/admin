@@ -65,7 +65,9 @@
           "children": {
             "movieList": "映画リスト",
             "movieDetail": "映画詳細",
-            "reReleaseList": "再上映リスト"
+            "reReleaseList": "再上映リスト",
+            "movieMerge": "映画重複統合",
+            "movieMergeDetail": "統合詳細"
           }
         },
         "commentManagement": {
@@ -299,6 +301,7 @@
     "remove": "削除",
     "save": "保存",
     "publish": "公開",
+    "merge": "統合",
     "sort": "並び替え",
     "pageButtons": "ページボタン",
     "manage": "ボタン管理",
