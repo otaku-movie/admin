@@ -24,8 +24,32 @@ export default function Page({ params: { lng } }: PageProps) {
     email: '',
     password: ''
   })
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {}, [])
+
+  const onLogin = () => {
+    if (loading) return
+    setLoading(true)
+    store
+      .login({
+        ...query,
+        password: query.password ?? ''
+      })
+      .then((res) => {
+        if (res) {
+          const redirectURL = localStorage.getItem('redirectURL')
+          if (redirectURL) {
+            localStorage.setItem('redirectURL', '')
+            location.href = redirectURL
+          } else {
+            localStorage.setItem('redirectURL', '')
+            router.push(processPath('movieList'))
+          }
+        }
+      })
+      .finally(() => setLoading(false))
+  }
 
   return (
     <section className="login">
@@ -81,6 +105,7 @@ export default function Page({ params: { lng } }: PageProps) {
                   password: e.currentTarget.value
                 })
               }}
+              onPressEnter={onLogin}
             />
           </Form.Item>
           <Form.Item
@@ -90,29 +115,12 @@ export default function Page({ params: { lng } }: PageProps) {
           >
             <Button
               type="primary"
+              loading={loading}
               style={{
                 width: '100%',
                 height: '40px'
               }}
-              onClick={() => {
-                store
-                  .login({
-                    ...query,
-                    password: query.password ?? ''
-                  })
-                  .then((res) => {
-                    if (res) {
-                      const redirectURL = localStorage.getItem('redirectURL')
-                      if (redirectURL) {
-                        localStorage.setItem('redirectURL', '')
-                        location.href = redirectURL
-                      } else {
-                        localStorage.setItem('redirectURL', '')
-                        router.push(processPath('movieList'))
-                      }
-                    }
-                  })
-              }}
+              onClick={onLogin}
             >
               {common('button.login')}
             </Button>
